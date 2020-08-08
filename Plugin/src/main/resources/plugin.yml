@@ -3,5 +3,5 @@ main: xyz.jpenilla.tabtps.TabTPS
 author: jmp
 description: Show TPS and MSPT in the Tab Menu
 version: ${project.version}
-website: https://www.spigotmc.org/resources/authors/jmp.908524/
+website: https://www.spigotmc.org/resources/tabtps.82528/
 softdepend: [Prisma, PlaceholderAPI]
