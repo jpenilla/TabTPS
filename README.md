@@ -9,6 +9,11 @@
 * The plugin will remeber which players have the TPS display enabled through restarts and log in/out.
 * ![tab menu](https://i.imgur.com/93NmuUA.png)
 
+### Show TPS and MSPT in Action Bar
+* Command: ``/tabtps actionbar`` or ``/ttps ab``
+* Permission required: ``tabtps.toggleactionbar``
+* ![action bar](https://i.imgur.com/aMzzNRR.png)
+
 ### Improved TPS command
 * Command: ``/tickinfo`` or ``/mspt``
 * Permission required: ``tabtps.tps``

@@ -7,7 +7,7 @@ import xyz.jpenilla.tabtps.api.NMS;
 
 import java.lang.reflect.Field;
 
-public class NMSHandler implements NMS {
+public class NMSHandler extends NMS {
 
     private static final ChatComponentText EMPTY = new ChatComponentText("");
 

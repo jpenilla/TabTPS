@@ -15,6 +15,7 @@ public class UserPrefs {
     private static final JsonParser jsonParser = new JsonParser();
 
     @Getter private final ArrayList<UUID> tabEnabled = new ArrayList<>();
+    @Getter private final ArrayList<UUID> actionBarEnabled = new ArrayList<>();
 
     public static UserPrefs deserialize(File json) throws FileNotFoundException {
         JsonObject jsonObject = jsonParser.parse(new FileReader(json)).getAsJsonObject();

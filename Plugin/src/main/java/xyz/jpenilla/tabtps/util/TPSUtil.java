@@ -1,5 +1,6 @@
 package xyz.jpenilla.tabtps.util;
 
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import xyz.jpenilla.tabtps.TabTPS;
 
@@ -33,7 +34,7 @@ public class TPSUtil {
 
     public static String getColoredMspt(double mspt) {
         final StringBuilder m = new StringBuilder();
-        if (mspt <= 20.0) {
+        if (mspt <= 25.0) {
             m.append("<gradient:green:dark_green>");
         } else if (mspt <= 40) {
             m.append("<gradient:gold:yellow>");

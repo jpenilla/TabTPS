@@ -13,7 +13,7 @@ public class CommandTabTPS extends BaseCommand {
     @Default
     @CommandPermission("tabtps.toggletab")
     @Description("Toggles showing the current TPS and MSPT of the server in your tab menu.")
-    public void onToggleTPS(Player player) {
+    public void onToggleTab(Player player) {
         if (tabTPS.getTaskManager().hasTabTask(player)) {
             tabTPS.getTaskManager().stopTabTask(player);
             tabTPS.getUserPrefs().getTabEnabled().remove(player.getUniqueId());
@@ -22,6 +22,21 @@ public class CommandTabTPS extends BaseCommand {
             tabTPS.getTaskManager().startTabTask(player);
             tabTPS.getUserPrefs().getTabEnabled().add(player.getUniqueId());
             tabTPS.getChat().send(player, "<gradient:green:yellow>Showing TPS and MSPT in tab menu");
+        }
+    }
+
+    @Subcommand("actionbar|ab")
+    @CommandPermission("tabtps.toggleactionbar")
+    @Description("Toggles showing the current TPS and MSPT of the server in your action bar.")
+    public void onToggleActionBar(Player player) {
+        if (tabTPS.getTaskManager().hasActionBarTask(player)) {
+            tabTPS.getTaskManager().stopActionBarTask(player);
+            tabTPS.getUserPrefs().getActionBarEnabled().remove(player.getUniqueId());
+            tabTPS.getChat().send(player, "<gradient:red:gold>Not showing TPS and MSPT in action bar any more");
+        } else {
+            tabTPS.getTaskManager().startActionBarTask(player);
+            tabTPS.getUserPrefs().getActionBarEnabled().add(player.getUniqueId());
+            tabTPS.getChat().send(player, "<gradient:green:yellow>Showing TPS and MSPT in action bar");
         }
     }
 }

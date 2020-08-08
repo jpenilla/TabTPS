@@ -2,10 +2,12 @@ package xyz.jpenilla.tabtps.api;
 
 import org.bukkit.entity.Player;
 
-public interface NMS {
-    double[] getTps();
+public abstract class NMS {
+    public abstract double[] getTps();
 
-    double getMspt();
+    public abstract double getMspt();
 
-    void setHeaderFooter(Player player, String header, String footer);
+    public void setHeaderFooter(Player player, String header, String footer) {
+        // This method is only required to be implemented up to 1.15
+    }
 }

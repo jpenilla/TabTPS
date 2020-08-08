@@ -17,12 +17,18 @@ public class JoinQuitListener implements Listener {
         if (tabTPS.getUserPrefs().getTabEnabled().contains(e.getPlayer().getUniqueId())) {
             tabTPS.getTaskManager().startTabTask(e.getPlayer());
         }
+        if (tabTPS.getUserPrefs().getActionBarEnabled().contains(e.getPlayer().getUniqueId())) {
+            tabTPS.getTaskManager().startActionBarTask(e.getPlayer());
+        }
     }
 
     @EventHandler
     public void onJoin(PlayerQuitEvent e) {
         if (tabTPS.getUserPrefs().getTabEnabled().contains(e.getPlayer().getUniqueId())) {
             tabTPS.getTaskManager().stopTabTask(e.getPlayer());
+        }
+        if (tabTPS.getUserPrefs().getActionBarEnabled().contains(e.getPlayer().getUniqueId())) {
+            tabTPS.getTaskManager().stopActionBarTask(e.getPlayer());
         }
     }
 }

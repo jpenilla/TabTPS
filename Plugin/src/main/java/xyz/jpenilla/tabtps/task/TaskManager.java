@@ -10,25 +10,26 @@ import java.util.UUID;
 public class TaskManager {
 
     private final TabTPS tabTPS;
-    private final HashMap<UUID, Integer> tpsTabTaskIds = new HashMap<>();
+    private final HashMap<UUID, Integer> tabTpsTaskIds = new HashMap<>();
+    private final HashMap<UUID, Integer> actionBarTpsTaskIds = new HashMap<>();
 
     public TaskManager(TabTPS tabTPS) {
         this.tabTPS = tabTPS;
     }
 
     public boolean hasTabTask(Player player) {
-        return tpsTabTaskIds.containsKey(player.getUniqueId());
+        return tabTpsTaskIds.containsKey(player.getUniqueId());
     }
 
     public void startTabTask(Player player) {
         stopTabTask(player);
-        final int taskId = new TPSTabTask(tabTPS, player).runTaskTimerAsynchronously(tabTPS, 0L, 1L).getTaskId();
-        tpsTabTaskIds.put(player.getUniqueId(), taskId);
+        final int taskId = new TabTPSTask(tabTPS, player).runTaskTimerAsynchronously(tabTPS, 0L, 5L).getTaskId();
+        tabTpsTaskIds.put(player.getUniqueId(), taskId);
     }
 
     public void stopTabTask(Player player) {
         if (hasTabTask(player)) {
-            Bukkit.getScheduler().cancelTask(tpsTabTaskIds.get(player.getUniqueId()));
+            Bukkit.getScheduler().cancelTask(tabTpsTaskIds.get(player.getUniqueId()));
             if (player.isOnline()) {
                 if (tabTPS.getMajorMinecraftVersion() < 16) {
                     tabTPS.getNmsHandler().setHeaderFooter(player, null, null);
@@ -36,7 +37,24 @@ public class TaskManager {
                     player.setPlayerListHeaderFooter((String) null, null);
                 }
             }
-            tpsTabTaskIds.remove(player.getUniqueId());
+            tabTpsTaskIds.remove(player.getUniqueId());
+        }
+    }
+
+    public boolean hasActionBarTask(Player player) {
+        return actionBarTpsTaskIds.containsKey(player.getUniqueId());
+    }
+
+    public void startActionBarTask(Player player) {
+        stopActionBarTask(player);
+        final int taskId = new ActionBarTPSTask(tabTPS, player).runTaskTimerAsynchronously(tabTPS, 0L, 5L).getTaskId();
+        actionBarTpsTaskIds.put(player.getUniqueId(), taskId);
+    }
+
+    public void stopActionBarTask(Player player) {
+        if (hasActionBarTask(player)) {
+            Bukkit.getScheduler().cancelTask(actionBarTpsTaskIds.get(player.getUniqueId()));
+            actionBarTpsTaskIds.remove(player.getUniqueId());
         }
     }
 }

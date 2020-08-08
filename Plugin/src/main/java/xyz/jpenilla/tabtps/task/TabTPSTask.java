@@ -1,5 +1,6 @@
 package xyz.jpenilla.tabtps.task;
 
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.bungeecord.BungeeCordComponentSerializer;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -8,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 
-public class TPSTabTask extends BukkitRunnable {
+public class TabTPSTask extends BukkitRunnable {
     private static final GsonComponentSerializer legacyGsonComponentSerializer = GsonComponentSerializer.builder().downsampleColors().build();
     private static final LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
     private static final BungeeCordComponentSerializer bungeeComponentSerializer = BungeeCordComponentSerializer.get();
@@ -16,7 +17,7 @@ public class TPSTabTask extends BukkitRunnable {
     private final TabTPS tabTPS;
     private boolean firstTick = true;
 
-    public TPSTabTask(TabTPS tabTPS, Player player) {
+    public TabTPSTask(TabTPS tabTPS, Player player) {
         this.player = player;
         this.tabTPS = tabTPS;
     }
@@ -34,8 +35,7 @@ public class TPSTabTask extends BukkitRunnable {
             tabTPS.getTaskManager().stopTabTask(player);
         }
         if (tabTPS.getMajorMinecraftVersion() < 16) {
-            final String footer = legacyGsonComponentSerializer.serialize(tabTPS.getMiniMessage().parse(getFooter()));
-            tabTPS.getNmsHandler().setHeaderFooter(player, null, footer);
+            tabTPS.getNmsHandler().setHeaderFooter(player, null, legacyGsonComponentSerializer.serialize(tabTPS.getMiniMessage().parse(getFooter())));
         } else {
             if (tabTPS.isPaperServer()) {
                 player.setPlayerListHeaderFooter(null, bungeeComponentSerializer.serialize(tabTPS.getMiniMessage().parse(getFooter())));

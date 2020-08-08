@@ -7,7 +7,7 @@ import net.minecraft.server.v1_15_R1.MinecraftServer;
 import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.api.NMS;
 
-public class NMSHandler implements NMS {
+public class NMSHandler extends NMS {
 
     @Override
     public double[] getTps() {
