@@ -6,7 +6,7 @@
 ### Show TPS and MSPT in Tab menu
 * Toggle on/off with ``/tabtps`` or ``/ttps``
 * Permission required: ``tabtps.toggletab``
-* The plugin will remeber which players have the TPS display enabled through restarts and log in/out.
+* The plugin will remember which players have the TPS display enabled through restarts and log in/out.
 * ![tab menu](https://i.imgur.com/93NmuUA.png)
 
 ### Show TPS and MSPT in Action Bar
