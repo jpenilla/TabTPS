@@ -12,7 +12,6 @@ import xyz.jpenilla.tabtps.util.TPSUtil;
 import xyz.jpenilla.tabtps.util.UserPrefs;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -55,8 +54,9 @@ public class TabTPS extends BasePlugin {
         this.taskManager = new TaskManager(this);
         try {
             this.userPrefs = UserPrefs.deserialize(new File(getDataFolder() + File.separator + "user_preferences.json"));
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             this.userPrefs = new UserPrefs();
+            getLogger().warning("Failed to load user_preferences.json, creating a new one");
         }
 
         PaperCommandManager manager = new PaperCommandManager(this);
@@ -75,7 +75,9 @@ public class TabTPS extends BasePlugin {
             getDataFolder().mkdirs();
         }
         try {
-            this.userPrefs.serialize(new FileWriter(new File(getDataFolder() + File.separator + "user_preferences.json")));
+            if (this.userPrefs != null) {
+                this.userPrefs.serialize(new FileWriter(new File(getDataFolder() + File.separator + "user_preferences.json")));
+            }
         } catch (IOException e) {
             getLogger().warning("Failed to save user_preferences.json");
             e.printStackTrace();

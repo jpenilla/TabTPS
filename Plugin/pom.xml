@@ -105,6 +105,14 @@
         </dependency>
         <dependency>
             <groupId>xyz.jpenilla</groupId>
+            <artifactId>TabTPS-v1_16_R2</artifactId>
+            <version>v1_16_R2</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>xyz.jpenilla</groupId>
             <artifactId>TabTPS-api</artifactId>
             <version>API</version>
             <type>jar</type>

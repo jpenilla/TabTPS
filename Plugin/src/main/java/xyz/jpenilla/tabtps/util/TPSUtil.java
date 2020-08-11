@@ -1,6 +1,5 @@
 package xyz.jpenilla.tabtps.util;
 
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import xyz.jpenilla.tabtps.TabTPS;
 
