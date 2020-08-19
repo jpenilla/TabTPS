@@ -5,7 +5,7 @@
     <artifactId>TabTPS</artifactId>
     <packaging>jar</packaging>
     <name>TabTPS</name>
-    <version>1.0.2</version>
+    <version>1.0.3+{BUILD_NUMBER}-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -91,14 +91,6 @@
             <groupId>xyz.jpenilla</groupId>
             <artifactId>TabTPS-v1_15_R1</artifactId>
             <version>v1_15_R1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>xyz.jpenilla</groupId>
-            <artifactId>TabTPS-v1_16_R1</artifactId>
-            <version>v1_16_R1</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
