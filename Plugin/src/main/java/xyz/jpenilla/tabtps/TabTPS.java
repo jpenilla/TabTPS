@@ -8,6 +8,7 @@ import xyz.jpenilla.tabtps.command.CommandHelper;
 import xyz.jpenilla.tabtps.task.TaskManager;
 import xyz.jpenilla.tabtps.util.PluginSettings;
 import xyz.jpenilla.tabtps.util.TPSUtil;
+import xyz.jpenilla.tabtps.util.UpdateChecker;
 import xyz.jpenilla.tabtps.util.UserPrefs;
 
 import java.io.File;
@@ -15,10 +16,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class TabTPS extends BasePlugin {
-
     @Getter private static TabTPS instance;
     @Getter private NMS nmsHandler = null;
-    @Getter private int majorMinecraftVersion;
     @Getter private TaskManager taskManager;
     @Getter private TPSUtil tpsUtil;
     @Getter private UserPrefs userPrefs;
@@ -28,31 +27,7 @@ public class TabTPS extends BasePlugin {
     @Override
     public void onPluginEnable() {
         instance = this;
-
-        final String packageName = this.getServer().getClass().getPackage().getName();
-        final String version = packageName.substring(packageName.lastIndexOf('.') + 1);
-        majorMinecraftVersion = Integer.parseInt(version.split("_")[1]);
-
-        if (majorMinecraftVersion > 15 && !isPaperServer()) {
-            getLogger().info("You are not using Paper, and therefore NMS methods must be used to get TPS and MSPT.");
-            getLogger().info("Please consider upgrading to Paper for better performance and compatibility at https://papermc.io/downloads");
-        }
-
-        if (majorMinecraftVersion < 16 || !isPaperServer()) {
-            try {
-                final Class<?> clazz = Class.forName("xyz.jpenilla.tabtps.nms." + version + ".NMSHandler");
-                if (NMS.class.isAssignableFrom(clazz)) {
-                    this.nmsHandler = (NMS) clazz.getConstructor().newInstance();
-                }
-            } catch (final Exception e) {
-                e.printStackTrace();
-                this.getLogger().severe("Could not find support for this Minecraft version.");
-                this.getLogger().info("Check for updates at " + getDescription().getWebsite());
-                this.setEnabled(false);
-                return;
-            }
-            this.getLogger().info("Loaded NMS support for " + version);
-        }
+        setupNMS();
 
         this.pluginSettings = new PluginSettings(this);
         pluginSettings.load();
@@ -64,11 +39,11 @@ public class TabTPS extends BasePlugin {
             this.userPrefs = new UserPrefs();
             getLogger().warning("Failed to load user_preferences.json, creating a new one");
         }
-
         this.commandHelper = new CommandHelper(this);
 
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
+        new UpdateChecker(this, 82528).checkVersion();
         Metrics metrics = new Metrics(this, 8458);
     }
 
@@ -84,6 +59,29 @@ public class TabTPS extends BasePlugin {
         } catch (IOException e) {
             getLogger().warning("Failed to save user_preferences.json");
             e.printStackTrace();
+        }
+    }
+
+    private void setupNMS() {
+        if (getMajorMinecraftVersion() > 15 && !isPaperServer()) {
+            getLogger().info("You are not using Paper, and therefore NMS methods must be used to get TPS and MSPT.");
+            getLogger().info("Please consider upgrading to Paper for better performance and compatibility at https://papermc.io/downloads");
+        }
+
+        if (getMajorMinecraftVersion() < 16 || !isPaperServer()) {
+            try {
+                final Class<?> clazz = Class.forName("xyz.jpenilla.tabtps.nms." + getServerApiVersion() + ".NMSHandler");
+                if (NMS.class.isAssignableFrom(clazz)) {
+                    this.nmsHandler = (NMS) clazz.getConstructor().newInstance();
+                }
+            } catch (final Exception e) {
+                e.printStackTrace();
+                this.getLogger().severe("Could not find support for this Minecraft version.");
+                this.getLogger().info("Check for updates at " + getDescription().getWebsite());
+                this.setEnabled(false);
+                return;
+            }
+            this.getLogger().info("Loaded NMS support for " + getServerApiVersion());
         }
     }
 }
