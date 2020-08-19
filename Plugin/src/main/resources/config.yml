@@ -1,0 +1,13 @@
+# The default options for new users who have the appropriate permissions
+defaults:
+  tab_tps: false
+  action_bar_tps: false
+
+# Enable/disable modules in the tab and action bar displays
+modules:
+  tps: true
+  mspt: true
+  memory: false
+
+# The order of the modules to display
+module_order: "tps,mspt,memory"

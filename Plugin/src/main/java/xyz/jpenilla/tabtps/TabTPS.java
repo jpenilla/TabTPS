@@ -1,13 +1,12 @@
 package xyz.jpenilla.tabtps;
 
-import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import xyz.jpenilla.jmplib.BasePlugin;
 import xyz.jpenilla.tabtps.api.NMS;
-import xyz.jpenilla.tabtps.command.CommandTPS;
-import xyz.jpenilla.tabtps.command.CommandTabTPS;
+import xyz.jpenilla.tabtps.command.CommandHelper;
 import xyz.jpenilla.tabtps.task.TaskManager;
+import xyz.jpenilla.tabtps.util.PluginSettings;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 import xyz.jpenilla.tabtps.util.UserPrefs;
 
@@ -17,14 +16,19 @@ import java.io.IOException;
 
 public class TabTPS extends BasePlugin {
 
+    @Getter private static TabTPS instance;
     @Getter private NMS nmsHandler = null;
     @Getter private int majorMinecraftVersion;
     @Getter private TaskManager taskManager;
     @Getter private TPSUtil tpsUtil;
     @Getter private UserPrefs userPrefs;
+    @Getter private PluginSettings pluginSettings;
+    @Getter private CommandHelper commandHelper;
 
     @Override
     public void onPluginEnable() {
+        instance = this;
+
         final String packageName = this.getServer().getClass().getPackage().getName();
         final String version = packageName.substring(packageName.lastIndexOf('.') + 1);
         majorMinecraftVersion = Integer.parseInt(version.split("_")[1]);
@@ -50,6 +54,8 @@ public class TabTPS extends BasePlugin {
             this.getLogger().info("Loaded NMS support for " + version);
         }
 
+        this.pluginSettings = new PluginSettings(this);
+        pluginSettings.load();
         this.tpsUtil = new TPSUtil(this);
         this.taskManager = new TaskManager(this);
         try {
@@ -59,10 +65,7 @@ public class TabTPS extends BasePlugin {
             getLogger().warning("Failed to load user_preferences.json, creating a new one");
         }
 
-        PaperCommandManager manager = new PaperCommandManager(this);
-        manager.enableUnstableAPI("help");
-        manager.registerCommand(new CommandTabTPS());
-        manager.registerCommand(new CommandTPS());
+        this.commandHelper = new CommandHelper(this);
 
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
 

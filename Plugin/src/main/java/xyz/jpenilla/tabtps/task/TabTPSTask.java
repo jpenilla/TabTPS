@@ -6,17 +6,20 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.jpenilla.tabtps.TabTPS;
-import xyz.jpenilla.tabtps.util.TPSUtil;
+import xyz.jpenilla.tabtps.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.util.Constants;
 
 public class TabTPSTask extends BukkitRunnable {
     private static final GsonComponentSerializer legacyGsonComponentSerializer = GsonComponentSerializer.builder().downsampleColors().build();
     private static final LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
     private static final BungeeCordComponentSerializer bungeeComponentSerializer = BungeeCordComponentSerializer.get();
+    private final ModuleRenderer renderer;
     private final Player player;
     private final TabTPS tabTPS;
     private boolean firstTick = true;
 
     public TabTPSTask(TabTPS tabTPS, Player player) {
+        this.renderer = new ModuleRenderer(tabTPS).separator(" ").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
         this.player = player;
         this.tabTPS = tabTPS;
     }
@@ -25,9 +28,10 @@ public class TabTPSTask extends BukkitRunnable {
     public void run() {
         if (firstTick) {
             firstTick = false;
-            if (!player.hasPermission("tabtps.toggletab")) {
+            if (!player.hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
                 tabTPS.getTaskManager().stopTabTask(player);
                 tabTPS.getUserPrefs().getTabEnabled().remove(player.getUniqueId());
+                return;
             }
         }
         if (!player.isOnline()) {
@@ -45,14 +49,6 @@ public class TabTPSTask extends BukkitRunnable {
     }
 
     private String getFooter() {
-        final StringBuilder footer = new StringBuilder();
-
-        footer.append("<gray>TPS<white>:</white> ");
-        footer.append(TPSUtil.getColoredTps(tabTPS.getTpsUtil().getTps()[0]));
-
-        footer.append(" MSPT<white>:</white> ");
-        footer.append(TPSUtil.getColoredMspt(tabTPS.getTpsUtil().getMspt()));
-
-        return footer.toString();
+        return renderer.render();
     }
 }

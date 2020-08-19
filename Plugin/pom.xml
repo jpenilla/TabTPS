@@ -5,7 +5,7 @@
     <artifactId>TabTPS</artifactId>
     <packaging>jar</packaging>
     <name>TabTPS</name>
-    <version>1.0.3+{BUILD_NUMBER}-SNAPSHOT</version>
+    <version>1.1.0+{BUILD_NUMBER}-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -22,7 +22,7 @@
         </repository>
         <repository>
             <id>jmp-repo</id>
-            <url>https://mvn.jpenilla.xyz/repository/internal</url>
+            <url>https://repo.jpenilla.xyz/snapshots</url>
         </repository>
         <repository>
             <id>CodeMC</id>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>xyz.jpenilla</groupId>
             <artifactId>jmplib</artifactId>
-            <version>1.0.0-SNAPSHOT.89</version>
+            <version>1.0.0+98-SNAPSHOT</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -159,6 +159,7 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>config.yml</include>
                 </includes>
             </resource>
         </resources>
@@ -169,6 +170,9 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

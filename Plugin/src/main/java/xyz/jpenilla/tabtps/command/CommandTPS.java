@@ -4,17 +4,25 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.util.Constants;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 
 @CommandAlias("tickinfo|mspt")
 public class CommandTPS extends BaseCommand {
+    private ModuleRenderer moduleRenderer = null;
+
     @Dependency
     private TabTPS tabTPS;
 
     @Default
-    @CommandPermission("tabtps.tps")
+    @CommandPermission(Constants.PERMISSION_COMMAND_TICKINFO)
     @Description("Displays the current TPS and MSPT of the server.")
     public void onTPS(CommandSender sender) {
+        if (moduleRenderer == null) {
+            moduleRenderer = new ModuleRenderer(tabTPS).separator(" ").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
+        }
+
         final StringBuilder builder = new StringBuilder();
 
         final double[] tps = tabTPS.getTpsUtil().getTps();
@@ -29,6 +37,7 @@ public class CommandTPS extends BaseCommand {
 
         tabTPS.getChat().send(sender, "<gradient:blue:aqua><strikethrough>-----------</strikethrough></gradient><aqua>[</aqua> <bold><gradient:red:gold>TabTPS</gradient></bold> <gradient:aqua:blue>]<strikethrough>-----------</strikethrough>");
         tabTPS.getChat().send(sender, builder.toString());
-        tabTPS.getChat().send(sender, "<gray><hover:show_text:'Milliseconds per tick<gray>.</gray> MSPT <gray><</gray> 50 <gray>-></gray> <green>20 TPS</green>'>MSPT<white>:</white> " + TPSUtil.getColoredMspt(tabTPS.getTpsUtil().getMspt()) + "</hover>");
+        tabTPS.getChat().send(sender, "<hover:show_text:'Milliseconds per tick<gray>.</gray> MSPT <gray><</gray> 50 <gray>-></gray> <green>20 TPS</green>'>" + moduleRenderer.render("mspt"));
+        tabTPS.getChat().send(sender, "<hover:show_text:'Megabytes of Memory/RAM<gray>.</gray> Used<gray>/</gray>Allocated <white>(<gray>Maximum</gray>)</white>'>" + moduleRenderer.render("memory"));
     }
 }
