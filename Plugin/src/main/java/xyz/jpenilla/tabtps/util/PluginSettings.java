@@ -51,7 +51,7 @@ public class PluginSettings {
     }
 
     @AllArgsConstructor
-    public class UserPrefsDefaults {
+    public static class UserPrefsDefaults {
         @Getter @Setter
         private boolean tab;
 
@@ -60,7 +60,7 @@ public class PluginSettings {
     }
 
     @AllArgsConstructor
-    public class Modules {
+    public static class Modules {
         @Getter @Setter
         private boolean tps;
 
