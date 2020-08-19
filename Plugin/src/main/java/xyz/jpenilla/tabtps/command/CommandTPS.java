@@ -47,29 +47,23 @@ public class CommandTPS extends BaseCommand {
         } else {
             memoryBar.append("<gradient:yellow:gold>");
         }
-        IntStream.range(0, (int) (barLength * usedPercent)).forEach(i -> {
-            memoryBar.append("|");
-        });
+        IntStream.range(0, (int) (barLength * usedPercent)).forEach(i -> memoryBar.append("|"));
         memoryBar.append("</gradient>");
         memoryBar.append("<gradient:aqua:blue>");
-        IntStream.range(0, (int) (barLength * (allocatedPercent - usedPercent))).forEach(i -> {
-            memoryBar.append("|");
-        });
+        IntStream.range(0, (int) (barLength * (allocatedPercent - usedPercent))).forEach(i -> memoryBar.append("|"));
         memoryBar.append("</gradient>");
         memoryBar.append("<gradient:#929292:#5A5A5A>");
-        IntStream.range(0, (int) (barLength * (1 - allocatedPercent))).forEach(i -> {
-            memoryBar.append("|");
-        });
+        IntStream.range(0, (int) (barLength * (1 - allocatedPercent))).forEach(i -> memoryBar.append("|"));
         memoryBar.append("</gradient>");
         memoryBar.append("]");
 
         List<String> messages = new ArrayList<>();
+        messages.add("");
         messages.add("<gradient:blue:aqua><strikethrough>-----------</strikethrough></gradient><aqua>[</aqua> <bold><gradient:red:gold>TabTPS</gradient></bold> <gradient:aqua:blue>]<strikethrough>-----------</strikethrough>");
         messages.add(tpsBuilder.toString());
         messages.add("<hover:show_text:'Milliseconds per tick<gray>.</gray> MSPT <gray><</gray> 50 <gray>-></gray> <green>20 TPS</green>'>" + moduleRenderer.render("mspt"));
         messages.add("<hover:show_text:'Megabytes of Memory/RAM<gray>.</gray> Used<gray>/</gray>Allocated <white>(<gray>Maximum</gray>)</white>'>" + moduleRenderer.render("memory"));
         messages.add(memoryBar.toString());
-        messages.add("");
 
         tabTPS.getChat().send(sender, messages);
     }
