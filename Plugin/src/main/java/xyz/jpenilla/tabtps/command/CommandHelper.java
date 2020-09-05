@@ -23,6 +23,7 @@ public class CommandHelper {
 
         manager.registerCommand(new CommandTabTPS());
         manager.registerCommand(new CommandTPS());
+        manager.registerCommand(new CommandMemory());
     }
 
     private void registerCompletions() {

@@ -19,6 +19,7 @@ public class PluginSettings {
 
     public void load() {
         tabTPS.saveDefaultConfig();
+        tabTPS.reloadConfig();
         final FileConfiguration config = tabTPS.getConfig();
 
         moduleOrder = config.getString("module_order");
