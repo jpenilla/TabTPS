@@ -25,7 +25,7 @@ public class CommandTPS extends BaseCommand {
     @Description("Displays the current TPS and MSPT of the server.")
     public void onTPS(CommandSender sender) {
         if (moduleRenderer == null) {
-            moduleRenderer = new ModuleRenderer(tabTPS).separator(" ").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
+            moduleRenderer = new ModuleRenderer().separator(" ").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
         }
 
         final double[] tps = tabTPS.getTpsUtil().getTps();

@@ -3,11 +3,19 @@ defaults:
   tab_tps: false
   action_bar_tps: false
 
-# Enable/disable modules in the tab and action bar displays
+# The modules to display. Separate with commas (,) ie: "tps,mspt,memory"
+#   Possible modules: tps, mspt, memory
 modules:
-  tps: true
-  mspt: true
-  memory: false
+  tab_header: ""
+  tab_footer: "tps,mspt"
+  action_bar: "tps,mspt"
 
-# The order of the modules to display
-module_order: "tps,mspt,memory"
+# The names of memory pools to not display in commands
+ignored_memory_pools:
+  - "Metaspace"
+  - "Code Cache"
+  - "Compressed Class Space"
+  - "Non-Heap Memory Usage"
+  - "CodeHeap 'non-nmethods'"
+  - "CodeHeap 'non-profiled nmethods'"
+  - "CodeHeap 'profiled nmethods'"

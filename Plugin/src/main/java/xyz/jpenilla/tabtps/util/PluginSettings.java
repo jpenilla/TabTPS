@@ -6,12 +6,15 @@ import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
 import xyz.jpenilla.tabtps.TabTPS;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PluginSettings {
     private final TabTPS tabTPS;
 
     @Getter private UserPrefsDefaults userPrefsDefaults;
     @Getter private Modules modules;
-    @Getter private String moduleOrder;
+    @Getter private final List<String> ignoredMemoryPools = new ArrayList<>();
 
     public PluginSettings(TabTPS tabTPS) {
         this.tabTPS = tabTPS;
@@ -22,31 +25,30 @@ public class PluginSettings {
         tabTPS.reloadConfig();
         final FileConfiguration config = tabTPS.getConfig();
 
-        moduleOrder = config.getString("module_order");
-
         userPrefsDefaults = new UserPrefsDefaults(
                 config.getBoolean("defaults.tab_tps", false),
                 config.getBoolean("defaults.action_bar_tps", false)
         );
 
         modules = new Modules(
-                config.getBoolean("modules.tps", true),
-                config.getBoolean("modules.mspt", true),
-                config.getBoolean("modules.memory", false)
+                config.getString("modules.tab_header", ""),
+                config.getString("modules.tab_footer", "tps,mspt"),
+                config.getString("modules.action_bar", "tps,mspt")
         );
+
+        ignoredMemoryPools.clear();
+        ignoredMemoryPools.addAll(config.getStringList("ignored_memory_pools"));
     }
 
     public void save() {
         final FileConfiguration config = tabTPS.getConfig();
 
-        config.set("module_order", moduleOrder);
-
         config.set("defaults.tab_tps", userPrefsDefaults.isTab());
         config.set("defaults.action_bar_tps", userPrefsDefaults.isActionBar());
 
-        config.set("modules.tps", modules.isTps());
-        config.set("modules.mspt", modules.isMspt());
-        config.set("modules.memory", modules.isMemory());
+        config.set("modules.tab_header", modules.getTabHeader());
+        config.set("modules.tab_footer", modules.getTabFooter());
+        config.set("modules.action_bar", modules.getActionBar());
 
         tabTPS.saveConfig();
     }
@@ -63,12 +65,12 @@ public class PluginSettings {
     @AllArgsConstructor
     public static class Modules {
         @Getter @Setter
-        private boolean tps;
+        private String tabHeader;
 
         @Getter @Setter
-        private boolean mspt;
+        private String tabFooter;
 
         @Getter @Setter
-        private boolean memory;
+        private String actionBar;
     }
 }

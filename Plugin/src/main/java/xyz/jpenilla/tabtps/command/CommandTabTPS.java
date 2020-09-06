@@ -2,6 +2,8 @@ package xyz.jpenilla.tabtps.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import com.google.common.collect.ImmutableList;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -39,6 +41,14 @@ public class CommandTabTPS extends BaseCommand {
     @Description("Reloads the TabTPS config files.")
     public void onReload(CommandSender sender) {
         tabTPS.getPluginSettings().load();
+        ImmutableList.copyOf(Bukkit.getOnlinePlayers()).forEach(player -> {
+            if (tabTPS.getTaskManager().hasActionBarTask(player)) {
+                tabTPS.getTaskManager().startActionBarTask(player);
+            }
+            if (tabTPS.getTaskManager().hasTabTask(player)) {
+                tabTPS.getTaskManager().startTabTask(player);
+            }
+        });
         tabTPS.getChat().send(sender, prefix + " <gradient:green:dark_green>Reload complete</gradient><gray>.");
     }
 
