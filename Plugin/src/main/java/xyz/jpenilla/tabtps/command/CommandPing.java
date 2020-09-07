@@ -56,7 +56,7 @@ public class CommandPing extends BaseCommand {
             .build(
                     TextComponent.builder().append(CommandTabTPS.prefixComponent).append(TextComponent.of(" Player Pings")).build(),
                     (value, index) -> Collections.singleton(TabTPS.getInstance().getMiniMessage().parse(Objects.requireNonNull(value))),
-                    page -> "/tabtps:ping summary " + page
+                    page -> "/tabtps:ping all " + page
             );
 
     @Subcommand("all")
