@@ -24,6 +24,7 @@ public class CommandHelper {
         manager.registerCommand(new CommandTabTPS());
         manager.registerCommand(new CommandTPS());
         manager.registerCommand(new CommandMemory());
+        manager.registerCommand(new CommandPing());
     }
 
     private void registerCompletions() {
@@ -54,23 +55,21 @@ public class CommandHelper {
             if (firstArg.equalsIgnoreCase("tab")) {
                 if (player.hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
                     return Toggle.TAB;
-                } else {
-                    throw new InvalidCommandArgument("No permission");
                 }
+                throw new InvalidCommandArgument("No permission");
             }
             if (firstArg.equalsIgnoreCase("actionbar")) {
                 if (player.hasPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)) {
                     return Toggle.ACTION_BAR;
-                } else {
-                    throw new InvalidCommandArgument("No permission");
                 }
+                throw new InvalidCommandArgument("No permission");
             }
 
             List<String> valid = new ArrayList<>();
-            if (context.getPlayer().hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
+            if (player.hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
                 valid.add("tab");
             }
-            if (context.getPlayer().hasPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)) {
+            if (player.hasPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)) {
                 valid.add("actionbar");
             }
             throw new InvalidCommandArgument(MessageKeys.PLEASE_SPECIFY_ONE_OF, "{valid}", ACFUtil.join(valid, ", "));
