@@ -1,6 +1,6 @@
 package xyz.jpenilla.tabtps.util;
 
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.Bukkit;
 import xyz.jpenilla.tabtps.TabTPS;
 
 import java.io.IOException;
@@ -19,26 +19,22 @@ public class UpdateChecker {
     }
 
     public void checkVersion() {
-        class CheckVersionTask extends BukkitRunnable {
-            @Override
-            public void run() {
-                try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
-                    if (scanner.hasNext()) {
-                        String latest = scanner.next();
-                        if (plugin.getDescription().getVersion().equalsIgnoreCase(latest)) {
-                            plugin.getLogger().info("You are running the latest version of " + plugin.getName() + "! :)");
-                        } else if (plugin.getDescription().getVersion().contains("SNAPSHOT")) {
-                            plugin.getLogger().info("[!] You are running a development build of " + plugin.getName() + " (" + plugin.getDescription().getVersion() + ") [!]");
-                        } else {
-                            plugin.getLogger().info("[!] You are running an outdated version of " + plugin.getName() + " (" + plugin.getDescription().getVersion() + ") [!]");
-                            plugin.getLogger().info("Version " + latest + " is available at https://www.spigotmc.org/resources/tabtps.82528/");
-                        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+                if (scanner.hasNext()) {
+                    String latest = scanner.next();
+                    if (plugin.getDescription().getVersion().equalsIgnoreCase(latest)) {
+                        plugin.getLogger().info("You are running the latest version of " + plugin.getName() + "! :)");
+                    } else if (plugin.getDescription().getVersion().contains("SNAPSHOT")) {
+                        plugin.getLogger().info("[!] You are running a development build of " + plugin.getName() + " (" + plugin.getDescription().getVersion() + ") [!]");
+                    } else {
+                        plugin.getLogger().info("[!] You are running an outdated version of " + plugin.getName() + " (" + plugin.getDescription().getVersion() + ") [!]");
+                        plugin.getLogger().info("Version " + latest + " is available at https://www.spigotmc.org/resources/tabtps.82528/");
                     }
-                } catch (IOException exception) {
-                    plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
                 }
+            } catch (IOException exception) {
+                plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
             }
-        }
-        new CheckVersionTask().runTaskAsynchronously(plugin);
+        });
     }
 }

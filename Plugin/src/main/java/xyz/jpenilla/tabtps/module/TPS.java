@@ -13,4 +13,9 @@ public class TPS extends Module {
     public String getData() {
         return TPSUtil.getColoredTps(TabTPS.getInstance().getTpsUtil().getTps()[0]);
     }
+
+    @Override
+    public boolean needsPlayer() {
+        return false;
+    }
 }

@@ -7,6 +7,8 @@ public abstract class NMS {
 
     public abstract double getMspt();
 
+    public abstract int getPing(Player player);
+
     public void setHeaderFooter(Player player, String header, String footer) {
         // This method is only required to be implemented up to 1.15
     }

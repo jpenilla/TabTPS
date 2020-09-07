@@ -17,7 +17,7 @@ public class ActionBarTPSTask extends BukkitRunnable {
     private boolean firstTick = true;
 
     public ActionBarTPSTask(TabTPS tabTPS, Player player) {
-        this.renderer = new ModuleRenderer().separator(" <white>|</white> ").moduleRenderFunction(module -> "<bold><gradient:blue:aqua>" + module.getLabel() + "</gradient><white>:</white></bold> " + module.getData());
+        this.renderer = new ModuleRenderer(player).separator(" <white>|</white> ").moduleRenderFunction(module -> "<bold><gradient:blue:aqua>" + module.getLabel() + "</gradient><white>:</white></bold> " + module.getData());
         this.player = player;
         this.tabTPS = tabTPS;
         this.modules = ImmutableList.copyOf(tabTPS.getPluginSettings().getModules().getActionBar().split(","));

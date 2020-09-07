@@ -13,4 +13,9 @@ public class MSPT extends Module {
     public String getData() {
         return TPSUtil.getColoredMspt(TabTPS.getInstance().getTpsUtil().getMspt());
     }
+
+    @Override
+    public boolean needsPlayer() {
+        return false;
+    }
 }

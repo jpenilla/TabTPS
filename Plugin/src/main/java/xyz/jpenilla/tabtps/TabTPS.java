@@ -30,7 +30,7 @@ public class TabTPS extends BasePlugin {
         setupNMS();
 
         this.pluginSettings = new PluginSettings(this);
-        pluginSettings.load();
+        this.pluginSettings.load();
         this.tpsUtil = new TPSUtil(this);
         this.taskManager = new TaskManager(this);
         try {

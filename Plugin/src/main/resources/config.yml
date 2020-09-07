@@ -3,12 +3,12 @@ defaults:
   tab_tps: false
   action_bar_tps: false
 
-# The modules to display. Separate with commas (,) ie: "tps,mspt,memory"
-#   Possible modules: tps, mspt, memory
+# The modules to display. Separate with commas (,) ie: "ping,tps,mspt"
+#   Possible modules: tps, mspt, memory, ping, cpu
 modules:
   tab_header: ""
   tab_footer: "tps,mspt"
-  action_bar: "tps,mspt"
+  action_bar: "tps,mspt,ping"
 
 # The names of memory pools to not display in commands
 ignored_memory_pools:

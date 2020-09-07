@@ -22,10 +22,14 @@ public class NMSHandler extends NMS {
     }
 
     @Override
+    public int getPing(Player player) {
+        return ((CraftPlayer) player).getHandle().ping;
+    }
+
+    @Override
     public void setHeaderFooter(Player player, String header, String footer) {
         IChatBaseComponent h = header != null ? IChatBaseComponent.ChatSerializer.a(header) : EMPTY;
         IChatBaseComponent f = footer != null ? IChatBaseComponent.ChatSerializer.a(footer) : EMPTY;
-        CraftPlayer craftplayer = (CraftPlayer) player;
         PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
         try {
             Field headerField = packet.getClass().getDeclaredField("a");
@@ -40,6 +44,6 @@ public class NMSHandler extends NMS {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        craftplayer.getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 }

@@ -3,17 +3,17 @@ package xyz.jpenilla.tabtps.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.google.common.collect.ImmutableList;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.util.Constants;
 
-import java.util.ArrayList;
-
 @CommandAlias("tabtps|ttps")
 public class CommandTabTPS extends BaseCommand {
-    private final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
+    public static final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
+    public static final Component prefixComponent = TabTPS.getInstance().getMiniMessage().parse(prefix);
 
     @Dependency
     private TabTPS tabTPS;
@@ -27,13 +27,13 @@ public class CommandTabTPS extends BaseCommand {
     @Subcommand("about")
     @Description("Shows info about the TabTPS plugin.")
     public void onAbout(CommandSender sender) {
-        ArrayList<String> list = new ArrayList<>();
         final String header = tabTPS.getChat().getCenteredMessage("<strikethrough><gradient:white:black:white>----------------------------------");
-        list.add(header);
-        list.add(tabTPS.getChat().getCenteredMessage("<hover:show_text:'<rainbow>click me!'><click:open_url:" + tabTPS.getDescription().getWebsite() + ">" + tabTPS.getName() + " <gradient:blue:aqua>" + tabTPS.getDescription().getVersion()));
-        list.add(tabTPS.getChat().getCenteredMessage("<gray>By <gradient:gold:yellow>jmp"));
-        list.add(header);
-        tabTPS.getChat().sendParsed(sender, list);
+        tabTPS.getChat().sendParsed(sender, ImmutableList.of(
+                header,
+                tabTPS.getChat().getCenteredMessage("<hover:show_text:'<rainbow>click me!'><click:open_url:" + tabTPS.getDescription().getWebsite() + ">" + tabTPS.getName() + " <gradient:blue:aqua>" + tabTPS.getDescription().getVersion()),
+                tabTPS.getChat().getCenteredMessage("<gray>By <gradient:gold:yellow>jmp"),
+                header
+        ));
     }
 
     @Subcommand("reload")
