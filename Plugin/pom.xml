@@ -133,7 +133,7 @@
         <dependency>
             <groupId>xyz.jpenilla</groupId>
             <artifactId>jmplib</artifactId>
-            <version>1.0.0+102-SNAPSHOT</version>
+            <version>1.0.0+103-SNAPSHOT</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
