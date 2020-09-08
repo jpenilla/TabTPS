@@ -1,8 +1,8 @@
 package xyz.jpenilla.tabtps.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.*;
 import co.aikar.commands.annotation.Optional;
+import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.google.common.collect.ImmutableList;
 import net.kyori.adventure.text.Component;
@@ -70,12 +70,9 @@ public class CommandPing extends BaseCommand {
             content.add(" <gray>-</gray> <white><italic>" + player.getName() + "</italic><gray>:</gray> " + Ping.getColoredPing(player) + "<gray>ms");
             pings.add(Ping.getPing(player));
         });
-        float pingAvg = 0;
-        for (Integer ping : pings) {
-            pingAvg += (float) ping / pings.size();
-        }
+        final int avgPing = (int) Math.round(pings.stream().mapToInt(i -> i).average().orElse(0));
         final StringBuilder avg = new StringBuilder();
-        avg.append("Average ping<gray>:</gray> ").append(Ping.getColoredPing(Math.round(pingAvg))).append("<gray>ms <white>(</white><green>").append(Bukkit.getOnlinePlayers().size()).append("</green> player");
+        avg.append("Average ping<gray>:</gray> ").append(Ping.getColoredPing(avgPing)).append("<gray>ms <white>(</white><green>").append(Bukkit.getOnlinePlayers().size()).append("</green> player");
         if (Bukkit.getOnlinePlayers().size() != 1) {
             avg.append("s");
         }
