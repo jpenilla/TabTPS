@@ -31,7 +31,7 @@ public class CommandPing extends BaseCommand {
     @CommandPermission(Constants.PERMISSION_COMMAND_PING)
     @Description("Displays the senders ping to the server in milliseconds.")
     public void onPing(Player player) {
-        tabTPS.getChat().send(player, CommandTabTPS.prefix + "<reset><gray> Your " + getModuleRenderer(player).render("ping"));
+        tabTPS.getChat().send(player, CommandTabTPS.prefix + "<reset><gray> Your " + getModuleRenderer(player).render());
     }
 
     @Default
@@ -39,11 +39,11 @@ public class CommandPing extends BaseCommand {
     @Description("Displays the targets ping to the server in milliseconds.")
     @CommandCompletion("*")
     public void onPingOther(CommandSender sender, OnlinePlayer target) {
-        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> " + target.getPlayer().getName() + "'s " + getModuleRenderer(target.getPlayer()).render("ping"));
+        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> " + target.getPlayer().getName() + "'s " + getModuleRenderer(target.getPlayer()).render());
     }
 
     private ModuleRenderer getModuleRenderer(Player player) {
-        return new ModuleRenderer(player).separator("<gray>,</gray> ").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
+        return new ModuleRenderer(player).modules("ping").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
     }
 
     private static final Pagination<String> pagination = Pagination.builder()

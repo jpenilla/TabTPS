@@ -1,13 +1,16 @@
 package xyz.jpenilla.tabtps.module;
 
-import com.google.common.collect.ImmutableList;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ModuleRenderer {
     private final Player player;
+    private final List<Module> modules = new ArrayList<>();
     private Function<Module, String> renderModule;
     private String separator;
 
@@ -25,18 +28,31 @@ public class ModuleRenderer {
         return this;
     }
 
-    public String render(String module) {
-        return module != null ? render(ImmutableList.of(module)) : render(ImmutableList.of());
+    public ModuleRenderer modules(List<Module> modules) {
+        this.modules.clear();
+        this.modules.addAll(modules);
+        return this;
     }
 
-    public String render(List<String> modules) {
-        StringBuilder builder = new StringBuilder();
-        modules.forEach(moduleName -> {
-            if (moduleName.equals("")) return;
-            final Module module = Module.from(player, moduleName);
-            if (module.needsPlayer() && player == null) return;
+    public ModuleRenderer modules(Module... modules) {
+        return modules(Arrays.asList(modules));
+    }
+
+    public ModuleRenderer modules(String modules) {
+        return modules(
+                Arrays.stream(modules.replace(" ", "").split(","))
+                        .filter(s -> s != null && !s.equals(""))
+                        .map(moduleName -> Module.from(player, moduleName))
+                        .filter(module -> !module.needsPlayer() || player != null)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public String render() {
+        final StringBuilder builder = new StringBuilder();
+        modules.forEach(module -> {
             builder.append(renderModule.apply(module));
-            if (modules.indexOf(moduleName) != modules.size() - 1) {
+            if (modules.indexOf(module) != modules.size() - 1) {
                 builder.append(separator);
             }
         });

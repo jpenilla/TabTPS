@@ -1,26 +1,24 @@
 package xyz.jpenilla.tabtps.task;
 
-import com.google.common.collect.ImmutableList;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 import xyz.jpenilla.tabtps.util.Constants;
 
-import java.util.List;
-
 public class ActionBarTPSTask extends BukkitRunnable {
     private final Player player;
     private final TabTPS tabTPS;
     private final ModuleRenderer renderer;
-    private final List<String> modules;
     private boolean firstTick = true;
 
     public ActionBarTPSTask(TabTPS tabTPS, Player player) {
-        this.renderer = new ModuleRenderer(player).separator(" <white>|</white> ").moduleRenderFunction(module -> "<bold><gradient:blue:aqua>" + module.getLabel() + "</gradient><white>:</white></bold> " + module.getData());
+        this.renderer = new ModuleRenderer(player)
+                .modules(tabTPS.getPluginSettings().getModules().getActionBar())
+                .separator(" <white>|</white> ")
+                .moduleRenderFunction(module -> "<bold><gradient:blue:aqua>" + module.getLabel() + "</gradient><white>:</white></bold> " + module.getData());
         this.player = player;
         this.tabTPS = tabTPS;
-        this.modules = ImmutableList.copyOf(tabTPS.getPluginSettings().getModules().getActionBar().split(","));
     }
 
     @Override
@@ -40,6 +38,6 @@ public class ActionBarTPSTask extends BukkitRunnable {
     }
 
     private String getText() {
-        return renderer.render(modules);
+        return renderer.render();
     }
 }
