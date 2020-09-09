@@ -43,7 +43,7 @@ public class CommandPing extends BaseCommand {
     }
 
     private ModuleRenderer getModuleRenderer(Player player) {
-        return new ModuleRenderer(player).modules("ping").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData());
+        return ModuleRenderer.builder().player(player).modules("ping").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData()).build();
     }
 
     private static final Pagination<String> pagination = Pagination.builder()

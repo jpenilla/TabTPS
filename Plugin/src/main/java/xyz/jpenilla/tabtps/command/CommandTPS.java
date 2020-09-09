@@ -17,9 +17,9 @@ import java.util.List;
 
 @CommandAlias("tickinfo|mspt")
 public class CommandTPS extends BaseCommand {
-    private static final ModuleRenderer msptRenderer = new ModuleRenderer(null).modules("mspt").moduleRenderFunction(CommandTPS::renderModule);
-    private static final ModuleRenderer cpuRenderer = new ModuleRenderer(null).modules("cpu").moduleRenderFunction(CommandTPS::renderModule);
-    private static final ModuleRenderer memoryRenderer = new ModuleRenderer(null).modules(new Memory(true)).moduleRenderFunction(CommandTPS::renderModule);
+    private static final ModuleRenderer msptRenderer = ModuleRenderer.builder().modules("mspt").moduleRenderFunction(CommandTPS::renderModule).build();
+    private static final ModuleRenderer cpuRenderer = ModuleRenderer.builder().modules("cpu").moduleRenderFunction(CommandTPS::renderModule).build();
+    private static final ModuleRenderer memoryRenderer = ModuleRenderer.builder().modules(new Memory(true)).moduleRenderFunction(CommandTPS::renderModule).build();
 
     private static String renderModule(Module module) {
         return "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData();

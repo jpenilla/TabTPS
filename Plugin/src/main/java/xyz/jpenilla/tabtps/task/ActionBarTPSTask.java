@@ -13,10 +13,12 @@ public class ActionBarTPSTask extends BukkitRunnable {
     private boolean firstTick = true;
 
     public ActionBarTPSTask(TabTPS tabTPS, Player player) {
-        this.renderer = new ModuleRenderer(player)
+        this.renderer = ModuleRenderer.builder()
+                .player(player)
                 .modules(tabTPS.getPluginSettings().getModules().getActionBar())
                 .separator(" <white>|</white> ")
-                .moduleRenderFunction(module -> "<bold><gradient:blue:aqua>" + module.getLabel() + "</gradient><white>:</white></bold> " + module.getData());
+                .moduleRenderFunction(module -> "<bold><gradient:blue:aqua>" + module.getLabel() + "</gradient><white>:</white></bold> " + module.getData())
+                .build();
         this.player = player;
         this.tabTPS = tabTPS;
     }
