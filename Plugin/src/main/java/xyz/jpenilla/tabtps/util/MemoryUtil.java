@@ -20,7 +20,7 @@ public class MemoryUtil {
         return Math.round(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() / 1048576f);
     }
 
-    public static int getTotalMemory() {
+    public static int getCommittedMemory() {
         return Math.round(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getCommitted() / 1048576f);
     }
 

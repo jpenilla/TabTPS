@@ -26,7 +26,8 @@ public class CPU extends Module {
 
     @Override
     public String getData() {
-        return "<gradient:green:dark_green>" + getSystemCpuLoad() + "</gradient><white>% (<gray>sys.</gray>)</white><white>,</white> <gradient:green:dark_green>" + getProcessCpuLoad() + "</gradient><white>% (<gray>proc.</gray>)</white>";
+        //return "<gradient:green:dark_green>" + getSystemCpuLoad() + "</gradient><white>% (<gray>sys.</gray>)</white><white>,</white> <gradient:green:dark_green>" + getProcessCpuLoad() + "</gradient><white>% (<gray>proc.</gray>)</white>";
+        return "<gradient:green:dark_green>" + getSystemCpuLoad() + "</gradient><gray>%<white>, </white><gradient:green:dark_green>" + getProcessCpuLoad() + "</gradient>%</gray> <white>(<gray>sys.</gray>, <gray>proc.</gray>)</white>";
     }
 
     @Override

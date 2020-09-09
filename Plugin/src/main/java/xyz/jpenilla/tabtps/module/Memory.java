@@ -3,6 +3,17 @@ package xyz.jpenilla.tabtps.module;
 import xyz.jpenilla.tabtps.util.MemoryUtil;
 
 public class Memory extends Module {
+
+    private final boolean alwaysShowMax;
+
+    public Memory() {
+        this.alwaysShowMax = false;
+    }
+
+    public Memory(boolean alwaysShowMax) {
+        this.alwaysShowMax = alwaysShowMax;
+    }
+
     @Override
     public String getLabel() {
         return "RAM";
@@ -10,7 +21,12 @@ public class Memory extends Module {
 
     @Override
     public String getData() {
-        return "<gray><gradient:green:dark_green>" + MemoryUtil.getUsedMemory() + "</gradient>M<white>/</white><gradient:green:dark_green>" + MemoryUtil.getTotalMemory() + "</gradient>M <white>(</white>max <gradient:green:dark_green>" + MemoryUtil.getMaxMemory() + "</gradient>M</white>)</white></gray>";
+        final StringBuilder builder = new StringBuilder("<gray><gradient:green:dark_green>" + MemoryUtil.getUsedMemory() + "</gradient>M<white>/</white><gradient:green:dark_green>" + MemoryUtil.getCommittedMemory() + "</gradient>M");
+        if (alwaysShowMax || MemoryUtil.getCommittedMemory() != MemoryUtil.getMaxMemory()) {
+            builder.append(" <white>(</white>max <gradient:green:dark_green>").append(MemoryUtil.getMaxMemory()).append("</gradient>M<white>)</white>");
+        }
+        builder.append("</gray>");
+        return builder.toString();
     }
 
     @Override

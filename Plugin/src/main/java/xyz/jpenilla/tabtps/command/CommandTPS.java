@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.module.Memory;
 import xyz.jpenilla.tabtps.module.Module;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 import xyz.jpenilla.tabtps.util.Constants;
@@ -18,7 +19,7 @@ import java.util.List;
 public class CommandTPS extends BaseCommand {
     private static final ModuleRenderer msptRenderer = new ModuleRenderer(null).modules("mspt").moduleRenderFunction(CommandTPS::renderModule);
     private static final ModuleRenderer cpuRenderer = new ModuleRenderer(null).modules("cpu").moduleRenderFunction(CommandTPS::renderModule);
-    private static final ModuleRenderer memoryRenderer = new ModuleRenderer(null).modules("memory").moduleRenderFunction(CommandTPS::renderModule);
+    private static final ModuleRenderer memoryRenderer = new ModuleRenderer(null).modules(new Memory(true)).moduleRenderFunction(CommandTPS::renderModule);
 
     private static String renderModule(Module module) {
         return "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData();
