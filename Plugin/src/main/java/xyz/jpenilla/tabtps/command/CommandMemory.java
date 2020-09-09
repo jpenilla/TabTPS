@@ -5,8 +5,8 @@ import co.aikar.commands.annotation.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
-import xyz.jpenilla.tabtps.util.Constants;
 import xyz.jpenilla.tabtps.util.MemoryUtil;
 
 import java.lang.management.ManagementFactory;

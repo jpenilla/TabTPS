@@ -7,8 +7,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
-import xyz.jpenilla.tabtps.util.Constants;
 
 @CommandAlias("tabtps|ttps")
 public class CommandTabTPS extends BaseCommand {

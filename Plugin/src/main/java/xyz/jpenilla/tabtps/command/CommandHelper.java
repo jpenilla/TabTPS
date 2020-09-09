@@ -2,8 +2,8 @@ package xyz.jpenilla.tabtps.command;
 
 import co.aikar.commands.*;
 import org.bukkit.entity.Player;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
-import xyz.jpenilla.tabtps.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

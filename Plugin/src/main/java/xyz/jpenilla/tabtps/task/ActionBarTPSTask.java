@@ -2,9 +2,9 @@ package xyz.jpenilla.tabtps.task;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
-import xyz.jpenilla.tabtps.util.Constants;
 
 public class ActionBarTPSTask extends BukkitRunnable {
     private final Player player;

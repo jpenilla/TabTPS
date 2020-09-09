@@ -1,5 +1,6 @@
 package xyz.jpenilla.tabtps.module;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -9,17 +10,16 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModuleRenderer {
-    private final Player player;
     private final List<Module> modules;
-    private final Function<Module, String> renderModule;
+    private final Function<Module, String> moduleRenderFunction;
     private final String separator;
 
     public String render() {
         final StringBuilder builder = new StringBuilder();
         modules.forEach(module -> {
-            builder.append(renderModule.apply(module));
+            builder.append(moduleRenderFunction.apply(module));
             if (modules.indexOf(module) != modules.size() - 1) {
                 builder.append(separator);
             }
@@ -27,6 +27,9 @@ public class ModuleRenderer {
         return builder.toString();
     }
 
+    /**
+     * @return A new {@link Builder}
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -34,16 +37,29 @@ public class ModuleRenderer {
     public static class Builder {
         private Player player = null;
         private final List<Module> modules = new ArrayList<>();
-        private Function<Module, String> renderModule;
+        private Function<Module, String> moduleRenderFunction;
         private String separator = null;
 
+        private Builder() {
+        }
+
+        /**
+         * Sets the {@link Player} for the {@link Builder}.
+         * <p>
+         * Only necessary when using {@link Builder#modules(String)} with {@link Module}s which need a Player.
+         * <p>
+         * Should be called before {@link Builder#modules(String)}, otherwise the Modules will be resolved without a Player.
+         *
+         * @param player The player
+         * @return The {@link Builder}
+         */
         public Builder player(Player player) {
             this.player = player;
             return this;
         }
 
         public Builder moduleRenderFunction(Function<Module, String> function) {
-            this.renderModule = function;
+            this.moduleRenderFunction = function;
             return this;
         }
 
@@ -62,6 +78,14 @@ public class ModuleRenderer {
             return modules(Arrays.asList(modules));
         }
 
+        /**
+         * Sets the list of {@link Module}s to use from a comma separated {@link String}.
+         * <p>
+         * If Modules which need a {@link Player} are used, {@link Builder#player(Player)} should be called before this method.
+         *
+         * @param modules The list of Modules to use in the builder, separated by commas.
+         * @return The {@link Builder}
+         */
         public Builder modules(String modules) {
             return modules(
                     Arrays.stream(modules.replace(" ", "").split(","))
@@ -80,10 +104,10 @@ public class ModuleRenderer {
             if (separator == null && modules.size() > 1) {
                 throw new IllegalArgumentException("separator is null but there is more than one module");
             }
-            if (renderModule == null) {
+            if (moduleRenderFunction == null) {
                 throw new IllegalArgumentException("must provide a module render function");
             }
-            return new ModuleRenderer(player, modules, renderModule, separator);
+            return new ModuleRenderer(modules, moduleRenderFunction, separator);
         }
     }
 }

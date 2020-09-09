@@ -1,10 +1,9 @@
-package xyz.jpenilla.tabtps.util;
+package xyz.jpenilla.tabtps;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
-import xyz.jpenilla.tabtps.TabTPS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class PluginSettings {
         modules = new Modules(
                 config.getString("modules.tab_header", ""),
                 config.getString("modules.tab_footer", "tps,mspt"),
-                config.getString("modules.action_bar", "tps,mspt")
+                config.getString("modules.action_bar", "tps,mspt,ping")
         );
 
         ignoredMemoryPools.clear();

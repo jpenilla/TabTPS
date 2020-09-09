@@ -6,10 +6,9 @@ import xyz.jpenilla.jmplib.BasePlugin;
 import xyz.jpenilla.tabtps.api.NMS;
 import xyz.jpenilla.tabtps.command.CommandHelper;
 import xyz.jpenilla.tabtps.task.TaskManager;
-import xyz.jpenilla.tabtps.util.PluginSettings;
+import xyz.jpenilla.tabtps.util.CPUUtil;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 import xyz.jpenilla.tabtps.util.UpdateChecker;
-import xyz.jpenilla.tabtps.util.UserPrefs;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,6 +19,7 @@ public class TabTPS extends BasePlugin {
     @Getter private NMS nmsHandler = null;
     @Getter private TaskManager taskManager;
     @Getter private TPSUtil tpsUtil;
+    @Getter private CPUUtil cpuUtil;
     @Getter private UserPrefs userPrefs;
     @Getter private PluginSettings pluginSettings;
     @Getter private CommandHelper commandHelper;
@@ -32,7 +32,9 @@ public class TabTPS extends BasePlugin {
         this.pluginSettings = new PluginSettings(this);
         this.pluginSettings.load();
         this.tpsUtil = new TPSUtil(this);
+        this.cpuUtil = new CPUUtil();
         this.taskManager = new TaskManager(this);
+        this.taskManager.startRecordCpuTask();
         try {
             this.userPrefs = UserPrefs.deserialize(new File(getDataFolder() + File.separator + "user_preferences.json"));
         } catch (Exception e) {

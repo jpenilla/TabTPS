@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class UpdateChecker {
-
     private final TabTPS plugin;
     private final int resourceId;
 

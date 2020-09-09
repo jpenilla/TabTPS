@@ -1,4 +1,4 @@
-package xyz.jpenilla.tabtps.util;
+package xyz.jpenilla.tabtps;
 
 public class Constants {
     private static final String DOT = ".";

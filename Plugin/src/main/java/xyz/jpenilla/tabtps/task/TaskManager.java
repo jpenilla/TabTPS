@@ -8,13 +8,25 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class TaskManager {
-
     private final TabTPS tabTPS;
     private final HashMap<UUID, Integer> tabTpsTaskIds = new HashMap<>();
     private final HashMap<UUID, Integer> actionBarTpsTaskIds = new HashMap<>();
+    private int recordCpuTaskId = 0;
 
     public TaskManager(TabTPS tabTPS) {
         this.tabTPS = tabTPS;
+    }
+
+    public void startRecordCpuTask() {
+        stopRecordCpuTask();
+        recordCpuTaskId = new RecordCPUTask(tabTPS).runTaskTimerAsynchronously(tabTPS, 0L, 4L).getTaskId();
+    }
+
+    public void stopRecordCpuTask() {
+        if (recordCpuTaskId != 0) {
+            Bukkit.getScheduler().cancelTask(recordCpuTaskId);
+            recordCpuTaskId = 0;
+        }
     }
 
     public boolean hasTabTask(Player player) {

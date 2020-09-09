@@ -6,10 +6,10 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.Module;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
-import xyz.jpenilla.tabtps.util.Constants;
 
 public class TabTPSTask extends BukkitRunnable {
     private static final GsonComponentSerializer legacyGsonComponentSerializer = GsonComponentSerializer.builder().downsampleColors().build();

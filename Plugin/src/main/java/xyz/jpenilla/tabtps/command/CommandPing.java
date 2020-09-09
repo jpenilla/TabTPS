@@ -14,10 +14,10 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 import xyz.jpenilla.tabtps.module.Ping;
-import xyz.jpenilla.tabtps.util.Constants;
 
 import java.util.*;
 

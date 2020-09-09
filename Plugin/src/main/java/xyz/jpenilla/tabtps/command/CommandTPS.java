@@ -3,11 +3,11 @@ package xyz.jpenilla.tabtps.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import org.bukkit.command.CommandSender;
+import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.Memory;
 import xyz.jpenilla.tabtps.module.Module;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
-import xyz.jpenilla.tabtps.util.Constants;
 import xyz.jpenilla.tabtps.util.MemoryUtil;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 
