@@ -48,7 +48,7 @@ public class TabTPS extends BasePlugin {
 
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
-        new UpdateChecker(this, 82528).checkVersion();
+        new UpdateChecker(this, "jmanpenilla/TabTPS").checkVersion();
         Metrics metrics = new Metrics(this, 8458);
     }
 
