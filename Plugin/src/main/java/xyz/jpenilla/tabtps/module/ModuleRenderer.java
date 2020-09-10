@@ -3,6 +3,7 @@ package xyz.jpenilla.tabtps.module;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
+import xyz.jpenilla.tabtps.TabTPS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,27 +36,11 @@ public class ModuleRenderer {
     }
 
     public static class Builder {
-        private Player player = null;
         private final List<Module> modules = new ArrayList<>();
         private Function<Module, String> moduleRenderFunction;
         private String separator = null;
 
         private Builder() {
-        }
-
-        /**
-         * Sets the {@link Player} for the {@link Builder}.
-         * <p>
-         * Only necessary when using {@link Builder#modules(String)} with {@link Module}s which need a Player.
-         * <p>
-         * Should be called before {@link Builder#modules(String)}, otherwise the Modules will be resolved without a Player.
-         *
-         * @param player The player
-         * @return The {@link Builder}
-         */
-        public Builder player(Player player) {
-            this.player = player;
-            return this;
         }
 
         public Builder moduleRenderFunction(Function<Module, String> function) {
@@ -81,16 +66,29 @@ public class ModuleRenderer {
         /**
          * Sets the list of {@link Module}s to use from a comma separated {@link String}.
          * <p>
-         * If Modules which need a {@link Player} are used, {@link Builder#player(Player)} should be called before this method.
+         * If Modules which need a {@link Player} are used, {@link Builder#modules(TabTPS, Player, String)} should be used instead.
          *
+         * @param tabTPS  The TabTPS instance
          * @param modules The list of Modules to use in the builder, separated by commas.
          * @return The {@link Builder}
          */
-        public Builder modules(String modules) {
+        public Builder modules(TabTPS tabTPS, String modules) {
+            return modules(tabTPS, null, modules);
+        }
+
+        /**
+         * Sets the list of {@link Module}s to use from a comma separated {@link String}.
+         *
+         * @param tabTPS  The TabTPS instance
+         * @param player  The Player to use
+         * @param modules The list of Modules to use in the builder, separated by commas.
+         * @return The {@link Builder}
+         */
+        public Builder modules(TabTPS tabTPS, Player player, String modules) {
             return modules(
                     Arrays.stream(modules.replace(" ", "").split(","))
                             .filter(s -> s != null && !s.equals(""))
-                            .map(moduleName -> Module.from(player, moduleName))
+                            .map(moduleName -> Module.from(tabTPS, player, moduleName))
                             .filter(module -> !module.needsPlayer() || player != null)
                             .collect(Collectors.toList())
             );

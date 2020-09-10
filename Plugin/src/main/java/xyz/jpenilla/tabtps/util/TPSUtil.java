@@ -1,17 +1,15 @@
 package xyz.jpenilla.tabtps.util;
 
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import xyz.jpenilla.tabtps.TabTPS;
 
 import java.text.DecimalFormat;
 
+@AllArgsConstructor
 public class TPSUtil {
     private static final DecimalFormat format = new DecimalFormat("###.00");
     private final TabTPS tabTPS;
-
-    public TPSUtil(TabTPS tabTPS) {
-        this.tabTPS = tabTPS;
-    }
 
     public static String round(double value) {
         return format.format(value);

@@ -1,7 +1,10 @@
 package xyz.jpenilla.tabtps.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.*;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Description;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -17,16 +20,21 @@ import java.util.List;
 
 @CommandAlias("tickinfo|mspt")
 public class CommandTPS extends BaseCommand {
-    private static final ModuleRenderer msptRenderer = ModuleRenderer.builder().modules("mspt").moduleRenderFunction(CommandTPS::renderModule).build();
-    private static final ModuleRenderer cpuRenderer = ModuleRenderer.builder().modules("cpu").moduleRenderFunction(CommandTPS::renderModule).build();
-    private static final ModuleRenderer memoryRenderer = ModuleRenderer.builder().modules(new Memory(true)).moduleRenderFunction(CommandTPS::renderModule).build();
+    private final TabTPS tabTPS;
+    private final ModuleRenderer msptRenderer;
+    private final ModuleRenderer cpuRenderer;
+    private final ModuleRenderer memoryRenderer;
+
+    public CommandTPS(TabTPS tabTPS) {
+        this.tabTPS = tabTPS;
+        this.msptRenderer = ModuleRenderer.builder().modules(tabTPS, "mspt").moduleRenderFunction(CommandTPS::renderModule).build();
+        this.cpuRenderer = ModuleRenderer.builder().modules(tabTPS, "cpu").moduleRenderFunction(CommandTPS::renderModule).build();
+        this.memoryRenderer = ModuleRenderer.builder().modules(new Memory(true)).moduleRenderFunction(CommandTPS::renderModule).build();
+    }
 
     private static String renderModule(Module module) {
         return "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData();
     }
-
-    @Dependency
-    private TabTPS tabTPS;
 
     @Default
     @CommandPermission(Constants.PERMISSION_COMMAND_TICKINFO)

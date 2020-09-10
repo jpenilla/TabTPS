@@ -22,8 +22,8 @@ public class TabTPSTask extends BukkitRunnable {
     private boolean firstTick = true;
 
     public TabTPSTask(TabTPS tabTPS, Player player) {
-        this.headerRenderer = ModuleRenderer.builder().player(player).modules(tabTPS.getPluginSettings().getModules().getTabHeader()).separator(" ").moduleRenderFunction(TabTPSTask::renderModule).build();
-        this.footerRenderer = ModuleRenderer.builder().player(player).modules(tabTPS.getPluginSettings().getModules().getTabFooter()).separator(" ").moduleRenderFunction(TabTPSTask::renderModule).build();
+        this.headerRenderer = ModuleRenderer.builder().modules(tabTPS, player, tabTPS.getPluginSettings().getModules().getTabHeader()).separator(" ").moduleRenderFunction(TabTPSTask::renderModule).build();
+        this.footerRenderer = ModuleRenderer.builder().modules(tabTPS, player, tabTPS.getPluginSettings().getModules().getTabFooter()).separator(" ").moduleRenderFunction(TabTPSTask::renderModule).build();
         this.player = player;
         this.tabTPS = tabTPS;
     }

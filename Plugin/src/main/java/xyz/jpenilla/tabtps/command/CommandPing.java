@@ -17,15 +17,30 @@ import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
-import xyz.jpenilla.tabtps.module.Ping;
+import xyz.jpenilla.tabtps.util.PingUtil;
 
 import java.util.*;
 
 @CommandAlias("ping")
 public class CommandPing extends BaseCommand {
+    private final TabTPS tabTPS;
+    private final Pagination<String> pagination;
 
-    @Dependency
-    private TabTPS tabTPS;
+    public CommandPing(TabTPS tabTPS) {
+        this.tabTPS = tabTPS;
+        this.pagination = Pagination.builder()
+                .resultsPerPage(5)
+                .width(38)
+                .line(line -> {
+                    line.character('-');
+                    line.style(Style.of(TextColor.fromHexString("#47C8FF"), TextDecoration.STRIKETHROUGH));
+                })
+                .build(
+                        TextComponent.builder().append(CommandTabTPS.prefixComponent).append(TextComponent.of(" Player Pings")).build(),
+                        (value, index) -> Collections.singleton(tabTPS.getMiniMessage().parse(Objects.requireNonNull(value))),
+                        page -> "/tabtps:ping all " + page
+                );
+    }
 
     @Default
     @CommandPermission(Constants.PERMISSION_COMMAND_PING)
@@ -43,21 +58,8 @@ public class CommandPing extends BaseCommand {
     }
 
     private ModuleRenderer getModuleRenderer(Player player) {
-        return ModuleRenderer.builder().player(player).modules("ping").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData()).build();
+        return ModuleRenderer.builder().modules(tabTPS, player, "ping").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData()).build();
     }
-
-    private static final Pagination<String> pagination = Pagination.builder()
-            .resultsPerPage(5)
-            .width(38)
-            .line(line -> {
-                line.character('-');
-                line.style(Style.of(TextColor.fromHexString("#47C8FF"), TextDecoration.STRIKETHROUGH));
-            })
-            .build(
-                    TextComponent.builder().append(CommandTabTPS.prefixComponent).append(TextComponent.of(" Player Pings")).build(),
-                    (value, index) -> Collections.singleton(TabTPS.getInstance().getMiniMessage().parse(Objects.requireNonNull(value))),
-                    page -> "/tabtps:ping all " + page
-            );
 
     @Subcommand("all")
     @CommandPermission(Constants.PERMISSION_COMMAND_PING_OTHERS)
@@ -66,13 +68,13 @@ public class CommandPing extends BaseCommand {
     public void onPingAll(CommandSender sender, @Optional Integer page) {
         final List<String> content = new ArrayList<>();
         final List<Integer> pings = new ArrayList<>();
-        ImmutableList.copyOf(Bukkit.getOnlinePlayers()).stream().sorted(Comparator.comparing(Ping::getPing).reversed()).forEach(player -> {
-            content.add(" <gray>-</gray> <white><italic>" + player.getName() + "</italic><gray>:</gray> " + Ping.getColoredPing(player) + "<gray>ms");
-            pings.add(Ping.getPing(player));
+        ImmutableList.copyOf(Bukkit.getOnlinePlayers()).stream().sorted(Comparator.comparing(player -> tabTPS.getPingUtil().getPing(player))).forEach(player -> {
+            content.add(" <gray>-</gray> <white><italic>" + player.getName() + "</italic><gray>:</gray> " + tabTPS.getPingUtil().getColoredPing(player) + "<gray>ms");
+            pings.add(tabTPS.getPingUtil().getPing(player));
         });
         final int avgPing = (int) Math.round(pings.stream().mapToInt(i -> i).average().orElse(0));
         final StringBuilder avg = new StringBuilder();
-        avg.append("Average ping<gray>:</gray> ").append(Ping.getColoredPing(avgPing)).append("<gray>ms <white>(</white><green>").append(Bukkit.getOnlinePlayers().size()).append("</green> player");
+        avg.append("Average ping<gray>:</gray> ").append(PingUtil.getColoredPing(avgPing)).append("<gray>ms <white>(</white><green>").append(Bukkit.getOnlinePlayers().size()).append("</green> player");
         if (Bukkit.getOnlinePlayers().size() != 1) {
             avg.append("s");
         }

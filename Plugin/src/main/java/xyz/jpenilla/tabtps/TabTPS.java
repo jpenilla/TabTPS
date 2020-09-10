@@ -7,6 +7,7 @@ import xyz.jpenilla.tabtps.api.NMS;
 import xyz.jpenilla.tabtps.command.CommandHelper;
 import xyz.jpenilla.tabtps.task.TaskManager;
 import xyz.jpenilla.tabtps.util.CPUUtil;
+import xyz.jpenilla.tabtps.util.PingUtil;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 import xyz.jpenilla.tabtps.util.UpdateChecker;
 
@@ -20,6 +21,7 @@ public class TabTPS extends BasePlugin {
     @Getter private TaskManager taskManager;
     @Getter private TPSUtil tpsUtil;
     @Getter private CPUUtil cpuUtil;
+    @Getter private PingUtil pingUtil;
     @Getter private UserPrefs userPrefs;
     @Getter private PluginSettings pluginSettings;
     @Getter private CommandHelper commandHelper;
@@ -33,6 +35,7 @@ public class TabTPS extends BasePlugin {
         this.pluginSettings.load();
         this.tpsUtil = new TPSUtil(this);
         this.cpuUtil = new CPUUtil();
+        this.pingUtil = new PingUtil(this);
         this.taskManager = new TaskManager(this);
         this.taskManager.startRecordCpuTask();
         try {

@@ -1,17 +1,14 @@
 package xyz.jpenilla.tabtps.module;
 
+import lombok.AllArgsConstructor;
 import xyz.jpenilla.tabtps.util.MemoryUtil;
 
+@AllArgsConstructor
 public class Memory extends Module {
-
     private final boolean alwaysShowMax;
 
     public Memory() {
         this.alwaysShowMax = false;
-    }
-
-    public Memory(boolean alwaysShowMax) {
-        this.alwaysShowMax = alwaysShowMax;
     }
 
     @Override
