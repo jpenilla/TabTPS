@@ -28,6 +28,13 @@ Spigot/Paper Plugin to show TPS and MSPT in the Tab menu. Supports Minecraft ver
 * Permission required: ``tabtps.tps``
 * ![tps command](https://i.imgur.com/ZKlObpY.png)
 
+### Ping command
+* Commands: ``/ping``, `/ping [username]`, or ``/ping all``
+* View the ping of yourself, or another user. ``/ping all`` will show a summary of all connected player's pings.
+* Permissions: ``tabtps.ping`` to view your own ping, ``tabtps.ping.others`` to view other users ping and the ping summary.
+* ![ping command](https://i.imgur.com/0agY7lB.png)
+* ![ping all](https://i.imgur.com/t1lBt2b.png)
+
 ### Reload command
 * Command: ``/tabtps reload`` or ``/ttps reload``
 * Permission required: ``tabtps.reload``
