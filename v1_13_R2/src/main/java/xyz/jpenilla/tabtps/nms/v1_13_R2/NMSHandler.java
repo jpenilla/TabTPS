@@ -1,14 +1,17 @@
 package xyz.jpenilla.tabtps.nms.v1_13_R2;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_13_R2.ChatComponentText;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
 import net.minecraft.server.v1_13_R2.MathHelper;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_13_R2.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.api.NMS;
 
 public class NMSHandler extends NMS {
+
+    private static final ChatComponentText EMPTY = new ChatComponentText("");
 
     @Override
     public double[] getTps() {
@@ -27,8 +30,9 @@ public class NMSHandler extends NMS {
 
     @Override
     public void setHeaderFooter(Player player, String header, String footer) {
-        final String h = header != null ? BaseComponent.toLegacyText(ComponentSerializer.parse(header)) : null;
-        final String f = footer != null ? BaseComponent.toLegacyText(ComponentSerializer.parse(footer)) : null;
-        player.setPlayerListHeaderFooter(h, f);
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+        packet.header = header != null ? IChatBaseComponent.ChatSerializer.a(header) : EMPTY;
+        packet.footer = footer != null ? IChatBaseComponent.ChatSerializer.a(footer) : EMPTY;
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 }

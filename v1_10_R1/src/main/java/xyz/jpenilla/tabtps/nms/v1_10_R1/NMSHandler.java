@@ -1,6 +1,10 @@
 package xyz.jpenilla.tabtps.nms.v1_10_R1;
 
-import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_10_R1.ChatComponentText;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.MathHelper;
+import net.minecraft.server.v1_10_R1.MinecraftServer;
+import net.minecraft.server.v1_10_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.api.NMS;
@@ -35,12 +39,10 @@ public class NMSHandler extends NMS {
             Field headerField = packet.getClass().getDeclaredField("a");
             headerField.setAccessible(true);
             headerField.set(packet, h);
-            headerField.setAccessible(!headerField.isAccessible());
 
             Field footerField = packet.getClass().getDeclaredField("b");
             footerField.setAccessible(true);
             footerField.set(packet, f);
-            footerField.setAccessible(!footerField.isAccessible());
         } catch (Exception e) {
             e.printStackTrace();
         }
