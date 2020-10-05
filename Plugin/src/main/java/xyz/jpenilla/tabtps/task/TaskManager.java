@@ -5,12 +5,13 @@ import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.TabTPS;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class TaskManager {
     private final TabTPS tabTPS;
-    private final HashMap<UUID, Integer> tabTpsTaskIds = new HashMap<>();
-    private final HashMap<UUID, Integer> actionBarTpsTaskIds = new HashMap<>();
+    private final Map<UUID, Integer> tabTpsTaskIds = new HashMap<>();
+    private final Map<UUID, Integer> actionBarTpsTaskIds = new HashMap<>();
     private int recordCpuTaskId = 0;
 
     public TaskManager(TabTPS tabTPS) {

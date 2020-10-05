@@ -118,22 +118,49 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>co.aikar</groupId>
-            <artifactId>acf-paper</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
-            <scope>compile</scope>
-            <optional>true</optional>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-paper</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-annotations</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-minecraft-extras</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-text-minimessage</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- <dependency> Add back when Commodore is fixed (merging child nodes)
+            <groupId>me.lucko</groupId>
+            <artifactId>commodore</artifactId>
+            <version>1.9</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mojang</groupId>
+                    <artifactId>brigadier</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency> -->
         <dependency>
             <groupId>xyz.jpenilla</groupId>
             <artifactId>jmplib</artifactId>
-            <version>1.0.1+3-SNAPSHOT</version>
+            <version>1.0.1+10-SNAPSHOT</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -194,20 +221,20 @@
                             <shadedPattern>xyz.jpenilla.tabtps.lib.jmplib</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>xyz.jpenilla.tabtps.lib.acf</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>xyz.jpenilla.tabtps.lib.acflocales</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>net.kyori.examination</pattern>
                             <shadedPattern>xyz.jpenilla.tabtps.lib.kyori.examination</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.kyori.adventure</pattern>
                             <shadedPattern>xyz.jpenilla.tabtps.lib.kyori.adventure</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>cloud.commandframework</pattern>
+                            <shadedPattern>xyz.jpenilla.tabtps.lib.cloud</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.lucko.commodore</pattern>
+                            <shadedPattern>xyz.jpenilla.tabtps.lib.commodore</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
@@ -216,6 +243,7 @@
                             <excludes>
                                 <exclude>org/checkerframework/**</exclude>
                                 <exclude>com/google/**</exclude>
+                                <exclude>javax/**</exclude>
                             </excludes>
                         </filter>
                     </filters>

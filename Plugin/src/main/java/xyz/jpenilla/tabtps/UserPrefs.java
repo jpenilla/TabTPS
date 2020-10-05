@@ -6,7 +6,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
@@ -18,14 +22,14 @@ public class UserPrefs {
     @Getter private final Collection<UUID> tabEnabled = new HashSet<>();
     @Getter private final Collection<UUID> actionBarEnabled = new HashSet<>();
 
-    public static UserPrefs deserialize(File json) throws FileNotFoundException {
-        JsonObject jsonObject = jsonParser.parse(new FileReader(json)).getAsJsonObject();
-        return gson.fromJson(jsonObject, UserPrefs.class);
-    }
-
     public void serialize(FileWriter writer) throws IOException {
         writer.write(gson.toJson(this));
         writer.flush();
         writer.close();
+    }
+
+    public static UserPrefs deserialize(File json) throws FileNotFoundException {
+        JsonObject jsonObject = jsonParser.parse(new FileReader(json)).getAsJsonObject();
+        return gson.fromJson(jsonObject, UserPrefs.class);
     }
 }

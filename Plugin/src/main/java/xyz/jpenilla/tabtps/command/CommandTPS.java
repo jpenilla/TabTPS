@@ -1,10 +1,9 @@
 package xyz.jpenilla.tabtps.command;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Description;
+import cloud.commandframework.annotations.CommandDescription;
+import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.paper.PaperCommandManager;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -18,14 +17,13 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandAlias("tickinfo|mspt")
-public class CommandTPS extends BaseCommand {
+public class CommandTPS {
     private final TabTPS tabTPS;
     private final ModuleRenderer msptRenderer;
     private final ModuleRenderer cpuRenderer;
     private final ModuleRenderer memoryRenderer;
 
-    public CommandTPS(TabTPS tabTPS) {
+    public CommandTPS(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
         this.tabTPS = tabTPS;
         this.msptRenderer = ModuleRenderer.builder().modules(tabTPS, "mspt").moduleRenderFunction(CommandTPS::renderModule).build();
         this.cpuRenderer = ModuleRenderer.builder().modules(tabTPS, "cpu").moduleRenderFunction(CommandTPS::renderModule).build();
@@ -36,9 +34,9 @@ public class CommandTPS extends BaseCommand {
         return "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData();
     }
 
-    @Default
+    @CommandDescription("Displays the current TPS and MSPT of the server.")
     @CommandPermission(Constants.PERMISSION_COMMAND_TICKINFO)
-    @Description("Displays the current TPS and MSPT of the server.")
+    @CommandMethod("tickinfo|mspt|tps")
     public void onTPS(CommandSender sender) {
         final double[] tps = tabTPS.getTpsUtil().getTps();
         final String tpsString = "<hover:show_text:'Ticks per second<gray>.</gray> <green>20</green> is optimal<gray>.</gray>'>" +

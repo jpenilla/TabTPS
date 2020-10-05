@@ -5,4 +5,5 @@ api-version: 1.13
 description: Show TPS and MSPT in the Tab Menu
 version: ${project.version}
 website: https://www.spigotmc.org/resources/tabtps.82528/
-softdepend: [Prisma, PlaceholderAPI]
+loadbefore: [Essentials]
+softdepend: [Prisma, PlaceholderAPI, ViaVersion]

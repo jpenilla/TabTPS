@@ -45,7 +45,7 @@ public class MemoryUtil {
         committedGradient.init(committedLength);
         unallocatedGradient.init(unallocatedLength);
 
-        final TextComponent.Builder builder = TextComponent.builder();
+        final TextComponent.Builder builder = Component.text();
 
         final StringBuilder hover = new StringBuilder();
         hover.append(humanReadableByteCountBin(usage.getUsed())).append(" <white>Used</white>/").append(humanReadableByteCountBin(usage.getCommitted())).append(" <white>Committed</white>\n");
@@ -55,22 +55,22 @@ public class MemoryUtil {
         hover.append(humanReadableByteCountBin(init)).append(" <white>Init</white>");
         builder.hoverEvent(HoverEvent.showText(TabTPS.getInstance().getMiniMessage().parse(hover.toString())));
 
-        builder.append("[", NamedTextColor.GRAY);
+        builder.append(Component.text("[", NamedTextColor.GRAY));
         IntStream.rangeClosed(1, barLength).forEach(i -> {
             if (i == initPointer) {
-                builder.append("|", TextColor.of(0xFF48A8));
+                builder.append(Component.text("|", TextColor.color(0xFF48A8)));
             } else if (i <= usedLength) {
-                builder.append(usedGradient.apply(TextComponent.of("|")));
+                builder.append(usedGradient.apply(Component.text("|")));
             } else if (i <= usedLength + committedLength) {
-                builder.append(committedGradient.apply(TextComponent.of("|")));
+                builder.append(committedGradient.apply(Component.text("|")));
             } else {
-                builder.append(unallocatedGradient.apply(TextComponent.of("|")));
+                builder.append(unallocatedGradient.apply(Component.text("|")));
             }
         });
-        builder.append("]", NamedTextColor.GRAY);
+        builder.append(Component.text("]", NamedTextColor.GRAY));
         if (name != null && !name.equals("")) {
-            builder.append(" ");
-            builder.append(name, NamedTextColor.WHITE, TextDecoration.ITALIC);
+            builder.append(Component.text(" "));
+            builder.append(Component.text(name, NamedTextColor.WHITE, TextDecoration.ITALIC));
         }
 
         return builder.build();

@@ -1,7 +1,7 @@
 package xyz.jpenilla.tabtps.task;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.bungeecord.BungeeCordComponentSerializer;
+import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ import xyz.jpenilla.tabtps.module.ModuleRenderer;
 public class TabTPSTask extends BukkitRunnable {
     private static final GsonComponentSerializer legacyGsonComponentSerializer = GsonComponentSerializer.builder().downsampleColors().build();
     private static final LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
-    private static final BungeeCordComponentSerializer bungeeComponentSerializer = BungeeCordComponentSerializer.get();
+    private static final BungeeComponentSerializer bungeeComponentSerializer = BungeeComponentSerializer.get();
     private final ModuleRenderer headerRenderer;
     private final ModuleRenderer footerRenderer;
     private final Player player;

@@ -1,82 +1,63 @@
 package xyz.jpenilla.tabtps.command;
 
-import co.aikar.commands.*;
-import org.bukkit.entity.Player;
-import xyz.jpenilla.tabtps.Constants;
+import cloud.commandframework.MinecraftHelp;
+import cloud.commandframework.annotations.AnnotationParser;
+import cloud.commandframework.arguments.parser.StandardParameters;
+import cloud.commandframework.bukkit.BukkitCommandMetaBuilder;
+import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.meta.SimpleCommandMeta;
+import cloud.commandframework.paper.PaperCommandManager;
+import com.google.common.collect.ImmutableList;
+import lombok.Getter;
+import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.TabTPS;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Function;
 
 public class CommandHelper {
-    private final TabTPS tabTPS;
-    private final PaperCommandManager manager;
+    @Getter private PaperCommandManager<CommandSender> mgr;
+    @Getter private MinecraftHelp<CommandSender> help;
+    @Getter private AnnotationParser<CommandSender> annotationParser;
 
     public CommandHelper(TabTPS tabTPS) {
-        this.tabTPS = tabTPS;
+        try {
+            mgr = new PaperCommandManager<>(
+                    tabTPS,
+                    AsynchronousCommandExecutionCoordinator.<CommandSender>newBuilder().build(),
+                    Function.identity(),
+                    Function.identity()
+            );
+            help = new MinecraftHelp<>("/tabtps help", sender -> tabTPS.getAudience().sender(sender), mgr);
+            annotationParser = new AnnotationParser<>(mgr, CommandSender.class,
+                    p -> metaWithDescription(p.get(StandardParameters.DESCRIPTION, "No description")));
 
-        manager = new PaperCommandManager(tabTPS);
-        manager.enableUnstableAPI("help");
+            /* Register Brigadier */
+            try {
+                mgr.registerBrigadier();
+                tabTPS.getLogger().info("Successfully registered Mojang Brigadier support for commands.");
+            } catch (Exception ignored) {
+            }
 
-        registerContexts();
-        registerCompletions();
+            /* Register Asynchronous Completion Listener */
+            try {
+                mgr.registerAsynchronousCompletions();
+                tabTPS.getLogger().info("Successfully registered asynchronous command completion listener.");
+            } catch (Exception ignored) {
+            }
 
-        manager.registerCommand(new CommandTabTPS());
-        manager.registerCommand(new CommandTPS(tabTPS));
-        manager.registerCommand(new CommandMemory());
-        manager.registerCommand(new CommandPing(tabTPS));
+            /* Register Commands */
+            ImmutableList.of(
+                    new CommandTabTPS(tabTPS, mgr),
+                    new CommandTPS(tabTPS, mgr),
+                    new CommandMemory(tabTPS, mgr),
+                    new CommandPing(tabTPS, mgr)
+            ).forEach(annotationParser::parse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void registerCompletions() {
-        CommandCompletions<BukkitCommandCompletionContext> completions = manager.getCommandCompletions();
-
-        completions.registerCompletion("available_display_toggles", completion -> {
-            List<String> c = new ArrayList<>();
-
-            if (completion.getPlayer().hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
-                c.add("tab");
-            }
-            if (completion.getPlayer().hasPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)) {
-                c.add("actionbar");
-            }
-
-            return c;
-        });
-        completions.setDefaultCompletion("available_display_toggles", Toggle.class);
-    }
-
-    private void registerContexts() {
-        CommandContexts<BukkitCommandExecutionContext> contexts = manager.getCommandContexts();
-
-        contexts.registerContext(Toggle.class, context -> {
-            Player player = context.getPlayer();
-            String firstArg = context.popFirstArg();
-
-            if (firstArg.equalsIgnoreCase("tab")) {
-                if (player.hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
-                    return Toggle.TAB;
-                }
-                throw new InvalidCommandArgument("No permission");
-            }
-            if (firstArg.equalsIgnoreCase("actionbar")) {
-                if (player.hasPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)) {
-                    return Toggle.ACTION_BAR;
-                }
-                throw new InvalidCommandArgument("No permission");
-            }
-
-            List<String> valid = new ArrayList<>();
-            if (player.hasPermission(Constants.PERMISSION_TOGGLE_TAB)) {
-                valid.add("tab");
-            }
-            if (player.hasPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)) {
-                valid.add("actionbar");
-            }
-            throw new InvalidCommandArgument(MessageKeys.PLEASE_SPECIFY_ONE_OF, "{valid}", ACFUtil.join(valid, ", "));
-        });
-    }
-
-    public enum Toggle {
-        TAB, ACTION_BAR
+    public static SimpleCommandMeta metaWithDescription(final String description) {
+        return BukkitCommandMetaBuilder.builder().withDescription(description).build();
     }
 }

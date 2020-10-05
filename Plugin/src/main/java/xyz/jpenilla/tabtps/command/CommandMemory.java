@@ -1,9 +1,10 @@
 package xyz.jpenilla.tabtps.command;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.*;
+import cloud.commandframework.annotations.CommandDescription;
+import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.paper.PaperCommandManager;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -15,18 +16,19 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@CommandAlias("memory|mem|ram")
-public class CommandMemory extends BaseCommand {
+public class CommandMemory {
+    private final TabTPS tabTPS;
 
-    @Dependency
-    private TabTPS tabTPS;
+    public CommandMemory(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
+        this.tabTPS = tabTPS;
+    }
 
-    @Default
+    @CommandDescription("Displays the current memory pools of the server jvm. Output will vary greatly based on garbage collection settings.")
     @CommandPermission(Constants.PERMISSION_COMMAND_TICKINFO)
-    @Description("Displays the current memory pools of the server jvm. Output will vary greatly based on garbage collection settings.")
+    @CommandMethod("memory|mem|ram")
     public void onMemory(CommandSender sender) {
         final List<Component> messages = new ArrayList<>();
-        messages.add(TextComponent.of(""));
+        messages.add(Component.text(""));
         messages.add(tabTPS.getMiniMessage().parse("<gradient:blue:aqua><strikethrough>----</strikethrough></gradient><aqua>[</aqua> <bold><gradient:red:gold>TabTPS RAM</gradient></bold> <gradient:aqua:blue>]<strikethrough>-----------------------</strikethrough>"));
         if (!tabTPS.getPluginSettings().getIgnoredMemoryPools().contains("Heap Memory Usage")) {
             messages.add(MemoryUtil.renderBar("Heap Memory Usage", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 60));

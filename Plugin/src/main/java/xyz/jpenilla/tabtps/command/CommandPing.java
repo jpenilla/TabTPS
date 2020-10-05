@@ -1,13 +1,15 @@
 package xyz.jpenilla.tabtps.command;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.Optional;
-import co.aikar.commands.annotation.*;
-import co.aikar.commands.bukkit.contexts.OnlinePlayer;
+import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandDescription;
+import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
+import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.feature.pagination.Pagination;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -19,70 +21,90 @@ import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 import xyz.jpenilla.tabtps.util.PingUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
-@CommandAlias("ping")
-public class CommandPing extends BaseCommand {
+public class CommandPing {
     private final TabTPS tabTPS;
     private final Pagination<String> pagination;
 
-    public CommandPing(TabTPS tabTPS) {
+    public CommandPing(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
         this.tabTPS = tabTPS;
         this.pagination = Pagination.builder()
                 .resultsPerPage(5)
                 .width(38)
                 .line(line -> {
                     line.character('-');
-                    line.style(Style.of(TextColor.fromHexString("#47C8FF"), TextDecoration.STRIKETHROUGH));
+                    line.style(Style.style(TextColor.fromHexString("#47C8FF"), TextDecoration.STRIKETHROUGH));
                 })
                 .build(
-                        TextComponent.builder().append(CommandTabTPS.prefixComponent).append(TextComponent.of(" Player Pings")).build(),
+                        Component.text().append(CommandTabTPS.prefixComponent).append(Component.text(" Player Pings")).build(),
                         (value, index) -> Collections.singleton(tabTPS.getMiniMessage().parse(Objects.requireNonNull(value))),
                         page -> "/tabtps:ping all " + page
                 );
     }
 
-    @Default
+    @CommandDescription("Displays the senders ping to the server in milliseconds.")
     @CommandPermission(Constants.PERMISSION_COMMAND_PING)
-    @Description("Displays the senders ping to the server in milliseconds.")
-    public void onPing(Player player) {
-        tabTPS.getChat().send(player, CommandTabTPS.prefix + "<reset><gray> Your " + getModuleRenderer(player).render());
+    @CommandMethod("ping")
+    public void onPingSelf(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><red> Console must provide a player to check the ping of.");
+            return;
+        }
+        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> Your " + getModuleRenderer((Player) sender).render());
     }
 
-    @Default
+    @CommandDescription("Displays the targets ping to the server in milliseconds.")
     @CommandPermission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-    @Description("Displays the targets ping to the server in milliseconds.")
-    @CommandCompletion("*")
-    public void onPingOther(CommandSender sender, OnlinePlayer target) {
-        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> " + target.getPlayer().getName() + "'s " + getModuleRenderer(target.getPlayer()).render());
+    @CommandMethod("ping <target> [page]")
+    public void onPing(CommandSender sender,
+                       @Argument(value = "target", description = "The player to check the ping of") MultiplePlayerSelector target,
+                       @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") int page) {
+        if (target.getPlayers().isEmpty()) {
+            tabTPS.getChat().send(sender, CommandTabTPS.prefixComponent.append(Component.text(String.format(" No players found for selector: '%s'", target.getSelector()), NamedTextColor.RED, TextDecoration.ITALIC)));
+            return;
+        }
+        if (target.getPlayers().size() > 1) {
+            pingMultiple(sender, target.getPlayers(), page);
+        }
+        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> " + target.getPlayers().get(0).getName() + "'s " + getModuleRenderer(target.getPlayers().get(0)).render());
     }
 
     private ModuleRenderer getModuleRenderer(Player player) {
         return ModuleRenderer.builder().modules(tabTPS, player, "ping").moduleRenderFunction(module -> "<gray>" + module.getLabel() + "</gray><white>:</white> " + module.getData()).build();
     }
 
-    @Subcommand("all")
+    @CommandDescription("Displays the pings of connected players with an average.")
     @CommandPermission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-    @Description("Displays the pings of connected players with an average.")
-    @CommandCompletion("*")
-    public void onPingAll(CommandSender sender, @Optional Integer page) {
+    @CommandMethod("pingall [page]")
+    public void onPingAll(CommandSender sender,
+                          @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") int page) {
+        pingMultiple(sender, ImmutableList.copyOf(Bukkit.getOnlinePlayers()), page);
+    }
+
+    private void pingMultiple(CommandSender sender, Collection<Player> targets, int page) {
         final List<String> content = new ArrayList<>();
         final List<Integer> pings = new ArrayList<>();
-        ImmutableList.copyOf(Bukkit.getOnlinePlayers()).stream().sorted(Comparator.comparing(player -> tabTPS.getPingUtil().getPing(player))).forEach(player -> {
+        targets.stream().sorted(Comparator.comparing(player -> tabTPS.getPingUtil().getPing(player))).forEach(player -> {
             content.add(" <gray>-</gray> <white><italic>" + player.getName() + "</italic><gray>:</gray> " + tabTPS.getPingUtil().getColoredPing(player) + "<gray>ms");
             pings.add(tabTPS.getPingUtil().getPing(player));
         });
         final int avgPing = (int) Math.round(pings.stream().mapToInt(i -> i).average().orElse(0));
         final StringBuilder avg = new StringBuilder();
         avg.append("Average ping<gray>:</gray> ").append(PingUtil.getColoredPing(avgPing)).append("<gray>ms <white>(</white><green>").append(Bukkit.getOnlinePlayers().size()).append("</green> player");
-        if (Bukkit.getOnlinePlayers().size() != 1) {
+        if (targets.size() != 1) {
             avg.append("s");
         }
         avg.append("<white>)</white></gray>");
         final List<Component> messages = new ArrayList<>();
-        messages.add(TextComponent.of(""));
-        messages.addAll(pagination.render(content, page == null ? 1 : page));
-        messages.add(TextComponent.of(""));
+        messages.add(Component.text(""));
+        messages.addAll(pagination.render(content, page));
+        messages.add(Component.text(""));
         messages.add(tabTPS.getMiniMessage().parse(avg.toString()));
         tabTPS.getChat().send(sender, messages);
     }
