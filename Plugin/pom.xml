@@ -145,7 +145,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- <dependency> Add back when Commodore is fixed (merging child nodes)
+        <dependency>
             <groupId>me.lucko</groupId>
             <artifactId>commodore</artifactId>
             <version>1.9</version>
@@ -156,7 +156,7 @@
                     <artifactId>brigadier</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency> -->
+        </dependency>
         <dependency>
             <groupId>xyz.jpenilla</groupId>
             <artifactId>jmplib</artifactId>
