@@ -63,7 +63,7 @@ public class CommandPing {
     @CommandPermission(Constants.PERMISSION_COMMAND_PING_OTHERS)
     @CommandMethod("ping <target> [page]")
     public void onPing(CommandSender sender,
-                       @Argument(value = "target", description = "The player to check the ping of") MultiplePlayerSelector target,
+                       @Argument(value = "target", description = "The player(s) to check the ping of.") MultiplePlayerSelector target,
                        @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") int page) {
         if (target.getPlayers().isEmpty()) {
             tabTPS.getChat().send(sender, CommandTabTPS.prefixComponent.append(Component.text(String.format(" No players found for selector: '%s'", target.getSelector()), NamedTextColor.RED, TextDecoration.ITALIC)));
@@ -71,6 +71,7 @@ public class CommandPing {
         }
         if (target.getPlayers().size() > 1) {
             pingMultiple(sender, target.getPlayers(), page);
+            return;
         }
         tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> " + target.getPlayers().get(0).getName() + "'s " + getModuleRenderer(target.getPlayers().get(0)).render());
     }
