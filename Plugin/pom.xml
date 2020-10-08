@@ -236,6 +236,10 @@
                             <pattern>me.lucko.commodore</pattern>
                             <shadedPattern>xyz.jpenilla.tabtps.lib.commodore</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>io.leangen.geantyref</pattern>
+                            <shadedPattern>xyz.jpenilla.tabtps.lib.typetoken</shadedPattern>
+                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
