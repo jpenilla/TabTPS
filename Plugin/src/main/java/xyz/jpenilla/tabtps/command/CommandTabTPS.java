@@ -15,8 +15,7 @@ import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandTabTPS {
     public static final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
@@ -28,12 +27,9 @@ public class CommandTabTPS {
         this.tabTPS = tabTPS;
 
         mgr.getParserRegistry().registerNamedParserSupplier("help_query", p -> new StringArgument.StringParser<>(StringArgument.StringMode.GREEDY,
-                (context, input) -> {
-                    List<String> list = new ArrayList<>();
-                    ((CommandHelpHandler.IndexHelpTopic<CommandSender>) mgr.getCommandHelpHandler().queryHelp(context.getSender(), ""))
-                            .getEntries().forEach(entry -> list.add(entry.getSyntaxString()));
-                    return list;
-                }
+                (context, input) ->
+                        ((CommandHelpHandler.IndexHelpTopic<CommandSender>) mgr.getCommandHelpHandler().queryHelp(context.getSender(), ""))
+                                .getEntries().stream().map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString).collect(Collectors.toList())
         ));
     }
 
