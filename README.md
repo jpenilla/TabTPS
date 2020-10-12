@@ -13,7 +13,7 @@ Spigot/Paper Plugin to show TPS and MSPT in the Tab menu. Supports Minecraft ver
 
 ### Show TPS and MSPT in Action Bar
 * Command: ``/tabtps toggle actionbar``
-* Permission required: ``tabtps.toggle`` and ``tabtps.togglea.ctionbar``
+* Permission required: ``tabtps.toggle`` and ``tabtps.toggle.actionbar``
 * ![action bar](https://i.imgur.com/aMzzNRR.png)
 
 ### Improved TPS command
