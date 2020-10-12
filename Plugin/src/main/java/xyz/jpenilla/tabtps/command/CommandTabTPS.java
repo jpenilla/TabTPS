@@ -8,7 +8,6 @@ import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,9 +17,6 @@ import xyz.jpenilla.tabtps.TabTPS;
 import java.util.stream.Collectors;
 
 public class CommandTabTPS {
-    public static final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
-    public static final Component prefixComponent = TabTPS.getInstance().getMiniMessage().parse(prefix);
-
     private final TabTPS tabTPS;
 
     public CommandTabTPS(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
@@ -65,7 +61,7 @@ public class CommandTabTPS {
                 tabTPS.getTaskManager().startTabTask(player);
             }
         });
-        tabTPS.getChat().send(sender, prefix + " <gradient:green:dark_green>Reload complete</gradient><gray>.");
+        tabTPS.getChat().send(sender, tabTPS.getPrefix() + " <gradient:green:dark_green>Reload complete</gradient><gray>.");
     }
 
     @CommandDescription("Toggles showing information in the tab menu.")
@@ -76,11 +72,11 @@ public class CommandTabTPS {
         if (tabTPS.getTaskManager().hasTabTask(player)) {
             tabTPS.getTaskManager().stopTabTask(player);
             tabTPS.getUserPrefs().getTabEnabled().remove(player.getUniqueId());
-            tabTPS.getChat().send(player, prefix + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle tab> <gradient:red:gold>Not showing TPS and MSPT in tab menu any more</gradient><gray>.");
+            tabTPS.getChat().send(player, tabTPS.getPrefix() + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle tab> <gradient:red:gold>Not showing TPS and MSPT in tab menu any more</gradient><gray>.");
         } else {
             tabTPS.getTaskManager().startTabTask(player);
             tabTPS.getUserPrefs().getTabEnabled().add(player.getUniqueId());
-            tabTPS.getChat().send(player, prefix + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle tab> <gradient:green:yellow>Showing TPS and MSPT in tab menu</gradient><gray>.");
+            tabTPS.getChat().send(player, tabTPS.getPrefix() + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle tab> <gradient:green:yellow>Showing TPS and MSPT in tab menu</gradient><gray>.");
         }
     }
 
@@ -92,11 +88,11 @@ public class CommandTabTPS {
         if (tabTPS.getTaskManager().hasActionBarTask(player)) {
             tabTPS.getTaskManager().stopActionBarTask(player);
             tabTPS.getUserPrefs().getActionBarEnabled().remove(player.getUniqueId());
-            tabTPS.getChat().send(player, prefix + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle actionbar> <gradient:red:gold>Not showing TPS and MSPT in action bar any more</gradient><gray>.");
+            tabTPS.getChat().send(player, tabTPS.getPrefix() + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle actionbar> <gradient:red:gold>Not showing TPS and MSPT in action bar any more</gradient><gray>.");
         } else {
             tabTPS.getTaskManager().startActionBarTask(player);
             tabTPS.getUserPrefs().getActionBarEnabled().add(player.getUniqueId());
-            tabTPS.getChat().send(player, prefix + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle actionbar> <gradient:green:yellow>Showing TPS and MSPT in action bar</gradient><gray>.");
+            tabTPS.getChat().send(player, tabTPS.getPrefix() + "<hover:show_text:'<green>Click to toggle'><click:run_command:/tabtps toggle actionbar> <gradient:green:yellow>Showing TPS and MSPT in action bar</gradient><gray>.");
         }
     }
 }

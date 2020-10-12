@@ -1,6 +1,7 @@
 package xyz.jpenilla.tabtps;
 
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import xyz.jpenilla.jmplib.BasePlugin;
 import xyz.jpenilla.tabtps.api.NMS;
@@ -26,6 +27,9 @@ public class TabTPS extends BasePlugin {
     @Getter private PluginSettings pluginSettings;
     @Getter private CommandHelper commandHelper;
 
+    @Getter private final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
+    @Getter private final Component prefixComponent = getMiniMessage().parse(prefix);
+
     @Override
     public void onPluginEnable() {
         instance = this;
@@ -49,7 +53,7 @@ public class TabTPS extends BasePlugin {
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
         new UpdateChecker(this, "jmanpenilla/TabTPS").checkVersion();
-        Metrics metrics = new Metrics(this, 8458);
+        final Metrics metrics = new Metrics(this, 8458);
     }
 
     @Override

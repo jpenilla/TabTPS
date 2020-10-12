@@ -42,7 +42,7 @@ public class CommandPing {
                     line.style(Style.style(TextColor.fromHexString("#47C8FF"), TextDecoration.STRIKETHROUGH));
                 })
                 .build(
-                        Component.text().append(CommandTabTPS.prefixComponent).append(Component.text(" Player Pings")).build(),
+                        Component.text().append(tabTPS.getPrefixComponent()).append(Component.text(" Player Pings")).build(),
                         (value, index) -> Collections.singleton(tabTPS.getMiniMessage().parse(Objects.requireNonNull(value))),
                         page -> "/tabtps:ping all " + page
                 );
@@ -53,10 +53,10 @@ public class CommandPing {
     @CommandMethod("ping")
     public void onPingSelf(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><red> Console must provide a player to check the ping of.");
+            tabTPS.getChat().send(sender, tabTPS.getPrefixComponent() + "<reset><red> Console must provide a player to check the ping of.");
             return;
         }
-        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> Your " + getModuleRenderer((Player) sender).render());
+        tabTPS.getChat().send(sender, tabTPS.getPrefix() + "<reset><gray> Your " + getModuleRenderer((Player) sender).render());
     }
 
     @CommandDescription("Displays the targets ping to the server in milliseconds.")
@@ -66,14 +66,14 @@ public class CommandPing {
                        @Argument(value = "target", description = "The player(s) to check the ping of.") MultiplePlayerSelector target,
                        @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") int page) {
         if (target.getPlayers().isEmpty()) {
-            tabTPS.getChat().send(sender, CommandTabTPS.prefixComponent.append(Component.text(String.format(" No players found for selector: '%s'", target.getSelector()), NamedTextColor.RED, TextDecoration.ITALIC)));
+            tabTPS.getChat().send(sender, tabTPS.getPrefixComponent().append(Component.text(String.format(" No players found for selector: '%s'", target.getSelector()), NamedTextColor.RED, TextDecoration.ITALIC)));
             return;
         }
         if (target.getPlayers().size() > 1) {
             pingMultiple(sender, target.getPlayers(), page);
             return;
         }
-        tabTPS.getChat().send(sender, CommandTabTPS.prefix + "<reset><gray> " + target.getPlayers().get(0).getName() + "'s " + getModuleRenderer(target.getPlayers().get(0)).render());
+        tabTPS.getChat().send(sender, tabTPS.getPrefix() + "<reset><gray> " + target.getPlayers().get(0).getName() + "'s " + getModuleRenderer(target.getPlayers().get(0)).render());
     }
 
     private ModuleRenderer getModuleRenderer(Player player) {

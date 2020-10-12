@@ -11,6 +11,5 @@ public class Constants {
     public static final String PERMISSION_COMMAND_TICKINFO = PERMISSION_ROOT + DOT + "tps";
     public static final String PERMISSION_COMMAND_PING = PERMISSION_ROOT + DOT + "ping";
     public static final String PERMISSION_COMMAND_PING_OTHERS = PERMISSION_ROOT + DOT + "ping" + DOT + "others";
-    public static final String PERMISSION_COMMAND_TOGGLE = PERMISSION_TOGGLE_ROOT;
     public static final String PERMISSION_COMMAND_RELOAD = PERMISSION_ROOT + DOT + "reload";
 }
