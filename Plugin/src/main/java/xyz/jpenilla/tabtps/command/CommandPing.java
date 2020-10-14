@@ -4,6 +4,7 @@ import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
@@ -64,7 +65,7 @@ public class CommandPing {
     @CommandMethod("ping <target> [page]")
     public void onPing(CommandSender sender,
                        @Argument(value = "target", description = "The player(s) to check the ping of.") MultiplePlayerSelector target,
-                       @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") int page) {
+                       @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") @Range(min = "1", max = "999") int page) {
         if (target.getPlayers().isEmpty()) {
             tabTPS.getChat().send(sender, tabTPS.getPrefixComponent().append(Component.text(String.format(" No players found for selector: '%s'", target.getSelector()), NamedTextColor.RED, TextDecoration.ITALIC)));
             return;
@@ -84,7 +85,7 @@ public class CommandPing {
     @CommandPermission(Constants.PERMISSION_COMMAND_PING_OTHERS)
     @CommandMethod("pingall [page]")
     public void onPingAll(CommandSender sender,
-                          @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") int page) {
+                          @Argument(value = "page", defaultValue = "1", description = "The page number of players to display, if applicable.") @Range(min = "1", max = "999") int page) {
         pingMultiple(sender, ImmutableList.copyOf(Bukkit.getOnlinePlayers()), page);
     }
 

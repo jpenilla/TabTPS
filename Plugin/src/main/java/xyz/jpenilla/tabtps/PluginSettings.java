@@ -49,6 +49,8 @@ public class PluginSettings {
         config.set("modules.tab_footer", modules.getTabFooter());
         config.set("modules.action_bar", modules.getActionBar());
 
+        config.set("ignored_memory_pools", ignoredMemoryPools);
+
         tabTPS.saveConfig();
     }
 
