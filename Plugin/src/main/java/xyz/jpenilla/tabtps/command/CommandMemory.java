@@ -3,7 +3,6 @@ package xyz.jpenilla.tabtps.command;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.paper.PaperCommandManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.Constants;
@@ -19,7 +18,7 @@ import java.util.List;
 public class CommandMemory {
     private final TabTPS tabTPS;
 
-    public CommandMemory(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
+    public CommandMemory(TabTPS tabTPS, CommandManager mgr) {
         this.tabTPS = tabTPS;
     }
 

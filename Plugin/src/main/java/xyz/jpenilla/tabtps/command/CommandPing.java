@@ -6,7 +6,6 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
-import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.feature.pagination.Pagination;
@@ -33,7 +32,7 @@ public class CommandPing {
     private final TabTPS tabTPS;
     private final Pagination<String> pagination;
 
-    public CommandPing(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
+    public CommandPing(TabTPS tabTPS, CommandManager mgr) {
         this.tabTPS = tabTPS;
         this.pagination = Pagination.builder()
                 .resultsPerPage(5)

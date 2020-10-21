@@ -3,7 +3,6 @@ package xyz.jpenilla.tabtps.command;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.paper.PaperCommandManager;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -23,7 +22,7 @@ public class CommandTPS {
     private final ModuleRenderer cpuRenderer;
     private final ModuleRenderer memoryRenderer;
 
-    public CommandTPS(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
+    public CommandTPS(TabTPS tabTPS, CommandManager mgr) {
         this.tabTPS = tabTPS;
         this.msptRenderer = ModuleRenderer.builder().modules(tabTPS, "mspt").moduleRenderFunction(CommandTPS::renderModule).build();
         this.cpuRenderer = ModuleRenderer.builder().modules(tabTPS, "cpu").moduleRenderFunction(CommandTPS::renderModule).build();

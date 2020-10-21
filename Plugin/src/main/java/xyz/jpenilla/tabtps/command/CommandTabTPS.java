@@ -6,7 +6,6 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.arguments.standard.StringArgument;
-import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 public class CommandTabTPS {
     private final TabTPS tabTPS;
 
-    public CommandTabTPS(TabTPS tabTPS, PaperCommandManager<CommandSender> mgr) {
+    public CommandTabTPS(TabTPS tabTPS, CommandManager mgr) {
         this.tabTPS = tabTPS;
 
         mgr.getParserRegistry().registerNamedParserSupplier("help_query", p -> new StringArgument.StringParser<>(StringArgument.StringMode.GREEDY,
@@ -33,7 +32,7 @@ public class CommandTabTPS {
     @CommandMethod("tabtps help [query]")
     public void onHelp(CommandSender sender,
                        @Argument(value = "query", description = "Help Query", parserName = "help_query") String query) {
-        tabTPS.getCommandHelper().getHelp().queryCommands(query == null ? "" : query, sender);
+        tabTPS.getCommandManager().getHelp().queryCommands(query == null ? "" : query, sender);
     }
 
     @CommandDescription("Shows info about the TabTPS plugin.")

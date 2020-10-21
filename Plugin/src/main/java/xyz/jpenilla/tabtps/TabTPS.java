@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import xyz.jpenilla.jmplib.BasePlugin;
 import xyz.jpenilla.tabtps.api.NMS;
-import xyz.jpenilla.tabtps.command.CommandHelper;
+import xyz.jpenilla.tabtps.command.CommandManager;
 import xyz.jpenilla.tabtps.task.TaskManager;
 import xyz.jpenilla.tabtps.util.CPUUtil;
 import xyz.jpenilla.tabtps.util.PingUtil;
@@ -15,6 +15,7 @@ import xyz.jpenilla.tabtps.util.UpdateChecker;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class TabTPS extends BasePlugin {
     @Getter private static TabTPS instance;
@@ -25,7 +26,7 @@ public class TabTPS extends BasePlugin {
     @Getter private PingUtil pingUtil;
     @Getter private UserPrefs userPrefs;
     @Getter private PluginSettings pluginSettings;
-    @Getter private CommandHelper commandHelper;
+    @Getter private CommandManager commandManager;
 
     @Getter private final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
     @Getter private final Component prefixComponent = getMiniMessage().parse(prefix);
@@ -48,7 +49,11 @@ public class TabTPS extends BasePlugin {
             this.userPrefs = new UserPrefs();
             getLogger().warning("Failed to load user_preferences.json, creating a new one");
         }
-        this.commandHelper = new CommandHelper(this);
+        try {
+            this.commandManager = new CommandManager(this);
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "Failed to initialize command manager.", e);
+        }
 
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
