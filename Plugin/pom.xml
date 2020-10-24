@@ -126,17 +126,17 @@
         <dependency>
             <groupId>cloud.commandframework</groupId>
             <artifactId>cloud-paper</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>cloud.commandframework</groupId>
             <artifactId>cloud-annotations</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>cloud.commandframework</groupId>
             <artifactId>cloud-minecraft-extras</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
