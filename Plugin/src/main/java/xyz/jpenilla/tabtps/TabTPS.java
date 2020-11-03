@@ -52,7 +52,9 @@ public class TabTPS extends BasePlugin {
         try {
             this.commandManager = new CommandManager(this);
         } catch (Exception e) {
-            getLogger().log(Level.WARNING, "Failed to initialize command manager.", e);
+            getLogger().log(Level.SEVERE, "Failed to initialize command manager.", e);
+            this.setEnabled(false);
+            return;
         }
 
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);

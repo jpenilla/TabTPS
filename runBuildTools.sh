@@ -12,4 +12,4 @@ cd ../112; java -jar ../BuildTools.jar --compile-if-changed --rev 1.12.2
 cd ../113; java -jar ../BuildTools.jar --compile-if-changed --rev 1.13.2
 cd ../114; java -jar ../BuildTools.jar --compile-if-changed --rev 1.14.4
 cd ../115; java -jar ../BuildTools.jar --compile-if-changed --rev 1.15.2
-cd ../116; java -jar ../BuildTools.jar --compile-if-changed --rev 1.16.3
+cd ../116; java -jar ../BuildTools.jar --compile-if-changed --rev 1.16.4

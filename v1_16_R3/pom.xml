@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>TabTPS-v1_16_R2</artifactId>
+    <artifactId>TabTPS-v1_16_R3</artifactId>
     <packaging>jar</packaging>
-    <name>TabTPS v1_16_R2</name>
-    <version>v1_16_R2</version>
+    <name>TabTPS v1_16_R3</name>
+    <version>v1_16_R3</version>
 
     <parent>
         <groupId>xyz.jpenilla</groupId>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <optional>true</optional>
         </dependency>
