@@ -19,3 +19,10 @@ ignored_memory_pools:
   - "CodeHeap 'non-nmethods'"
   - "CodeHeap 'non-profiled nmethods'"
   - "CodeHeap 'profiled nmethods'"
+
+# Set the amount of ticks to wait between updates to the tab menu
+tab_update_rate: 5
+
+# Set the amount of ticks to wait between updates to the action bar
+#   Note: Setting this too high can cause the action bar to flash on and off.
+action_bar_update_rate: 5

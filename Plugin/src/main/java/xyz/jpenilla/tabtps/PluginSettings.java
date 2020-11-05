@@ -14,6 +14,8 @@ public class PluginSettings {
     @Getter private UserPrefsDefaults userPrefsDefaults;
     @Getter private Modules modules;
     @Getter private final List<String> ignoredMemoryPools = new ArrayList<>();
+    @Getter private int tabUpdateRate;
+    @Getter private int actionBarUpdateRate;
 
     public PluginSettings(TabTPS tabTPS) {
         this.tabTPS = tabTPS;
@@ -37,6 +39,9 @@ public class PluginSettings {
 
         ignoredMemoryPools.clear();
         ignoredMemoryPools.addAll(config.getStringList("ignored_memory_pools"));
+
+        tabUpdateRate = config.getInt("tab_update_rate", 5);
+        actionBarUpdateRate = config.getInt("action_bar_update_rate", 5);
     }
 
     public void save() {
@@ -50,6 +55,9 @@ public class PluginSettings {
         config.set("modules.action_bar", modules.getActionBar());
 
         config.set("ignored_memory_pools", ignoredMemoryPools);
+
+        config.set("tab_update_rate", tabUpdateRate);
+        config.set("action_bar_update_rate", actionBarUpdateRate);
 
         tabTPS.saveConfig();
     }

@@ -7,6 +7,7 @@ import xyz.jpenilla.tabtps.TabTPS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,12 +20,14 @@ public class ModuleRenderer {
 
     public String render() {
         final StringBuilder builder = new StringBuilder();
-        modules.forEach(module -> {
+        final Iterator<Module> iterator = modules.iterator();
+        while (iterator.hasNext()) {
+            final Module module = iterator.next();
             builder.append(moduleRenderFunction.apply(module));
-            if (modules.indexOf(module) != modules.size() - 1) {
+            if (iterator.hasNext()) {
                 builder.append(separator);
             }
-        });
+        }
         return builder.toString();
     }
 

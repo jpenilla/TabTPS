@@ -20,7 +20,9 @@ public class TaskManager {
 
     public void startRecordCpuTask() {
         stopRecordCpuTask();
-        recordCpuTaskId = new RecordCPUTask(tabTPS).runTaskTimerAsynchronously(tabTPS, 0L, 4L).getTaskId();
+        recordCpuTaskId = new RecordCPUTask(tabTPS)
+                .runTaskTimerAsynchronously(tabTPS, 0L, 4L)
+                .getTaskId();
     }
 
     public void stopRecordCpuTask() {
@@ -36,7 +38,9 @@ public class TaskManager {
 
     public void startTabTask(Player player) {
         stopTabTask(player);
-        final int taskId = new TabTPSTask(tabTPS, player).runTaskTimerAsynchronously(tabTPS, 0L, 5L).getTaskId();
+        final int taskId = new TabTPSTask(tabTPS, player)
+                .runTaskTimerAsynchronously(tabTPS, 0L, tabTPS.getPluginSettings().getTabUpdateRate())
+                .getTaskId();
         tabTpsTaskIds.put(player.getUniqueId(), taskId);
     }
 
@@ -60,7 +64,9 @@ public class TaskManager {
 
     public void startActionBarTask(Player player) {
         stopActionBarTask(player);
-        final int taskId = new ActionBarTPSTask(tabTPS, player).runTaskTimerAsynchronously(tabTPS, 0L, 5L).getTaskId();
+        final int taskId = new ActionBarTPSTask(tabTPS, player)
+                .runTaskTimerAsynchronously(tabTPS, 0L, tabTPS.getPluginSettings().getActionBarUpdateRate())
+                .getTaskId();
         actionBarTpsTaskIds.put(player.getUniqueId(), taskId);
     }
 
