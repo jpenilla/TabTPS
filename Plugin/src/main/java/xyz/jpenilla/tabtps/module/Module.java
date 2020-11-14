@@ -18,10 +18,10 @@ public abstract class Module {
                 return new Memory();
             case "ping":
                 return new Ping(tabTPS, player);
-            case "cpu" :
+            case "cpu":
                 return new CPU(tabTPS);
             default:
-                throw new IllegalArgumentException("No such module: '" + name.toLowerCase() + "'");
+                throw new IllegalArgumentException(String.format("No such module: '%s'", name.toLowerCase()));
         }
     }
 }

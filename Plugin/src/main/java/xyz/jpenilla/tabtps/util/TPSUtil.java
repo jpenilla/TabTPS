@@ -1,18 +1,39 @@
 package xyz.jpenilla.tabtps.util;
 
-import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import xyz.jpenilla.tabtps.TabTPS;
 
 import java.text.DecimalFormat;
 
-@AllArgsConstructor
 public class TPSUtil {
-    private static final DecimalFormat format = new DecimalFormat("###.00");
+    private static final DecimalFormat FORMAT = new DecimalFormat("###.00");
+
     private final TabTPS tabTPS;
 
+    public TPSUtil(TabTPS tabTPS) {
+        this.tabTPS = tabTPS;
+    }
+
+    public double[] getTps() {
+        if (tabTPS.getMajorMinecraftVersion() < 16 || !tabTPS.isPaperServer()) {
+            return tabTPS.getNmsHandler().getTps();
+        }
+        return Bukkit.getServer().getTPS();
+    }
+
+    public double getMspt() {
+        if (tabTPS.getMajorMinecraftVersion() < 16 || !tabTPS.isPaperServer()) {
+            return tabTPS.getNmsHandler().getMspt();
+        }
+        return Bukkit.getServer().getAverageTickTime();
+    }
+
     public static String round(double value) {
-        return format.format(value);
+        final String formatted = FORMAT.format(value);
+        if (formatted.startsWith(".")) {
+            return String.format("0%s", formatted);
+        }
+        return formatted;
     }
 
     public static String getColoredTps(double tps) {
@@ -29,6 +50,14 @@ public class TPSUtil {
         return s.toString();
     }
 
+    public static double toMilliseconds(long time) {
+        return time * 1.0E-6D;
+    }
+
+    public static double toMilliseconds(double time) {
+        return time * 1.0E-6D;
+    }
+
     public static String getColoredMspt(double mspt) {
         final StringBuilder m = new StringBuilder();
         if (mspt <= 25.0) {
@@ -41,21 +70,5 @@ public class TPSUtil {
         m.append(round(mspt));
         m.append("</gradient>");
         return m.toString();
-    }
-
-    public double[] getTps() {
-        if (tabTPS.getMajorMinecraftVersion() < 16 || !tabTPS.isPaperServer()) {
-            return tabTPS.getNmsHandler().getTps();
-        } else {
-            return Bukkit.getServer().getTPS();
-        }
-    }
-
-    public double getMspt() {
-        if (tabTPS.getMajorMinecraftVersion() < 16 || !tabTPS.isPaperServer()) {
-            return tabTPS.getNmsHandler().getMspt();
-        } else {
-            return Bukkit.getServer().getAverageTickTime();
-        }
     }
 }

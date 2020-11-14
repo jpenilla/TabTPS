@@ -69,7 +69,7 @@ public class MemoryUtil {
         });
         builder.append(Component.text("]", NamedTextColor.GRAY));
         if (name != null && !name.equals("")) {
-            builder.append(Component.text(" "));
+            builder.append(Component.space());
             builder.append(Component.text(name, NamedTextColor.WHITE, TextDecoration.ITALIC));
         }
 

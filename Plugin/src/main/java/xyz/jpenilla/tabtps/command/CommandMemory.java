@@ -4,6 +4,8 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -28,7 +30,14 @@ public class CommandMemory {
     public void onMemory(CommandSender sender) {
         final List<Component> messages = new ArrayList<>();
         messages.add(Component.text(""));
-        messages.add(tabTPS.getMiniMessage().parse("<gradient:blue:aqua><strikethrough>----</strikethrough></gradient><aqua>[</aqua> <bold><gradient:red:gold>TabTPS RAM</gradient></bold> <gradient:aqua:blue>]<strikethrough>-----------------------</strikethrough>"));
+        final Component header = TabTPS.getInstance().getPrefixComponent()
+                .append(Component.space())
+                .append(Component.text(
+                        "Memory Usage",
+                        NamedTextColor.GRAY,
+                        TextDecoration.ITALIC
+                ));
+        messages.add(header);
         if (!tabTPS.getPluginSettings().getIgnoredMemoryPools().contains("Heap Memory Usage")) {
             messages.add(MemoryUtil.renderBar("Heap Memory Usage", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 60));
         }
