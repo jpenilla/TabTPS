@@ -19,14 +19,14 @@ Spigot/Paper Plugin to show TPS and MSPT in the Tab menu. Supports Minecraft ver
 ### Improved TPS command
 * Command: ``/tickinfo`` or ``/mspt``
 * Permission required: ``tabtps.tps``
-* ![tps command](https://i.imgur.com/hTK4Asd.png)
+* ![tps command](https://i.imgur.com/d87Z80z.png)
 
 ### Memory command
 * Command: ``/memory``, `/mem`, or ``/ram``
 * View information about the current memory pools of the server jvm.
   * Note: the output and usefulness of this command varies depending on the type of garbage collection used, garbage collection settings, and many other factors.
 * Permission required: ``tabtps.tps``
-* ![tps command](https://i.imgur.com/M9nb01Z.png)
+* ![tps command](https://i.imgur.com/eYeUNMc.png)
 
 ### Ping command
 * Commands: ``/ping``, `/ping [username]`, or ``/pingall``
