@@ -21,7 +21,7 @@ public class TaskManager {
     public void startRecordCpuTask() {
         stopRecordCpuTask();
         recordCpuTaskId = new RecordCPUTask(tabTPS)
-                .runTaskTimerAsynchronously(tabTPS, 0L, 4L)
+                .runTaskTimerAsynchronously(tabTPS, 0L, 10L)
                 .getTaskId();
     }
 
