@@ -53,7 +53,7 @@ public class CommandTPS {
     public void onTPS(CommandSender sender) {
         final List<String> messages = new ArrayList<>();
         messages.add("");
-        messages.add(TabTPS.getInstance().getPrefix() + " <gray>Server Tick Information");
+        messages.add(TabTPS.getInstance().getPrefix() + "<italic> <gray>Server Tick Information");
         messages.add(this.formatTPS());
         messages.addAll(this.formatTickTimes());
         messages.add("<hover:show_text:'CPU usage for the Minecraft server process as well as the system CPU usage.'>" + cpuRenderer.render());
@@ -107,7 +107,7 @@ public class CommandTPS {
                 final LongSummaryStatistics statistics10s = LongStream.of(times10s).filter(NOT_ZERO).summaryStatistics();
                 final LongSummaryStatistics statistics60s = LongStream.of(times60s).filter(NOT_ZERO).summaryStatistics();
 
-                output.add("<hover:show_text:'Milliseconds per tick<gray>.</gray> Avg. MSPT <gray><</gray> 50 <gray>-></gray> <green>20 TPS</green>'>"
+                output.add("<hover:show_text:'Milliseconds per tick<gray>.</gray> Avg. MSPT <gray>\\<</gray> 50 <gray>-></gray> <green>20 TPS</green>'>"
                         + "<gray>MSPT <white>-</white> Average<white>,</white> Minimum<white>,</white> Maximum</hover>");
                 output.add(this.formatStatistics("<white> ├─ <gray>5s</gray> - ", statistics5s));
                 output.add(this.formatStatistics("<white> ├─ <gray>10s</gray> - ", statistics10s));
@@ -116,7 +116,7 @@ public class CommandTPS {
                 this.tabTPS.getLogger().log(Level.WARNING, "Failed to retrieve tick time statistics", throwable);
             }
         } else {
-            output.add("<hover:show_text:'Milliseconds per tick<gray>.</gray> MSPT <gray><</gray> 50 <gray>-></gray> <green>20 TPS</green>'>" + msptRenderer.render());
+            output.add("<hover:show_text:'Milliseconds per tick<gray>.</gray> MSPT <gray>\\<</gray> 50 <gray>-></gray> <green>20 TPS</green>'>" + msptRenderer.render());
         }
         return output;
     }

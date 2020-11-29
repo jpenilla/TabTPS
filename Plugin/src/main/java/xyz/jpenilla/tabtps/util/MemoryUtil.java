@@ -6,7 +6,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.fancy.Gradient;
 import xyz.jpenilla.tabtps.TabTPS;
 
 import java.lang.management.ManagementFactory;
@@ -34,16 +33,16 @@ public class MemoryUtil {
         final float initPercent = (float) init / max;
         final float usedPercent = (float) usage.getUsed() / max;
         final float committedPercent = (float) usage.getCommitted() / max;
-        final Gradient usedGradient = new Gradient(0, NamedTextColor.GREEN, NamedTextColor.DARK_GREEN);
-        final Gradient committedGradient = new Gradient(0, NamedTextColor.AQUA, NamedTextColor.BLUE);
-        final Gradient unallocatedGradient = new Gradient(0, NamedTextColor.GRAY, NamedTextColor.DARK_GRAY);
+        final Gradient usedGradient = new Gradient(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN);
+        final Gradient committedGradient = new Gradient(NamedTextColor.AQUA, NamedTextColor.BLUE);
+        final Gradient unallocatedGradient = new Gradient(NamedTextColor.GRAY, NamedTextColor.DARK_GRAY);
         final int usedLength = Math.round(barLength * usedPercent);
         final int committedLength = Math.round(barLength * (committedPercent - usedPercent));
         final int unallocatedLength = barLength - usedLength - committedLength;
         final int initPointer = Math.min(barLength, Math.max(1, Math.round(barLength * initPercent)));
-        usedGradient.init(usedLength);
-        committedGradient.init(committedLength);
-        unallocatedGradient.init(unallocatedLength);
+        usedGradient.setLength(usedLength);
+        committedGradient.setLength(committedLength);
+        unallocatedGradient.setLength(unallocatedLength);
 
         final TextComponent.Builder builder = Component.text();
 
@@ -60,11 +59,11 @@ public class MemoryUtil {
             if (i == initPointer) {
                 builder.append(Component.text("|", TextColor.color(0xFF48A8)));
             } else if (i <= usedLength) {
-                builder.append(usedGradient.apply(Component.text("|")));
+                builder.append(Component.text("|", usedGradient.nextColor()));
             } else if (i <= usedLength + committedLength) {
-                builder.append(committedGradient.apply(Component.text("|")));
+                builder.append(Component.text("|", committedGradient.nextColor()));
             } else {
-                builder.append(unallocatedGradient.apply(Component.text("|")));
+                builder.append(Component.text("|", unallocatedGradient.nextColor()));
             }
         });
         builder.append(Component.text("]", NamedTextColor.GRAY));

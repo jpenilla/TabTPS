@@ -56,7 +56,7 @@ public class CommandPing {
             tabTPS.getChat().send(sender, tabTPS.getPrefixComponent() + "<reset><red> Console must provide a player to check the ping of.");
             return;
         }
-        tabTPS.getChat().send(sender, tabTPS.getPrefix() + "<reset><gray> Your " + getModuleRenderer((Player) sender).render());
+        tabTPS.getChat().send(sender, tabTPS.getPrefix() + "<gray> Your " + getModuleRenderer((Player) sender).render());
     }
 
     @CommandDescription("Displays the targets ping to the server in milliseconds.")
@@ -73,7 +73,7 @@ public class CommandPing {
             pingMultiple(sender, target.getPlayers(), page);
             return;
         }
-        tabTPS.getChat().send(sender, tabTPS.getPrefix() + "<reset><gray> " + target.getPlayers().get(0).getName() + "'s " + getModuleRenderer(target.getPlayers().get(0)).render());
+        tabTPS.getChat().send(sender, tabTPS.getPrefix() + "<gray> " + target.getPlayers().get(0).getName() + "'s " + getModuleRenderer(target.getPlayers().get(0)).render());
     }
 
     private ModuleRenderer getModuleRenderer(Player player) {

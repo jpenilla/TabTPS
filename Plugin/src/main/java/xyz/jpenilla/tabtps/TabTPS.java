@@ -28,7 +28,7 @@ public class TabTPS extends BasePlugin {
     @Getter private PluginSettings pluginSettings;
     @Getter private CommandManager commandManager;
 
-    @Getter private final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white><italic>";
+    @Getter private final String prefix = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white>";
     @Getter private final Component prefixComponent = getMiniMessage().parse(prefix);
 
     @Override

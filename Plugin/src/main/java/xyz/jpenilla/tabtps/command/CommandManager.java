@@ -2,6 +2,7 @@ package xyz.jpenilla.tabtps.command;
 
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.arguments.parser.StandardParameters;
+import cloud.commandframework.brigadier.CloudBrigadierManager;
 import cloud.commandframework.bukkit.BukkitCommandMetaBuilder;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.meta.SimpleCommandMeta;
@@ -20,8 +21,8 @@ import java.util.function.Function;
 
 public class CommandManager extends PaperCommandManager<CommandSender> {
 
-    @Getter private MinecraftHelp<CommandSender> help;
-    @Getter private AnnotationParser<CommandSender> annotationParser;
+    @Getter private final MinecraftHelp<CommandSender> help;
+    @Getter private final AnnotationParser<CommandSender> annotationParser;
 
     public CommandManager(TabTPS tabTPS) throws Exception {
         super(
@@ -52,6 +53,10 @@ public class CommandManager extends PaperCommandManager<CommandSender> {
         /* Register Brigadier */
         try {
             this.registerBrigadier();
+            final CloudBrigadierManager<CommandSender, ?> brigadierManager = this.brigadierManager();
+            if (brigadierManager != null) {
+                brigadierManager.setNativeNumberSuggestions(false);
+            }
             tabTPS.getLogger().info("Successfully registered Mojang Brigadier support for commands.");
         } catch (Exception ignored) {
         }
