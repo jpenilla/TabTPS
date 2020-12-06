@@ -65,6 +65,7 @@ public class TabTPS extends BasePlugin {
 
     @Override
     public void onDisable() {
+        this.taskManager.stopRecordCpuTask();
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
