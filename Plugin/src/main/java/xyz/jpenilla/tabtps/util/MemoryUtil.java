@@ -28,18 +28,23 @@ public class MemoryUtil {
     }
 
     public static Component renderBar(String name, MemoryUsage usage, int barLength) {
-        final long max = usage.getMax() == -1 ? usage.getCommitted() : usage.getMax();
-        final long init = usage.getInit() == -1 ? 0 : usage.getInit();
-        final float initPercent = (float) init / max;
-        final float usedPercent = (float) usage.getUsed() / max;
-        final float committedPercent = (float) usage.getCommitted() / max;
-        final Gradient usedGradient = new Gradient(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN);
-        final Gradient committedGradient = new Gradient(NamedTextColor.AQUA, NamedTextColor.BLUE);
-        final Gradient unallocatedGradient = new Gradient(NamedTextColor.GRAY, NamedTextColor.DARK_GRAY);
+        final long used = usage.getUsed();
+        final long committed = usage.getCommitted();
+        final long max = usage.getMax();
+        final long init = usage.getInit();
+        final long adjustedMax = max == -1 ? committed : max;
+        final long adjustedInit = init == -1 ? 0 : init;
+
+        final float usedPercent = (float) used / adjustedMax;
+        final float committedPercent = (float) committed / adjustedMax;
+        final float initPercent = (float) adjustedInit / adjustedMax;
         final int usedLength = Math.round(barLength * usedPercent);
         final int committedLength = Math.round(barLength * (committedPercent - usedPercent));
         final int unallocatedLength = barLength - usedLength - committedLength;
         final int initPointer = Math.min(barLength, Math.max(1, Math.round(barLength * initPercent)));
+        final Gradient usedGradient = new Gradient(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN);
+        final Gradient committedGradient = new Gradient(NamedTextColor.AQUA, NamedTextColor.BLUE);
+        final Gradient unallocatedGradient = new Gradient(NamedTextColor.GRAY, NamedTextColor.DARK_GRAY);
         usedGradient.setLength(usedLength);
         committedGradient.setLength(committedLength);
         unallocatedGradient.setLength(unallocatedLength);
@@ -47,11 +52,11 @@ public class MemoryUtil {
         final TextComponent.Builder builder = Component.text();
 
         final StringBuilder hover = new StringBuilder();
-        hover.append(humanReadableByteCountBin(usage.getUsed())).append(" <white>Used</white>/").append(humanReadableByteCountBin(usage.getCommitted())).append(" <white>Committed</white>\n");
-        if (usage.getMax() != -1) {
-            hover.append(humanReadableByteCountBin(max)).append(" <white>Max</white><gray>,</gray> ");
+        hover.append(humanReadableByteCountBin(used)).append(" <white>Used</white>/").append(humanReadableByteCountBin(committed)).append(" <white>Committed</white>\n");
+        if (max != -1) {
+            hover.append(humanReadableByteCountBin(adjustedMax)).append(" <white>Max</white><gray>,</gray> ");
         }
-        hover.append(humanReadableByteCountBin(init)).append(" <white>Init</white>");
+        hover.append(humanReadableByteCountBin(adjustedInit)).append(" <white>Init</white>");
         builder.hoverEvent(HoverEvent.showText(TabTPS.getInstance().getMiniMessage().parse(hover.toString())));
 
         builder.append(Component.text("[", NamedTextColor.GRAY));
@@ -67,9 +72,11 @@ public class MemoryUtil {
             }
         });
         builder.append(Component.text("]", NamedTextColor.GRAY));
-        if (name != null && !name.equals("")) {
-            builder.append(Component.space());
-            builder.append(Component.text(name, NamedTextColor.WHITE, TextDecoration.ITALIC));
+        if (name != null && !name.isEmpty()) {
+            builder.append(
+                    Component.space(),
+                    Component.text(name, NamedTextColor.WHITE, TextDecoration.ITALIC)
+            );
         }
 
         return builder.build();

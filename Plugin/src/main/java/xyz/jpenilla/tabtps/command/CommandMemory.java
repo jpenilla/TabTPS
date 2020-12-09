@@ -29,7 +29,7 @@ public class CommandMemory {
     @CommandMethod("memory|mem|ram")
     public void onMemory(CommandSender sender) {
         final List<Component> messages = new ArrayList<>();
-        messages.add(Component.text(""));
+        messages.add(Component.empty());
         final Component header = TabTPS.getInstance().getPrefixComponent()
                 .append(Component.space())
                 .append(Component.text(

@@ -3,6 +3,7 @@ package xyz.jpenilla.tabtps;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import xyz.jpenilla.jmplib.BasePlugin;
 import xyz.jpenilla.tabtps.api.NMS;
 import xyz.jpenilla.tabtps.command.CommandManager;
@@ -39,10 +40,10 @@ public class TabTPS extends BasePlugin {
         this.pluginSettings = new PluginSettings(this);
         this.pluginSettings.load();
         this.tpsUtil = new TPSUtil(this);
-        this.cpuUtil = new CPUUtil();
+        this.cpuUtil = new CPUUtil(this);
+        this.cpuUtil.startRecordingUsage();
         this.pingUtil = new PingUtil(this);
         this.taskManager = new TaskManager(this);
-        this.taskManager.startRecordCpuTask();
         try {
             this.userPrefs = UserPrefs.deserialize(new File(getDataFolder() + File.separator + "user_preferences.json"));
         } catch (Exception e) {
@@ -57,7 +58,7 @@ public class TabTPS extends BasePlugin {
             return;
         }
 
-        getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
         new UpdateChecker(this, "jmanpenilla/TabTPS").checkVersion();
         final Metrics metrics = new Metrics(this, 8458);
@@ -65,7 +66,8 @@ public class TabTPS extends BasePlugin {
 
     @Override
     public void onDisable() {
-        this.taskManager.stopRecordCpuTask();
+        this.cpuUtil.stopRecordingUsage();
+        Bukkit.getScheduler().cancelTasks(this);
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }

@@ -37,11 +37,7 @@ public class JoinQuitListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        if (tabTPS.getUserPrefs().getTabEnabled().contains(e.getPlayer().getUniqueId())) {
-            tabTPS.getTaskManager().stopTabTask(e.getPlayer());
-        }
-        if (tabTPS.getUserPrefs().getActionBarEnabled().contains(e.getPlayer().getUniqueId())) {
-            tabTPS.getTaskManager().stopActionBarTask(e.getPlayer());
-        }
+        tabTPS.getTaskManager().stopTabTask(e.getPlayer());
+        tabTPS.getTaskManager().stopActionBarTask(e.getPlayer());
     }
 }

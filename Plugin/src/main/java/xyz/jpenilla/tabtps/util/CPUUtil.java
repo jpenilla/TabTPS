@@ -2,16 +2,37 @@ package xyz.jpenilla.tabtps.util;
 
 import com.sun.management.OperatingSystemMXBean;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import xyz.jpenilla.tabtps.TabTPS;
 
 import java.lang.management.ManagementFactory;
 import java.util.DoubleSummaryStatistics;
 
 public class CPUUtil {
+    private final TabTPS tabTPS;
     @Getter private double recentProcessCpuLoadSnapshot = 0;
     @Getter private double recentSystemCpuLoadSnapshot = 0;
     private final double[] recentSystemUsage = new double[20];
     private final double[] recentProcessUsage = new double[20];
     private int index = 0;
+    private int monitorTaskId;
+
+    public CPUUtil(TabTPS tabTPS) {
+        this.tabTPS = tabTPS;
+    }
+
+    public void startRecordingUsage() {
+        stopRecordingUsage();
+        monitorTaskId = Bukkit.getScheduler()
+                .runTaskTimerAsynchronously(tabTPS, this::recordUsage, 0L, 10L)
+                .getTaskId();
+    }
+
+    public void stopRecordingUsage() {
+        if (monitorTaskId != 0) {
+            Bukkit.getScheduler().cancelTask(monitorTaskId);
+        }
+    }
 
     private void nextIndex() {
         index++;
@@ -20,7 +41,7 @@ public class CPUUtil {
         }
     }
 
-    public void recordUsage() {
+    private void recordUsage() {
         recentProcessUsage[index] = getCurrentProcessCpuLoad();
         recentSystemUsage[index] = getCurrentSystemCpuLoad();
         recentProcessCpuLoadSnapshot = getRecentProcessCpuLoad();
