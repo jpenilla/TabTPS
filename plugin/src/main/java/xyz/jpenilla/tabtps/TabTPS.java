@@ -1,5 +1,6 @@
 package xyz.jpenilla.tabtps;
 
+import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
@@ -18,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 
+@PluginMain
 public class TabTPS extends BasePlugin {
     @Getter private static TabTPS instance;
     @Getter private NMS nmsHandler = null;

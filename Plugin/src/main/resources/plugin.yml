@@ -1,9 +1,0 @@
-name: TabTPS
-main: xyz.jpenilla.tabtps.TabTPS
-author: jmp
-api-version: 1.13
-description: Show TPS and MSPT in the Tab Menu
-version: ${project.version}
-website: https://github.com/jmanpenilla/TabTPS
-loadbefore: [Essentials]
-softdepend: [Prisma, PlaceholderAPI, ViaVersion]

@@ -1,7 +1,12 @@
 # Project exclude paths
 /.idea
 *.iml
-/API/target/
+/nms-api/target/
 /target/
 */target/
 BuildTools/
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
