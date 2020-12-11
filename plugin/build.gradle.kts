@@ -30,6 +30,7 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
+        //minimize() //todo: minimize jar without excluding nms-api impls
         fun shade(vararg packages: String) {
             packages.forEach { pkg ->
                 relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
@@ -41,13 +42,9 @@ tasks {
                 "net.kyori",
                 "me.lucko.commodore",
                 "org.checkerframework",
-                "org.bstats"
+                "org.bstats",
+                "xyz.jpenilla.jmplib"
         )
-        minimize {
-            nmsRevisions.forEach { revision ->
-                include(project(":$revision"))
-            }
-        }
         archiveClassifier.set("")
         archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
         destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
