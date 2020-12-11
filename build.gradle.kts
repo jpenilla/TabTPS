@@ -26,7 +26,6 @@ subprojects {
         maven("https://oss.sonatype.org/content/groups/public/")
         maven("https://repo.jpenilla.xyz/snapshots/")
         maven("https://repo.codemc.org/repository/maven-public")
-        maven("https://repo.aikar.co/content/groups/aikar/")
         maven("https://jitpack.io")
     }
 }

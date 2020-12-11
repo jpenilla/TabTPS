@@ -20,15 +20,9 @@ dependencies {
 
     implementation("org.bstats", "bstats-bukkit", "1.7")
 
-    (rootProject.ext["nmsRevisions"] as Map<String, String>).keys.forEach { revision ->
+    nmsRevisions.forEach { revision ->
         implementation(project(":$revision"))
     }
-}
-
-val autoRelocate by tasks.register<com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation>("configureShadowRelocation", com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation::class) {
-    target = tasks.shadowJar.get()
-    val packageName = "${rootProject.group}.${rootProject.name.toLowerCase()}"
-    prefix = "$packageName.shaded"
 }
 
 tasks {
@@ -36,8 +30,24 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
-        minimize()
-        dependsOn(autoRelocate)
+        fun shade(vararg packages: String) {
+            packages.forEach { pkg ->
+                relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
+            }
+        }
+        shade(
+                "cloud.commandframework",
+                "io.leangen.geantyref",
+                "net.kyori",
+                "me.lucko.commodore",
+                "org.checkerframework",
+                "org.bstats"
+        )
+        minimize {
+            nmsRevisions.forEach { revision ->
+                include(project(":$revision"))
+            }
+        }
         archiveClassifier.set("")
         archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
         destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
@@ -51,3 +61,6 @@ spigot {
     softDepends("Prisma", "PlaceholderAPI", "ViaVersion")
     authors("jmp")
 }
+
+val nmsRevisions
+    get() = (rootProject.ext["nmsRevisions"] as Map<String, String>).keys
