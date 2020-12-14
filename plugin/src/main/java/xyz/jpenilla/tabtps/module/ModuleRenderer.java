@@ -31,6 +31,10 @@ public class ModuleRenderer {
         return builder.toString();
     }
 
+    public int moduleCount() {
+        return this.modules.size();
+    }
+
     /**
      * @return A new {@link Builder}
      */

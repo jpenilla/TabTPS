@@ -1,5 +1,6 @@
 package xyz.jpenilla.tabtps.task;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.TabTPS;
@@ -33,11 +34,7 @@ public class TaskManager {
         if (hasTabTask(player)) {
             Bukkit.getScheduler().cancelTask(tabTpsTaskIds.get(player.getUniqueId()));
             if (player.isOnline()) {
-                if (tabTPS.getMajorMinecraftVersion() < 16) {
-                    tabTPS.getNmsHandler().setHeaderFooter(player, null, null);
-                } else {
-                    player.setPlayerListHeaderFooter((String) null, null);
-                }
+                tabTPS.getAudience().player(player).sendPlayerListHeaderAndFooter(Component.empty(), Component.empty());
             }
             tabTpsTaskIds.remove(player.getUniqueId());
         }

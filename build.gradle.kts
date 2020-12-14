@@ -31,15 +31,15 @@ subprojects {
 }
 
 ext["nmsRevisions"] = mapOf(
-        Pair("v1_8_R3", "1.8.8-R0.1-SNAPSHOT"),
-        Pair("v1_9_R2", "1.9.4-R0.1-SNAPSHOT"),
-        Pair("v1_10_R1", "1.10.2-R0.1-SNAPSHOT"),
-        Pair("v1_11_R1", "1.11.2-R0.1-SNAPSHOT"),
-        Pair("v1_12_R1", "1.12.2-R0.1-SNAPSHOT"),
-        Pair("v1_13_R2", "1.13.2-R0.1-SNAPSHOT"),
-        Pair("v1_14_R1", "1.14.4-R0.1-SNAPSHOT"),
-        Pair("v1_15_R1", "1.15.2-R0.1-SNAPSHOT"),
-        Pair("v1_16_R3", "1.16.4-R0.1-SNAPSHOT")
+        "v1_8_R3" to "1.8.8-R0.1-SNAPSHOT",
+        "v1_9_R2" to "1.9.4-R0.1-SNAPSHOT",
+        "v1_10_R1" to "1.10.2-R0.1-SNAPSHOT",
+        "v1_11_R1" to "1.11.2-R0.1-SNAPSHOT",
+        "v1_12_R1" to "1.12.2-R0.1-SNAPSHOT",
+        "v1_13_R2" to "1.13.2-R0.1-SNAPSHOT",
+        "v1_14_R1" to "1.14.4-R0.1-SNAPSHOT",
+        "v1_15_R1" to "1.15.2-R0.1-SNAPSHOT",
+        "v1_16_R3" to "1.16.4-R0.1-SNAPSHOT"
 )
 
 fun latestCommitHash(): String {

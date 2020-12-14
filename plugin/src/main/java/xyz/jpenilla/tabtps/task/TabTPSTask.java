@@ -1,9 +1,6 @@
 package xyz.jpenilla.tabtps.task;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.jpenilla.tabtps.Constants;
@@ -12,9 +9,6 @@ import xyz.jpenilla.tabtps.module.Module;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
 public class TabTPSTask extends BukkitRunnable {
-    private static final GsonComponentSerializer legacyGsonComponentSerializer = GsonComponentSerializer.builder().downsampleColors().build();
-    private static final LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
-    private static final BungeeComponentSerializer bungeeComponentSerializer = BungeeComponentSerializer.get();
     private final ModuleRenderer headerRenderer;
     private final ModuleRenderer footerRenderer;
     private final Player player;
@@ -45,28 +39,12 @@ public class TabTPSTask extends BukkitRunnable {
         if (!player.isOnline()) {
             tabTPS.getTaskManager().stopTabTask(player);
         }
-        if (tabTPS.getMajorMinecraftVersion() < 16) {
-            tabTPS.getNmsHandler().setHeaderFooter(player,
-                    legacyGsonComponentSerializer.serialize(getHeader()),
-                    legacyGsonComponentSerializer.serialize(getFooter()));
-        } else {
-            if (tabTPS.isPaperServer()) {
-                player.setPlayerListHeaderFooter(
-                        bungeeComponentSerializer.serialize(getHeader()),
-                        bungeeComponentSerializer.serialize(getFooter()));
-            } else {
-                player.setPlayerListHeaderFooter(
-                        legacyComponentSerializer.serialize(getHeader()),
-                        legacyComponentSerializer.serialize(getFooter()));
-            }
+        final Audience player = tabTPS.getAudience().player(this.player);
+        if (this.headerRenderer.moduleCount() > 0) {
+            player.sendPlayerListHeader(tabTPS.getMiniMessage().parse(headerRenderer.render()));
         }
-    }
-
-    private Component getHeader() {
-        return tabTPS.getMiniMessage().parse(headerRenderer.render());
-    }
-
-    private Component getFooter() {
-        return tabTPS.getMiniMessage().parse(footerRenderer.render());
+        if (this.footerRenderer.moduleCount() > 0) {
+            player.sendPlayerListFooter(tabTPS.getMiniMessage().parse(footerRenderer.render()));
+        }
     }
 }

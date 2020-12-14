@@ -4,7 +4,7 @@ import net.minecraft.server.v1_16_R3.MathHelper;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import xyz.jpenilla.tabtps.api.NMS;
+import xyz.jpenilla.tabtps.nms.api.NMS;
 
 public class NMSHandler implements NMS {
 

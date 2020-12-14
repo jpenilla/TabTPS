@@ -12,6 +12,6 @@ listOf(
         "v1_15_R1",
         "v1_16_R3"
 ).forEach { rev ->
-    include(":$rev")
+    include(rev)
     project(":$rev").projectDir = file("nms/$rev")
 }
