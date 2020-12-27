@@ -5,7 +5,9 @@ import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.annotations.specifier.Greedy;
+import cloud.commandframework.annotations.suggestions.Suggestions;
+import cloud.commandframework.context.CommandContext;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -13,25 +15,30 @@ import org.bukkit.entity.Player;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommandTabTPS {
     private final TabTPS tabTPS;
+    private final CommandManager mgr;
 
     public CommandTabTPS(TabTPS tabTPS, CommandManager mgr) {
         this.tabTPS = tabTPS;
+        this.mgr = mgr;
+    }
 
-        mgr.getParserRegistry().registerNamedParserSupplier("help_query", p -> new StringArgument.StringParser<>(StringArgument.StringMode.GREEDY,
-                (context, input) ->
-                        ((CommandHelpHandler.IndexHelpTopic<CommandSender>) mgr.getCommandHelpHandler().queryHelp(context.getSender(), ""))
-                                .getEntries().stream().map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString).collect(Collectors.toList())
-        ));
+    @Suggestions("help_query")
+    public List<String> helpSuggestions(CommandContext<CommandSender> context, String input) {
+        return ((CommandHelpHandler.IndexHelpTopic<CommandSender>) mgr.getCommandHelpHandler().queryHelp(context.getSender(), ""))
+                .getEntries().stream().map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString).collect(Collectors.toList());
     }
 
     @CommandDescription("Shows help for the TabTPS commands.")
     @CommandMethod("tabtps help [query]")
-    public void onHelp(CommandSender sender,
-                       @Argument(value = "query", description = "Help Query", parserName = "help_query") String query) {
+    public void onHelp(
+            CommandSender sender,
+            @Greedy @Argument(value = "query", description = "Help Query", suggestions = "help_query") String query
+    ) {
         tabTPS.getCommandManager().getHelp().queryCommands(query == null ? "" : query, sender);
     }
 

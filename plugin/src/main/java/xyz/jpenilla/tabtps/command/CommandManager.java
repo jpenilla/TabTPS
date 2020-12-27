@@ -3,9 +3,8 @@ package xyz.jpenilla.tabtps.command;
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.arguments.parser.StandardParameters;
 import cloud.commandframework.brigadier.CloudBrigadierManager;
-import cloud.commandframework.bukkit.BukkitCommandMetaBuilder;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
-import cloud.commandframework.meta.SimpleCommandMeta;
+import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
@@ -34,7 +33,7 @@ public class CommandManager extends PaperCommandManager<CommandSender> {
 
         help = new MinecraftHelp<>("/tabtps help", tabTPS.getAudience()::sender, this);
         annotationParser = new AnnotationParser<>(this, CommandSender.class,
-                p -> metaWithDescription(p.get(StandardParameters.DESCRIPTION, "No description")));
+                p -> CommandMeta.simple().with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description.")).build());
 
         help.setHelpColors(MinecraftHelp.HelpColors.of(
                 TextColor.color(0x00a3ff),
@@ -77,7 +76,4 @@ public class CommandManager extends PaperCommandManager<CommandSender> {
         ).forEach(annotationParser::parse);
     }
 
-    public static SimpleCommandMeta metaWithDescription(final String description) {
-        return BukkitCommandMetaBuilder.builder().withDescription(description).build();
-    }
 }

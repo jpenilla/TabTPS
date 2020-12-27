@@ -9,9 +9,9 @@ dependencies {
     annotationProcessor("org.projectlombok", "lombok", "1.18.16")
     compileOnly("org.projectlombok", "lombok", "1.18.16")
 
-    implementation("xyz.jpenilla", "jmplib", "1.0.1+26-SNAPSHOT")
+    implementation("xyz.jpenilla", "jmplib", "1.0.1+27-SNAPSHOT")
 
-    val cloudVersion = "1.2.0"
+    val cloudVersion = "1.3.0"
     implementation("cloud.commandframework", "cloud-paper", cloudVersion)
     implementation("cloud.commandframework", "cloud-annotations", cloudVersion)
     implementation("cloud.commandframework", "cloud-minecraft-extras", cloudVersion)
@@ -20,7 +20,7 @@ dependencies {
         exclude("com.mojang")
     }
 
-    implementation("org.bstats", "bstats-bukkit", "1.7")
+    implementation("org.bstats", "bstats-bukkit", "1.8")
 
     nmsRevisions.forEach { revision ->
         implementation(project(":$revision"))
@@ -28,11 +28,13 @@ dependencies {
 }
 
 tasks {
-    build {
-        dependsOn(shadowJar)
-    }
     shadowJar {
-        //minimize() //todo: minimize jar without excluding nms-api impls
+        archiveClassifier.set("")
+        archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
+        destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
+        minimize {
+            exclude { nmsRevisions.contains(it.moduleName) }
+        }
         listOf(
                 "cloud.commandframework",
                 "io.leangen.geantyref",
@@ -44,9 +46,9 @@ tasks {
         ).forEach { pkg ->
             relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
         }
-        archiveClassifier.set("")
-        archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
-        destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
+    }
+    build {
+        dependsOn(shadowJar)
     }
 }
 

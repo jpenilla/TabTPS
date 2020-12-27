@@ -18,6 +18,12 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    tasks {
+        withType<JavaCompile> {
+            options.encoding = Charsets.UTF_8.name()
+        }
+    }
+
     repositories {
         mavenLocal()
         mavenCentral()
