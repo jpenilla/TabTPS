@@ -31,8 +31,6 @@ public interface Module {
 
   @NonNull Component display();
 
-  boolean needsPlayer();
-
   default <T extends Module> ModuleType<T> type() {
     return ModuleType.fromClass(this.getClass());
   }

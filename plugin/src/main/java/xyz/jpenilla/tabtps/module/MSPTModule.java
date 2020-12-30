@@ -44,9 +44,4 @@ public final class MSPTModule implements Module {
   public @NonNull Component display() {
     return this.tabTPS.miniMessage().parse(TPSUtil.coloredMspt(this.tabTPS.tpsUtil().mspt()));
   }
-
-  @Override
-  public boolean needsPlayer() {
-    return false;
-  }
 }

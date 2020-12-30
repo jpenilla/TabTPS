@@ -128,7 +128,7 @@ public final class ConfigManager {
     return Collections.unmodifiableSet(this.displayConfigs.keySet());
   }
 
-  public @NonNull Optional<DisplayConfig> findDisplayConfig(final Player player) {
+  public @NonNull Optional<DisplayConfig> findDisplayConfig(final @NonNull Player player) {
     for (final String permission : this.pluginSettings.permissionPriorities()) {
       if (player.hasPermission(permission) || permission.isEmpty()) {
         return Optional.of(this.displayConfigsByPermission.get(permission));

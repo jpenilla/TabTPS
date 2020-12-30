@@ -74,7 +74,7 @@ public final class ModuleRenderer {
    *
    * @return A new {@link Builder}
    */
-  public static Builder builder() {
+  public static @NonNull Builder builder() {
     return new Builder();
   }
 
@@ -86,23 +86,23 @@ public final class ModuleRenderer {
     private Builder() {
     }
 
-    public Builder moduleRenderFunction(final @NonNull Function<Module, Component> function) {
+    public @NonNull Builder moduleRenderFunction(final @NonNull Function<Module, Component> function) {
       this.moduleRenderFunction = function;
       return this;
     }
 
-    public Builder separator(final @NonNull Component separator) {
+    public @NonNull Builder separator(final @NonNull Component separator) {
       this.separator = separator;
       return this;
     }
 
-    public Builder modules(final @NonNull List<Module> modules) {
+    public @NonNull Builder modules(final @NonNull List<Module> modules) {
       this.modules.clear();
       this.modules.addAll(modules);
       return this;
     }
 
-    public Builder modules(final @NonNull Module... modules) {
+    public @NonNull Builder modules(final @NonNull Module... modules) {
       return this.modules(Arrays.asList(modules));
     }
 
@@ -115,7 +115,7 @@ public final class ModuleRenderer {
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    public Builder modules(final @NonNull TabTPS tabTPS, final @NonNull String modules) {
+    public @NonNull Builder modules(final @NonNull TabTPS tabTPS, final @NonNull String modules) {
       return this.modules(tabTPS, null, modules);
     }
 
@@ -127,7 +127,7 @@ public final class ModuleRenderer {
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    public Builder modules(final @NonNull TabTPS tabTPS, final @Nullable Player player, final @NonNull String modules) {
+    public @NonNull Builder modules(final @NonNull TabTPS tabTPS, final @Nullable Player player, final @NonNull String modules) {
       return this.modules(
         Arrays.stream(modules.replace(" ", "").split(","))
           .filter(s -> s != null && !s.equals(""))
@@ -144,7 +144,7 @@ public final class ModuleRenderer {
      * @return The built {@link ModuleRenderer}
      * @throws IllegalArgumentException When a needed parameter has not been provided
      */
-    public ModuleRenderer build() throws IllegalArgumentException {
+    public @NonNull ModuleRenderer build() throws IllegalArgumentException {
       if (this.separator == null && this.modules.size() > 1) {
         throw new IllegalArgumentException("separator is null but there is more than one module");
       }

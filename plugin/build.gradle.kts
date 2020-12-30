@@ -28,6 +28,7 @@ tasks {
     archiveClassifier.set("")
     archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
     destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
+    from(rootProject.projectDir.resolve("license.txt"))
     minimize {
       exclude { nmsRevisions.contains(it.moduleName) }
     }

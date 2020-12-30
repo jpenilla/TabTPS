@@ -47,9 +47,4 @@ public final class CPUModule implements Module {
       this.tabTPS.cpuUtil().recentProcessCpuLoadSnapshot()
     ));
   }
-
-  @Override
-  public boolean needsPlayer() {
-    return false;
-  }
 }

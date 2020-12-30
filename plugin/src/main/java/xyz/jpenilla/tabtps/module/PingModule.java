@@ -46,9 +46,4 @@ public final class PingModule implements Module {
   public @NonNull Component display() {
     return this.tabTPS.miniMessage().parse(this.tabTPS.pingUtil().coloredPing(this.player) + "<gray>ms</gray>");
   }
-
-  @Override
-  public boolean needsPlayer() {
-    return true;
-  }
 }

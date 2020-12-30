@@ -37,7 +37,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.configurate.ConfigurateException;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 
@@ -62,7 +61,7 @@ public class CommandTabTPS {
 
   @CommandDescription("Shows help for the TabTPS commands.")
   @CommandMethod("tabtps help [query]")
-  public void onHelp(
+  public void help(
     final @NonNull CommandSender sender,
     @Greedy @Argument(value = "query", description = "Help Query", suggestions = "help_query") final @Nullable String query
   ) {
@@ -71,7 +70,7 @@ public class CommandTabTPS {
 
   @CommandDescription("Shows info about the TabTPS plugin.")
   @CommandMethod("tabtps about")
-  public void onAbout(final @NonNull CommandSender sender) {
+  public void about(final @NonNull CommandSender sender) {
     final String header = this.tabTPS.chat().getCenteredMessage("<strikethrough><gradient:white:black:white>----------------------------------");
     this.tabTPS.chat().sendParsed(sender, ImmutableList.of(
       header,
@@ -84,11 +83,11 @@ public class CommandTabTPS {
   @CommandDescription("Reloads the TabTPS config files.")
   @CommandPermission(Constants.PERMISSION_COMMAND_RELOAD)
   @CommandMethod("tabtps reload")
-  public void onReload(final @NonNull CommandSender sender) {
+  public void reload(final @NonNull CommandSender sender) {
     Bukkit.getScheduler().runTask(this.tabTPS, () -> {
       try {
         this.tabTPS.configManager().load();
-      } catch (final ConfigurateException e) {
+      } catch (final Exception e) {
         this.tabTPS.getLogger().log(Level.WARNING, "Failed to reload config, is there an error in the config files?", e);
         this.tabTPS.chat().send(sender, Constants.PREFIX_MINIMESSAGE + "<italic><red> Something went wrong reloading the configs, check console for more info.");
         return;
@@ -112,7 +111,7 @@ public class CommandTabTPS {
   @CommandDescription("Toggles showing information in the tab menu.")
   @CommandPermission(Constants.PERMISSION_TOGGLE_TAB)
   @CommandMethod(value = "tabtps toggle tab", requiredSender = Player.class)
-  public void onToggleTab(final @NonNull CommandSender sender) {
+  public void toggleTab(final @NonNull CommandSender sender) {
     Bukkit.getScheduler().runTask(this.tabTPS, () -> {
       final Player player = (Player) sender;
       if (this.tabTPS.taskManager().hasTabTask(player)) {
@@ -130,7 +129,7 @@ public class CommandTabTPS {
   @CommandDescription("Toggles showing information in the action bar.")
   @CommandPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)
   @CommandMethod(value = "tabtps toggle actionbar", requiredSender = Player.class)
-  public void onToggleActionBar(final @NonNull CommandSender sender) {
+  public void toggleActionBar(final @NonNull CommandSender sender) {
     Bukkit.getScheduler().runTask(this.tabTPS, () -> {
       final Player player = (Player) sender;
       if (this.tabTPS.taskManager().hasActionBarTask(player)) {
@@ -148,7 +147,7 @@ public class CommandTabTPS {
   @CommandDescription("Toggles showing information in a boss bar.")
   @CommandPermission(Constants.PERMISSION_TOGGLE_BOSSBAR)
   @CommandMethod(value = "tabtps toggle bossbar", requiredSender = Player.class)
-  public void onToggleBossBar(final @NonNull CommandSender sender) {
+  public void toggleBossBar(final @NonNull CommandSender sender) {
     Bukkit.getScheduler().runTask(this.tabTPS, () -> {
       final Player player = (Player) sender;
       if (this.tabTPS.taskManager().hasBossTask(player)) {

@@ -44,9 +44,4 @@ public final class TPSModule implements Module {
   public @NonNull Component display() {
     return this.tabTPS.miniMessage().parse(TPSUtil.coloredTps(this.tabTPS.tpsUtil().tps()[0]));
   }
-
-  @Override
-  public boolean needsPlayer() {
-    return false;
-  }
 }

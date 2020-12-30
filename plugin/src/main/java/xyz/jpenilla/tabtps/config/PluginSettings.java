@@ -49,8 +49,8 @@ public final class PluginSettings {
     "CodeHeap 'profiled nmethods'"
   ));
 
-  @Comment("A player may only have a single display config active at once, even if they have permissions for multiple"
-    + "\nThis list allows defining the order in which permissions will be checked")
+  @Comment("A player may only have a single display config active at once, even if they have permissions for multiple\n"
+    + "This list allows defining the order in which permissions will be checked")
   private final Set<String> permissionPriorities = new LinkedHashSet<>();
 
   public @NonNull Set<String> ignoredMemoryPools() {

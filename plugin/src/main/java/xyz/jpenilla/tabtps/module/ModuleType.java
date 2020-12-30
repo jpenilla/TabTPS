@@ -124,7 +124,7 @@ public final class ModuleType<T extends Module> {
     final @Nullable Player player
   ) {
     if (this.needsPlayer && player == null) {
-      throw new IllegalArgumentException(String.format("Module type %s requires a player", this.name));
+      throw new IllegalArgumentException(String.format("Module type '%s' requires a player", this.name));
     }
     return this.createModuleFunction.apply(tabTPS, player);
   }

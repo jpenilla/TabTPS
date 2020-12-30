@@ -58,9 +58,4 @@ public final class MemoryModule implements Module {
     builder.append("</gray>");
     return this.tabTPS.miniMessage().parse(builder.toString());
   }
-
-  @Override
-  public boolean needsPlayer() {
-    return false;
-  }
 }
