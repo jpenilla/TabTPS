@@ -21,31 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.nms.v1_11_R1;
+package xyz.jpenilla.tabtps.module;
 
-import net.minecraft.server.v1_11_R1.MathHelper;
-import net.minecraft.server.v1_11_R1.MinecraftServer;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.nms.api.NMS;
+import xyz.jpenilla.tabtps.TabTPS;
 
-public class NMSHandler implements NMS {
+public final class CPUModule implements Module {
+  private final TabTPS tabTPS;
 
-  @SuppressWarnings("deprecation")
-  @Override
-  public double[] tps() {
-    return MinecraftServer.getServer().recentTps;
-  }
-
-  @SuppressWarnings("deprecation")
-  @Override
-  public double mspt() {
-    return MathHelper.a(MinecraftServer.getServer().h) * 1.0E-6D;
+  public CPUModule(final @NonNull TabTPS tabTPS) {
+    this.tabTPS = tabTPS;
   }
 
   @Override
-  public int ping(final @NonNull Player player) {
-    return ((CraftPlayer) player).getHandle().ping;
+  public @NonNull String label() {
+    return "CPU";
+  }
+
+  @Override
+  public @NonNull Component display() {
+    return this.tabTPS.miniMessage().parse(String.format(
+      "<gradient:green:dark_green>%s</gradient><gray>%%<white>, </white><gradient:green:dark_green>%s</gradient>%%</gray> <white>(<gray>sys.</gray>, <gray>proc.</gray>)</white>",
+      this.tabTPS.cpuUtil().recentSystemCpuLoadSnapshot(),
+      this.tabTPS.cpuUtil().recentProcessCpuLoadSnapshot()
+    ));
+  }
+
+  @Override
+  public boolean needsPlayer() {
+    return false;
   }
 }

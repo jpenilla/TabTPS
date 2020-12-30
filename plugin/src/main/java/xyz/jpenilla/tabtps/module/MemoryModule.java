@@ -21,31 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.nms.v1_11_R1;
+package xyz.jpenilla.tabtps.module;
 
-import net.minecraft.server.v1_11_R1.MathHelper;
-import net.minecraft.server.v1_11_R1.MinecraftServer;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.nms.api.NMS;
+import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.util.MemoryUtil;
 
-public class NMSHandler implements NMS {
+public final class MemoryModule implements Module {
+  private final boolean alwaysShowMax;
+  private final TabTPS tabTPS;
 
-  @SuppressWarnings("deprecation")
-  @Override
-  public double[] tps() {
-    return MinecraftServer.getServer().recentTps;
+  public MemoryModule(
+    final @NonNull TabTPS tabTPS,
+    final boolean alwaysShowMax
+  ) {
+    this.alwaysShowMax = alwaysShowMax;
+    this.tabTPS = tabTPS;
   }
 
-  @SuppressWarnings("deprecation")
-  @Override
-  public double mspt() {
-    return MathHelper.a(MinecraftServer.getServer().h) * 1.0E-6D;
+  public MemoryModule(final @NonNull TabTPS tabTPS) {
+    this(tabTPS, false);
   }
 
   @Override
-  public int ping(final @NonNull Player player) {
-    return ((CraftPlayer) player).getHandle().ping;
+  public @NonNull String label() {
+    return "RAM";
+  }
+
+  @Override
+  public @NonNull Component display() {
+    final StringBuilder builder = new StringBuilder("<gray><gradient:green:dark_green>" + MemoryUtil.usedMemory() + "</gradient>M<white>/</white><gradient:green:dark_green>" + MemoryUtil.committedMemory() + "</gradient>M");
+    if (this.alwaysShowMax || MemoryUtil.committedMemory() != MemoryUtil.maxMemory()) {
+      builder.append(" <white>(</white>max <gradient:green:dark_green>").append(MemoryUtil.maxMemory()).append("</gradient>M<white>)</white>");
+    }
+    builder.append("</gray>");
+    return this.tabTPS.miniMessage().parse(builder.toString());
+  }
+
+  @Override
+  public boolean needsPlayer() {
+    return false;
   }
 }

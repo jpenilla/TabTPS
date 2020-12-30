@@ -21,31 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.nms.v1_11_R1;
+package xyz.jpenilla.tabtps.module;
 
-import net.minecraft.server.v1_11_R1.MathHelper;
-import net.minecraft.server.v1_11_R1.MinecraftServer;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.nms.api.NMS;
+import xyz.jpenilla.tabtps.TabTPS;
 
-public class NMSHandler implements NMS {
+public final class PingModule implements Module {
+  private final TabTPS tabTPS;
+  private final Player player;
 
-  @SuppressWarnings("deprecation")
-  @Override
-  public double[] tps() {
-    return MinecraftServer.getServer().recentTps;
-  }
-
-  @SuppressWarnings("deprecation")
-  @Override
-  public double mspt() {
-    return MathHelper.a(MinecraftServer.getServer().h) * 1.0E-6D;
+  public PingModule(final @NonNull TabTPS tabTPS, final @NonNull Player player) {
+    this.tabTPS = tabTPS;
+    this.player = player;
   }
 
   @Override
-  public int ping(final @NonNull Player player) {
-    return ((CraftPlayer) player).getHandle().ping;
+  public @NonNull String label() {
+    return "Ping";
+  }
+
+  @Override
+  public @NonNull Component display() {
+    return this.tabTPS.miniMessage().parse(this.tabTPS.pingUtil().coloredPing(this.player) + "<gray>ms</gray>");
+  }
+
+  @Override
+  public boolean needsPlayer() {
+    return true;
   }
 }
