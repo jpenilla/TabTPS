@@ -89,13 +89,13 @@ public final class ModuleType<T extends Module> {
     return new ModuleType<>(moduleClass, createModuleFunction, name, true);
   }
 
-  private final Class<? extends Module> moduleClass;
+  private final Class<T> moduleClass;
   private final BiFunction<@NonNull TabTPS, @Nullable Player, @NonNull T> createModuleFunction;
   private final String name;
   private final boolean needsPlayer;
 
   private ModuleType(
-    final @NonNull Class<? extends Module> moduleClass,
+    final @NonNull Class<T> moduleClass,
     final @NonNull BiFunction<@NonNull TabTPS, @Nullable Player, @NonNull T> createModuleFunction,
     final @NonNull String name,
     final boolean needsPlayer
@@ -116,7 +116,7 @@ public final class ModuleType<T extends Module> {
     return this.needsPlayer;
   }
 
-  public @NonNull Class<? extends Module> moduleClass() {
+  public @NonNull Class<T> moduleClass() {
     return this.moduleClass;
   }
 
