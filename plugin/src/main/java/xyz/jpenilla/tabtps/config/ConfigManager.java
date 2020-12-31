@@ -83,7 +83,7 @@ public final class ConfigManager {
             options -> options.header(
               "TabTPS display configuration\n"
                 + "\n"
-                + "   Available modules: [tps, mspt, memory, ping, cpu]\n"
+                + "   Available modules: [tps, mspt, memory, ping, cpu, players]\n"
                 + "   Modules are configured in comma separated format, i.e. \"cpu,tps,mspt\", \"ping\", or \"\" (no modules)"
             )
           );
