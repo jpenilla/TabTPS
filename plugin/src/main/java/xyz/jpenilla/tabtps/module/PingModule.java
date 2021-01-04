@@ -27,23 +27,30 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 
-public final class PingModule implements Module {
-  private final TabTPS tabTPS;
+public final class PingModule extends AbstractModule {
   private final Player player;
 
-  public PingModule(final @NonNull TabTPS tabTPS, final @NonNull Player player) {
-    this.tabTPS = tabTPS;
+  public PingModule(
+    final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme,
+    final @NonNull Player player
+  ) {
+    super(tabTPS, theme);
     this.player = player;
   }
 
   @Override
-  public @NonNull String label() {
-    return "Ping";
+  public @NonNull Component label() {
+    return Component.translatable("tabtps.label.ping", this.theme.colorScheme().text());
   }
 
   @Override
   public @NonNull Component display() {
-    return this.tabTPS.miniMessage().parse(this.tabTPS.pingUtil().coloredPing(this.player) + "<gray>ms</gray>");
+    return Component.text()
+      .append(this.tabTPS.pingUtil().coloredPing(this.player, this.theme.colorScheme()))
+      .append(Component.translatable("tabtps.label.milliseconds_short", this.theme.colorScheme().textSecondary()))
+      .build();
   }
 }

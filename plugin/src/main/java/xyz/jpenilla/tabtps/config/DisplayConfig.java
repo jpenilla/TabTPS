@@ -77,6 +77,8 @@ public final class DisplayConfig {
     boolean allow();
 
     boolean enableOnLogin();
+
+    @NonNull String theme();
   }
 
   @ConfigSerializable
@@ -84,6 +86,7 @@ public final class DisplayConfig {
     private boolean allow = true;
     private boolean enableOnLogin = false;
     private String modules = "tps,mspt,ping";
+    private String theme = "default";
 
     @Override
     public boolean enableOnLogin() {
@@ -98,6 +101,11 @@ public final class DisplayConfig {
     public @NonNull String modules() {
       return this.modules;
     }
+
+    @Override
+    public @NonNull String theme() {
+      return this.theme;
+    }
   }
 
   @ConfigSerializable
@@ -105,6 +113,10 @@ public final class DisplayConfig {
     private boolean allow = true;
     private boolean enableOnLogin = false;
     private String modules = "tps,mspt,ping";
+    private String theme = "default";
+
+    @Comment("Available colors: [PINK, RED, GREEN, BLUE, YELLOW, PURPLE, WHITE]")
+    private Colors colors = new Colors();
 
     @Comment("Should the fill of the boss bar be determined by MSPT, or by TPS?")
     private FillMode fillMode = FillMode.MSPT;
@@ -134,8 +146,36 @@ public final class DisplayConfig {
       return this.overlay;
     }
 
+    public @NonNull Colors colors() {
+      return this.colors;
+    }
+
+    @Override
+    public @NonNull String theme() {
+      return this.theme;
+    }
+
     public enum FillMode {
       TPS, MSPT
+    }
+
+    @ConfigSerializable
+    public static final class Colors {
+      private BossBar.Color lowPerformance = BossBar.Color.RED;
+      private BossBar.Color mediumPerformance = BossBar.Color.YELLOW;
+      private BossBar.Color goodPerformance = BossBar.Color.GREEN;
+
+      public BossBar.@NonNull Color lowPerformance() {
+        return this.lowPerformance;
+      }
+
+      public BossBar.@NonNull Color mediumPerformance() {
+        return this.mediumPerformance;
+      }
+
+      public BossBar.@NonNull Color goodPerformance() {
+        return this.goodPerformance;
+      }
     }
   }
 
@@ -145,6 +185,7 @@ public final class DisplayConfig {
     private boolean enableOnLogin = false;
     private String headerModules = "";
     private String footerModules = "tps,mspt";
+    private String theme = "default";
 
     @Override
     public boolean enableOnLogin() {
@@ -162,6 +203,11 @@ public final class DisplayConfig {
 
     public @NonNull String footerModules() {
       return this.footerModules;
+    }
+
+    @Override
+    public @NonNull String theme() {
+      return this.theme;
     }
   }
 }

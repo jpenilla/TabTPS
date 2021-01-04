@@ -44,11 +44,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class CommandTabTPS {
+final class CommandTabTPS {
   private final TabTPS tabTPS;
   private final CommandManager mgr;
 
-  public CommandTabTPS(final @NonNull TabTPS tabTPS, final @NonNull CommandManager mgr) {
+  CommandTabTPS(final @NonNull TabTPS tabTPS, final @NonNull CommandManager mgr) {
     this.tabTPS = tabTPS;
     this.mgr = mgr;
   }
@@ -59,7 +59,7 @@ public class CommandTabTPS {
       .getEntries().stream().map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString).collect(Collectors.toList());
   }
 
-  @CommandDescription("Shows help for the TabTPS commands.")
+  @CommandDescription("tabtps.command.help.description")
   @CommandMethod("tabtps help [query]")
   public void help(
     final @NonNull CommandSender sender,
@@ -68,7 +68,7 @@ public class CommandTabTPS {
     this.tabTPS.commandManager().help().queryCommands(query == null ? "" : query, sender);
   }
 
-  @CommandDescription("Shows info about the TabTPS plugin.")
+  @CommandDescription("tabtps.command.about.description")
   @CommandMethod("tabtps about")
   public void about(final @NonNull CommandSender sender) {
     final String header = this.tabTPS.chat().getCenteredMessage("<strikethrough><gradient:white:black:white>----------------------------------");
@@ -80,7 +80,7 @@ public class CommandTabTPS {
     ));
   }
 
-  @CommandDescription("Reloads the TabTPS config files.")
+  @CommandDescription("tabtps.command.reload.description")
   @CommandPermission(Constants.PERMISSION_COMMAND_RELOAD)
   @CommandMethod("tabtps reload")
   public void reload(final @NonNull CommandSender sender) {
@@ -92,6 +92,7 @@ public class CommandTabTPS {
         this.tabTPS.chat().send(sender, Constants.PREFIX_MINIMESSAGE + "<italic><red> Something went wrong reloading the configs, check console for more info.");
         return;
       }
+      this.tabTPS.commandManager().onReload();
       ImmutableList.copyOf(Bukkit.getOnlinePlayers()).forEach(player -> {
         this.tabTPS.permissionManager().attach(player);
         if (this.tabTPS.taskManager().hasActionBarTask(player)) {
@@ -108,7 +109,7 @@ public class CommandTabTPS {
     });
   }
 
-  @CommandDescription("Toggles showing information in the tab menu.")
+  @CommandDescription("tabtps.command.toggle_tab.description")
   @CommandPermission(Constants.PERMISSION_TOGGLE_TAB)
   @CommandMethod(value = "tabtps toggle tab", requiredSender = Player.class)
   public void toggleTab(final @NonNull CommandSender sender) {
@@ -126,7 +127,7 @@ public class CommandTabTPS {
     });
   }
 
-  @CommandDescription("Toggles showing information in the action bar.")
+  @CommandDescription("tabtps.command.toggle_actionbar.description")
   @CommandPermission(Constants.PERMISSION_TOGGLE_ACTIONBAR)
   @CommandMethod(value = "tabtps toggle actionbar", requiredSender = Player.class)
   public void toggleActionBar(final @NonNull CommandSender sender) {
@@ -144,7 +145,7 @@ public class CommandTabTPS {
     });
   }
 
-  @CommandDescription("Toggles showing information in a boss bar.")
+  @CommandDescription("tabtps.command.toggle_bossbar.description")
   @CommandPermission(Constants.PERMISSION_TOGGLE_BOSSBAR)
   @CommandMethod(value = "tabtps toggle bossbar", requiredSender = Player.class)
   public void toggleBossBar(final @NonNull CommandSender sender) {

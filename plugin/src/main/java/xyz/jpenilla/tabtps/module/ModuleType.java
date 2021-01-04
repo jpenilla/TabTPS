@@ -27,13 +27,13 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public final class ModuleType<T extends Module> {
   private static final Map<String, ModuleType<? extends Module>> TYPES_BY_NAME = new HashMap<>();
@@ -70,12 +70,12 @@ public final class ModuleType<T extends Module> {
 
   private static <T extends Module> @NonNull ModuleType<T> withoutPlayer(
     final @NonNull Class<T> moduleClass,
-    final @NonNull Function<@NonNull TabTPS, @NonNull T> createModuleFunction,
+    final @NonNull BiFunction<@NonNull TabTPS, @NonNull Theme, @NonNull T> moduleFactory,
     final @NonNull String name
   ) {
     return new ModuleType<>(
       moduleClass,
-      (plugin, player) -> createModuleFunction.apply(plugin),
+      (plugin, theme, player) -> moduleFactory.apply(plugin, theme),
       name,
       false
     );
@@ -83,25 +83,25 @@ public final class ModuleType<T extends Module> {
 
   private static <T extends Module> @NonNull ModuleType<T> withPlayer(
     final @NonNull Class<T> moduleClass,
-    final @NonNull BiFunction<@NonNull TabTPS, @NonNull Player, @NonNull T> createModuleFunction,
+    final @NonNull ModuleFactory<T> moduleFactory,
     final @NonNull String name
   ) {
-    return new ModuleType<>(moduleClass, createModuleFunction, name, true);
+    return new ModuleType<>(moduleClass, moduleFactory, name, true);
   }
 
   private final Class<T> moduleClass;
-  private final BiFunction<@NonNull TabTPS, @Nullable Player, @NonNull T> createModuleFunction;
+  private final ModuleFactory<T> moduleFactory;
   private final String name;
   private final boolean needsPlayer;
 
   private ModuleType(
     final @NonNull Class<T> moduleClass,
-    final @NonNull BiFunction<@NonNull TabTPS, @Nullable Player, @NonNull T> createModuleFunction,
+    final @NonNull ModuleFactory<T> moduleFactory,
     final @NonNull String name,
     final boolean needsPlayer
   ) {
     this.moduleClass = moduleClass;
-    this.createModuleFunction = createModuleFunction;
+    this.moduleFactory = moduleFactory;
     this.name = name;
     this.needsPlayer = needsPlayer;
     TYPES_BY_NAME.put(name, this);
@@ -122,11 +122,21 @@ public final class ModuleType<T extends Module> {
 
   public @NonNull T createModule(
     final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme,
     final @Nullable Player player
   ) {
     if (this.needsPlayer && player == null) {
       throw new IllegalArgumentException(String.format("Module type '%s' requires a player", this.name));
     }
-    return this.createModuleFunction.apply(tabTPS, player);
+    return this.moduleFactory.create(tabTPS, theme, player);
+  }
+
+  @FunctionalInterface
+  private interface ModuleFactory<T extends Module> {
+    @NonNull T create(
+      final @NonNull TabTPS tabTPS,
+      final @NonNull Theme theme,
+      final @Nullable Player player
+    );
   }
 }

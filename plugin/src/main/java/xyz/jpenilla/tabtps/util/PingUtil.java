@@ -23,10 +23,13 @@
  */
 package xyz.jpenilla.tabtps.util;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.jmplib.Environment;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 
 public class PingUtil {
   private final TabTPS tabTPS;
@@ -36,22 +39,28 @@ public class PingUtil {
   }
 
   public int ping(final @NonNull Player player) {
-    return Environment.majorMinecraftVersion() < 16 || !Environment.paper() ? this.tabTPS.nmsHandler().ping(player) : player.spigot().getPing();
+    return Environment.majorMinecraftVersion() < 16 || !Environment.paper()
+      ? this.tabTPS.nmsHandler().ping(player)
+      : player.spigot().getPing();
   }
 
-  public String coloredPing(final @NonNull Player player) {
-    return coloredPing(this.ping(player));
+  public @NonNull Component coloredPing(final @NonNull Player player, final Theme.@NonNull Colors colors) {
+    return coloredPing(this.ping(player), colors);
   }
 
-  public static String coloredPing(final int ping) {
-    final String color;
+  public static @NonNull Component coloredPing(final int ping, final Theme.@NonNull Colors colors) {
+    final TextColor color1;
+    final TextColor color2;
     if (ping < 100) {
-      color = "green:dark_green";
+      color1 = colors.goodPerformance();
+      color2 = colors.goodPerformanceSecondary();
     } else if (ping < 250) {
-      color = "yellow:#FFC500";
+      color1 = colors.mediumPerformance();
+      color2 = colors.mediumPerformanceSecondary();
     } else {
-      color = "red:#FF4300";
+      color1 = colors.lowPerformance();
+      color2 = colors.lowPerformanceSecondary();
     }
-    return "<gradient:" + color + ">" + ping + "</gradient>";
+    return ComponentUtil.gradient(String.valueOf(ping), color1, color2);
   }
 }

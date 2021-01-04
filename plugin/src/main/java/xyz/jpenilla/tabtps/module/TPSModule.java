@@ -26,22 +26,24 @@ package xyz.jpenilla.tabtps.module;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.util.TPSUtil;
 
-public final class TPSModule implements Module {
-  private final TabTPS tabTPS;
-
-  public TPSModule(final @NonNull TabTPS tabTPS) {
-    this.tabTPS = tabTPS;
+public final class TPSModule extends AbstractModule {
+  public TPSModule(
+    final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme
+  ) {
+    super(tabTPS, theme);
   }
 
   @Override
-  public @NonNull String label() {
-    return "TPS";
+  public @NonNull Component label() {
+    return Component.translatable("tabtps.label.tps", this.theme.colorScheme().text());
   }
 
   @Override
   public @NonNull Component display() {
-    return this.tabTPS.miniMessage().parse(TPSUtil.coloredTps(this.tabTPS.tpsUtil().tps()[0]));
+    return TPSUtil.coloredTps(this.tabTPS.tpsUtil().tps()[0], this.theme.colorScheme());
   }
 }

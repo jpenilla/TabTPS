@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.config;
 
+import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
@@ -30,11 +31,20 @@ import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
 
 public class ConfigLoader<C> {
+  private static final TypeSerializerCollection SERIALIZERS;
+
+  static {
+    SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
+      .registerAll(ConfigurateComponentSerializer.configurate().serializers())
+      .build();
+  }
+
   private final HoconConfigurationLoader loader;
   private final ObjectMapper<C> mapper;
 
@@ -45,7 +55,7 @@ public class ConfigLoader<C> {
   ) {
     this.loader = HoconConfigurationLoader.builder()
       .path(configPath)
-      .defaultOptions(options)
+      .defaultOptions(options.serializers(SERIALIZERS))
       .build();
     try {
       this.mapper = ObjectMapper.factory().get(configClass);

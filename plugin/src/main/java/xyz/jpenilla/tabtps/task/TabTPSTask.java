@@ -24,14 +24,12 @@
 package xyz.jpenilla.tabtps.task;
 
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.config.DisplayConfig;
-import xyz.jpenilla.tabtps.module.Module;
+import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
 public class TabTPSTask extends BukkitRunnable {
@@ -41,27 +39,19 @@ public class TabTPSTask extends BukkitRunnable {
   private final TabTPS tabTPS;
 
   public TabTPSTask(final @NonNull TabTPS tabTPS, final @NonNull Player player, final DisplayConfig.@NonNull TabSettings settings) {
+    final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.headerRenderer = ModuleRenderer.builder()
-      .modules(tabTPS, player, settings.headerModules())
-      .separator(Component.space())
-      .moduleRenderFunction(TabTPSTask::renderModule)
+      .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), player, settings.headerModules())
+      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.footerRenderer = ModuleRenderer.builder()
-      .modules(tabTPS, player, settings.footerModules())
-      .separator(Component.space())
-      .moduleRenderFunction(TabTPSTask::renderModule)
+      .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), player, settings.footerModules())
+      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.player = player;
     this.tabTPS = tabTPS;
-  }
-
-  private static @NonNull Component renderModule(final @NonNull Module module) {
-    return Component.text()
-      .append(Component.text(module.label(), NamedTextColor.GRAY))
-      .append(Component.text(":", NamedTextColor.WHITE))
-      .append(Component.space())
-      .append(module.display())
-      .build();
   }
 
   @Override

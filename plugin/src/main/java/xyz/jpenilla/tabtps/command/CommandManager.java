@@ -29,23 +29,21 @@ import cloud.commandframework.brigadier.CloudBrigadierManager;
 import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.meta.CommandMeta;
-import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableSet;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
 
+import java.util.Arrays;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
-public class CommandManager extends PaperCommandManager<CommandSender> {
+public final class CommandManager extends PaperCommandManager<CommandSender> {
 
+  private final TabTPS tabTPS;
   private final MinecraftHelp<CommandSender> help;
   private final AnnotationParser<CommandSender> annotationParser;
 
@@ -58,27 +56,29 @@ public class CommandManager extends PaperCommandManager<CommandSender> {
       UnaryOperator.identity()
     );
 
+    this.tabTPS = tabTPS;
+
+    this.annotationParser = new AnnotationParser<>(
+      this,
+      CommandSender.class,
+      params -> CommandMeta.simple()
+        .with(CommandMeta.DESCRIPTION, params.get(StandardParameters.DESCRIPTION, "tabtps.help.no_description"))
+        .build()
+    );
+
     this.help = new MinecraftHelp<>("/tabtps help", tabTPS.audiences()::sender, this);
-    this.annotationParser = new AnnotationParser<>(this, CommandSender.class,
-      p -> CommandMeta.simple().with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description.")).build());
+    this.help.messageProvider((sender, key, args) ->
+      Component.translatable(
+        "tabtps.help." + key,
+        Arrays.stream(args)
+          .map(Component::text)
+          .collect(Collectors.toList())
+      )
+    );
+    this.help.descriptionDecorator(Component::translatable);
+    this.setupHelpColors();
 
-    this.help.setHelpColors(MinecraftHelp.HelpColors.of(
-      TextColor.color(0x00a3ff),
-      NamedTextColor.WHITE,
-      TextColor.color(0x284fff),
-      NamedTextColor.GRAY,
-      NamedTextColor.DARK_GRAY
-    ));
-    this.help.setMessage(MinecraftHelp.MESSAGE_HELP_TITLE, "TabTPS Help");
-
-    new MinecraftExceptionHandler<CommandSender>()
-      .withDefaultHandlers()
-      .withDecorator(component -> LinearComponents.linear(
-        Constants.PREFIX,
-        Component.space(),
-        component
-      ))
-      .apply(this, tabTPS.audiences()::sender);
+    new ExceptionHandler(tabTPS).apply(this);
 
     /* Register Brigadier */
     if (this.queryCapability(CloudBukkitCapabilities.BRIGADIER)) {
@@ -103,6 +103,14 @@ public class CommandManager extends PaperCommandManager<CommandSender> {
       new CommandMemory(tabTPS, this),
       new CommandPing(tabTPS, this)
     ).forEach(this.annotationParser::parse);
+  }
+
+  public void onReload() {
+    this.setupHelpColors();
+  }
+
+  private void setupHelpColors() {
+    this.help.setHelpColors(this.tabTPS.pluginSettings().helpColors().toCloud());
   }
 
   public @NonNull MinecraftHelp<CommandSender> help() {

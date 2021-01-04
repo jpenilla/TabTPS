@@ -51,6 +51,10 @@ public final class ConfigManager {
   private final Map<DisplayConfig, ConfigLoader<DisplayConfig>> displayConfigs = new HashMap<>();
   private final Map<String, DisplayConfig> displayConfigsByPermission = new HashMap<>();
 
+  private final Path themePath;
+  private final Map<Theme, ConfigLoader<Theme>> themes = new HashMap<>();
+  private final Map<String, Theme> themesByName = new HashMap<>();
+
   public ConfigManager(final @NonNull TabTPS tabTPS) {
     this.dataFolder = tabTPS.getDataFolder().toPath();
 
@@ -64,10 +68,36 @@ public final class ConfigManager {
     if (!Files.exists(this.displayConfigsPath)) {
       tryCreateDirectory(this.displayConfigsPath);
     }
+
+    this.themePath = this.dataFolder.resolve("themes");
+    if (!Files.exists(this.themePath)) {
+      tryCreateDirectory(this.themePath);
+    }
   }
 
   public void load() throws ConfigurateException {
     this.pluginSettings = this.pluginSettingsLoader.load();
+
+    try {
+      this.themes.clear();
+      this.themesByName.clear();
+      final List<Path> existingFiles = Files.list(this.themePath).collect(Collectors.toList());
+      final List<Path> paths = existingFiles.size() != 0 ? existingFiles : Collections.singletonList(this.themePath.resolve("default.conf"));
+      for (final Path path : paths) {
+        if (path.toString().endsWith(".conf")) {
+          final ConfigLoader<Theme> loader = new ConfigLoader<>(
+            Theme.class,
+            path,
+            options -> options.header("Theme")
+          );
+          final Theme config = loader.load();
+          this.themes.put(config, loader);
+          this.themesByName.put(path.getFileName().toString().split("\\.")[0], config);
+        }
+      }
+    } catch (final IOException e) {
+      throw new ConfigurateException("Failed to load themes", e);
+    }
 
     try {
       this.displayConfigs.clear();
@@ -118,6 +148,9 @@ public final class ConfigManager {
     for (final Map.Entry<DisplayConfig, ConfigLoader<DisplayConfig>> entry : this.displayConfigs.entrySet()) {
       entry.getValue().save(entry.getKey());
     }
+    for (final Map.Entry<Theme, ConfigLoader<Theme>> entry : this.themes.entrySet()) {
+      entry.getValue().save(entry.getKey());
+    }
   }
 
   public @NonNull PluginSettings pluginSettings() {
@@ -126,6 +159,18 @@ public final class ConfigManager {
 
   public @NonNull Collection<DisplayConfig> displayConfigs() {
     return Collections.unmodifiableSet(this.displayConfigs.keySet());
+  }
+
+  public @NonNull Theme theme(final @NonNull String name) {
+    final Theme theme = this.themesByName.get(name);
+    if (theme == null) {
+      throw new IllegalArgumentException(String.format(
+        "Uh oh! No theme found with the name '%s'. Available themes: [%s]",
+        name,
+        String.join(", ", this.themesByName.keySet())
+      ));
+    }
+    return theme;
   }
 
   public @NonNull Optional<DisplayConfig> findDisplayConfig(final @NonNull Player player) {

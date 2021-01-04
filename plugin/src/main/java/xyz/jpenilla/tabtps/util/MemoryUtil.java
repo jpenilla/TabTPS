@@ -24,6 +24,7 @@
 package xyz.jpenilla.tabtps.util;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -31,7 +32,6 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import xyz.jpenilla.tabtps.Constants;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
@@ -55,7 +55,7 @@ public final class MemoryUtil {
     return Math.round(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / 1048576f);
   }
 
-  public static Component renderBar(final @Nullable String name, final @NonNull MemoryUsage usage, final int barLength) {
+  public static @NonNull Component renderBar(final @Nullable String name, final @NonNull MemoryUsage usage, final int barLength) {
     final long used = usage.getUsed();
     final long committed = usage.getCommitted();
     final long max = usage.getMax();
@@ -79,13 +79,26 @@ public final class MemoryUtil {
 
     final TextComponent.Builder builder = Component.text();
 
-    final StringBuilder hover = new StringBuilder();
-    hover.append(humanReadableByteCountBin(used)).append(" <white>Used</white>/").append(humanReadableByteCountBin(committed)).append(" <white>Committed</white>\n");
+    final TextComponent.Builder hover = Component.text()
+      .append(humanReadableByteCountBin(used))
+      .append(Component.space())
+      .append(Component.translatable("tabtps.label.used", NamedTextColor.WHITE))
+      .append(Component.text("/", NamedTextColor.GRAY))
+      .append(humanReadableByteCountBin(committed))
+      .append(Component.space())
+      .append(Component.translatable("tabtps.label.allocated", NamedTextColor.WHITE))
+      .append(Component.newline());
     if (max != -1) {
-      hover.append(humanReadableByteCountBin(adjustedMax)).append(" <white>Max</white><gray>,</gray> ");
+      hover.append(humanReadableByteCountBin(adjustedMax))
+        .append(Component.space())
+        .append(Component.translatable("tabtps.label.maximum", NamedTextColor.WHITE))
+        .append(Component.text(",", NamedTextColor.GRAY))
+        .append(Component.space());
     }
-    hover.append(humanReadableByteCountBin(adjustedInit)).append(" <white>Init</white>");
-    builder.hoverEvent(HoverEvent.showText(Constants.MINIMESSAGE.parse(hover.toString())));
+    hover.append(humanReadableByteCountBin(adjustedInit))
+      .append(Component.space())
+      .append(Component.translatable("tabtps.label.initial_amount"));
+    builder.hoverEvent(HoverEvent.showText(hover));
 
     builder.append(Component.text("[", NamedTextColor.GRAY));
     IntStream.rangeClosed(1, barLength).forEach(i -> {
@@ -110,10 +123,13 @@ public final class MemoryUtil {
     return builder.build();
   }
 
-  public static String humanReadableByteCountBin(final long bytes) {
+  public static @NonNull Component humanReadableByteCountBin(final long bytes) {
     final long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
     if (absB < 1024) {
-      return "<gradient:blue:aqua>" + bytes + "</gradient></gray>B</gray>";
+      return LinearComponents.linear(
+        ComponentUtil.gradient(String.valueOf(bytes), NamedTextColor.BLUE, NamedTextColor.AQUA),
+        Component.text("B", NamedTextColor.GRAY)
+      );
     }
     long value = absB;
     final CharacterIterator ci = new StringCharacterIterator("KMGTPE");
@@ -122,6 +138,9 @@ public final class MemoryUtil {
       ci.next();
     }
     value *= Long.signum(bytes);
-    return String.format("<gradient:blue:aqua>%.1f</gradient><gray>%ciB<gray>", value / 1024.0, ci.current());
+    return LinearComponents.linear(
+      ComponentUtil.gradient(String.format("%.1f", value / 1024.0), NamedTextColor.BLUE, NamedTextColor.AQUA),
+      Component.text(String.format("%ciB", ci.current()), NamedTextColor.GRAY)
+    );
   }
 }

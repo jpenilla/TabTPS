@@ -24,38 +24,59 @@
 package xyz.jpenilla.tabtps.module;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
+import xyz.jpenilla.tabtps.util.ComponentUtil;
 import xyz.jpenilla.tabtps.util.MemoryUtil;
 
-public final class MemoryModule implements Module {
+public final class MemoryModule extends AbstractModule {
   private final boolean alwaysShowMax;
-  private final TabTPS tabTPS;
 
   public MemoryModule(
     final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme,
     final boolean alwaysShowMax
   ) {
+    super(tabTPS, theme);
     this.alwaysShowMax = alwaysShowMax;
-    this.tabTPS = tabTPS;
   }
 
-  public MemoryModule(final @NonNull TabTPS tabTPS) {
-    this(tabTPS, false);
-  }
-
-  @Override
-  public @NonNull String label() {
-    return "RAM";
+  public MemoryModule(
+    final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme
+  ) {
+    this(tabTPS, theme, false);
   }
 
   @Override
-  public @NonNull Component display() {
-    final StringBuilder builder = new StringBuilder("<gray><gradient:green:dark_green>" + MemoryUtil.usedMemory() + "</gradient>M<white>/</white><gradient:green:dark_green>" + MemoryUtil.committedMemory() + "</gradient>M");
+  public @NonNull
+  Component label() {
+    return Component.translatable("tabtps.label.memory", this.theme.colorScheme().text());
+  }
+
+  @Override
+  public @NonNull
+  Component display() {
+    final TextColor color1 = this.theme.colorScheme().goodPerformance();
+    final TextColor color2 = this.theme.colorScheme().goodPerformanceSecondary();
+    final TextComponent.Builder builder = Component.text()
+      .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.usedMemory()), color1, color2))
+      .append(Component.text("M", this.theme.colorScheme().text()))
+      .append(Component.text("/", this.theme.colorScheme().textSecondary()))
+      .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.committedMemory()), color1, color2))
+      .append(Component.text("M", this.theme.colorScheme().text()));
     if (this.alwaysShowMax || MemoryUtil.committedMemory() != MemoryUtil.maxMemory()) {
-      builder.append(" <white>(</white>max <gradient:green:dark_green>").append(MemoryUtil.maxMemory()).append("</gradient>M<white>)</white>");
+      builder.append(Component.space())
+        .append(Component.text("(", this.theme.colorScheme().textSecondary()))
+        .append(Component.translatable("tabtps.label.maximum_short_lower", this.theme.colorScheme().text()))
+        .append(Component.space())
+        .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.maxMemory()), color1, color2))
+        .append(Component.text("M", this.theme.colorScheme().text()))
+        .append(Component.text(")", this.theme.colorScheme().textSecondary()));
     }
-    builder.append("</gray>");
-    return this.tabTPS.miniMessage().parse(builder.toString());
+    return builder.build();
   }
 }

@@ -23,6 +23,9 @@
  */
 package xyz.jpenilla.tabtps.config;
 
+import cloud.commandframework.minecraft.extras.MinecraftHelp;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
@@ -34,6 +37,9 @@ import java.util.Set;
 
 @ConfigSerializable
 public final class PluginSettings {
+
+  @Comment("Should the plugin check GitHub for updates on startup?")
+  private boolean updateChecker = true;
 
   @Comment("How many ticks in between updates")
   private UpdateRates updateRates = new UpdateRates();
@@ -53,6 +59,13 @@ public final class PluginSettings {
     + "This list allows defining the order in which permissions will be checked")
   private final Set<String> permissionPriorities = new LinkedHashSet<>();
 
+  @Comment("Colors used in the command help menus")
+  private HelpColors helpColors = new HelpColors();
+
+  public @NonNull HelpColors helpColors() {
+    return this.helpColors;
+  }
+
   public @NonNull Set<String> ignoredMemoryPools() {
     return this.ignoredMemoryPools;
   }
@@ -63,6 +76,10 @@ public final class PluginSettings {
 
   public @NonNull Set<String> permissionPriorities() {
     return this.permissionPriorities;
+  }
+
+  public boolean updateChecker() {
+    return this.updateChecker;
   }
 
   @ConfigSerializable
@@ -81,6 +98,25 @@ public final class PluginSettings {
 
     public int bossBar() {
       return this.bossBar;
+    }
+  }
+
+  @ConfigSerializable
+  public static final class HelpColors {
+    private TextColor primary = TextColor.color(0x00a3ff);
+    private TextColor highlight = NamedTextColor.WHITE;
+    private TextColor alternateHighlight = TextColor.color(0x284fff);
+    private TextColor text = NamedTextColor.GRAY;
+    private TextColor accent = NamedTextColor.DARK_GRAY;
+
+    public MinecraftHelp.@NonNull HelpColors toCloud() {
+      return MinecraftHelp.HelpColors.of(
+        this.primary,
+        this.highlight,
+        this.alternateHighlight,
+        this.text,
+        this.accent
+      );
     }
   }
 }

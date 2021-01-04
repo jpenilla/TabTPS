@@ -25,14 +25,12 @@ package xyz.jpenilla.tabtps.task;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.config.DisplayConfig;
-import xyz.jpenilla.tabtps.module.Module;
+import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
 public class BossBarTPSTask extends BukkitRunnable {
@@ -50,10 +48,11 @@ public class BossBarTPSTask extends BukkitRunnable {
     this.tabTPS = tabTPS;
     this.audience = this.tabTPS.audiences().player(player);
     this.settings = settings;
+    final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.renderer = ModuleRenderer.builder()
-      .modules(tabTPS, player, settings.modules())
-      .separator(Component.space())
-      .moduleRenderFunction(BossBarTPSTask::renderModule)
+      .modules(tabTPS, theme, player, settings.modules())
+      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.bar = BossBar.bossBar(
       this.renderer.render(),
@@ -84,20 +83,20 @@ public class BossBarTPSTask extends BukkitRunnable {
       case MSPT:
         final double mspt = this.tabTPS.tpsUtil().mspt();
         if (mspt < 25) {
-          return BossBar.Color.GREEN;
+          return this.settings.colors().goodPerformance();
         } else if (mspt < 40) {
-          return BossBar.Color.YELLOW;
+          return this.settings.colors().mediumPerformance();
         } else {
-          return BossBar.Color.RED;
+          return this.settings.colors().lowPerformance();
         }
       case TPS:
         final double tps = this.tabTPS.tpsUtil().tps()[0];
         if (tps > 18.50D) {
-          return BossBar.Color.GREEN;
+          return this.settings.colors().goodPerformance();
         } else if (tps > 15.00D) {
-          return BossBar.Color.YELLOW;
+          return this.settings.colors().mediumPerformance();
         } else {
-          return BossBar.Color.RED;
+          return this.settings.colors().lowPerformance();
         }
       default:
         throw new IllegalStateException("Unknown or invalid fill mode: " + this.settings.fillMode());
@@ -112,15 +111,6 @@ public class BossBarTPSTask extends BukkitRunnable {
     this.bar.progress(this.progress());
     this.bar.color(this.color());
     this.bar.name(this.renderer.render());
-  }
-
-  private static @NonNull Component renderModule(final @NonNull Module module) {
-    return Component.text()
-      .append(Component.text(module.label(), NamedTextColor.GRAY))
-      .append(Component.text(":", NamedTextColor.WHITE))
-      .append(Component.space())
-      .append(module.display())
-      .build();
   }
 
   public void removeViewer() {

@@ -24,6 +24,9 @@
 package xyz.jpenilla.tabtps;
 
 import kr.entree.spigradle.annotations.PluginMain;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.TranslationRegistry;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -44,7 +47,18 @@ import xyz.jpenilla.tabtps.util.UpdateChecker;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.Set;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 
 @PluginMain
 public class TabTPS extends BasePlugin {
@@ -61,6 +75,35 @@ public class TabTPS extends BasePlugin {
   @Override
   public void onPluginEnable() {
     this.setupNMS();
+
+    final TranslationRegistry registry = TranslationRegistry.create(Key.key(this.getName().toLowerCase(Locale.ENGLISH), "translations"));
+    final String prefix = "tabtps_";
+    final String suffix = ".properties";
+    final Set<Locale> locales = new HashSet<>();
+    try {
+      final Enumeration<URL> urls = this.getClassLoader().getResources("META-INF");
+      while (urls.hasMoreElements()) {
+        final URL url = urls.nextElement();
+        final JarURLConnection connection = (JarURLConnection) (url.openConnection());
+        try (final JarFile jar = connection.getJarFile()) {
+          locales.addAll(
+            Collections.list(jar.entries()).stream()
+              .map(ZipEntry::toString)
+              .filter(path -> path.startsWith(prefix) && path.endsWith(suffix))
+              .map(path -> path.replaceFirst(prefix, "").replaceFirst(suffix, ""))
+              .map(name -> name.split("_"))
+              .map(locale -> new Locale(locale[0], locale[1]))
+              .collect(Collectors.toSet())
+          );
+        }
+      }
+    } catch (final IOException e) {
+      this.getLogger().log(Level.SEVERE, "Failed to load translations", e);
+      this.setEnabled(false);
+      return;
+    }
+    locales.forEach(locale -> registry.registerAll(locale, PropertyResourceBundle.getBundle("tabtps", locale), true));
+    GlobalTranslator.get().addSource(registry);
 
     this.permissionManager = new PermissionManager(this);
 
@@ -96,7 +139,13 @@ public class TabTPS extends BasePlugin {
 
     Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
-    new UpdateChecker(this, "jmanpenilla/TabTPS").checkVersion();
+    if (this.pluginSettings().updateChecker()) {
+      UpdateChecker.checkVersion(
+        this,
+        "jmanpenilla/TabTPS",
+        messages -> messages.forEach(this.getLogger()::info)
+      );
+    }
     final Metrics metrics = new Metrics(this, 8458);
   }
 
@@ -105,7 +154,7 @@ public class TabTPS extends BasePlugin {
     this.cpuUtil.stopRecordingUsage();
     Bukkit.getScheduler().cancelTasks(this);
 
-    if (!getDataFolder().exists()) {
+    if (!this.getDataFolder().exists()) {
       this.getDataFolder().mkdirs();
     }
     try {
@@ -159,8 +208,10 @@ public class TabTPS extends BasePlugin {
 
   private void setupNMS() {
     if (Environment.majorMinecraftVersion() > 15 && !Environment.paper()) {
-      this.getLogger().info("You are not using Paper, and therefore NMS methods must be used to get TPS and MSPT.");
-      this.getLogger().info("Please consider upgrading to Paper for better performance and compatibility at https://papermc.io/downloads");
+      this.getLogger().info("# ");
+      this.getLogger().info("# You are not using Paper, and therefore NMS methods must be used to get TPS and MSPT.");
+      this.getLogger().info("# Please consider upgrading to Paper for better performance and compatibility at https://papermc.io/downloads");
+      this.getLogger().info("# ");
     }
 
     if (Environment.majorMinecraftVersion() < 16 || !Environment.paper()) {

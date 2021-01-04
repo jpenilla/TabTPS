@@ -27,55 +27,56 @@ import com.google.common.base.Charsets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.TabTPS;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-public class UpdateChecker {
-  private final TabTPS plugin;
-  private final JsonParser parser = new JsonParser();
-  private final String githubRepo;
+public final class UpdateChecker {
+  private static final JsonParser parser = new JsonParser();
 
-  public UpdateChecker(final @NonNull TabTPS plugin, final @NonNull String githubRepo) {
-    this.plugin = plugin;
-    this.githubRepo = githubRepo;
+  private UpdateChecker() {
   }
 
-  public void checkVersion() {
-    Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+  public static void checkVersion(final @NonNull JavaPlugin plugin, final @NonNull String githubRepo, final @NonNull Consumer<List<String>> messageConsumer) {
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
       final JsonArray result;
+      final List<String> list = new ArrayList<>();
       try {
-        result = this.parser.parse(new InputStreamReader(new URL("https://api.github.com/repos/" + this.githubRepo + "/releases").openStream(), Charsets.UTF_8)).getAsJsonArray();
+        result = parser.parse(new InputStreamReader(new URL("https://api.github.com/repos/" + githubRepo + "/releases").openStream(), Charsets.UTF_8)).getAsJsonArray();
       } catch (final IOException exception) {
-        this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+        messageConsumer.accept(Collections.singletonList("Failed to look for updates: " + exception.getMessage()));
         return;
       }
 
       final Map<String, String> versionMap = new LinkedHashMap<>();
       result.forEach(element -> versionMap.put(element.getAsJsonObject().get("tag_name").getAsString(), element.getAsJsonObject().get("html_url").getAsString()));
       final List<String> versionList = new LinkedList<>(versionMap.keySet());
-      final String currentVersion = "v" + this.plugin.getDescription().getVersion();
+      final String currentVersion = "v" + plugin.getDescription().getVersion();
       if (versionList.get(0).equals(currentVersion)) {
-        this.plugin.getLogger().info("You are running the latest version of " + this.plugin.getName() + "! :)");
         return;
       }
       if (currentVersion.contains("SNAPSHOT")) {
-        this.plugin.getLogger().info("You are running a development build of " + this.plugin.getName() + "! (" + currentVersion + ")");
-        this.plugin.getLogger().info("The latest official release is " + versionList.get(0));
+        list.add("This server is running a development build of " + plugin.getName() + "! (" + currentVersion + ")");
+        list.add("The latest official release is " + versionList.get(0));
+        messageConsumer.accept(list);
         return;
       }
       final int versionsBehind = versionList.indexOf(currentVersion);
-      this.plugin.getLogger().info("There is an update available for " + this.plugin.getName() + "!");
-      this.plugin.getLogger().info("You are running version " + currentVersion + ", which is " + (versionsBehind == -1 ? "many" : versionsBehind) + " versions outdated.");
-      this.plugin.getLogger().info("Download the latest version, " + versionList.get(0) + " from GitHub at the link below:");
-      this.plugin.getLogger().info(versionMap.get(versionList.get(0)));
+      list.add("There is an update available for " + plugin.getName() + "!");
+      list.add("This server is running version " + currentVersion + ", which is " + (versionsBehind == -1 ? "UNKNOWN" : versionsBehind) + " versions outdated.");
+      list.add("Download the latest version, " + versionList.get(0) + " from GitHub at the link below:");
+      list.add(versionMap.get(versionList.get(0)));
+      messageConsumer.accept(list);
     });
   }
 }

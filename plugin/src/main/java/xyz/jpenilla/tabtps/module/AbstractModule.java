@@ -23,15 +23,16 @@
  */
 package xyz.jpenilla.tabtps.module;
 
-import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 
-public interface Module {
-  @NonNull Component label();
+abstract class AbstractModule implements Module {
+  protected final TabTPS tabTPS;
+  protected final Theme theme;
 
-  @NonNull Component display();
-
-  default <T extends Module> ModuleType<T> type() {
-    return ModuleType.fromClass(this.getClass());
+  AbstractModule(final @NonNull TabTPS tabTPS, final @NonNull Theme theme) {
+    this.tabTPS = tabTPS;
+    this.theme = theme;
   }
 }

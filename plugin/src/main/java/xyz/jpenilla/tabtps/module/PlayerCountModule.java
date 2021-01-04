@@ -24,28 +24,36 @@
 package xyz.jpenilla.tabtps.module;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.LinearComponents;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
+import xyz.jpenilla.tabtps.util.ComponentUtil;
 
-public class PlayerCountModule implements Module {
-  private final TabTPS tabTPS;
-
-  public PlayerCountModule(final @NonNull TabTPS tabTPS) {
-    this.tabTPS = tabTPS;
+public final class PlayerCountModule extends AbstractModule {
+  public PlayerCountModule(
+    final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme
+  ) {
+    super(tabTPS, theme);
   }
 
   @Override
-  public @NonNull String label() {
-    return "Online";
+  public @NonNull Component label() {
+    return Component.translatable("tabtps.label.player_count", this.theme.colorScheme().text());
   }
 
   @Override
   public @NonNull Component display() {
-    return this.tabTPS.miniMessage().parse(String.format(
-      "<gradient:green:dark_green>%d</gradient><gray>/</gray><gradient:green:dark_green>%d",
-      Bukkit.getOnlinePlayers().size(),
-      Bukkit.getMaxPlayers()
-    ));
+    final TextColor color1 = this.theme.colorScheme().goodPerformance();
+    final TextColor color2 = this.theme.colorScheme().goodPerformanceSecondary();
+    final TextColor textColor = this.theme.colorScheme().textSecondary();
+    return LinearComponents.linear(
+      ComponentUtil.gradient(String.valueOf(Bukkit.getOnlinePlayers().size()), color1, color2),
+      Component.text("/", textColor),
+      ComponentUtil.gradient(String.valueOf(Bukkit.getMaxPlayers()), color1, color2)
+    );
   }
 }

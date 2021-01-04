@@ -27,6 +27,7 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
@@ -41,24 +42,24 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class CommandMemory {
+final class CommandMemory {
   private final TabTPS tabTPS;
 
-  public CommandMemory(final @NonNull TabTPS tabTPS, final @NonNull CommandManager mgr) {
+  CommandMemory(final @NonNull TabTPS tabTPS, final @NonNull CommandManager mgr) {
     this.tabTPS = tabTPS;
   }
 
-  @CommandDescription("Displays the current memory pools of the server jvm. Output will vary greatly based on garbage collection settings.")
+  @CommandDescription("tabtps.command.memory.description")
   @CommandPermission(Constants.PERMISSION_COMMAND_TICKINFO)
   @CommandMethod("memory|mem|ram")
   public void onMemory(final @NonNull CommandSender sender) {
     final List<Component> messages = new ArrayList<>();
     messages.add(Component.empty());
-    final Component header = Component.text()
-      .append(Constants.PREFIX)
-      .append(Component.space())
-      .append(Component.text("Memory Usage", NamedTextColor.GRAY, TextDecoration.ITALIC))
-      .build();
+    final Component header = LinearComponents.linear(
+      Constants.PREFIX,
+      Component.space(),
+      Component.translatable("tabtps.command.memory.text.header", NamedTextColor.GRAY, TextDecoration.ITALIC)
+    );
     messages.add(header);
     if (!this.tabTPS.pluginSettings().ignoredMemoryPools().contains("Heap Memory Usage")) {
       messages.add(MemoryUtil.renderBar("Heap Memory Usage", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 60));

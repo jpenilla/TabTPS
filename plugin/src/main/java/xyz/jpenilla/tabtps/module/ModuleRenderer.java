@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,16 @@ public final class ModuleRenderer {
   private final List<Module> modules;
   private final Function<Module, Component> moduleRenderFunction;
   private final Component separator;
+
+  public static @NonNull Function<Module, Component> standardRenderFunction(final @NonNull Theme theme) {
+    return module ->
+      Component.text()
+        .append(module.label())
+        .append(Component.text(":", theme.colorScheme().textSecondary()))
+        .append(Component.space())
+        .append(module.display())
+        .build();
+  }
 
   private ModuleRenderer(
     final @NonNull List<Module> modules,
@@ -109,31 +120,41 @@ public final class ModuleRenderer {
     /**
      * Sets the list of {@link Module}s to use from a comma separated {@link String}.
      *
-     * <p>If Modules which need a {@link Player} are used, {@link Builder#modules(TabTPS, Player, String)} should be used instead.</p>
+     * <p>If Modules which need a {@link Player} are used, {@link Builder#modules(TabTPS, Theme, Player, String)} should be used instead.</p>
      *
      * @param tabTPS  The TabTPS instance
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    public @NonNull Builder modules(final @NonNull TabTPS tabTPS, final @NonNull String modules) {
-      return this.modules(tabTPS, null, modules);
+    public @NonNull Builder modules(
+      final @NonNull TabTPS tabTPS,
+      final @NonNull Theme theme,
+      final @NonNull String modules
+    ) {
+      return this.modules(tabTPS, theme, null, modules);
     }
 
     /**
      * Sets the list of {@link Module}s to use from a comma separated {@link String}.
      *
      * @param tabTPS  The TabTPS instance
+     * @param theme   Theme to use
      * @param player  The Player to use
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    public @NonNull Builder modules(final @NonNull TabTPS tabTPS, final @Nullable Player player, final @NonNull String modules) {
+    public @NonNull Builder modules(
+      final @NonNull TabTPS tabTPS,
+      final @NonNull Theme theme,
+      final @Nullable Player player,
+      final @NonNull String modules
+    ) {
       return this.modules(
         Arrays.stream(modules.replace(" ", "").split(","))
           .filter(s -> s != null && !s.equals(""))
           .map(ModuleType::fromName)
           .filter(type -> !type.needsPlayer() || player != null)
-          .map(type -> type.createModule(tabTPS, player))
+          .map(type -> type.createModule(tabTPS, theme, player))
           .collect(Collectors.toList())
       );
     }

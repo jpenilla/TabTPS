@@ -27,6 +27,8 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.LinearComponents;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -36,6 +38,7 @@ import xyz.jpenilla.jmplib.Crafty;
 import xyz.jpenilla.jmplib.Environment;
 import xyz.jpenilla.tabtps.Constants;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.module.MemoryModule;
 import xyz.jpenilla.tabtps.module.Module;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
@@ -45,9 +48,11 @@ import xyz.jpenilla.tabtps.util.TPSUtil;
 import java.lang.invoke.MethodHandle;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LongSummaryStatistics;
@@ -55,16 +60,10 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.LongPredicate;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-public class CommandTPS {
-  private static final Function<Module, Component> MODULE_RENDERER = module -> Component.text()
-    .append(Component.text(module.label(), NamedTextColor.GRAY))
-    .append(Component.text(":", NamedTextColor.WHITE))
-    .append(Component.space())
-    .append(module.display())
-    .build();
+final class CommandTPS {
+  private static final Function<Module, Component> MODULE_RENDERER = ModuleRenderer.standardRenderFunction(Theme.DEFAULT);
   private static final LongPredicate NOT_ZERO = l -> l != 0;
 
   private final TabTPS tabTPS;
@@ -72,24 +71,30 @@ public class CommandTPS {
   private final ModuleRenderer cpuRenderer;
   private final ModuleRenderer memoryRenderer;
 
-  public CommandTPS(final @NonNull TabTPS tabTPS, final @NonNull CommandManager mgr) {
+  CommandTPS(final @NonNull TabTPS tabTPS, final @NonNull CommandManager mgr) {
     this.tabTPS = tabTPS;
-    this.msptRenderer = ModuleRenderer.builder().modules(tabTPS, "mspt").moduleRenderFunction(MODULE_RENDERER).build();
-    this.cpuRenderer = ModuleRenderer.builder().modules(tabTPS, "cpu").moduleRenderFunction(MODULE_RENDERER).build();
-    this.memoryRenderer = ModuleRenderer.builder().modules(new MemoryModule(tabTPS, true)).moduleRenderFunction(MODULE_RENDERER).build();
+    this.msptRenderer = ModuleRenderer.builder().modules(tabTPS, Theme.DEFAULT, "mspt").moduleRenderFunction(MODULE_RENDERER).build();
+    this.cpuRenderer = ModuleRenderer.builder().modules(tabTPS, Theme.DEFAULT, "cpu").moduleRenderFunction(MODULE_RENDERER).build();
+    this.memoryRenderer = ModuleRenderer.builder().modules(new MemoryModule(tabTPS, Theme.DEFAULT, true)).moduleRenderFunction(MODULE_RENDERER).build();
   }
 
-  @CommandDescription("Displays the current TPS and MSPT of the server.")
+  @CommandDescription("tabtps.command.tickinfo.description")
   @CommandPermission(Constants.PERMISSION_COMMAND_TICKINFO)
   @CommandMethod("tickinfo|mspt|tps")
   public void onTPS(final @NonNull CommandSender sender) {
     final List<Component> messages = new ArrayList<>();
     messages.add(Component.empty());
-    messages.add(Constants.PREFIX.append(Component.text(" Server Tick Information", NamedTextColor.GRAY, TextDecoration.ITALIC)));
+    messages.add(
+      LinearComponents.linear(
+        Constants.PREFIX,
+        Component.space(),
+        Component.translatable("tabtps.command.tickinfo.text.header", NamedTextColor.GRAY, TextDecoration.ITALIC)
+      )
+    );
     messages.add(this.formatTPS());
     messages.addAll(this.formatTickTimes());
     messages.add(this.cpuRenderer.render().hoverEvent(HoverEvent.showText(
-      Component.text("CPU usage for the Minecraft server process as well as the system CPU usage.", NamedTextColor.GRAY)
+      Component.translatable("tabtps.command.tickinfo.text.cpu_hover", NamedTextColor.GRAY)
     )));
     messages.add(this.renderMemory());
     messages.add(MemoryUtil.renderBar(null, ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 91));
@@ -97,47 +102,52 @@ public class CommandTPS {
   }
 
   private @NonNull Component renderMemory() {
-    return this.memoryRenderer.render().hoverEvent(HoverEvent.showText(
-      Component.text()
-        .color(NamedTextColor.GRAY)
-        .append(Component.text("Megabytes of Memory/RAM"))
-        .append(Component.text(".", NamedTextColor.WHITE))
-        .append(Component.space())
-        .append(Component.text("Used"))
-        .append(Component.text("/", NamedTextColor.WHITE))
-        .append(Component.text("Allocated"))
-        .append(Component.space())
-        .append(Component.text("(", NamedTextColor.WHITE))
-        .append(Component.text("Maximum"))
-        .append(Component.text(")", NamedTextColor.WHITE))
-        .build()
-    ));
+    return this.memoryRenderer.render()
+      .hoverEvent(HoverEvent.showText(
+        Component.text()
+          .color(NamedTextColor.GRAY)
+          .append(Component.translatable("tabtps.command.tickinfo.text.memory_hover"))
+          .append(Component.newline())
+          .append(Component.translatable("tabtps.label.used"))
+          .append(Component.text("/", NamedTextColor.WHITE))
+          .append(Component.translatable("tabtps.label.allocated"))
+          .append(Component.space())
+          .append(Component.text("(", NamedTextColor.WHITE))
+          .append(Component.translatable("tabtps.label.maximum"))
+          .append(Component.text(")", NamedTextColor.WHITE))
+          .build()
+      ));
   }
 
   private @NonNull Component formatTPS() {
     final double[] tps = this.tabTPS.tpsUtil().tps();
-    final StringBuilder tpsBuilder = new StringBuilder("<hover:show_text:'Ticks per second<gray>.</gray> <green>20</green> is optimal<gray>.</gray>'><gray>TPS<white>:</white> ");
+    final TextComponent.Builder builder = Component.text()
+      .hoverEvent(HoverEvent.showText(Component.translatable("taptps.command.tickinfo.text.tps_hover", NamedTextColor.GRAY)))
+      .append(Component.translatable("tabtps.label.tps", NamedTextColor.GRAY))
+      .append(Component.text(":", NamedTextColor.WHITE))
+      .append(Component.space());
     final Iterator<Double> tpsIterator = Arrays.stream(tps).iterator();
+    final Deque<String> tpsDurations = tps.length == 4
+      ? new ArrayDeque<>(Arrays.asList("5s", "1m", "5m", "15m"))
+      : new ArrayDeque<>(Arrays.asList("1m", "5m", "15m"));
     while (tpsIterator.hasNext()) {
-      tpsBuilder.append(TPSUtil.coloredTps(tpsIterator.next()));
-      tpsBuilder.append(" <italic>(%s)</italic>");
+      builder.append(TPSUtil.coloredTps(tpsIterator.next(), Theme.DEFAULT.colorScheme()))
+        .append(Component.space())
+        .append(Component.text("(", NamedTextColor.GRAY, TextDecoration.ITALIC))
+        .append(Component.text(tpsDurations.removeFirst(), NamedTextColor.GRAY, TextDecoration.ITALIC))
+        .append(Component.text(")", NamedTextColor.GRAY, TextDecoration.ITALIC));
       if (tpsIterator.hasNext()) {
-        tpsBuilder.append("<white>,</white> ");
+        builder.append(Component.text(",", NamedTextColor.WHITE))
+          .append(Component.space());
       }
     }
-    final String miniMessage;
-    if (tps.length == 4) {
-      miniMessage = String.format(tpsBuilder.toString(), "5s", "1m", "5m", "15m");
-    } else {
-      miniMessage = String.format(tpsBuilder.toString(), "1m", "5m", "15m");
-    }
-    return this.tabTPS.miniMessage().parse(miniMessage);
+    return builder.build();
   }
 
   private @NonNull List<Component> formatTickTimes() {
     if (Environment.majorMinecraftVersion() >= 15 && Environment.paper()) {
       try {
-        final List<String> output = new ArrayList<>();
+        final List<Component> output = new ArrayList<>();
 
         final Class<?> _MinecraftServer = Crafty.needNmsClass("MinecraftServer");
         final MethodHandle _getServer = Objects.requireNonNull(Crafty.findStaticMethod(_MinecraftServer, "getServer", _MinecraftServer));
@@ -162,31 +172,67 @@ public class CommandTPS {
         final LongSummaryStatistics statistics10s = LongStream.of(times10s).filter(NOT_ZERO).summaryStatistics();
         final LongSummaryStatistics statistics60s = LongStream.of(times60s).filter(NOT_ZERO).summaryStatistics();
 
-        output.add("<hover:show_text:'Milliseconds per tick<gray>.</gray> Avg. MSPT <gray>≤ <white>50</white> -></gray> <green>20 TPS</green>'>"
-          + "<gray>MSPT <white>-</white> Average<white>,</white> Minimum<white>,</white> Maximum</hover>");
-        output.add(this.formatStatistics("<white> ├─ <gray>5s</gray> - ", statistics5s));
-        output.add(this.formatStatistics("<white> ├─ <gray>10s</gray> - ", statistics10s));
-        output.add(this.formatStatistics("<white> └─ <gray>60s</gray> - ", statistics60s));
+        output.add(
+          LinearComponents.linear(
+            Component.translatable("tabtps.label.mspt", NamedTextColor.GRAY),
+            Component.space(),
+            Component.text("-", NamedTextColor.WHITE),
+            Component.space(),
+            Component.translatable("tabtps.label.average", NamedTextColor.GRAY),
+            Component.text(", ", NamedTextColor.WHITE),
+            Component.translatable("tabtps.label.minimum", NamedTextColor.GRAY),
+            Component.text(", ", NamedTextColor.WHITE),
+            Component.translatable("tabtps.label.maximum", NamedTextColor.GRAY)
+          ).hoverEvent(HoverEvent.showText(Component.translatable("tabtps.command.tickinfo.text.mspt_hover", NamedTextColor.GRAY)))
+        );
 
-        return output.stream().map(string -> this.tabTPS.miniMessage().parse(string)).collect(Collectors.toList());
+        output.add(this.formatStatistics(
+          "├─",
+          Component.text("5s"),
+          statistics5s
+        ));
+        output.add(this.formatStatistics(
+          "├─",
+          Component.text("10s"),
+          statistics10s
+        ));
+        output.add(this.formatStatistics(
+          "└─",
+          Component.text("60s"),
+          statistics60s
+        ));
+
+        return output;
       } catch (final Throwable throwable) {
         this.tabTPS.getLogger().log(Level.WARNING, "Failed to retrieve tick time statistics", throwable);
         throw new IllegalStateException("Failed to retrieve tick time statistics", throwable);
       }
     } else {
-      return Collections.singletonList(this.msptRenderer.render().hoverEvent(HoverEvent.showText(
-        this.tabTPS.miniMessage().parse("Milliseconds per tick<gray>.</gray> Avg. MSPT <gray>≤ <white>50</white> -></gray> <green>20 TPS</green>")
-      )));
+      return Collections.singletonList(
+        this.msptRenderer.render()
+          .hoverEvent(HoverEvent.showText(
+            Component.translatable("tabtps.command.tickinfo.text.mspt_hover", NamedTextColor.GRAY)
+          ))
+      );
     }
   }
 
-  private String formatStatistics(final @NonNull String prefix, final @NonNull LongSummaryStatistics statistics) {
-    return String.format(
-      "%s%s, %s, %s",
-      prefix,
-      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getAverage())),
-      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMin())),
-      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMax()))
+  private @NonNull Component formatStatistics(final @NonNull String branch, final @NonNull Component time, final @NonNull LongSummaryStatistics statistics) {
+    return LinearComponents.linear(
+      Component.space(),
+      Component.text(branch, NamedTextColor.WHITE),
+      Component.space(),
+      time.color(NamedTextColor.GRAY),
+      Component.space(),
+      Component.text("-", NamedTextColor.WHITE),
+      Component.space(),
+      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getAverage()), Theme.DEFAULT.colorScheme()),
+      Component.text(",", NamedTextColor.WHITE),
+      Component.space(),
+      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMin()), Theme.DEFAULT.colorScheme()),
+      Component.text(",", NamedTextColor.WHITE),
+      Component.space(),
+      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMax()), Theme.DEFAULT.colorScheme())
     );
   }
 }

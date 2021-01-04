@@ -6,11 +6,12 @@ plugins {
 val nmsRevisions = (rootProject.ext["nmsRevisions"] as Map<String, String>).keys
 
 dependencies {
-  implementation("org.spongepowered", "configurate-hocon", "4.0.0")
-  implementation("xyz.jpenilla", "jmplib", "1.0.1+28-SNAPSHOT")
+  implementation("org.spongepowered", "configurate-hocon", "4.1.0-SNAPSHOT")
+  implementation("net.kyori", "adventure-serializer-configurate4", "4.3.0")
+  implementation("xyz.jpenilla", "jmplib", "1.0.1+29-SNAPSHOT")
   implementation("org.bstats", "bstats-bukkit", "1.8")
 
-  val cloudVersion = "1.3.0"
+  val cloudVersion = "1.4.0-SNAPSHOT"
   implementation("cloud.commandframework", "cloud-paper", cloudVersion)
   implementation("cloud.commandframework", "cloud-annotations", cloudVersion)
   implementation("cloud.commandframework", "cloud-minecraft-extras", cloudVersion)

@@ -23,13 +23,12 @@
  */
 package xyz.jpenilla.tabtps.task;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.config.DisplayConfig;
+import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
 public class ActionBarTPSTask extends BukkitRunnable {
@@ -38,21 +37,11 @@ public class ActionBarTPSTask extends BukkitRunnable {
   private final ModuleRenderer renderer;
 
   public ActionBarTPSTask(final @NonNull TabTPS tabTPS, final @NonNull Player player, final DisplayConfig.@NonNull ActionBarSettings settings) {
+    final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.renderer = ModuleRenderer.builder()
-      .modules(tabTPS, player, settings.modules())
-      .separator(Component.text()
-        .append(Component.space())
-        .append(Component.text("|", NamedTextColor.WHITE))
-        .append(Component.space())
-        .build()
-      )
-      .moduleRenderFunction(module -> Component.text()
-        .append(Component.text(module.label(), NamedTextColor.BLUE))
-        .append(Component.text(":", NamedTextColor.WHITE))
-        .append(Component.space())
-        .append(module.display())
-        .build()
-      )
+      .modules(tabTPS, theme, player, settings.modules())
+      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.player = player;
     this.tabTPS = tabTPS;

@@ -26,17 +26,19 @@ package xyz.jpenilla.tabtps.module;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.config.Theme;
 
-public final class CPUModule implements Module {
-  private final TabTPS tabTPS;
-
-  public CPUModule(final @NonNull TabTPS tabTPS) {
-    this.tabTPS = tabTPS;
+public final class CPUModule extends AbstractModule {
+  public CPUModule(
+    final @NonNull TabTPS tabTPS,
+    final @NonNull Theme theme
+  ) {
+    super(tabTPS, theme);
   }
 
   @Override
-  public @NonNull String label() {
-    return "CPU";
+  public @NonNull Component label() {
+    return Component.translatable("tabtps.label.cpu", this.theme.colorScheme().text());
   }
 
   @Override
