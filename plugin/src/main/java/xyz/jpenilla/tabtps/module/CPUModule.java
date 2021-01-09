@@ -24,9 +24,12 @@
 package xyz.jpenilla.tabtps.module;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.config.Theme;
+import xyz.jpenilla.tabtps.util.CPUMonitor;
+import xyz.jpenilla.tabtps.util.ComponentUtil;
 
 public final class CPUModule extends AbstractModule {
   public CPUModule(
@@ -43,10 +46,19 @@ public final class CPUModule extends AbstractModule {
 
   @Override
   public @NonNull Component display() {
-    return this.tabTPS.miniMessage().parse(String.format(
-      "<gradient:green:dark_green>%s</gradient><gray>%%<white>, </white><gradient:green:dark_green>%s</gradient>%%</gray> <white>(<gray>sys.</gray>, <gray>proc.</gray>)</white>",
-      this.tabTPS.cpuUtil().recentSystemCpuLoadSnapshot(),
-      this.tabTPS.cpuUtil().recentProcessCpuLoadSnapshot()
-    ));
+    final TextComponent.Builder builder = Component.text()
+      .append(ComponentUtil.gradient(String.valueOf(CPUMonitor.instance().recentSystemCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
+      .append(Component.text("%", this.theme.colorScheme().text()))
+      .append(Component.text(",", this.theme.colorScheme().textSecondary()))
+      .append(Component.space())
+      .append(ComponentUtil.gradient(String.valueOf(CPUMonitor.instance().recentProcessCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
+      .append(Component.text("%", this.theme.colorScheme().text()));
+    builder.append(Component.space())
+      .append(Component.text("(", this.theme.colorScheme().textSecondary()))
+      .append(Component.translatable("tabtps.label.cpu.system_short", this.theme.colorScheme().text()))
+      .append(Component.text(", ", this.theme.colorScheme().textSecondary()))
+      .append(Component.translatable("tabtps.label.cpu.process_short", this.theme.colorScheme().text()))
+      .append(Component.text(")", this.theme.colorScheme().textSecondary()));
+    return builder.build();
   }
 }

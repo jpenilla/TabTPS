@@ -26,8 +26,11 @@ package xyz.jpenilla.tabtps.config;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
+
+import java.util.Objects;
 
 @ConfigSerializable
 public final class Theme {
@@ -44,6 +47,20 @@ public final class Theme {
 
   public @NonNull String separator() {
     return this.separator;
+  }
+
+  @Override
+  public boolean equals(final @Nullable Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final Theme theme = (Theme) o;
+    return Objects.equals(this.colorScheme, theme.colorScheme)
+      && Objects.equals(this.separator, theme.separator);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.colorScheme, this.separator);
   }
 
   @ConfigSerializable

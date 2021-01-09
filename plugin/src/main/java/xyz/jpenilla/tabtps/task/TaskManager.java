@@ -25,22 +25,32 @@ package xyz.jpenilla.tabtps.task;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
+import xyz.jpenilla.tabtps.util.RunnableFuturePair;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class TaskManager {
   private final TabTPS tabTPS;
-  private final Map<UUID, BukkitTask> tabTasks = new HashMap<>();
-  private final Map<UUID, BukkitTask> actionBarTasks = new HashMap<>();
-  private final Map<UUID, BossBarTPSTask> bossBarTasks = new HashMap<>();
+  private final ScheduledExecutorService executor;
+  private final Map<UUID, RunnableFuturePair<TabTPSTask, Future<?>>> tabTasks = new HashMap<>();
+  private final Map<UUID, RunnableFuturePair<ActionBarTPSTask, Future<?>>> actionBarTasks = new HashMap<>();
+  private final Map<UUID, RunnableFuturePair<BossBarTPSTask, Future<?>>> bossBarTasks = new HashMap<>();
 
   public TaskManager(final @NonNull TabTPS tabTPS) {
     this.tabTPS = tabTPS;
+    final ScheduledThreadPoolExecutor ex = new ScheduledThreadPoolExecutor(4);
+    ex.setRemoveOnCancelPolicy(true);
+    this.executor = Executors.unconfigurableScheduledExecutorService(ex);
   }
 
   public boolean hasTabTask(final @NonNull Player player) {
@@ -53,16 +63,16 @@ public class TaskManager {
       if (!config.tabSettings().allow()) {
         return;
       }
-      final BukkitTask task = new TabTPSTask(this.tabTPS, player, config.tabSettings())
-        .runTaskTimerAsynchronously(this.tabTPS, 0L, this.tabTPS.pluginSettings().updateRates().tab());
-      this.tabTasks.put(player.getUniqueId(), task);
+      final TabTPSTask task = new TabTPSTask(this.tabTPS, player, config.tabSettings());
+      final Future<?> future = this.executor.scheduleAtFixedRate(task, 0L, this.tabTPS.pluginSettings().updateRates().tab(), TimeUnit.MILLISECONDS);
+      this.tabTasks.put(player.getUniqueId(), new RunnableFuturePair<>(task, future));
     });
   }
 
   public void stopTabTask(final @NonNull Player player) {
-    final BukkitTask task = this.tabTasks.remove(player.getUniqueId());
-    if (task != null) {
-      task.cancel();
+    final RunnableFuturePair<TabTPSTask, Future<?>> pair = this.tabTasks.remove(player.getUniqueId());
+    if (pair != null) {
+      pair.future().cancel(false);
       if (player.isOnline()) {
         this.tabTPS.audiences().player(player).sendPlayerListHeaderAndFooter(Component.empty(), Component.empty());
       }
@@ -79,16 +89,16 @@ public class TaskManager {
       if (!config.actionBarSettings().allow()) {
         return;
       }
-      final BukkitTask task = new ActionBarTPSTask(this.tabTPS, player, config.actionBarSettings())
-        .runTaskTimerAsynchronously(this.tabTPS, 0L, this.tabTPS.pluginSettings().updateRates().actionBar());
-      this.actionBarTasks.put(player.getUniqueId(), task);
+      final ActionBarTPSTask task = new ActionBarTPSTask(this.tabTPS, player, config.actionBarSettings());
+      final Future<?> future = this.executor.scheduleAtFixedRate(task, 0L, this.tabTPS.pluginSettings().updateRates().actionBar(), TimeUnit.MILLISECONDS);
+      this.actionBarTasks.put(player.getUniqueId(), new RunnableFuturePair<>(task, future));
     });
   }
 
   public void stopActionBarTask(final @NonNull Player player) {
-    final BukkitTask task = this.actionBarTasks.remove(player.getUniqueId());
-    if (task != null) {
-      task.cancel();
+    final RunnableFuturePair<ActionBarTPSTask, Future<?>> pair = this.actionBarTasks.remove(player.getUniqueId());
+    if (pair != null) {
+      pair.future().cancel(false);
     }
   }
 
@@ -103,16 +113,27 @@ public class TaskManager {
         return;
       }
       final BossBarTPSTask task = new BossBarTPSTask(this.tabTPS, player, config.bossBarSettings());
-      task.runTaskTimerAsynchronously(this.tabTPS, 0L, this.tabTPS.pluginSettings().updateRates().bossBar());
-      this.bossBarTasks.put(player.getUniqueId(), task);
+      final Future<?> future = this.executor.scheduleAtFixedRate(task, 0L, this.tabTPS.pluginSettings().updateRates().bossBar(), TimeUnit.MILLISECONDS);
+      this.bossBarTasks.put(player.getUniqueId(), new RunnableFuturePair<>(task, future));
     });
   }
 
   public void stopBossTask(final @NonNull Player player) {
-    final BossBarTPSTask task = this.bossBarTasks.remove(player.getUniqueId());
-    if (task != null) {
-      task.cancel();
-      task.removeViewer();
+    final RunnableFuturePair<BossBarTPSTask, Future<?>> pair = this.bossBarTasks.remove(player.getUniqueId());
+    if (pair != null) {
+      pair.future().cancel(false);
+      pair.runnable().removeViewer();
+    }
+  }
+
+  public void shutdown() {
+    this.executor.shutdownNow();
+    try {
+      if (!this.executor.awaitTermination(1, TimeUnit.SECONDS)) {
+        throw new IllegalStateException("Thread pool did not shut down after a 1 second time out");
+      }
+    } catch (final InterruptedException | IllegalStateException e) {
+      this.tabTPS.getLogger().log(Level.SEVERE, "Failed to shut down thread pool", e);
     }
   }
 }

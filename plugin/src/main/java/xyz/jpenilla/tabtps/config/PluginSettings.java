@@ -41,7 +41,7 @@ public final class PluginSettings {
   @Comment("Should the plugin check GitHub for updates on startup?")
   private boolean updateChecker = true;
 
-  @Comment("How many ticks in between updates")
+  @Comment("How many milliseconds in between updates")
   private UpdateRates updateRates = new UpdateRates();
 
   @Comment("These memory pools will not be displayed in the '/memory' command")
@@ -84,9 +84,9 @@ public final class PluginSettings {
 
   @ConfigSerializable
   public static final class UpdateRates {
-    private int tab = 5;
-    private int actionBar = 5;
-    private int bossBar = 5;
+    private int tab = 250;
+    private int actionBar = 250;
+    private int bossBar = 250;
 
     public int tab() {
       return this.tab;

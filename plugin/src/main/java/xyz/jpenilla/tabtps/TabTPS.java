@@ -38,7 +38,7 @@ import xyz.jpenilla.tabtps.config.ConfigManager;
 import xyz.jpenilla.tabtps.config.PluginSettings;
 import xyz.jpenilla.tabtps.nms.api.NMS;
 import xyz.jpenilla.tabtps.task.TaskManager;
-import xyz.jpenilla.tabtps.util.CPUUtil;
+import xyz.jpenilla.tabtps.util.CPUMonitor;
 import xyz.jpenilla.tabtps.util.PermissionManager;
 import xyz.jpenilla.tabtps.util.PingUtil;
 import xyz.jpenilla.tabtps.util.TPSUtil;
@@ -65,7 +65,6 @@ public class TabTPS extends BasePlugin {
   private NMS nmsHandler = null;
   private TaskManager taskManager;
   private TPSUtil tpsUtil;
-  private CPUUtil cpuUtil;
   private PingUtil pingUtil;
   private UserPreferences userPreferences;
   private PermissionManager permissionManager;
@@ -74,8 +73,48 @@ public class TabTPS extends BasePlugin {
 
   @Override
   public void onPluginEnable() {
-    this.setupNMS();
+    if (!this.setupNMS()) return;
+    if (!this.loadTranslations()) return;
+    if (!this.setupConfigManager()) return;
+    if (!this.setupCommandManager()) return;
+    this.loadUserPreferences();
+    this.permissionManager = new PermissionManager(this);
+    this.tpsUtil = new TPSUtil(this);
+    this.pingUtil = new PingUtil(this);
+    this.taskManager = new TaskManager(this);
+    CPUMonitor.instance().startRecordingUsage();
 
+    Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
+
+    if (this.pluginSettings().updateChecker()) {
+      UpdateChecker.checkVersion(
+        this,
+        "jmanpenilla/TabTPS",
+        messages -> messages.forEach(this.getLogger()::info)
+      );
+    }
+    final Metrics metrics = new Metrics(this, 8458);
+  }
+
+  @Override
+  public void onDisable() {
+    CPUMonitor.instance().stopRecordingUsage();
+    this.taskManager.shutdown();
+    Bukkit.getScheduler().cancelTasks(this);
+
+    if (!this.getDataFolder().exists()) {
+      this.getDataFolder().mkdirs();
+    }
+    try {
+      if (this.userPreferences != null) {
+        this.userPreferences.serialize(new FileWriter(new File(getDataFolder() + File.separator + "user_preferences.json")));
+      }
+    } catch (final IOException e) {
+      this.getLogger().log(Level.WARNING, "Failed to save user_preferences.json", e);
+    }
+  }
+
+  private boolean loadTranslations() {
     final TranslationRegistry registry = TranslationRegistry.create(Key.key(this.getName().toLowerCase(Locale.ENGLISH), "translations"));
     final String prefix = "tabtps_";
     final String suffix = ".properties";
@@ -100,70 +139,71 @@ public class TabTPS extends BasePlugin {
     } catch (final IOException e) {
       this.getLogger().log(Level.SEVERE, "Failed to load translations", e);
       this.setEnabled(false);
-      return;
+      return false;
     }
     locales.forEach(locale -> registry.registerAll(locale, PropertyResourceBundle.getBundle("tabtps", locale), true));
     GlobalTranslator.get().addSource(registry);
+    return true;
+  }
 
-    this.permissionManager = new PermissionManager(this);
-
+  private void loadUserPreferences() {
     try {
-      this.configManager = new ConfigManager(this);
-      this.configManager.load();
-    } catch (final Exception e) {
-      this.getLogger().log(Level.SEVERE, "Failed to load config", e);
-      this.setEnabled(false);
-      return;
-    }
-
-    try {
-      this.commandManager = new CommandManager(this);
-    } catch (final Exception e) {
-      this.getLogger().log(Level.SEVERE, "Failed to initialize command manager.", e);
-      this.setEnabled(false);
-      return;
-    }
-
-    try {
-      this.userPreferences = UserPreferences.deserialize(new File(getDataFolder() + File.separator + "user_preferences.json"));
+      this.userPreferences = UserPreferences.deserialize(new File(this.getDataFolder() + File.separator + "user_preferences.json"));
     } catch (final Exception e) {
       this.userPreferences = new UserPreferences();
       this.getLogger().warning("Failed to load user_preferences.json, creating a new one");
     }
-
-    this.tpsUtil = new TPSUtil(this);
-    this.cpuUtil = new CPUUtil(this);
-    this.pingUtil = new PingUtil(this);
-    this.taskManager = new TaskManager(this);
-    this.cpuUtil.startRecordingUsage();
-
-    Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
-
-    if (this.pluginSettings().updateChecker()) {
-      UpdateChecker.checkVersion(
-        this,
-        "jmanpenilla/TabTPS",
-        messages -> messages.forEach(this.getLogger()::info)
-      );
-    }
-    final Metrics metrics = new Metrics(this, 8458);
   }
 
-  @Override
-  public void onDisable() {
-    this.cpuUtil.stopRecordingUsage();
-    Bukkit.getScheduler().cancelTasks(this);
-
-    if (!this.getDataFolder().exists()) {
-      this.getDataFolder().mkdirs();
-    }
+  private boolean setupConfigManager() {
     try {
-      if (this.userPreferences != null) {
-        this.userPreferences.serialize(new FileWriter(new File(getDataFolder() + File.separator + "user_preferences.json")));
-      }
-    } catch (final IOException e) {
-      this.getLogger().log(Level.WARNING, "Failed to save user_preferences.json", e);
+      this.configManager = new ConfigManager(this);
+      this.configManager.load();
+      return true;
+    } catch (final Exception e) {
+      this.getLogger().log(Level.SEVERE, "Failed to load config", e);
+      this.setEnabled(false);
+      return false;
     }
+  }
+
+  private boolean setupCommandManager() {
+    try {
+      this.commandManager = new CommandManager(this);
+      return true;
+    } catch (final Exception e) {
+      this.getLogger().log(Level.SEVERE, "Failed to initialize command manager.", e);
+      this.setEnabled(false);
+      return false;
+    }
+  }
+
+  private boolean setupNMS() {
+    if (Environment.majorMinecraftVersion() > 15 && !Environment.paper()) {
+      this.getLogger().info("# ");
+      this.getLogger().info("# You are not using Paper, and therefore NMS methods must be used to get TPS and MSPT.");
+      this.getLogger().info("# Please consider upgrading to Paper for better performance and compatibility at https://papermc.io/downloads");
+      this.getLogger().info("# ");
+    }
+
+    if (Environment.majorMinecraftVersion() < 16 || !Environment.paper()) {
+      try {
+        final Class<?> clazz = Class.forName("xyz.jpenilla.tabtps.nms." + Environment.serverApiVersion() + ".NMSHandler");
+        if (NMS.class.isAssignableFrom(clazz)) {
+          this.nmsHandler = (NMS) clazz.getConstructor().newInstance();
+        }
+        this.getLogger().info("Loaded NMS support for " + Environment.serverApiVersion());
+        return true;
+      } catch (final Exception e) {
+        e.printStackTrace();
+        this.getLogger().severe("Could not find support for this Minecraft version.");
+        this.getLogger().info("Check for updates at " + getDescription().getWebsite());
+        this.setEnabled(false);
+        return false;
+      }
+    }
+
+    return true;
   }
 
   public @NonNull PermissionManager permissionManager() {
@@ -190,10 +230,6 @@ public class TabTPS extends BasePlugin {
     return this.tpsUtil;
   }
 
-  public @NonNull CPUUtil cpuUtil() {
-    return this.cpuUtil;
-  }
-
   public @NonNull PingUtil pingUtil() {
     return this.pingUtil;
   }
@@ -204,30 +240,5 @@ public class TabTPS extends BasePlugin {
 
   public @NonNull CommandManager commandManager() {
     return this.commandManager;
-  }
-
-  private void setupNMS() {
-    if (Environment.majorMinecraftVersion() > 15 && !Environment.paper()) {
-      this.getLogger().info("# ");
-      this.getLogger().info("# You are not using Paper, and therefore NMS methods must be used to get TPS and MSPT.");
-      this.getLogger().info("# Please consider upgrading to Paper for better performance and compatibility at https://papermc.io/downloads");
-      this.getLogger().info("# ");
-    }
-
-    if (Environment.majorMinecraftVersion() < 16 || !Environment.paper()) {
-      try {
-        final Class<?> clazz = Class.forName("xyz.jpenilla.tabtps.nms." + Environment.serverApiVersion() + ".NMSHandler");
-        if (NMS.class.isAssignableFrom(clazz)) {
-          this.nmsHandler = (NMS) clazz.getConstructor().newInstance();
-        }
-      } catch (final Exception e) {
-        e.printStackTrace();
-        this.getLogger().severe("Could not find support for this Minecraft version.");
-        this.getLogger().info("Check for updates at " + getDescription().getWebsite());
-        this.setEnabled(false);
-        return;
-      }
-      this.getLogger().info("Loaded NMS support for " + Environment.serverApiVersion());
-    }
   }
 }

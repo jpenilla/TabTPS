@@ -25,14 +25,13 @@ package xyz.jpenilla.tabtps.task;
 
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.config.DisplayConfig;
 import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
-public class TabTPSTask extends BukkitRunnable {
+public class TabTPSTask implements Runnable {
   private final ModuleRenderer headerRenderer;
   private final ModuleRenderer footerRenderer;
   private final Player player;

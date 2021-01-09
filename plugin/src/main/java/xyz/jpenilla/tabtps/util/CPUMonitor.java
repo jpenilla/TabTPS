@@ -24,36 +24,46 @@
 package xyz.jpenilla.tabtps.util;
 
 import com.sun.management.OperatingSystemMXBean;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.TabTPS;
 
 import java.lang.management.ManagementFactory;
 import java.util.DoubleSummaryStatistics;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class CPUUtil {
-  private final TabTPS tabTPS;
+public final class CPUMonitor {
+  private static final CPUMonitor instance = new CPUMonitor();
+
+  public static @NonNull CPUMonitor instance() {
+    return instance;
+  }
+
+  private int index = 0;
   private volatile double recentProcessCpuLoadSnapshot = 0;
   private volatile double recentSystemCpuLoadSnapshot = 0;
   private final double[] recentSystemUsage = new double[20];
   private final double[] recentProcessUsage = new double[20];
-  private int index = 0;
-  private BukkitTask monitorTask = null;
 
-  public CPUUtil(final @NonNull TabTPS tabTPS) {
-    this.tabTPS = tabTPS;
+  private final ScheduledExecutorService executor;
+  private Future<?> monitorTask = null;
+
+  private CPUMonitor() {
+    final ScheduledThreadPoolExecutor ex = new ScheduledThreadPoolExecutor(1);
+    ex.setRemoveOnCancelPolicy(true);
+    this.executor = Executors.unconfigurableScheduledExecutorService(ex);
   }
 
   public void startRecordingUsage() {
     this.stopRecordingUsage();
-    this.monitorTask = Bukkit.getScheduler()
-      .runTaskTimerAsynchronously(this.tabTPS, this::recordUsage, 0L, 10L);
+    this.monitorTask = this.executor.scheduleAtFixedRate(this::recordUsage, 0L, 500L, TimeUnit.MILLISECONDS);
   }
 
   public void stopRecordingUsage() {
     if (this.monitorTask != null) {
-      this.monitorTask.cancel();
+      this.monitorTask.cancel(false);
     }
   }
 

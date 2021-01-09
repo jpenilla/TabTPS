@@ -31,7 +31,7 @@ public interface Module {
 
   @NonNull Component display();
 
-  default <T extends Module> ModuleType<T> type() {
+  default @NonNull ModuleType<? extends Module> type() {
     return ModuleType.fromClass(this.getClass());
   }
 }

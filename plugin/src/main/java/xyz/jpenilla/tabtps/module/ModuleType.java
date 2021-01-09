@@ -50,9 +50,8 @@ public final class ModuleType<T extends Module> {
     return Collections.unmodifiableCollection(TYPES_BY_NAME.values());
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T extends Module> ModuleType<T> fromName(final @NonNull String name) {
-    final ModuleType<T> type = (ModuleType<T>) TYPES_BY_NAME.get(name);
+  public static @NonNull ModuleType<? extends Module> fromName(final @NonNull String name) {
+    final ModuleType<? extends Module> type = TYPES_BY_NAME.get(name);
     if (type == null) {
       throw new IllegalArgumentException("Unknown or invalid module type: " + name);
     }
@@ -60,7 +59,7 @@ public final class ModuleType<T extends Module> {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends Module> @NonNull ModuleType<T> fromClass(final @NonNull Class<? extends Module> moduleClass) {
+  public static <T extends Module> @NonNull ModuleType<T> fromClass(final @NonNull Class<T> moduleClass) {
     final ModuleType<T> type = (ModuleType<T>) TYPES_BY_CLASS.get(moduleClass);
     if (type == null) {
       throw new IllegalArgumentException("Unknown or invalid module class: " + moduleClass.getSimpleName());

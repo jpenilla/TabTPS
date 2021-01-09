@@ -26,14 +26,13 @@ package xyz.jpenilla.tabtps.task;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.TabTPS;
 import xyz.jpenilla.tabtps.config.DisplayConfig;
 import xyz.jpenilla.tabtps.config.Theme;
 import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
-public class BossBarTPSTask extends BukkitRunnable {
+public class BossBarTPSTask implements Runnable {
   private final TabTPS tabTPS;
   private final Audience audience;
   private final DisplayConfig.BossBarSettings settings;

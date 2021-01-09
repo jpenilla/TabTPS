@@ -21,36 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.task;
+package xyz.jpenilla.tabtps.util;
 
-import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.TabTPS;
-import xyz.jpenilla.tabtps.config.DisplayConfig;
-import xyz.jpenilla.tabtps.config.Theme;
-import xyz.jpenilla.tabtps.module.ModuleRenderer;
 
-public class ActionBarTPSTask implements Runnable {
-  private final Player player;
-  private final TabTPS tabTPS;
-  private final ModuleRenderer renderer;
+import java.util.concurrent.Future;
 
-  public ActionBarTPSTask(final @NonNull TabTPS tabTPS, final @NonNull Player player, final DisplayConfig.@NonNull ActionBarSettings settings) {
-    final Theme theme = tabTPS.configManager().theme(settings.theme());
-    this.renderer = ModuleRenderer.builder()
-      .modules(tabTPS, theme, player, settings.modules())
-      .separator(tabTPS.miniMessage().parse(theme.separator()))
-      .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
-      .build();
-    this.player = player;
-    this.tabTPS = tabTPS;
+public final class RunnableFuturePair<R extends Runnable, F extends Future<?>> {
+  private final R runnable;
+  private final F future;
+
+  public RunnableFuturePair(final @NonNull R runnable, final @NonNull F future) {
+    this.runnable = runnable;
+    this.future = future;
   }
 
-  @Override
-  public void run() {
-    if (!this.player.isOnline()) {
-      this.tabTPS.taskManager().stopActionBarTask(this.player);
-    }
-    this.tabTPS.audiences().player(this.player).sendActionBar(this.renderer.render());
+  public @NonNull R runnable() {
+    return this.runnable;
+  }
+
+  public @NonNull F future() {
+    return this.future;
   }
 }
