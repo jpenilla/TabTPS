@@ -50,7 +50,7 @@ public class BossBarTPSTask implements Runnable {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.renderer = ModuleRenderer.builder()
       .modules(tabTPS, theme, player, settings.modules())
-      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .separator(tabTPS.miniMessage().parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.bar = BossBar.bossBar(

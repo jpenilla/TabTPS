@@ -36,17 +36,14 @@ import java.util.Objects;
 public final class Theme {
   public static final Theme DEFAULT = new Theme();
 
+  @Comment("The color scheme to use for this theme. Named text colors or Hex colors may be used.\n"
+    + "   Hex color format: \"#FFFFFF\"\n"
+    + "   Named text color format: \"color_name\"\n"
+    + "   For a list of named text colors, refer to the Minecraft wiki: https://minecraft.gamepedia.com/Formatting_codes#Color_codes")
   private Colors colorScheme = new Colors();
-
-  @Comment("The text used to separate modules. Accepts MiniMessage (i.e. \" <gray>|</gray> \")")
-  private String separator = " ";
 
   public @NonNull Colors colorScheme() {
     return this.colorScheme;
-  }
-
-  public @NonNull String separator() {
-    return this.separator;
   }
 
   @Override
@@ -54,13 +51,12 @@ public final class Theme {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     final Theme theme = (Theme) o;
-    return Objects.equals(this.colorScheme, theme.colorScheme)
-      && Objects.equals(this.separator, theme.separator);
+    return this.colorScheme.equals(theme.colorScheme);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.colorScheme, this.separator);
+    return Objects.hash(this.colorScheme);
   }
 
   @ConfigSerializable

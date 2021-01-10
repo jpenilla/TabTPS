@@ -41,12 +41,12 @@ public class TabTPSTask implements Runnable {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.headerRenderer = ModuleRenderer.builder()
       .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), player, settings.headerModules())
-      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .separator(tabTPS.miniMessage().parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.footerRenderer = ModuleRenderer.builder()
       .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), player, settings.footerModules())
-      .separator(tabTPS.miniMessage().parse(theme.separator()))
+      .separator(tabTPS.miniMessage().parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.player = player;

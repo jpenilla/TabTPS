@@ -34,6 +34,8 @@ import java.util.Objects;
 @ConfigSerializable
 public final class DisplayConfig {
 
+  private static final String separatorComment = "The text used to separate modules. Accepts MiniMessage (i.e. \" <gray>|</gray> \")";
+
   @Comment("The permission required to use this display config\nCan be an empty string (\"\") to require no permission")
   private String permission = "tabtps.defaultdisplay";
 
@@ -79,6 +81,8 @@ public final class DisplayConfig {
     boolean enableOnLogin();
 
     @NonNull String theme();
+
+    @NonNull String separator();
   }
 
   @ConfigSerializable
@@ -87,6 +91,14 @@ public final class DisplayConfig {
     private boolean enableOnLogin = false;
     private String modules = "tps,mspt,ping";
     private String theme = "default";
+
+    @Comment(separatorComment)
+    private String separator = " ";
+
+    @Override
+    public @NonNull String separator() {
+      return this.separator;
+    }
 
     @Override
     public boolean enableOnLogin() {
@@ -123,6 +135,14 @@ public final class DisplayConfig {
 
     @Comment("What kind of overlay should be used for the boss bar?\nMust be one of: [PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20]")
     private BossBar.Overlay overlay = BossBar.Overlay.NOTCHED_20;
+
+    @Comment(separatorComment)
+    private String separator = " ";
+
+    @Override
+    public @NonNull String separator() {
+      return this.separator;
+    }
 
     @Override
     public boolean allow() {
@@ -186,6 +206,14 @@ public final class DisplayConfig {
     private String headerModules = "";
     private String footerModules = "tps,mspt";
     private String theme = "default";
+
+    @Comment(separatorComment)
+    private String separator = " ";
+
+    @Override
+    public @NonNull String separator() {
+      return this.separator;
+    }
 
     @Override
     public boolean enableOnLogin() {

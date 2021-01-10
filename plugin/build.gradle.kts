@@ -6,7 +6,7 @@ plugins {
 val nmsRevisions = (rootProject.ext["nmsRevisions"] as Map<String, String>).keys
 
 dependencies {
-  implementation("org.spongepowered", "configurate-hocon", "4.0.0")
+  implementation("org.spongepowered", "configurate-hocon", "4.1.0-SNAPSHOT")
   implementation("net.kyori", "adventure-serializer-configurate4", "4.3.0")
   implementation("xyz.jpenilla", "jmplib", "1.0.1+29-SNAPSHOT")
   implementation("org.bstats", "bstats-bukkit", "1.8")
