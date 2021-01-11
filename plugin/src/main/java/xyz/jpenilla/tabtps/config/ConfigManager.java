@@ -65,19 +65,14 @@ public final class ConfigManager {
     );
 
     this.displayConfigsPath = this.dataFolder.resolve("display-configs");
-    if (!Files.exists(this.displayConfigsPath)) {
-      tryCreateDirectory(this.displayConfigsPath);
-    }
-
     this.themePath = this.dataFolder.resolve("themes");
-    if (!Files.exists(this.themePath)) {
-      tryCreateDirectory(this.themePath);
-    }
   }
 
   public void load() throws ConfigurateException {
+    tryCreateDirectoryIfNeeded(this.dataFolder);
     this.pluginSettings = this.pluginSettingsLoader.load();
 
+    tryCreateDirectoryIfNeeded(this.themePath);
     try {
       this.themes.clear();
       this.themesByName.clear();
@@ -99,6 +94,7 @@ public final class ConfigManager {
       throw new ConfigurateException("Failed to load themes", e);
     }
 
+    tryCreateDirectoryIfNeeded(this.displayConfigsPath);
     try {
       this.displayConfigs.clear();
       this.displayConfigsByPermission.clear();
@@ -182,7 +178,10 @@ public final class ConfigManager {
     return Optional.empty();
   }
 
-  private static void tryCreateDirectory(final @NonNull Path directory) {
+  private static void tryCreateDirectoryIfNeeded(final @NonNull Path directory) {
+    if (Files.exists(directory)) {
+      return;
+    }
     try {
       Files.createDirectory(directory);
     } catch (final IOException e) {
