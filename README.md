@@ -5,36 +5,48 @@ Spigot/Paper Plugin to show TPS and MSPT in the Tab menu. Supports Minecraft ver
 
 ## Features
 
-### Show TPS and MSPT in Tab menu
-* Toggle on/off with ``/tabtps toggle tab``
-* Permission required: ``tabtps.toggle`` and ``tabtps.toggle.tab``
-* The plugin will remember which players have the TPS display enabled through restarts and log in/out.
+### Live information displays
+
+- Configure what information will be shown using display configs (`/plugins/TabTPS/display-configs/`)
+  - Each display config has a permission associated, and players with that permission will use that display config.
+    - The default display config uses the permission `tabtps.defaultdisplay`, and allows for using all three display types.
+    - Only one display config can be assigned to each player, even if they have permission for multiple. Set priorities for different display configs in the main config (`plugins/TabTPS/main.conf`)
+    
+- Configure colors for displays using theme configs (`/plugins/TabTPS/themes/`)
+
+#### Tab menu
+* Command: ``/tabtps toggle tab``
 * ![tab menu](https://i.imgur.com/93NmuUA.png)
 
-### Show TPS and MSPT in Action Bar
+#### Action bar
 * Command: ``/tabtps toggle actionbar``
-* Permission required: ``tabtps.toggle`` and ``tabtps.toggle.actionbar``
 * ![action bar](https://i.imgur.com/aMzzNRR.png)
 
-### Improved TPS command
+#### Boss bar
+ * Command: ``/tabtps toggle bossbar``
+ * ![boss bar](https://i.postimg.cc/xCJnGYfb/bossbar.png)
+
+### Commands
+
+#### Improved TPS command
 * Command: ``/tickinfo`` or ``/mspt``
 * Permission required: ``tabtps.tps``
 * ![tps command](https://i.imgur.com/d87Z80z.png)
 
-### Memory command
+#### Memory command
 * Command: ``/memory``, `/mem`, or ``/ram``
 * View information about the current memory pools of the server jvm.
   * Note: the output and usefulness of this command varies depending on the type of garbage collection used, garbage collection settings, and many other factors.
 * Permission required: ``tabtps.tps``
 * ![tps command](https://i.imgur.com/eYeUNMc.png)
 
-### Ping command
+#### Ping command
 * Commands: ``/ping``, `/ping [username]`, or ``/pingall``
 * View the ping of yourself, or another user. ``/pingall`` will show a summary of all connected player's pings.
 * Permissions: ``tabtps.ping`` to view your own ping, ``tabtps.ping.others`` to view other users ping and the ping summary.
 * ![ping command](https://i.imgur.com/0agY7lB.png)
 * ![ping all](https://i.imgur.com/t1lBt2b.png)
 
-### Reload command
+#### Reload command
 * Command: ``/tabtps reload``
 * Permission required: ``tabtps.reload``
