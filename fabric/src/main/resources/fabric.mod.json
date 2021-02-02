@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "{project.name}",
+  "version": "{version}",
+  "name": "{rootProject.name}",
+  "description": "{description}",
+  "authors": [
+    "jmp"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "xyz.jpenilla.tabtps.fabric.TabTPSFabric"
+    ],
+    "client": [
+      "xyz.jpenilla.tabtps.fabric.TabTPSFabricClient"
+    ]
+  },
+  "mixins": [
+    "tabtps-fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}
