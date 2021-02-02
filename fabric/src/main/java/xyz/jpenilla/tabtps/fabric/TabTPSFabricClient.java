@@ -25,11 +25,7 @@ package xyz.jpenilla.tabtps.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.Minecraft;
 import xyz.jpenilla.tabtps.common.TabTPS;
-import xyz.jpenilla.tabtps.common.config.Theme;
-import xyz.jpenilla.tabtps.common.module.MSPTModule;
 
 public class TabTPSFabricClient implements ClientModInitializer {
   @Override
@@ -37,14 +33,6 @@ public class TabTPSFabricClient implements ClientModInitializer {
     ClientLifecycleEvents.CLIENT_STOPPING.register(minecraft -> {
       final TabTPS tabTPS = TabTPSFabric.get().tabTPS();
       tabTPS.shutdown();
-    });
-
-    HudRenderCallback.EVENT.register((poseStack, v) -> {
-      poseStack.pushPose();
-
-      Minecraft.getInstance().font.draw(poseStack, TabTPSFabric.get().serverAudiences().toNative(new MSPTModule(TabTPSFabric.get().tabTPS(), Theme.DEFAULT).display()), 0, 0, -1);
-
-      poseStack.popPose();
     });
   }
 }
