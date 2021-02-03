@@ -60,7 +60,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return Permissions.check(this.base, permissionString);
+    return Permissions.check(this.base, permissionString, this.base.getServer().getOperatorUserPermissionLevel());
   }
 
   @Override

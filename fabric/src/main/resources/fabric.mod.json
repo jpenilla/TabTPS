@@ -23,6 +23,7 @@
   "depends": {
     "fabricloader": ">=0.11.1",
     "fabric": "*",
+    "fabric-permissions-api-v0": "*",
     "minecraft": "1.16.x"
   }
 }

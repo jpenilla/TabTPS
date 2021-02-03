@@ -41,7 +41,7 @@ public final class FabricConsoleCommander implements ConsoleCommander {
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return Permissions.check(this.commandSourceStack, permissionString);
+    return Permissions.check(this.commandSourceStack, permissionString, this.commandSourceStack.getServer().getOperatorUserPermissionLevel());
   }
 
   @Override
