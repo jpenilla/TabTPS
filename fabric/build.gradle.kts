@@ -15,6 +15,7 @@ dependencies {
   mappings(minecraft.officialMojangMappings())
   modImplementation("net.fabricmc", "fabric-loader", "0.11.1")
   modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.29.4+1.16")
+  modImplementation(include("me.lucko", "fabric-permissions-api", "0.1-SNAPSHOT"))
 
   add("shade", implementation(project(":tabtps-common")) {
     exclude("cloud.commandframework")

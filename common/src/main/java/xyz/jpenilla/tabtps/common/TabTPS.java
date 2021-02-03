@@ -37,7 +37,6 @@ import xyz.jpenilla.tabtps.common.command.commands.ReloadCommand;
 import xyz.jpenilla.tabtps.common.command.commands.ToggleDisplayCommands;
 import xyz.jpenilla.tabtps.common.config.ConfigManager;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
-import xyz.jpenilla.tabtps.common.task.TaskManager;
 import xyz.jpenilla.tabtps.common.util.CPUMonitor;
 
 import java.io.IOException;
@@ -50,6 +49,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,7 +61,7 @@ public final class TabTPS {
   private final TabTPSPlatform<?, ?> platform;
   private final CPUMonitor cpuMonitor;
   private final ConfigManager configManager;
-  private final TaskManager taskManager;
+  private final ScheduledExecutorService executor;
   private final Commands commands;
 
   public TabTPS(final @NonNull TabTPSPlatform<?, ?> platform) {
@@ -68,7 +70,9 @@ public final class TabTPS {
       this.loadTranslations();
       this.configManager = new ConfigManager(platform.dataDirectory());
       this.configManager.load();
-      this.taskManager = new TaskManager(this);
+      final ScheduledThreadPoolExecutor ex = new ScheduledThreadPoolExecutor(4);
+      ex.setRemoveOnCancelPolicy(true);
+      this.executor = Executors.unconfigurableScheduledExecutorService(ex);
       this.commands = new Commands(this, platform.commandManager());
       this.registerCommands();
       this.cpuMonitor = new CPUMonitor();
@@ -83,8 +87,8 @@ public final class TabTPS {
     if (this.cpuMonitor != null) {
       this.cpuMonitor.shutdown();
     }
-    if (this.taskManager != null) {
-      this.taskManager.shutdown();
+    if (this.executor != null) {
+      this.executor.shutdown();
     }
     this.platform.userService().flush();
   }
@@ -152,8 +156,8 @@ public final class TabTPS {
     return Optional.empty();
   }
 
-  public @NonNull TaskManager taskManager() {
-    return this.taskManager;
+  public @NonNull ScheduledExecutorService executor() {
+    return this.executor;
   }
 
   public @NonNull CPUMonitor cpuMonitor() {

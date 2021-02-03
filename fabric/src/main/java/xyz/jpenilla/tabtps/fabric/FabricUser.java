@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.fabric;
 
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,7 +60,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return this.base.hasPermissions(2); // todo
+    return Permissions.check(this.base, permissionString);
   }
 
   @Override

@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.fabric.command;
 
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.kyori.adventure.audience.Audience;
 import net.minecraft.commands.CommandSourceStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -40,7 +41,7 @@ public final class FabricConsoleCommander implements ConsoleCommander {
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return this.commandSourceStack.hasPermission(2); // todo
+    return Permissions.check(this.commandSourceStack, permissionString);
   }
 
   @Override

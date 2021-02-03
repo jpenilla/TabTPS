@@ -90,10 +90,12 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
         throw new IllegalArgumentException();
       }
     );
+    ((FabricServerCommandManager<Commander>) this.commandManager).brigadierManager().setNativeNumberSuggestions(false);
 
     this.tabTPS = new TabTPS(this);
 
     TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new FabricTickInfoCommandFormatter(this)).register();
+    // todo ping targets command
   }
 
   public static @NonNull TabTPSFabric get() {
