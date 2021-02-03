@@ -122,6 +122,14 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
       this.server = null;
       this.serverAudiences = null;
     });
+
+    /* Seems to trigger too early for permission checks with LP (NPE)
+    ServerPlayConnectionEvents.JOIN.register((serverGamePacketListener, packetSender, minecraftServer) ->
+      this.userService.handleJoin(serverGamePacketListener.player));
+
+    ServerPlayConnectionEvents.DISCONNECT.register((serverGamePacketListener, minecraftServer) ->
+      this.userService.handleQuit(serverGamePacketListener.player));
+    */
   }
 
   public @NonNull FabricServerAudiences serverAudiences() {
@@ -163,6 +171,8 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
 
   @Override
   public void onReload() {
+    this.server().getPlayerList().getPlayers().forEach(player ->
+      this.server.getCommands().sendCommands(player));
   }
 
   @Override
