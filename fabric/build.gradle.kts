@@ -15,14 +15,12 @@ dependencies {
   mappings(minecraft.officialMojangMappings())
   modImplementation("net.fabricmc", "fabric-loader", "0.11.1")
   modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.29.4+1.16")
-  modImplementation(include("me.lucko", "fabric-permissions-api", "0.1-SNAPSHOT"))
 
   add("shade", implementation(project(":tabtps-common")) {
     exclude("cloud.commandframework")
     exclude("net.kyori")
+    exclude("org.slf4j")
   })
-
-  add("shade", implementation("org.apache.logging.log4j", "log4j-slf4j-impl", "2.13.0"))
 
   val cloudVersion = "1.5.0-SNAPSHOT"
   modImplementation(include("cloud.commandframework", "cloud-fabric", cloudVersion))
@@ -31,9 +29,12 @@ dependencies {
   modImplementation(include("net.kyori", "adventure-platform-fabric", "4.0.0-SNAPSHOT"))
   implementation(include("net.kyori", "adventure-text-feature-pagination", "4.0.0-SNAPSHOT"))
   implementation(include("net.kyori", "adventure-text-minimessage", "4.1.0-SNAPSHOT"))
-  add("shade", implementation("net.kyori", "adventure-serializer-configurate4", "4.4.0")) {
+  add("shade", implementation("net.kyori", "adventure-serializer-configurate4", "4.4.0") {
     exclude("*")
-  }
+  })
+
+  implementation(include("org.slf4j", "slf4j-api", "1.7.30"))
+  implementation(include("org.apache.logging.log4j", "log4j-slf4j-impl", "2.8.1"))
 }
 
 tasks {

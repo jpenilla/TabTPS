@@ -50,6 +50,7 @@ import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<ServerPlayer, FabricUser> {
@@ -133,11 +134,11 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   }
 
   public @NonNull FabricServerAudiences serverAudiences() {
-    return this.serverAudiences;
+    return Objects.requireNonNull(this.serverAudiences, "serverAudiences is null");
   }
 
   public @NonNull MinecraftServer server() {
-    return this.server;
+    return Objects.requireNonNull(this.server, "server is null");
   }
 
   @Override
@@ -162,7 +163,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
 
   @Override
   public int maxPlayers() {
-    return this.server.getMaxPlayers();
+    return this.server().getMaxPlayers();
   }
 
   @Override
@@ -172,7 +173,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   @Override
   public void onReload() {
     this.server().getPlayerList().getPlayers().forEach(player ->
-      this.server.getCommands().sendCommands(player));
+      this.server().getCommands().sendCommands(player));
   }
 
   @Override

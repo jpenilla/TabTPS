@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream
 
 plugins {
   `java-library`
-  id("net.kyori.indra") version "1.2.1"
+  id("net.kyori.indra") version "1.3.1"
 }
 
 allprojects {
