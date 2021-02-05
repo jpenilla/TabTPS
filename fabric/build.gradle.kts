@@ -45,7 +45,6 @@ tasks {
     listOf(
       "net.kyori.adventure.serializer.configurate4",
       "org.apache.logging",
-      "org.slf4j",
       "io.leangen.geantyref",
       "org.spongepowered.configurate",
       "com.typesafe.config",
