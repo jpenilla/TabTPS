@@ -45,12 +45,14 @@ tasks {
     listOf(
       "net.kyori.adventure.serializer.configurate4",
       "org.apache.logging",
-      "io.leangen.geantyref",
       "org.spongepowered.configurate",
       "com.typesafe.config",
       "org.checkerframework"
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
+    }
+    dependencies {
+      exclude { it.moduleGroup.contains("leangen") } // provided by cloud-platform-fabric
     }
   }
   remapJar {

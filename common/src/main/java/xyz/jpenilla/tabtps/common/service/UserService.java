@@ -167,7 +167,7 @@ public abstract class UserService<P, U extends User<P>> {
   }
 
   public void handleJoin(final @NonNull P platformPlayer) {
-    final U user = this.platform.userService().user(platformPlayer);
+    final U user = this.user(platformPlayer);
 
     this.platform.tabTPS().findDisplayConfig(user).ifPresent(config -> {
       if (config.actionBarSettings().allow()) {

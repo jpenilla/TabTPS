@@ -29,9 +29,9 @@ import cloud.commandframework.fabric.FabricServerCommandManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.kyori.adventure.platform.fabric.FabricServerAudiences;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +42,8 @@ import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.common.util.UpdateChecker;
-import xyz.jpenilla.tabtps.fabric.access.CommandSouceStackAccess;
 import xyz.jpenilla.tabtps.fabric.command.FabricConsoleCommander;
+import xyz.jpenilla.tabtps.fabric.command.FabricPingCommand;
 import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.fabric.service.FabricTickTimeService;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
@@ -76,9 +76,9 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     this.commandManager = new FabricServerCommandManager<>(
       AsynchronousCommandExecutionCoordinator.<Commander>newBuilder().build(),
       commandSourceStack -> {
-        final CommandSource commandSource = ((CommandSouceStackAccess) commandSourceStack).tabtps$commandSource();
-        if (commandSource instanceof ServerPlayer) {
-          return this.userService().user((ServerPlayer) commandSource);
+        final Entity entity = commandSourceStack.getEntity();
+        if (entity instanceof ServerPlayer) {
+          return this.userService().user((ServerPlayer) entity);
         }
         return new FabricConsoleCommander(this, commandSourceStack);
       },
@@ -96,7 +96,8 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     this.tabTPS = new TabTPS(this);
 
     TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new FabricTickInfoCommandFormatter(this)).register();
-    // todo ping targets command
+    new FabricPingCommand(this, this.tabTPS.commands()).register();
+    this.logger.info("Done initializing TabTPS");
   }
 
   public static @NonNull TabTPSFabric get() {

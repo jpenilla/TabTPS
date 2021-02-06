@@ -24,8 +24,10 @@
 package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.ArgumentDescription;
+import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.execution.CommandExecutionHandler;
 import cloud.commandframework.meta.CommandMeta;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.LinearComponents;
@@ -77,6 +79,26 @@ public class PingCommand extends TabTPSCommand {
         .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
         .meta(CommandMeta.DESCRIPTION, "tabtps.command.ping_all.description")
         .handler(this::onPingAll)
+    );
+  }
+
+  protected <T> void registerPingTargetsCommand(
+    final @NonNull CommandArgument<Commander, T> targetsArgument,
+    final @NonNull CommandExecutionHandler<Commander> handler
+  ) {
+    this.commandManager.command(
+      this.commandManager.commandBuilder("ping")
+        .argument(targetsArgument, ArgumentDescription.of("tabtps.command.ping_target.arguments.target"))
+        .argument(
+          IntegerArgument.<Commander>newBuilder("page")
+            .withMin(1)
+            .withMax(999)
+            .asOptionalWithDefault("1"),
+          ArgumentDescription.of("tabtps.command.ping.arguments.page")
+        )
+        .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
+        .meta(CommandMeta.DESCRIPTION, "tabtps.command.ping_target.description")
+        .handler(handler)
     );
   }
 

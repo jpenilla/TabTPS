@@ -23,17 +23,13 @@
  */
 package xyz.jpenilla.tabtps.spigot.command;
 
-import cloud.commandframework.ArgumentDescription;
-import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import cloud.commandframework.bukkit.parsers.selector.MultiplePlayerSelectorArgument;
 import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.spigot.TabTPSPlugin;
 
 import java.util.stream.Collectors;
@@ -48,20 +44,7 @@ public final class BukkitPingCommand extends PingCommand {
 
   @Override
   public void register() {
-    this.commandManager.command(
-      this.commandManager.commandBuilder("ping")
-        .argument(MultiplePlayerSelectorArgument.of("target"), ArgumentDescription.of("tabtps.command.ping_target.arguments.target"))
-        .argument(
-          IntegerArgument.<Commander>newBuilder("page")
-            .withMin(1)
-            .withMax(999)
-            .asOptionalWithDefault("1"),
-          ArgumentDescription.of("tabtps.command.ping.arguments.page")
-        )
-        .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.ping_target.description")
-        .handler(this::onPingTargets)
-    );
+    this.registerPingTargetsCommand(MultiplePlayerSelectorArgument.of("target"), this::onPingTargets);
   }
 
   private void onPingTargets(final @NonNull CommandContext<Commander> context) {

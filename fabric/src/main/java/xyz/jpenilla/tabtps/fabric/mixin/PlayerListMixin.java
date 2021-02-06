@@ -34,7 +34,7 @@ import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
 @Mixin(PlayerList.class)
 public final class PlayerListMixin {
-  @Inject(method = "placeNewPlayer", at = @At(value = "RETURN", target = "Lnet/minecraft/server/level/ServerLevel;addNewPlayer(Lnet/minecraft/server/level/ServerPlayer;)V"))
+  @Inject(method = "placeNewPlayer", at = @At(value = "RETURN"))
   public void injectPlaceNewPlayer(final Connection connection, final ServerPlayer serverPlayer, final CallbackInfo ci) {
     TabTPSFabric.get().userService().handleJoin(serverPlayer);
   }
