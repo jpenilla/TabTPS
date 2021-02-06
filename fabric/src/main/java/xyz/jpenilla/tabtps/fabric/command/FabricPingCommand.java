@@ -27,7 +27,6 @@ import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.brigadier.argument.WrappedBrigadierParser;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.fabric.FabricCommandContextKeys;
-import cloud.commandframework.fabric.FabricServerCommandManager;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.text.Component;
@@ -55,8 +54,13 @@ public final class FabricPingCommand extends PingCommand {
   public FabricPingCommand(final @NonNull TabTPSFabric tabTPSFabric, final @NonNull Commands commands) {
     super(tabTPSFabric.tabTPS(), commands);
     this.tabTPSFabric = tabTPSFabric;
-    this.commandManager.getParserRegistry().registerParserSupplier(TypeToken.get(EntitySelector.class), p -> new WrappedBrigadierParser<>(EntityArgument.players()));
-    ((FabricServerCommandManager<Commander>) this.commandManager).brigadierManager().registerMapping(
+
+    this.commandManager.getParserRegistry().registerParserSupplier(
+      TypeToken.get(EntitySelector.class),
+      p -> new WrappedBrigadierParser<>(EntityArgument.players())
+    );
+
+    this.tabTPSFabric.commandManager().brigadierManager().registerMapping(
       new TypeToken<WrappedBrigadierParser<Commander, EntitySelector>>() {
       },
       builder -> builder.toConstant(EntityArgument.players())
@@ -65,10 +69,7 @@ public final class FabricPingCommand extends PingCommand {
 
   @Override
   public void register() {
-    final CommandArgument<Commander, EntitySelector> selectorArgument = this.commandManager.argumentBuilder(EntitySelector.class, "target")
-      .withParser(new WrappedBrigadierParser<>(EntityArgument.players()))
-      .build();
-
+    final CommandArgument<Commander, EntitySelector> selectorArgument = this.commandManager.argumentBuilder(EntitySelector.class, "target").build();
     this.registerPingTargetsCommand(selectorArgument, this::handlePingTargets);
   }
 

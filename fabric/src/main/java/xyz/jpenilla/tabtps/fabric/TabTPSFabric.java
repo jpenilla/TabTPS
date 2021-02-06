@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.fabric;
 
-import cloud.commandframework.CommandManager;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.fabric.FabricServerCommandManager;
 import net.fabricmc.api.ModInitializer;
@@ -59,7 +58,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   private final Logger logger = LoggerFactory.getLogger("TabTPS");
   private final FabricUserService userService;
   private final TabTPS tabTPS;
-  private final CommandManager<Commander> commandManager;
+  private final FabricServerCommandManager<Commander> commandManager;
   private final TickTimeService tickTimeService;
   private FabricServerAudiences serverAudiences;
   private MinecraftServer server;
@@ -91,7 +90,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
         throw new IllegalArgumentException();
       }
     );
-    ((FabricServerCommandManager<Commander>) this.commandManager).brigadierManager().setNativeNumberSuggestions(false);
+    this.commandManager.brigadierManager().setNativeNumberSuggestions(false);
 
     this.tabTPS = new TabTPS(this);
 
@@ -183,7 +182,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   }
 
   @Override
-  public @NonNull CommandManager<Commander> commandManager() {
+  public @NonNull FabricServerCommandManager<Commander> commandManager() {
     return this.commandManager;
   }
 }
