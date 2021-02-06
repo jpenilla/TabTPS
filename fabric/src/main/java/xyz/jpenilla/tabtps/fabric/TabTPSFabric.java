@@ -113,7 +113,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
       CompletableFuture.runAsync(() -> UpdateChecker.checkVersion("{version}").forEach(this.logger::info));
     });
 
-    ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
+    ServerLifecycleEvents.SERVER_STOPPED.register(minecraftServer -> {
       if (this.tabTPS != null) {
         if (minecraftServer.isDedicatedServer()) {
           this.tabTPS.shutdown();
