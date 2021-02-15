@@ -25,13 +25,13 @@ package xyz.jpenilla.tabtps.common.display.task;
 
 import net.kyori.adventure.bossbar.BossBar;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.util.Constants;
-import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
+import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.common.util.Constants;
 
 public final class BossBarDisplayTask implements Display {
   private final TabTPS tabTPS;
@@ -66,12 +66,24 @@ public final class BossBarDisplayTask implements Display {
   private float progress() {
     switch (this.settings.fillMode()) {
       case MSPT:
-        return ensureInRange(this.tabTPS.platform().tickTimeService().averageMspt() / 50.0f);
+        return this.msptProgress();
       case TPS:
-        return ensureInRange(this.tabTPS.platform().tickTimeService().recentTps()[0] / 20.0f);
+        return this.tpsProgress();
+      case REVERSE_MSPT:
+        return 1.0F - this.msptProgress();
+      case REVERSE_TPS:
+        return 1.0F - this.tpsProgress();
       default:
         throw new IllegalStateException("Unknown or invalid fill mode: " + this.settings.fillMode());
     }
+  }
+
+  private float msptProgress() {
+    return ensureInRange(this.tabTPS.platform().tickTimeService().averageMspt() / 50.0f);
+  }
+
+  private float tpsProgress() {
+    return ensureInRange(this.tabTPS.platform().tickTimeService().recentTps()[0] / 20.0f);
   }
 
   private static float ensureInRange(final double value) {

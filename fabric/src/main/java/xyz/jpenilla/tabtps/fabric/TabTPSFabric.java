@@ -27,6 +27,7 @@ import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.fabric.FabricServerCommandManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.platform.fabric.FabricServerAudiences;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,14 +48,13 @@ import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.fabric.service.FabricTickTimeService;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<ServerPlayer, FabricUser> {
   private static TabTPSFabric instance = null;
-  private final Path dataDirectory = new File("").getAbsoluteFile().toPath().resolve("config/TabTPS");
+  private final Path configDirectory = FabricLoader.getInstance().getConfigDir().resolve("TabTPS");
   private final Logger logger = LoggerFactory.getLogger("TabTPS");
   private final FabricUserService userService;
   private final TabTPS tabTPS;
@@ -148,7 +148,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
 
   @Override
   public @NonNull Path dataDirectory() {
-    return this.dataDirectory;
+    return this.configDirectory;
   }
 
   @Override

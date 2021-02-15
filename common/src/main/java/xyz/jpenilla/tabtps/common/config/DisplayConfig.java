@@ -176,7 +176,7 @@ public final class DisplayConfig {
     }
 
     public enum FillMode {
-      TPS, MSPT
+      TPS, MSPT, REVERSE_TPS, REVERSE_MSPT
     }
 
     @ConfigSerializable

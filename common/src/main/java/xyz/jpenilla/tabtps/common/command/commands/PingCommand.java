@@ -234,7 +234,7 @@ public class PingCommand extends TabTPSCommand {
 
   private static @NonNull Pagination<Component> pagination(final @NonNull String prefix) {
     return Pagination.builder()
-      .resultsPerPage(5)
+      .resultsPerPage(10)
       .width(38)
       .line(line -> {
         line.character('-');
