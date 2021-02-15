@@ -130,7 +130,7 @@ public final class DisplayConfig {
     @Comment("Available colors: [PINK, RED, GREEN, BLUE, YELLOW, PURPLE, WHITE]")
     private Colors colors = new Colors();
 
-    @Comment("Should the fill of the boss bar be determined by MSPT, or by TPS?")
+    @Comment("Set the mode for determining boss bar fill.\nPossible values: [MSPT, TPS, REVERSE_MSPT, REVERSE_TPS]")
     private FillMode fillMode = FillMode.MSPT;
 
     @Comment("What kind of overlay should be used for the boss bar?\nMust be one of: [PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20]")
