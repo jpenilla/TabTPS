@@ -1,7 +1,6 @@
 plugins {
   id("fabric-loom") version "0.5-SNAPSHOT"
   id("com.github.johnrengelman.shadow") version "6.1.0"
-  id("net.kyori.blossom") version "1.1.0"
 }
 
 configurations {
@@ -72,8 +71,4 @@ tasks {
       ).entries.forEach { (k, v) -> filter { it.replace(k, v as String) } }
     }
   }
-}
-
-blossom {
-  replaceToken("{version}", version.toString(), "src/main/java/xyz/jpenilla/tabtps/fabric/TabTPSFabric.java")
 }

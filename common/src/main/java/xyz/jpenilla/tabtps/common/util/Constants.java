@@ -30,6 +30,8 @@ public final class Constants {
   private Constants() {
   }
 
+  public static final String TABTPS_VERSION = "${VERSION}";
+
   public static final MiniMessage MINIMESSAGE = MiniMessage.get();
   public static final String PREFIX_MINIMESSAGE = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white>";
   public static final Component PREFIX = MINIMESSAGE.parse(PREFIX_MINIMESSAGE);

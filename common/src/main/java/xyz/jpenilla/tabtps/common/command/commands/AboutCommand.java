@@ -55,7 +55,7 @@ public final class AboutCommand extends TabTPSCommand {
     final Component header = ComponentUtil.gradient("----------------------------------", NamedTextColor.WHITE, NamedTextColor.BLACK, NamedTextColor.WHITE).decorate(TextDecoration.STRIKETHROUGH);
     ImmutableList.of(
       header,
-      Constants.MINIMESSAGE.parse("<hover:show_text:'<rainbow>click me!'><click:open_url:https://github.com/jpenilla/TabTPS>TabTPS <gradient:blue:aqua>{version}"), // todo
+      Constants.MINIMESSAGE.parse("<hover:show_text:'<rainbow>click me!'><click:open_url:https://github.com/jpenilla/TabTPS>TabTPS <gradient:blue:aqua>" + Constants.TABTPS_VERSION),
       Constants.MINIMESSAGE.parse("<gray>By <gradient:gold:yellow>jmp"),
       header
     ).forEach(ctx.getSender()::sendMessage);

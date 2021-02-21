@@ -41,6 +41,7 @@ import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
+import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.UpdateChecker;
 import xyz.jpenilla.tabtps.fabric.command.FabricConsoleCommander;
 import xyz.jpenilla.tabtps.fabric.command.FabricPingCommand;
@@ -109,7 +110,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
       this.server = minecraftServer;
       this.serverAudiences = FabricServerAudiences.of(minecraftServer);
 
-      CompletableFuture.runAsync(() -> UpdateChecker.checkVersion("{version}").forEach(this.logger::info));
+      CompletableFuture.runAsync(() -> UpdateChecker.checkVersion(Constants.TABTPS_VERSION).forEach(this.logger::info));
     });
 
     ServerLifecycleEvents.SERVER_STOPPED.register(minecraftServer -> {

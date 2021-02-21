@@ -106,7 +106,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
   @Override
   public void onReload() {
     if (Environment.majorMinecraftVersion() >= 13) {
-      ImmutableList.copyOf(Bukkit.getOnlinePlayers()).forEach(Player::updateCommands);
+      Bukkit.getScheduler().runTask(this, () -> ImmutableList.copyOf(Bukkit.getOnlinePlayers()).forEach(Player::updateCommands));
     }
   }
 
