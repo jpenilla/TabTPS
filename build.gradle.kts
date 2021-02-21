@@ -11,7 +11,7 @@ plugins {
 
 allprojects {
   group = "xyz.jpenilla"
-  version = "1.3.1+${latestCommitHash()}-SNAPSHOT"
+  version = "1.3.2+${latestCommitHash()}-SNAPSHOT"
   description = "Monitor your server's performance in real time"
 }
 
@@ -22,7 +22,7 @@ subprojects {
   apply<IndraLicenseHeaderPlugin>()
 
   repositories {
-    mavenLocal()
+    //mavenLocal()
     mavenCentral()
     sonatypeSnapshots()
     maven("https://papermc.io/repo/repository/maven-public/")
