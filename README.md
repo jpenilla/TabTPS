@@ -1,7 +1,11 @@
 <img src="https://i.imgur.com/gtxPU4S.png" width="128">
 
-# TabTPS ![plugin version badge](https://img.shields.io/github/v/release/jmanpenilla/TabTPS?color=blue&label=plugin%20version&style=plastic)
-Spigot/Paper Plugin to show TPS and MSPT in the Tab menu. Supports Minecraft versions 1.8.8-1.16+
+# TabTPS ![plugin version badge](https://img.shields.io/github/v/release/jmanpenilla/TabTPS?color=blue&label=version&style=plastic)
+Minecraft server mod/plugin to show TPS and MSPT in the Tab menu.
+
+Supports Minecraft versions 1.8.8-1.16+ on Paper/Spigot.
+
+Fabric version requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 
 ## Features
 
