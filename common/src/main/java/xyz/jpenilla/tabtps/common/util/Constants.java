@@ -24,7 +24,6 @@
 package xyz.jpenilla.tabtps.common.util;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public final class Constants {
   private Constants() {
@@ -32,9 +31,8 @@ public final class Constants {
 
   public static final String TABTPS_VERSION = "${VERSION}";
 
-  public static final MiniMessage MINIMESSAGE = MiniMessage.get();
   public static final String PREFIX_MINIMESSAGE = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white>";
-  public static final Component PREFIX = MINIMESSAGE.parse(PREFIX_MINIMESSAGE);
+  public static final Component PREFIX = Serializers.MINIMESSAGE.parse(PREFIX_MINIMESSAGE);
 
   private static final String DOT = ".";
   private static final String PERMISSION_ROOT = "tabtps";

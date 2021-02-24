@@ -25,13 +25,13 @@ package xyz.jpenilla.tabtps.common.display.task;
 
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 
 public final class TabDisplayTask implements Display {
   private final ModuleRenderer headerRenderer;
@@ -43,12 +43,12 @@ public final class TabDisplayTask implements Display {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.headerRenderer = ModuleRenderer.builder()
       .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), user, settings.headerModules())
-      .separator(Constants.MINIMESSAGE.parse(settings.separator()))
+      .separator(Serializers.MINIMESSAGE.parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.footerRenderer = ModuleRenderer.builder()
       .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), user, settings.footerModules())
-      .separator(Constants.MINIMESSAGE.parse(settings.separator()))
+      .separator(Serializers.MINIMESSAGE.parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.user = user;

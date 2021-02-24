@@ -38,6 +38,7 @@ import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.util.Constants;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -126,7 +127,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.sendMessage(LinearComponents.linear(
         Constants.PREFIX,
         Component.space(),
-        Constants.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in tab menu any more</gradient><gray>.")
+        Serializers.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in tab menu any more</gradient><gray>.")
           .hoverEvent(Component.translatable("tabtps.misc.text.click_to_toggle", NamedTextColor.GREEN))
           .clickEvent(ClickEvent.runCommand("/tabtps toggle tab"))
       ));
@@ -136,7 +137,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.sendMessage(LinearComponents.linear(
         Constants.PREFIX,
         Component.space(),
-        Constants.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in tab menu</gradient><gray>.")
+        Serializers.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in tab menu</gradient><gray>.")
           .hoverEvent(Component.translatable("tabtps.misc.text.click_to_toggle", NamedTextColor.GREEN))
           .clickEvent(ClickEvent.runCommand("/tabtps toggle tab"))
       ));
@@ -151,7 +152,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.sendMessage(LinearComponents.linear(
         Constants.PREFIX,
         Component.space(),
-        Constants.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in action bar any more</gradient><gray>.")
+        Serializers.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in action bar any more</gradient><gray>.")
           .hoverEvent(Component.translatable("tabtps.misc.text.click_to_toggle", NamedTextColor.GREEN))
           .clickEvent(ClickEvent.runCommand("/tabtps toggle actionbar"))
       ));
@@ -161,7 +162,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.sendMessage(LinearComponents.linear(
         Constants.PREFIX,
         Component.space(),
-        Constants.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in action bar</gradient><gray>.")
+        Serializers.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in action bar</gradient><gray>.")
           .hoverEvent(Component.translatable("tabtps.misc.text.click_to_toggle", NamedTextColor.GREEN))
           .clickEvent(ClickEvent.runCommand("/tabtps toggle actionbar"))
       ));
@@ -176,7 +177,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.sendMessage(LinearComponents.linear(
         Constants.PREFIX,
         Component.space(),
-        Constants.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in boss bar any more</gradient><gray>.")
+        Serializers.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in boss bar any more</gradient><gray>.")
           .hoverEvent(Component.translatable("tabtps.misc.text.click_to_toggle", NamedTextColor.GREEN))
           .clickEvent(ClickEvent.runCommand("/tabtps toggle bossbar"))
       ));
@@ -186,7 +187,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.sendMessage(LinearComponents.linear(
         Constants.PREFIX,
         Component.space(),
-        Constants.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in boss bar</gradient><gray>.")
+        Serializers.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in boss bar</gradient><gray>.")
           .hoverEvent(Component.translatable("tabtps.misc.text.click_to_toggle", NamedTextColor.GREEN))
           .clickEvent(ClickEvent.runCommand("/tabtps toggle bossbar"))
       ));

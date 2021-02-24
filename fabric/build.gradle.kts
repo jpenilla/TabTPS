@@ -28,7 +28,9 @@ dependencies {
   modImplementation(include("net.kyori", "adventure-platform-fabric", "4.0.0-SNAPSHOT"))
   implementation(include("net.kyori", "adventure-text-feature-pagination", "4.0.0-SNAPSHOT"))
   implementation(include("net.kyori", "adventure-text-minimessage", "4.1.0-SNAPSHOT"))
-  add("shade", implementation("net.kyori", "adventure-serializer-configurate4", "4.4.0") {
+  val adventureVersion = "4.5.1"
+  implementation(include("net.kyori", "adventure-text-serializer-legacy", adventureVersion))
+  add("shade", implementation("net.kyori", "adventure-serializer-configurate4", adventureVersion) {
     exclude("*")
   })
 

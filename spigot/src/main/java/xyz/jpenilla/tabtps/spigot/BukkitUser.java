@@ -32,6 +32,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.jmplib.Environment;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 import xyz.jpenilla.tabtps.spigot.util.SpigotReflection;
 
 public final class BukkitUser extends AbstractUser<Player> {
@@ -49,7 +50,7 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public @NonNull Component displayName() {
-    return Component.text(this.base.getDisplayName());
+    return Serializers.LEGACY_SECTION.deserialize(this.base.getDisplayName());
   }
 
   @Override

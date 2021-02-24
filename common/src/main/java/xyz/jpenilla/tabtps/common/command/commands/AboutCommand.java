@@ -36,6 +36,7 @@ import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 
 public final class AboutCommand extends TabTPSCommand {
   public AboutCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -52,11 +53,11 @@ public final class AboutCommand extends TabTPSCommand {
   }
 
   private void executeAbout(final @NonNull CommandContext<Commander> ctx) {
-    final Component header = ComponentUtil.gradient("----------------------------------", NamedTextColor.WHITE, NamedTextColor.BLACK, NamedTextColor.WHITE).decorate(TextDecoration.STRIKETHROUGH);
+    final Component header = ComponentUtil.gradient("                                  ", NamedTextColor.WHITE, NamedTextColor.BLACK, NamedTextColor.WHITE).decorate(TextDecoration.STRIKETHROUGH);
     ImmutableList.of(
       header,
-      Constants.MINIMESSAGE.parse("<hover:show_text:'<rainbow>click me!'><click:open_url:https://github.com/jpenilla/TabTPS>TabTPS <gradient:blue:aqua>" + Constants.TABTPS_VERSION),
-      Constants.MINIMESSAGE.parse("<gray>By <gradient:gold:yellow>jmp"),
+      Serializers.MINIMESSAGE.parse("<hover:show_text:'<rainbow>click me!'><click:open_url:https://github.com/jpenilla/TabTPS>TabTPS <gradient:blue:aqua>" + Constants.TABTPS_VERSION),
+      Serializers.MINIMESSAGE.parse("<gray>By <gradient:gold:yellow>jmp"),
       header
     ).forEach(ctx.getSender()::sendMessage);
   }

@@ -24,13 +24,13 @@
 package xyz.jpenilla.tabtps.common.display.task;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 
 public final class ActionBarDisplayTask implements Display {
   private final User<?> user;
@@ -41,7 +41,7 @@ public final class ActionBarDisplayTask implements Display {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.renderer = ModuleRenderer.builder()
       .modules(tabTPS, theme, user, settings.modules())
-      .separator(Constants.MINIMESSAGE.parse(settings.separator()))
+      .separator(Serializers.MINIMESSAGE.parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.user = user;

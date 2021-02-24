@@ -31,7 +31,7 @@ import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
-import xyz.jpenilla.tabtps.common.util.Constants;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 
 public final class BossBarDisplayTask implements Display {
   private final TabTPS tabTPS;
@@ -51,7 +51,7 @@ public final class BossBarDisplayTask implements Display {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.renderer = ModuleRenderer.builder()
       .modules(tabTPS, theme, user, settings.modules())
-      .separator(Constants.MINIMESSAGE.parse(settings.separator()))
+      .separator(Serializers.MINIMESSAGE.parse(settings.separator()))
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.bar = BossBar.bossBar(
