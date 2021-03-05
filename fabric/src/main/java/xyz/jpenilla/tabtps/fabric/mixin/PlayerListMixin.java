@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
 @Mixin(PlayerList.class)
-public final class PlayerListMixin {
+abstract class PlayerListMixin {
   @Inject(method = "placeNewPlayer", at = @At(value = "RETURN"))
   public void injectPlaceNewPlayer(final Connection connection, final ServerPlayer serverPlayer, final CallbackInfo ci) {
     TabTPSFabric.get().userService().handleJoin(serverPlayer);

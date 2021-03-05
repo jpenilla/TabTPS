@@ -29,6 +29,7 @@ import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
+import io.papermc.lib.PaperLib;
 import kr.entree.spigradle.annotations.PluginMain;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -37,7 +38,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.jmplib.BasePlugin;
-import xyz.jpenilla.jmplib.Environment;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -53,6 +53,7 @@ import xyz.jpenilla.tabtps.spigot.service.PaperTickTimeService;
 import xyz.jpenilla.tabtps.spigot.service.SpigotTickTimeService;
 
 import java.nio.file.Path;
+import java.util.logging.Level;
 
 @PluginMain
 public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Player, BukkitUser> {
@@ -64,8 +65,13 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
 
   @Override
   public void onPluginEnable() {
+    PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
-    if (Environment.majorMinecraftVersion() < 16 || !Environment.paper()) {
+    if (this.craftBukkit()) {
+      Bukkit.getPluginManager().disablePlugin(this);
+      return;
+    }
+    if (PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()) {
       this.tickTimeService = new SpigotTickTimeService();
     } else {
       this.tickTimeService = new PaperTickTimeService();
@@ -105,7 +111,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
 
   @Override
   public void onReload() {
-    if (Environment.majorMinecraftVersion() >= 13) {
+    if (PaperLib.getMinecraftVersion() >= 13) {
       Bukkit.getScheduler().runTask(this, () -> ImmutableList.copyOf(Bukkit.getOnlinePlayers()).forEach(Player::updateCommands));
     }
   }
@@ -149,7 +155,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
   }
 
   private void registerCommands() {
-    if (Environment.majorMinecraftVersion() >= 15 && Environment.paper()) {
+    if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
       TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
     } else {
       TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
@@ -190,5 +196,17 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
   @Override
   public @NonNull Logger logger() {
     return this.logger;
+  }
+
+  private boolean craftBukkit() {
+    if (!PaperLib.isSpigot()) {
+      this.logger.error("==========================================");
+      this.logger.error("TabTPS is not compatible with CraftBukkit.");
+      this.logger.error("You must use either Spigot or later forks");
+      this.logger.error("such as Paper in order to use TabTPS.");
+      this.logger.error("==========================================");
+      return true;
+    }
+    return false;
   }
 }

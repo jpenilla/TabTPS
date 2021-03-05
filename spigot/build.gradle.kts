@@ -1,5 +1,5 @@
 plugins {
-  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("com.github.johnrengelman.shadow")
   id("kr.entree.spigradle") version "2.2.3"
 }
 
@@ -7,7 +7,8 @@ dependencies {
   implementation(project(":tabtps-common"))
 
   compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
-  implementation("xyz.jpenilla", "jmplib", "1.0.1+30-SNAPSHOT")
+  implementation("io.papermc", "paperlib", "1.0.6")
+  implementation("xyz.jpenilla", "jmplib", "1.0.1+32-SNAPSHOT")
   implementation("org.bstats", "bstats-bukkit", "2.1.0")
   implementation("org.slf4j", "slf4j-jdk14","1.7.30")
 

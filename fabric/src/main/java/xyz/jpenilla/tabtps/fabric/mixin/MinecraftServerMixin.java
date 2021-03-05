@@ -43,7 +43,7 @@ import java.util.function.BooleanSupplier;
  * Adds TPS and tick time rolling averages, based on MIT-licensed code from the PaperMC project.
  */
 @Mixin(MinecraftServer.class)
-public final class MinecraftServerMixin implements MinecraftServerAccess {
+abstract class MinecraftServerMixin implements MinecraftServerAccess {
   private final TickTimes tabtps$tickTimes5s = new TickTimes(100);
   private final TickTimes tabtps$tickTimes10s = new TickTimes(200);
   private final TickTimes tabtps$tickTimes60s = new TickTimes(1200);

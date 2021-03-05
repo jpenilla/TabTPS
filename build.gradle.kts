@@ -7,11 +7,12 @@ import java.io.ByteArrayOutputStream
 plugins {
   `java-library`
   id("net.kyori.indra") version "1.3.1"
+  id("com.github.johnrengelman.shadow") version "6.1.0" apply false
 }
 
 allprojects {
   group = "xyz.jpenilla"
-  version = "1.3.4+${latestCommitHash()}-SNAPSHOT"
+  version = "1.3.4+${lastCommitHash()}-SNAPSHOT"
   description = "Monitor your server's performance in real time"
 }
 
@@ -24,6 +25,7 @@ subprojects {
   repositories {
     //mavenLocal()
     mavenCentral()
+    jcenter()
     sonatypeSnapshots()
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -41,29 +43,26 @@ subprojects {
     mitLicense()
   }
 
-  tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-Xlint:-processing")
-  }
-}
-
-allprojects {
-  tasks.withType<Jar> {
-    onlyIf {
-      val classifier = archiveClassifier.get()
-      classifier != "javadoc"
-        && project.name != rootProject.name
+  tasks {
+    withType<JavaCompile> {
+      options.compilerArgs.add("-Xlint:-processing")
+    }
+    withType<Jar> {
+      onlyIf { archiveClassifier.get() != "javadoc" }
+    }
+    withType<Javadoc> {
+      onlyIf { false }
     }
   }
-  tasks.withType<Javadoc> {
-    onlyIf { false }
-  }
 }
 
-fun latestCommitHash(): String {
-  val byteOut = ByteArrayOutputStream()
+tasks.withType<Jar> {
+  onlyIf { false }
+}
+
+fun lastCommitHash(): String = ByteArrayOutputStream().apply {
   exec {
     commandLine = listOf("git", "rev-parse", "--short", "HEAD")
-    standardOutput = byteOut
+    standardOutput = this@apply
   }
-  return byteOut.toString(Charsets.UTF_8.name()).trim()
-}
+}.toString(Charsets.UTF_8.name()).trim()

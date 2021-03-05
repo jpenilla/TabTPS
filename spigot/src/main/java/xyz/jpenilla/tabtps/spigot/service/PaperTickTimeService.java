@@ -30,11 +30,11 @@ import xyz.jpenilla.tabtps.common.service.TickTimeService;
 public final class PaperTickTimeService implements TickTimeService {
   @Override
   public double averageMspt() {
-    return Bukkit.getServer().getAverageTickTime();
+    return Bukkit.getAverageTickTime();
   }
 
   @Override
   public double @NonNull [] recentTps() {
-    return Bukkit.getServer().getTPS();
+    return Bukkit.getTPS();
   }
 }

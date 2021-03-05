@@ -21,38 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.common;
+package xyz.jpenilla.tabtps.fabric.service;
 
-import cloud.commandframework.CommandManager;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
-import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
-import xyz.jpenilla.tabtps.common.service.TickTimeService;
-import xyz.jpenilla.tabtps.common.service.UserService;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
+import java.util.Set;
 
-public interface TabTPSPlatform<P, U extends User<P>> {
-  @NonNull UserService<P, U> userService();
+public final class FabricLocaleDiscoverer implements LocaleDiscoverer {
+  private final String bundleName;
+  private final String modId;
 
-  @NonNull Path dataDirectory();
+  public FabricLocaleDiscoverer(final @NonNull String bundleName, final @NonNull String modId) {
+    this.bundleName = bundleName;
+    this.modId = modId;
+  }
 
-  @NonNull TabTPS tabTPS();
-
-  @NonNull TickTimeService tickTimeService();
-
-  int maxPlayers();
-
-  void shutdown();
-
-  void onReload();
-
-  @NonNull Logger logger();
-
-  @NonNull CommandManager<Commander> commandManager();
-
-  default @NonNull LocaleDiscoverer localeDiscoverer() {
-    return LocaleDiscoverer.standard("tabtps");
+  @Override
+  public @NonNull Set<Locale> availableLocales() throws IOException {
+    final ModContainer container = FabricLoader.getInstance().getModContainer(this.modId).orElse(null);
+    if (container == null) {
+      throw new IllegalArgumentException("Invalid mod id");
+    }
+    return LocaleDiscoverer.localesFromPathStrings(
+      this.bundleName,
+      Files.list(container.getRootPath()).map(Path::toString).map(it -> it.substring(1))
+    );
   }
 }

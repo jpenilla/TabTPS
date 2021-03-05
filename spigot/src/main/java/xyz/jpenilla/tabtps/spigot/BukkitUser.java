@@ -23,13 +23,13 @@
  */
 package xyz.jpenilla.tabtps.spigot;
 
+import io.papermc.lib.PaperLib;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.jmplib.Environment;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.util.Serializers;
@@ -65,7 +65,7 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public int ping() {
-    return Environment.majorMinecraftVersion() < 16 || !Environment.paper()
+    return PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()
       ? SpigotReflection.get().ping(this.base)
       : this.base.spigot().getPing();
   }

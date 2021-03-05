@@ -40,11 +40,6 @@ import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.util.CPUMonitor;
 
 import java.io.IOException;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.PropertyResourceBundle;
@@ -52,10 +47,7 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
 
 public final class TabTPS {
   private final TabTPSPlatform<?, ?> platform;
@@ -116,25 +108,7 @@ public final class TabTPS {
 
   private void loadTranslations() throws IOException {
     final TranslationRegistry registry = TranslationRegistry.create(Key.key("tabtps", "translations"));
-    final String prefix = "tabtps_";
-    final String suffix = ".properties";
-    final Set<Locale> locales = new HashSet<>();
-    final Enumeration<URL> urls = this.getClass().getClassLoader().getResources("META-INF");
-    while (urls.hasMoreElements()) {
-      final URL url = urls.nextElement();
-      final JarURLConnection connection = (JarURLConnection) (url.openConnection());
-      try (final JarFile jar = connection.getJarFile()) {
-        locales.addAll(
-          Collections.list(jar.entries()).stream()
-            .map(ZipEntry::toString)
-            .filter(path -> path.startsWith(prefix) && path.endsWith(suffix))
-            .map(path -> path.replaceFirst(prefix, "").replaceFirst(suffix, ""))
-            .map(name -> name.split("_"))
-            .map(locale -> new Locale(locale[0], locale[1]))
-            .collect(Collectors.toSet())
-        );
-      }
-    }
+    final Set<Locale> locales = this.platform.localeDiscoverer().availableLocales();
     locales.forEach(locale -> registry.registerAll(locale, PropertyResourceBundle.getBundle("tabtps", locale), true));
     GlobalTranslator.get().addSource(registry);
   }

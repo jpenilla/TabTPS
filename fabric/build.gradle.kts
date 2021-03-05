@@ -1,11 +1,9 @@
 plugins {
-  id("fabric-loom") version "0.5.43"
-  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("fabric-loom") version "0.6-SNAPSHOT"
+  id("com.github.johnrengelman.shadow")
 }
 
-configurations {
-  create("shade")
-}
+val shade: Configuration by configurations.creating
 
 val mcVersion = "1.16.5"
 
@@ -15,7 +13,7 @@ dependencies {
   modImplementation("net.fabricmc", "fabric-loader", "0.11.1")
   modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.29.4+1.16")
 
-  add("shade", implementation(project(":tabtps-common")) {
+  shade(implementation(project(":tabtps-common")) {
     exclude("cloud.commandframework")
     exclude("net.kyori")
     exclude("org.slf4j")
@@ -30,7 +28,7 @@ dependencies {
   implementation(include("net.kyori", "adventure-text-minimessage", "4.1.0-SNAPSHOT"))
   val adventureVersion = "4.5.1"
   implementation(include("net.kyori", "adventure-text-serializer-legacy", adventureVersion))
-  add("shade", implementation("net.kyori", "adventure-serializer-configurate4", adventureVersion) {
+  shade(implementation("net.kyori", "adventure-serializer-configurate4", adventureVersion) {
     exclude("*")
   })
 
@@ -40,7 +38,7 @@ dependencies {
 
 tasks {
   shadowJar {
-    configurations = listOf(project.configurations.getByName("shade"))
+    configurations = listOf(shade)
     from(rootProject.projectDir.resolve("license.txt"))
     minimize()
     listOf(
