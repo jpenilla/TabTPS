@@ -29,6 +29,7 @@ tasks {
       "org.slf4j",
       "cloud.commandframework",
       "io.leangen.geantyref",
+      "io.papermc.lib",
       "net.kyori",
       "org.spongepowered.configurate",
       "com.typesafe.config",
@@ -48,7 +49,7 @@ tasks {
 spigot {
   name = rootProject.name
   apiVersion = "1.13"
-  website = "https://github.com/jmanpenilla/TabTPS"
+  website = "https://github.com/jpenilla/TabTPS"
   loadBefore("Essentials")
   softDepends("Prisma", "PlaceholderAPI", "ViaVersion")
   authors("jmp")
