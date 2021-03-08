@@ -162,7 +162,7 @@ public abstract class UserService<P, U extends User<P>> {
       Files.createDirectories(this.userDataDirectory);
       Files.createFile(file);
     } catch (final IOException e) {
-      e.printStackTrace();
+      this.platform.logger().warn("Failed to create empty file: " + file, e);
     }
   }
 

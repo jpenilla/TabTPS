@@ -45,10 +45,10 @@ public final class FabricTickTimeService implements TickTimeService {
   public double @NonNull [] recentTps() {
     final MinecraftServerAccess access = (MinecraftServerAccess) this.tabTPSFabric.server();
     final double[] tps = new double[4];
-    tps[0] = access.tabtps$tps5s().average();
-    tps[1] = access.tabtps$tps1m().average();
-    tps[2] = access.tabtps$tps5m().average();
-    tps[3] = access.tabtps$tps15m().average();
+    tps[0] = access.tps5s().average();
+    tps[1] = access.tps1m().average();
+    tps[2] = access.tps5m().average();
+    tps[3] = access.tps15m().average();
     return tps;
   }
 }

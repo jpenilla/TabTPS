@@ -43,11 +43,11 @@ public final class FabricTickInfoCommandFormatter implements TickInfoCommand.For
 
   @Override
   public @NonNull List<Component> formatTickTimes() {
-    final MinecraftServerAccess serverAccess = (MinecraftServerAccess) this.tabTPSFabric.server();
+    final MinecraftServerAccess server = (MinecraftServerAccess) this.tabTPSFabric.server();
     return TPSUtil.formatTickTimes(ImmutableList.of(
-      Pair.of("5s", serverAccess.tabtps$tickTimes5s().times()),
-      Pair.of("10s", serverAccess.tabtps$tickTimes10s().times()),
-      Pair.of("60s", serverAccess.tabtps$tickTimes60s().times())
+      Pair.of("5s", server.tickTimes5s().times()),
+      Pair.of("10s", server.tickTimes10s().times()),
+      Pair.of("60s", server.tickTimes60s().times())
     ));
   }
 }

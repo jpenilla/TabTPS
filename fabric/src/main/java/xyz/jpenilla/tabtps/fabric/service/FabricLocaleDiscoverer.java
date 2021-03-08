@@ -45,10 +45,8 @@ public final class FabricLocaleDiscoverer implements LocaleDiscoverer {
 
   @Override
   public @NonNull Set<Locale> availableLocales() throws IOException {
-    final ModContainer container = FabricLoader.getInstance().getModContainer(this.modId).orElse(null);
-    if (container == null) {
-      throw new IllegalArgumentException("Invalid mod id");
-    }
+    final ModContainer container = FabricLoader.getInstance().getModContainer(this.modId)
+      .orElseThrow(() -> new IllegalArgumentException("Could not find mod container for mod id: " + this.modId));
     return LocaleDiscoverer.localesFromPathStrings(
       this.bundleName,
       Files.list(container.getRootPath()).map(Path::toString).map(it -> it.substring(1))

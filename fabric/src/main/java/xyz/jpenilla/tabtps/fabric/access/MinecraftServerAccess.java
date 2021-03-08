@@ -28,17 +28,17 @@ import xyz.jpenilla.tabtps.fabric.util.RollingAverage;
 import xyz.jpenilla.tabtps.fabric.util.TickTimes;
 
 public interface MinecraftServerAccess {
-  @NonNull TickTimes tabtps$tickTimes5s();
+  @NonNull TickTimes tickTimes5s();
 
-  @NonNull TickTimes tabtps$tickTimes10s();
+  @NonNull TickTimes tickTimes10s();
 
-  @NonNull TickTimes tabtps$tickTimes60s();
+  @NonNull TickTimes tickTimes60s();
 
-  @NonNull RollingAverage tabtps$tps5s();
+  @NonNull RollingAverage tps5s();
 
-  @NonNull RollingAverage tabtps$tps1m();
+  @NonNull RollingAverage tps1m();
 
-  @NonNull RollingAverage tabtps$tps5m();
+  @NonNull RollingAverage tps5m();
 
-  @NonNull RollingAverage tabtps$tps15m();
+  @NonNull RollingAverage tps15m();
 }

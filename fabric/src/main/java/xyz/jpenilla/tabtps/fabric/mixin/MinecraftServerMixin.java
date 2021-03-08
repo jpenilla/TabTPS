@@ -25,8 +25,11 @@ package xyz.jpenilla.tabtps.fabric.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.spongepowered.asm.mixin.Implements;
+import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,72 +45,67 @@ import java.util.function.BooleanSupplier;
 /**
  * Adds TPS and tick time rolling averages, based on MIT-licensed code from the PaperMC project.
  */
+@Unique
 @Mixin(MinecraftServer.class)
-abstract class MinecraftServerMixin implements MinecraftServerAccess {
-  private final TickTimes tabtps$tickTimes5s = new TickTimes(100);
-  private final TickTimes tabtps$tickTimes10s = new TickTimes(200);
-  private final TickTimes tabtps$tickTimes60s = new TickTimes(1200);
+@Implements({@Interface(iface = MinecraftServerAccess.class, prefix = "tabtps$")})
+abstract class MinecraftServerMixin {
+  private final TickTimes tickTimes5s = new TickTimes(100);
+  private final TickTimes tickTimes10s = new TickTimes(200);
+  private final TickTimes tickTimes60s = new TickTimes(1200);
 
-  private final RollingAverage tabtps$tps5s = new RollingAverage(5);
-  private final RollingAverage tabtps$tps1m = new RollingAverage(60);
-  private final RollingAverage tabtps$tps5m = new RollingAverage(60 * 5);
-  private final RollingAverage tabtps$tps15m = new RollingAverage(60 * 15);
+  private final RollingAverage tps5s = new RollingAverage(5);
+  private final RollingAverage tps1m = new RollingAverage(60);
+  private final RollingAverage tps5m = new RollingAverage(60 * 5);
+  private final RollingAverage tps15m = new RollingAverage(60 * 15);
 
   @Shadow private int tickCount;
-  private long tabtps$previousTime;
+  private long previousTime;
 
   @Inject(method = "tickServer", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
   public void injectTick(final BooleanSupplier var1, final CallbackInfo ci, final long tickStartTimeNanos, final long tickDurationNanos) {
-    this.tabtps$tickTimes5s.add(this.tickCount, tickDurationNanos);
-    this.tabtps$tickTimes10s.add(this.tickCount, tickDurationNanos);
-    this.tabtps$tickTimes60s.add(this.tickCount, tickDurationNanos);
+    this.tickTimes5s.add(this.tickCount, tickDurationNanos);
+    this.tickTimes10s.add(this.tickCount, tickDurationNanos);
+    this.tickTimes60s.add(this.tickCount, tickDurationNanos);
 
     if (this.tickCount % RollingAverage.SAMPLE_INTERVAL == 0) {
-      if (this.tabtps$previousTime == 0) {
-        this.tabtps$previousTime = tickStartTimeNanos - RollingAverage.TICK_TIME;
+      if (this.previousTime == 0) {
+        this.previousTime = tickStartTimeNanos - RollingAverage.TICK_TIME;
       }
-      final long diff = tickStartTimeNanos - this.tabtps$previousTime;
-      this.tabtps$previousTime = tickStartTimeNanos;
+      final long diff = tickStartTimeNanos - this.previousTime;
+      this.previousTime = tickStartTimeNanos;
       final BigDecimal currentTps = RollingAverage.TPS_BASE.divide(new BigDecimal(diff), 30, RoundingMode.HALF_UP);
-      this.tabtps$tps5s.add(currentTps, diff);
-      this.tabtps$tps1m.add(currentTps, diff);
-      this.tabtps$tps5m.add(currentTps, diff);
-      this.tabtps$tps15m.add(currentTps, diff);
+      this.tps5s.add(currentTps, diff);
+      this.tps1m.add(currentTps, diff);
+      this.tps5m.add(currentTps, diff);
+      this.tps15m.add(currentTps, diff);
     }
   }
 
-  @Override
   public @NonNull TickTimes tabtps$tickTimes5s() {
-    return this.tabtps$tickTimes5s;
+    return this.tickTimes5s;
   }
 
-  @Override
   public @NonNull TickTimes tabtps$tickTimes10s() {
-    return this.tabtps$tickTimes10s;
+    return this.tickTimes10s;
   }
 
-  @Override
   public @NonNull TickTimes tabtps$tickTimes60s() {
-    return this.tabtps$tickTimes60s;
+    return this.tickTimes60s;
   }
 
-  @Override
   public @NonNull RollingAverage tabtps$tps5s() {
-    return this.tabtps$tps5s;
+    return this.tps5s;
   }
 
-  @Override
   public @NonNull RollingAverage tabtps$tps1m() {
-    return this.tabtps$tps1m;
+    return this.tps1m;
   }
 
-  @Override
   public @NonNull RollingAverage tabtps$tps5m() {
-    return this.tabtps$tps5m;
+    return this.tps5m;
   }
 
-  @Override
   public @NonNull RollingAverage tabtps$tps15m() {
-    return this.tabtps$tps15m;
+    return this.tps15m;
   }
 }
