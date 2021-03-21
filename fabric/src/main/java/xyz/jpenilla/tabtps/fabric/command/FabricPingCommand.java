@@ -23,29 +23,15 @@
  */
 package xyz.jpenilla.tabtps.fabric.command;
 
-import cloud.commandframework.arguments.CommandArgument;
-import cloud.commandframework.brigadier.argument.WrappedBrigadierParser;
 import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.fabric.FabricCommandContextKeys;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import io.leangen.geantyref.TypeToken;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.selector.EntitySelector;
+import cloud.commandframework.fabric.argument.server.MultiplePlayerSelectorArgument;
+import cloud.commandframework.fabric.data.MultiplePlayerSelector;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
-import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class FabricPingCommand extends PingCommand {
@@ -54,49 +40,21 @@ public final class FabricPingCommand extends PingCommand {
   public FabricPingCommand(final @NonNull TabTPSFabric tabTPSFabric, final @NonNull Commands commands) {
     super(tabTPSFabric.tabTPS(), commands);
     this.tabTPSFabric = tabTPSFabric;
-
-    this.commandManager.getParserRegistry().registerParserSupplier(
-      TypeToken.get(EntitySelector.class),
-      p -> new WrappedBrigadierParser<>(EntityArgument.players())
-    );
-
-    this.tabTPSFabric.commandManager().brigadierManager().registerMapping(
-      new TypeToken<WrappedBrigadierParser<Commander, EntitySelector>>() {
-      },
-      builder -> builder.toConstant(EntityArgument.players())
-    );
   }
 
   @Override
   public void register() {
-    final CommandArgument<Commander, EntitySelector> selectorArgument = this.commandManager.argumentBuilder(EntitySelector.class, "target").build();
-    this.registerPingTargetsCommand(selectorArgument, this::handlePingTargets);
+    this.registerPingTargetsCommand(MultiplePlayerSelectorArgument.of("target"), this::handlePingTargets);
   }
 
   private void handlePingTargets(final @NonNull CommandContext<Commander> context) {
-    final EntitySelector target = context.get("target");
-    List<User<?>> users;
-    try {
-      users = target.findPlayers((CommandSourceStack) context.get(FabricCommandContextKeys.NATIVE_COMMAND_SOURCE)).stream()
-        .map(this.tabTPSFabric.userService()::user)
-        .collect(Collectors.toList());
-    } catch (final CommandSyntaxException e) {
-      users = Collections.emptyList();
-    }
-    if (users.isEmpty()) {
-      throw CommandCompletedException.withMessage(LinearComponents.linear(
-        Constants.PREFIX,
-        Component.space(),
-        Component.translatable(
-          "argument.entity.notfound.player",
-          NamedTextColor.RED
-        )
-      ));
-    }
+    final MultiplePlayerSelector target = context.get("target");
     this.pingTargets(
       context.getSender(),
-      users,
-      "", // todo: use selector input string here and remove above special case
+      target.get().stream()
+        .map(this.tabTPSFabric.userService()::user)
+        .collect(Collectors.toList()),
+      target.getInput(),
       context.get("page")
     );
   }

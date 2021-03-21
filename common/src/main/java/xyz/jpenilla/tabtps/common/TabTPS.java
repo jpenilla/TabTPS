@@ -26,6 +26,7 @@ package xyz.jpenilla.tabtps.common;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
+import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
@@ -109,7 +110,13 @@ public final class TabTPS {
   private void loadTranslations() throws IOException {
     final TranslationRegistry registry = TranslationRegistry.create(Key.key("tabtps", "translations"));
     final Set<Locale> locales = this.platform.localeDiscoverer().availableLocales();
-    locales.forEach(locale -> registry.registerAll(locale, PropertyResourceBundle.getBundle("tabtps", locale), true));
+    locales.forEach(locale ->
+      registry.registerAll(
+        locale,
+        PropertyResourceBundle.getBundle("tabtps", locale, UTF8ResourceBundleControl.get()),
+        true
+      )
+    );
     GlobalTranslator.get().addSource(registry);
   }
 

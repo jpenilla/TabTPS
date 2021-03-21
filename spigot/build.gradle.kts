@@ -8,8 +8,8 @@ dependencies {
 
   compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
   implementation("io.papermc", "paperlib", "1.0.6")
-  implementation("xyz.jpenilla", "jmplib", "1.0.1+32-SNAPSHOT")
-  implementation("org.bstats", "bstats-bukkit", "2.1.0")
+  implementation("xyz.jpenilla", "jmplib", "1.0.1+33-SNAPSHOT")
+  implementation("org.bstats", "bstats-bukkit", "2.2.1")
   implementation("org.slf4j", "slf4j-jdk14","1.7.30")
 
   implementation("cloud.commandframework", "cloud-paper", "1.5.0-SNAPSHOT")
@@ -51,6 +51,6 @@ spigot {
   apiVersion = "1.13"
   website = "https://github.com/jpenilla/TabTPS"
   loadBefore("Essentials")
-  softDepends("Prisma", "PlaceholderAPI", "ViaVersion")
+  softDepends("PlaceholderAPI", "ViaVersion")
   authors("jmp")
 }

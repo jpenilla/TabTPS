@@ -21,38 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.common.command.exception;
+package xyz.jpenilla.tabtps.fabric.mixin;
 
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.kyori.adventure.platform.fabric.FabricAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.kyori.adventure.util.ComponentMessageThrowable;
+import net.minecraft.network.chat.ComponentUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.asm.mixin.Implements;
+import org.spongepowered.asm.mixin.Interface;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
-public final class CommandCompletedException extends RuntimeException implements ComponentMessageThrowable {
-  private static final long serialVersionUID = -3747530074315156805L;
+/**
+ * Mixing into brig doesn't work on fabric. :(
+ *
+ * <p>todo: Enable this mixin instead of {@link ComponentMessageThrowableMixin} once fabric loader is fixed</p>
+ */
+@Unique
+@Mixin(value = CommandSyntaxException.class, remap = false)
+@Implements({@Interface(iface = ComponentMessageThrowable.class, prefix = "tabtps$")})
+abstract class CommandSyntaxExceptionMixin {
+  @SuppressWarnings("checkstyle:MethodName")
+  @Shadow
+  public abstract Message getRawMessage();
 
-  private final Component message;
-
-  private CommandCompletedException(final @Nullable Component message) {
-    this.message = message;
-  }
-
-  public static @NonNull CommandCompletedException withoutMessage() {
-    return new CommandCompletedException(null);
-  }
-
-  public static @NonNull CommandCompletedException withMessage(final @NonNull Component component) {
-    return new CommandCompletedException(component);
-  }
-
-  @Override
-  public @Nullable Component componentMessage() {
-    return this.message;
-  }
-
-  @Override
-  public @NonNull String getMessage() {
-    return PlainComponentSerializer.plain().serializeOr(this.message, "No message.");
+  public @NonNull Component tabtps$componentMessage() {
+    final net.minecraft.network.chat.Component minecraft = ComponentUtils.fromMessage(this.getRawMessage());
+    return FabricAudiences.nonWrappingSerializer().deserialize(minecraft);
   }
 }

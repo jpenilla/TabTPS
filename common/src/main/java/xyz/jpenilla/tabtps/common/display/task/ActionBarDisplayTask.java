@@ -24,11 +24,11 @@
 package xyz.jpenilla.tabtps.common.display.task;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
+import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 

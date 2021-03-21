@@ -24,17 +24,15 @@
 package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
+import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 
 import java.lang.management.ManagementFactory;
@@ -42,6 +40,12 @@ import java.lang.management.MemoryPoolMXBean;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.translatable;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
+import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
 public final class MemoryCommand extends TabTPSCommand {
   public MemoryCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -53,18 +57,18 @@ public final class MemoryCommand extends TabTPSCommand {
     this.commandManager.command(
       this.commandManager.commandBuilder("memory", "mem", "ram")
         .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.memory.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.memory.description"))
         .handler(this::executeMemory)
     );
   }
 
   private void executeMemory(final @NonNull CommandContext<Commander> ctx) {
     final List<Component> messages = new ArrayList<>();
-    messages.add(Component.empty());
-    final Component header = LinearComponents.linear(
+    messages.add(empty());
+    final Component header = TextComponent.ofChildren(
       Constants.PREFIX,
-      Component.space(),
-      Component.translatable("tabtps.command.memory.text.header", NamedTextColor.GRAY, TextDecoration.ITALIC)
+      space(),
+      translatable("tabtps.command.memory.text.header", GRAY, ITALIC)
     );
     messages.add(header);
     if (!this.tabTPS.configManager().pluginSettings().ignoredMemoryPools().contains("Heap Memory Usage")) {

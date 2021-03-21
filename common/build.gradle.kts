@@ -9,7 +9,7 @@ dependencies {
   api("cloud.commandframework", "cloud-core", cloudVersion)
   api("cloud.commandframework", "cloud-minecraft-extras", cloudVersion)
   api("org.spongepowered", "configurate-hocon", "4.1.0-SNAPSHOT")
-  val adventureVersion = "4.5.1"
+  val adventureVersion = "4.7.0"
   api("net.kyori", "adventure-serializer-configurate4", adventureVersion)
   api("net.kyori", "adventure-api", adventureVersion)
   api("net.kyori", "adventure-text-serializer-legacy", adventureVersion)

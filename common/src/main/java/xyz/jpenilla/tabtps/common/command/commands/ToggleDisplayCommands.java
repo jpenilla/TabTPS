@@ -25,10 +25,10 @@ package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.keys.SimpleCloudKey;
-import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import cloud.commandframework.permission.PredicatePermission;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -96,7 +96,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
         .literal("tab")
         .senderType(User.class)
         .permission(this.commands.permissionPredicate(Constants.PERMISSION_TOGGLE_TAB))
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.toggle_tab.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.toggle_tab.description"))
         .handler(this::toggleTab)
     );
 
@@ -105,7 +105,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
         .literal("actionbar")
         .senderType(User.class)
         .permission(this.commands.permissionPredicate(Constants.PERMISSION_TOGGLE_ACTIONBAR))
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.toggle_actionbar.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.toggle_actionbar.description"))
         .handler(this::toggleActionBar)
     );
 
@@ -114,7 +114,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
         .literal("bossbar")
         .senderType(User.class)
         .permission(this.commands.permissionPredicate(Constants.PERMISSION_TOGGLE_BOSSBAR))
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.toggle_bossbar.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.toggle_bossbar.description"))
         .handler(this::toggleBossBar)
     );
   }
@@ -124,7 +124,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     if (user.tab().enabled()) {
       user.tab().stopDisplay();
       user.tab().enabled(false);
-      user.sendMessage(LinearComponents.linear(
+      user.sendMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         Component.space(),
         Serializers.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in tab menu any more</gradient><gray>.")
@@ -134,7 +134,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     } else {
       user.tab().enabled(true);
       user.tab().startDisplay();
-      user.sendMessage(LinearComponents.linear(
+      user.sendMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         Component.space(),
         Serializers.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in tab menu</gradient><gray>.")
@@ -149,7 +149,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     if (user.actionBar().enabled()) {
       user.actionBar().stopDisplay();
       user.actionBar().enabled(false);
-      user.sendMessage(LinearComponents.linear(
+      user.sendMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         Component.space(),
         Serializers.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in action bar any more</gradient><gray>.")
@@ -159,7 +159,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     } else {
       user.actionBar().enabled(true);
       user.actionBar().startDisplay();
-      user.sendMessage(LinearComponents.linear(
+      user.sendMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         Component.space(),
         Serializers.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in action bar</gradient><gray>.")
@@ -174,7 +174,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     if (user.bossBar().enabled()) {
       user.bossBar().stopDisplay();
       user.bossBar().enabled(false);
-      user.sendMessage(LinearComponents.linear(
+      user.sendMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         Component.space(),
         Serializers.MINIMESSAGE.parse("<italic><gradient:red:gold>Not showing TPS and MSPT in boss bar any more</gradient><gray>.")
@@ -184,7 +184,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     } else {
       user.bossBar().enabled(true);
       user.bossBar().startDisplay();
-      user.sendMessage(LinearComponents.linear(
+      user.sendMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         Component.space(),
         Serializers.MINIMESSAGE.parse("<italic><gradient:green:yellow>Showing TPS and MSPT in boss bar</gradient><gray>.")

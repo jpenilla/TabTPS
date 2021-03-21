@@ -38,17 +38,59 @@ import static xyz.jpenilla.jmplib.Crafty.needCraftClass;
 import static xyz.jpenilla.jmplib.Crafty.needNmsClass;
 
 public final class SpigotReflection {
-  private static SpigotReflection instance;
+  private static SpigotReflection INSTANCE;
 
   public static @NonNull SpigotReflection get() {
-    if (instance == null) {
+    if (INSTANCE == null) {
       synchronized (SpigotReflection.class) {
-        if (instance == null) {
-          instance = new SpigotReflection();
+        if (INSTANCE == null) {
+          INSTANCE = new SpigotReflection();
         }
       }
     }
-    return instance;
+    return INSTANCE;
+  }
+
+  private SpigotReflection() {
+  }
+
+  private final Class<?> MinecraftServer_class = needNmsClass("MinecraftServer");
+  private final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
+  private final Class<?> EntityPlayer_class = needNmsClass("EntityPlayer");
+
+  private final MethodHandle CraftPlayer_getHandle_method = needMethod(this.CraftPlayer_class, "getHandle", this.EntityPlayer_class);
+  private final MethodHandle MinecraftServer_getServer_method = needStaticMethod(this.MinecraftServer_class, "getServer", this.MinecraftServer_class);
+
+  private final Field EntityPlayer_ping_field = needField(this.EntityPlayer_class, "ping");
+  private final Field MinecraftServer_recentTickTimes_field = needField(this.MinecraftServer_class, "h");
+  private final Field MinecraftServer_recentTps_field = needField(this.MinecraftServer_class, "recentTps");
+
+  public int ping(final @NonNull Player player) {
+    final Object nmsPlayer = invokeOrThrow(this.CraftPlayer_getHandle_method, player);
+    try {
+      return this.EntityPlayer_ping_field.getInt(nmsPlayer);
+    } catch (final IllegalAccessException e) {
+      throw new IllegalStateException(String.format("Failed to get ping for player: '%s'", player.getName()), e);
+    }
+  }
+
+  public double averageTickTime() {
+    final Object server = invokeOrThrow(this.MinecraftServer_getServer_method);
+    try {
+      final long[] recentMspt = (long[]) this.MinecraftServer_recentTickTimes_field.get(server);
+      return TPSUtil.toMilliseconds(TPSUtil.average(recentMspt));
+    } catch (final IllegalAccessException e) {
+      throw new IllegalStateException("Failed to get server mspt", e);
+    }
+  }
+
+  public double @NonNull [] recentTps() {
+    final Object server = invokeOrThrow(this.MinecraftServer_getServer_method);
+    try {
+      return (double[]) this.MinecraftServer_recentTps_field.get(server);
+    } catch (final IllegalAccessException e) {
+      throw new IllegalStateException("Failed to get server TPS", e);
+    }
   }
 
   private static @NonNull MethodHandle needMethod(final @NonNull Class<?> holderClass, final @NonNull String methodName, final @NonNull Class<?> returnClass, final @NonNull Class<?> @NonNull ... parameterClasses) {
@@ -92,48 +134,6 @@ public final class SpigotReflection {
       return methodHandle.invokeWithArguments(params);
     } catch (final Throwable throwable) {
       throw new IllegalStateException(String.format("Unable to invoke method with args '%s'", Arrays.toString(params)), throwable);
-    }
-  }
-
-  private final Class<?> MinecraftServer_class = needNmsClass("MinecraftServer");
-  private final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
-  private final Class<?> EntityPlayer_class = needNmsClass("EntityPlayer");
-
-  private final MethodHandle CraftPlayer_getHandle_method = needMethod(this.CraftPlayer_class, "getHandle", this.EntityPlayer_class);
-  private final MethodHandle MinecraftServer_getServer_method = needStaticMethod(this.MinecraftServer_class, "getServer", this.MinecraftServer_class);
-
-  private final Field EntityPlayer_ping_field = needField(this.EntityPlayer_class, "ping");
-  private final Field MinecraftServer_recentTickTimes_field = needField(this.MinecraftServer_class, "h");
-  private final Field MinecraftServer_recentTps_field = needField(this.MinecraftServer_class, "recentTps");
-
-  private SpigotReflection() {
-  }
-
-  public int ping(final @NonNull Player player) {
-    final Object nmsPlayer = invokeOrThrow(this.CraftPlayer_getHandle_method, player);
-    try {
-      return this.EntityPlayer_ping_field.getInt(nmsPlayer);
-    } catch (final IllegalAccessException e) {
-      throw new IllegalStateException(String.format("Failed to get ping for player: '%s'", player.getName()), e);
-    }
-  }
-
-  public double averageTickTime() {
-    final Object server = invokeOrThrow(this.MinecraftServer_getServer_method);
-    try {
-      final long[] recentMspt = (long[]) this.MinecraftServer_recentTickTimes_field.get(server);
-      return TPSUtil.toMilliseconds(TPSUtil.average(recentMspt));
-    } catch (final IllegalAccessException e) {
-      throw new IllegalStateException("Failed to get server mspt", e);
-    }
-  }
-
-  public double @NonNull [] recentTps() {
-    final Object server = invokeOrThrow(this.MinecraftServer_getServer_method);
-    try {
-      return (double[]) this.MinecraftServer_recentTps_field.get(server);
-    } catch (final IllegalAccessException e) {
-      throw new IllegalStateException("Failed to get server TPS", e);
     }
   }
 }

@@ -32,17 +32,16 @@ import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.parsing.ParserException;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Constants;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -58,7 +57,7 @@ final class ExceptionHandler {
   }
 
   private static void decorateAndSend(final @NonNull Commander commander, final @NonNull Component component) {
-    commander.sendMessage(LinearComponents.linear(
+    commander.sendMessage(TextComponent.ofChildren(
       Constants.PREFIX,
       Component.space(),
       component
@@ -77,7 +76,7 @@ final class ExceptionHandler {
     final Throwable cause = exception.getCause();
 
     if (cause instanceof CommandCompletedException) {
-      final Component message = ((CommandCompletedException) cause).message();
+      final Component message = ((CommandCompletedException) cause).componentMessage();
       if (message != null) {
         commander.sendMessage(message);
       }

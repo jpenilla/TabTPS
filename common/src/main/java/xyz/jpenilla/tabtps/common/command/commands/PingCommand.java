@@ -23,14 +23,14 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.execution.CommandExecutionHandler;
-import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
+import cloud.commandframework.minecraft.extras.RichDescription;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.feature.pagination.Pagination;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -63,7 +63,7 @@ public class PingCommand extends TabTPSCommand {
     this.commandManager.command(
       this.commandManager.commandBuilder("ping")
         .permission(Constants.PERMISSION_COMMAND_PING)
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.ping_self.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.ping_self.description"))
         .handler(this::onPingSelf)
     );
 
@@ -74,10 +74,10 @@ public class PingCommand extends TabTPSCommand {
             .withMin(1)
             .withMax(999)
             .asOptionalWithDefault("1"),
-          ArgumentDescription.of("tabtps.command.ping.arguments.page")
+          RichDescription.translatable("tabtps.command.ping.arguments.page")
         )
         .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.ping_all.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.ping_all.description"))
         .handler(this::onPingAll)
     );
   }
@@ -88,16 +88,16 @@ public class PingCommand extends TabTPSCommand {
   ) {
     this.commandManager.command(
       this.commandManager.commandBuilder("ping")
-        .argument(targetsArgument, ArgumentDescription.of("tabtps.command.ping_target.arguments.target"))
+        .argument(targetsArgument, RichDescription.translatable("tabtps.command.ping_target.arguments.target"))
         .argument(
           IntegerArgument.<Commander>newBuilder("page")
             .withMin(1)
             .withMax(999)
             .asOptionalWithDefault("1"),
-          ArgumentDescription.of("tabtps.command.ping.arguments.page")
+          RichDescription.translatable("tabtps.command.ping.arguments.page")
         )
         .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.ping_target.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.ping_target.description"))
         .handler(handler)
     );
   }
@@ -105,14 +105,14 @@ public class PingCommand extends TabTPSCommand {
   private void onPingAll(final @NonNull CommandContext<Commander> context) {
     final Commander sender = context.getSender();
     final int page = context.get("page");
-    this.pingMultiple(sender, Collections.unmodifiableCollection(this.tabTPS.platform().userService().onlineUsers()), page, "tabtps:pingall");
+    this.pingMultiple(sender, Collections.unmodifiableCollection(this.tabTPS.platform().userService().onlineUsers()), page, "pingall");
   }
 
   private void onPingSelf(final @NonNull CommandContext<Commander> context) {
     final Commander sender = context.getSender();
     if (!(sender instanceof User)) {
       throw CommandCompletedException.withMessage(
-        LinearComponents.linear(
+        TextComponent.ofChildren(
           Constants.PREFIX,
           Component.space(),
           Component.translatable("tabtps.command.ping.text.console_must_provide_player", NamedTextColor.RED)
@@ -128,7 +128,7 @@ public class PingCommand extends TabTPSCommand {
           Component.translatable(
             "tabtps.command.ping_self.text.your_ping",
             NamedTextColor.GRAY,
-            LinearComponents.linear(
+            TextComponent.ofChildren(
               PingUtil.coloredPing(player, Theme.DEFAULT.colorScheme()),
               Component.translatable(
                 "tabtps.label.milliseconds_short",
@@ -148,7 +148,7 @@ public class PingCommand extends TabTPSCommand {
   ) {
     if (targets.isEmpty()) {
       throw CommandCompletedException.withMessage(
-        LinearComponents.linear(
+        TextComponent.ofChildren(
           Constants.PREFIX,
           Component.space(),
           Component.translatable(
@@ -160,7 +160,7 @@ public class PingCommand extends TabTPSCommand {
       );
     }
     if (targets.size() > 1) {
-      this.pingMultiple(commander, targets, page, String.format("tabtps:ping %s", inputString));
+      this.pingMultiple(commander, targets, page, String.format("ping %s", inputString));
       return;
     }
     final User<?> targetPlayer = targets.get(0);
@@ -172,7 +172,7 @@ public class PingCommand extends TabTPSCommand {
           "tabtps.command.ping_target.text.targets_ping",
           NamedTextColor.GRAY,
           targetPlayer.displayName(),
-          LinearComponents.linear(
+          TextComponent.ofChildren(
             PingUtil.coloredPing(targetPlayer, Theme.DEFAULT.colorScheme()),
             Component.translatable(
               "tabtps.label.milliseconds_short",
@@ -193,7 +193,7 @@ public class PingCommand extends TabTPSCommand {
     final List<Component> content = new ArrayList<>();
     final List<Integer> pings = new ArrayList<>();
     targets.stream().sorted(Comparator.comparing(User::ping)).forEach(player -> {
-      content.add(LinearComponents.linear(
+      content.add(TextComponent.ofChildren(
         Component.space(),
         Component.text("-", NamedTextColor.GRAY),
         Component.space(),
@@ -206,7 +206,7 @@ public class PingCommand extends TabTPSCommand {
       pings.add(player.ping());
     });
     final int avgPing = (int) Math.round(pings.stream().mapToInt(i -> i).average().orElse(0));
-    final Component playerAmount = LinearComponents.linear(
+    final Component playerAmount = TextComponent.ofChildren(
       Component.text("(", NamedTextColor.WHITE),
       Component.translatable(
         targets.size() == 1 ? "tabtps.command.ping.text.amount_players_singular" : "tabtps.command.ping.text.amount_players",
@@ -216,7 +216,7 @@ public class PingCommand extends TabTPSCommand {
       ),
       Component.text(")", NamedTextColor.WHITE)
     );
-    final Component summary = LinearComponents.linear(
+    final Component summary = TextComponent.ofChildren(
       Component.translatable("tabtps.command.ping.text.average_ping", NamedTextColor.WHITE),
       Component.text(": ", NamedTextColor.GRAY),
       PingUtil.coloredPing(avgPing, Theme.DEFAULT.colorScheme()),
@@ -241,7 +241,7 @@ public class PingCommand extends TabTPSCommand {
         line.style(Style.style(TextColor.fromHexString("#47C8FF"), TextDecoration.STRIKETHROUGH));
       })
       .build(
-        LinearComponents.linear(
+        TextComponent.ofChildren(
           Constants.PREFIX,
           Component.space(),
           Component.translatable("tabtps.command.ping.text.player_pings")

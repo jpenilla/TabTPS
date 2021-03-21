@@ -23,13 +23,13 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.CommandHelpHandler;
 import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
+import cloud.commandframework.minecraft.extras.RichDescription;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
@@ -46,15 +46,6 @@ public final class HelpCommand extends TabTPSCommand {
     super(tabTPS, commands);
   }
 
-  private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull String... args) {
-    return Component.translatable(
-      "tabtps.help." + key,
-      Arrays.stream(args)
-        .map(Component::text)
-        .collect(Collectors.toList())
-    );
-  }
-
   @Override
   public void register() {
     final CommandArgument<Commander, String> queryArgument = StringArgument.<Commander>newBuilder("query")
@@ -65,8 +56,8 @@ public final class HelpCommand extends TabTPSCommand {
 
     this.commands.registerSubcommand(builder ->
       builder.literal("help")
-        .argument(queryArgument, ArgumentDescription.of("Help Query"))
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.help.description")
+        .argument(queryArgument, RichDescription.translatable("tabtps.command.help.arguments.query"))
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.help.description"))
         .handler(this::executeHelp));
   }
 
@@ -81,10 +72,18 @@ public final class HelpCommand extends TabTPSCommand {
   }
 
   private @NonNull MinecraftHelp<Commander> help() {
-    final MinecraftHelp<Commander> help = new MinecraftHelp<>("/tabtps help", c -> c, commands.commandManager());
+    final MinecraftHelp<Commander> help = MinecraftHelp.createNative("/tabtps help", this.commands.commandManager());
     help.setHelpColors(this.tabTPS.configManager().pluginSettings().helpColors().toCloud());
     help.messageProvider(HelpCommand::helpMessage);
-    help.descriptionDecorator(Component::translatable);
     return help;
+  }
+
+  private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull String... args) {
+    return Component.translatable(
+      "tabtps.help." + key,
+      Arrays.stream(args)
+        .map(Component::text)
+        .collect(Collectors.toList())
+    );
   }
 }

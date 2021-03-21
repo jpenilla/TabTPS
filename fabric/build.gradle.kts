@@ -11,7 +11,7 @@ dependencies {
   minecraft("com.mojang", "minecraft", mcVersion)
   mappings(minecraft.officialMojangMappings())
   modImplementation("net.fabricmc", "fabric-loader", "0.11.1")
-  modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.29.4+1.16")
+  modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.32.0+1.16")
 
   shade(implementation(project(":tabtps-common")) {
     exclude("cloud.commandframework")
@@ -26,7 +26,7 @@ dependencies {
   modImplementation(include("net.kyori", "adventure-platform-fabric", "4.0.0-SNAPSHOT"))
   implementation(include("net.kyori", "adventure-text-feature-pagination", "4.0.0-SNAPSHOT"))
   implementation(include("net.kyori", "adventure-text-minimessage", "4.1.0-SNAPSHOT"))
-  val adventureVersion = "4.5.1"
+  val adventureVersion = "4.7.0"
   implementation(include("net.kyori", "adventure-text-serializer-legacy", adventureVersion))
   shade(implementation("net.kyori", "adventure-serializer-configurate4", adventureVersion) {
     exclude("*")

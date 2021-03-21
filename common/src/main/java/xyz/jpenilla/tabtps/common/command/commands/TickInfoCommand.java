@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.TextComponent;
@@ -72,7 +72,7 @@ public final class TickInfoCommand extends TabTPSCommand {
     this.commandManager.command(
       this.commandManager.commandBuilder("tickinfo", "mspt", "tps")
         .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.tickinfo.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.tickinfo.description"))
         .handler(this::executeTickInfo)
     );
   }
@@ -101,7 +101,7 @@ public final class TickInfoCommand extends TabTPSCommand {
       Component.translatable("tabtps.command.tickinfo.text.cpu_hover", NamedTextColor.GRAY)
     ));
     messages.add(this.renderMemory());
-    messages.add(MemoryUtil.renderBar(null, ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 91));
+    messages.add(MemoryUtil.renderBar(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 91));
     messages.forEach(ctx.getSender()::sendMessage);
   }
 

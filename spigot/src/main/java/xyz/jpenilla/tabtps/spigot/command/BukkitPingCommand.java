@@ -51,7 +51,9 @@ public final class BukkitPingCommand extends PingCommand {
     final MultiplePlayerSelector target = context.get("target");
     this.pingTargets(
       context.getSender(),
-      target.getPlayers().stream().map(player -> this.plugin.userService().user(player)).collect(Collectors.toList()),
+      target.getPlayers().stream()
+        .map(player -> this.plugin.userService().user(player))
+        .collect(Collectors.toList()),
       target.getSelector(),
       context.get("page")
     );

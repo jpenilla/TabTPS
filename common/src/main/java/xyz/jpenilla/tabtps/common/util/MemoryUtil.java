@@ -24,12 +24,8 @@
 package xyz.jpenilla.tabtps.common.util;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -38,6 +34,17 @@ import java.lang.management.MemoryUsage;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.stream.IntStream;
+
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.translatable;
+import static net.kyori.adventure.text.format.NamedTextColor.AQUA;
+import static net.kyori.adventure.text.format.NamedTextColor.BLUE;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
+import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
+import static net.kyori.adventure.text.format.TextColor.color;
+import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
 public final class MemoryUtil {
   private MemoryUtil() {
@@ -55,7 +62,15 @@ public final class MemoryUtil {
     return Math.round(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / 1048576f);
   }
 
-  public static @NonNull Component renderBar(final @Nullable String name, final @NonNull MemoryUsage usage, final int barLength) {
+  public static @NonNull Component renderBar(final @NonNull MemoryUsage usage, final int barLength) {
+    return renderBarImpl(null, usage, barLength);
+  }
+
+  public static @NonNull Component renderBar(final @NonNull String name, final @NonNull MemoryUsage usage, final int barLength) {
+    return renderBarImpl(name, usage, barLength);
+  }
+
+  private static @NonNull Component renderBarImpl(final @Nullable String name, final @NonNull MemoryUsage usage, final int barLength) {
     final long used = usage.getUsed();
     final long committed = usage.getCommitted();
     final long max = usage.getMax();
@@ -71,52 +86,52 @@ public final class MemoryUtil {
     final int unallocatedLength = barLength - usedLength - committedLength;
     final int initPointer = Math.min(barLength, Math.max(1, Math.round(barLength * initPercent)));
     final Gradient usedGradient = new Gradient(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN);
-    final Gradient committedGradient = new Gradient(NamedTextColor.AQUA, NamedTextColor.BLUE);
-    final Gradient unallocatedGradient = new Gradient(NamedTextColor.GRAY, NamedTextColor.DARK_GRAY);
+    final Gradient committedGradient = new Gradient(AQUA, BLUE);
+    final Gradient unallocatedGradient = new Gradient(GRAY, NamedTextColor.DARK_GRAY);
     usedGradient.length(usedLength);
     committedGradient.length(committedLength);
     unallocatedGradient.length(unallocatedLength);
 
-    final TextComponent.Builder builder = Component.text();
+    final TextComponent.Builder builder = text();
 
-    final TextComponent.Builder hover = Component.text()
+    final TextComponent.Builder hover = text()
       .append(humanReadableByteCountBin(used))
-      .append(Component.space())
-      .append(Component.translatable("tabtps.label.used", NamedTextColor.WHITE))
-      .append(Component.text("/", NamedTextColor.GRAY))
+      .append(space())
+      .append(translatable("tabtps.label.used", WHITE))
+      .append(text("/", GRAY))
       .append(humanReadableByteCountBin(committed))
-      .append(Component.space())
-      .append(Component.translatable("tabtps.label.allocated", NamedTextColor.WHITE))
-      .append(Component.newline());
+      .append(space())
+      .append(translatable("tabtps.label.allocated", WHITE))
+      .append(newline());
     if (max != -1) {
       hover.append(humanReadableByteCountBin(adjustedMax))
-        .append(Component.space())
-        .append(Component.translatable("tabtps.label.maximum", NamedTextColor.WHITE))
-        .append(Component.text(",", NamedTextColor.GRAY))
-        .append(Component.space());
+        .append(space())
+        .append(translatable("tabtps.label.maximum", WHITE))
+        .append(text(",", GRAY))
+        .append(space());
     }
     hover.append(humanReadableByteCountBin(adjustedInit))
-      .append(Component.space())
-      .append(Component.translatable("tabtps.label.initial_amount"));
-    builder.hoverEvent(HoverEvent.showText(hover));
+      .append(space())
+      .append(translatable("tabtps.label.initial_amount"));
+    builder.hoverEvent(hover.build());
 
-    builder.append(Component.text("[", NamedTextColor.GRAY));
+    builder.append(text("[", GRAY));
     IntStream.rangeClosed(1, barLength).forEach(i -> {
       if (i == initPointer) {
-        builder.append(Component.text("|", TextColor.color(0xFF48A8)));
+        builder.append(text("|", color(0xFF48A8)));
       } else if (i <= usedLength) {
-        builder.append(Component.text("|", usedGradient.nextColor()));
+        builder.append(text("|", usedGradient.nextColor()));
       } else if (i <= usedLength + committedLength) {
-        builder.append(Component.text("|", committedGradient.nextColor()));
+        builder.append(text("|", committedGradient.nextColor()));
       } else {
-        builder.append(Component.text("|", unallocatedGradient.nextColor()));
+        builder.append(text("|", unallocatedGradient.nextColor()));
       }
     });
-    builder.append(Component.text("]", NamedTextColor.GRAY));
+    builder.append(text("]", GRAY));
     if (name != null && !name.isEmpty()) {
       builder.append(
-        Component.space(),
-        Component.text(name, NamedTextColor.WHITE, TextDecoration.ITALIC)
+        space(),
+        text(name, WHITE, ITALIC)
       );
     }
 
@@ -126,9 +141,9 @@ public final class MemoryUtil {
   public static @NonNull Component humanReadableByteCountBin(final long bytes) {
     final long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
     if (absB < 1024) {
-      return LinearComponents.linear(
-        ComponentUtil.gradient(String.valueOf(bytes), NamedTextColor.BLUE, NamedTextColor.AQUA),
-        Component.text("B", NamedTextColor.GRAY)
+      return TextComponent.ofChildren(
+        ComponentUtil.gradient(String.valueOf(bytes), BLUE, AQUA),
+        text("B", GRAY)
       );
     }
     long value = absB;
@@ -138,9 +153,9 @@ public final class MemoryUtil {
       ci.next();
     }
     value *= Long.signum(bytes);
-    return LinearComponents.linear(
-      ComponentUtil.gradient(String.format("%.1f", value / 1024.0), NamedTextColor.BLUE, NamedTextColor.AQUA),
-      Component.text(String.format("%ciB", ci.current()), NamedTextColor.GRAY)
+    return TextComponent.ofChildren(
+      ComponentUtil.gradient(String.format("%.1f", value / 1024.0), BLUE, AQUA),
+      text(String.format("%ciB", ci.current()), GRAY)
     );
   }
 }

@@ -24,18 +24,18 @@
 package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import com.google.common.collect.ImmutableList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 
 public final class AboutCommand extends TabTPSCommand {
@@ -47,7 +47,7 @@ public final class AboutCommand extends TabTPSCommand {
   public void register() {
     this.commands.registerSubcommand(builder ->
       builder.literal("about")
-        .meta(CommandMeta.DESCRIPTION, "tabtps.command.about.description")
+        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.about.description"))
         .handler(this::executeAbout)
     );
   }
