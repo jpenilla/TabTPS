@@ -23,7 +23,6 @@ tasks {
     archiveClassifier.set("")
     archiveFileName.set("${project.name}-${project.version}.jar")
     destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
-    from(rootProject.projectDir.resolve("license.txt"))
     minimize()
     listOf(
       "org.slf4j",

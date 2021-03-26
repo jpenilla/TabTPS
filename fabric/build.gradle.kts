@@ -29,7 +29,7 @@ dependencies {
   val adventureVersion = "4.7.0"
   implementation(include("net.kyori", "adventure-text-serializer-legacy", adventureVersion))
   shade(implementation("net.kyori", "adventure-serializer-configurate4", adventureVersion) {
-    exclude("*")
+    isTransitive = false
   })
 
   implementation(include("org.slf4j", "slf4j-api", "1.7.30"))
@@ -39,7 +39,6 @@ dependencies {
 tasks {
   shadowJar {
     configurations = listOf(shade)
-    from(rootProject.projectDir.resolve("license.txt"))
     minimize()
     listOf(
       "net.kyori.adventure.serializer.configurate4",
