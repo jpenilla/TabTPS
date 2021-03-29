@@ -49,7 +49,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-final class ExceptionHandler {
+public final class ExceptionHandler {
   private final TabTPS tabTPS;
 
   ExceptionHandler(final @NonNull TabTPS tabTPS) {

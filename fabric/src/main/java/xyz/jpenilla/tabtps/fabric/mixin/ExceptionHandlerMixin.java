@@ -28,22 +28,20 @@ import net.kyori.adventure.platform.fabric.FabricAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import net.minecraft.network.chat.ComponentUtils;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import xyz.jpenilla.tabtps.common.command.ExceptionHandler;
 
-@Unique
-@Mixin(value = ComponentMessageThrowable.class, remap = false)
-abstract class ComponentMessageThrowableMixin {
-  @Inject(method = "getOrConvertMessage", at = @At("HEAD"), cancellable = true)
-  private static void injectGetOrConvertMessage(final @Nullable Throwable throwable, final @NonNull CallbackInfoReturnable<@Nullable Component> cir) {
+@Mixin(value = ExceptionHandler.class, remap = false)
+abstract class ExceptionHandlerMixin {
+  @Redirect(method = "argumentParsing", at = @At(value = "INVOKE", target = "Lnet/kyori/adventure/util/ComponentMessageThrowable;getOrConvertMessage(Ljava/lang/Throwable;)Lnet/kyori/adventure/text/Component;"))
+  private @Nullable Component convertOrGetMessage(final @Nullable Throwable throwable) {
     if (throwable instanceof CommandSyntaxException) {
       final net.minecraft.network.chat.Component minecraft = ComponentUtils.fromMessage(((CommandSyntaxException) throwable).getRawMessage());
-      cir.setReturnValue(FabricAudiences.nonWrappingSerializer().deserialize(minecraft));
+      return FabricAudiences.nonWrappingSerializer().deserialize(minecraft);
     }
+    return ComponentMessageThrowable.getOrConvertMessage(throwable);
   }
 }

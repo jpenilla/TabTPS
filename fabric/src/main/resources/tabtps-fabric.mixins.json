@@ -4,7 +4,7 @@
   "package": "xyz.jpenilla.tabtps.fabric.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ComponentMessageThrowableMixin",
+    "ExceptionHandlerMixin",
     "MinecraftServerMixin",
     "PlayerListMixin"
   ],

@@ -39,7 +39,7 @@ import org.spongepowered.asm.mixin.Unique;
 /**
  * Mixing into brig doesn't work on fabric. :(
  *
- * <p>todo: Enable this mixin instead of {@link ComponentMessageThrowableMixin} once fabric loader is fixed</p>
+ * <p>todo: Enable this mixin instead of {@link ExceptionHandlerMixin} once fabric loader is fixed</p>
  */
 @Unique
 @Mixin(value = CommandSyntaxException.class, remap = false)
