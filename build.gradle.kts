@@ -12,7 +12,7 @@ plugins {
 
 allprojects {
   group = "xyz.jpenilla"
-  version = "1.3.5+${lastCommitHash()}-SNAPSHOT"
+  version = "1.3.6+${lastCommitHash()}-SNAPSHOT"
   description = "Monitor your server's performance in real time"
 }
 
