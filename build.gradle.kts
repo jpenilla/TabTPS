@@ -25,7 +25,6 @@ subprojects {
   repositories {
     //mavenLocal()
     mavenCentral()
-    jcenter()
     sonatypeSnapshots()
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
