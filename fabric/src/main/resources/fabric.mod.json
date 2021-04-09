@@ -7,6 +7,11 @@
   "authors": [
     "jmp"
   ],
+  "contact": {
+    "homepage": "{github}",
+    "sources": "{github}",
+    "issues": "{github}/issues"
+  },
   "license": "MIT",
   "environment": "*",
   "entrypoints": {

@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.service;
 
+import net.kyori.adventure.translation.Translator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -48,8 +49,7 @@ public interface LocaleDiscoverer {
     return pathStrings
       .filter(path -> path.startsWith(bundleId + "_") && path.endsWith(PROPERTIES_EXTENSION))
       .map(path -> path.replaceFirst(bundleId + "_", "").replaceFirst(PROPERTIES_EXTENSION, ""))
-      .map(name -> name.split("_"))
-      .map(locale -> new Locale(locale[0], locale[1]))
+      .map(Translator::parseLocale)
       .collect(Collectors.toSet());
   }
 

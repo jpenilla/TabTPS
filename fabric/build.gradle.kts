@@ -66,7 +66,8 @@ tasks {
         "{project.name}" to project.name,
         "{rootProject.name}" to rootProject.name,
         "{version}" to version.toString(),
-        "{description}" to project.description
+        "{description}" to project.description,
+        "{github}" to "https://github.com/jpenilla/TabTPS"
       ).entries.forEach { (k, v) -> filter { it.replace(k, v as String) } }
     }
   }
