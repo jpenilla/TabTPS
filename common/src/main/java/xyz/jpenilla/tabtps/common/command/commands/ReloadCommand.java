@@ -25,16 +25,19 @@ package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
-import xyz.jpenilla.tabtps.common.util.ComponentUtil;
 import xyz.jpenilla.tabtps.common.util.Constants;
+
+import static net.kyori.adventure.text.Component.translatable;
+import static net.kyori.adventure.text.format.NamedTextColor.DARK_GREEN;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
+import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
+import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
 
 public final class ReloadCommand extends TabTPSCommand {
   public ReloadCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -43,18 +46,17 @@ public final class ReloadCommand extends TabTPSCommand {
 
   @Override
   public void register() {
-    this.commands.registerSubcommand(builder ->
-      builder.literal("reload")
-        .permission(Constants.PERMISSION_COMMAND_RELOAD)
-        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.reload.description"))
-        .handler(this::executeReload)
-    );
+    this.commands.registerSubcommand(builder -> builder.literal("reload")
+      .permission(Constants.PERMISSION_COMMAND_RELOAD)
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.reload.description"))
+      .handler(this::executeReload));
   }
 
   private void executeReload(final @NonNull CommandContext<Commander> ctx) {
     this.tabTPS.reload();
-    ctx.getSender().sendMessage(Constants.PREFIX.append(
-      ComponentUtil.gradient(" Reload complete.", NamedTextColor.GREEN, NamedTextColor.DARK_GREEN).decorate(TextDecoration.ITALIC)
+    ctx.getSender().sendMessage(TextComponent.ofChildren(
+      Constants.PREFIX,
+      gradient(" Reload complete.", style -> style.decorate(ITALIC), GREEN, DARK_GREEN)
     ));
   }
 }

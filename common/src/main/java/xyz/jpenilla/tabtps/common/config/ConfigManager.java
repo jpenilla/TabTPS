@@ -115,7 +115,7 @@ public final class ConfigManager {
             throw new ConfigurateException(String.format(
               "Cannot load config with duplicate permission '%s': %s",
               config.permission(),
-              path.toString()
+              path
             ));
           }
           usedPermissions.add(config.permission());
@@ -177,7 +177,7 @@ public final class ConfigManager {
     try {
       Files.createDirectory(directory);
     } catch (final IOException e) {
-      throw new IllegalStateException("Failed to create directory: " + directory.toString(), e);
+      throw new IllegalStateException("Failed to create directory: " + directory, e);
     }
   }
 }

@@ -54,12 +54,10 @@ public final class MemoryCommand extends TabTPSCommand {
 
   @Override
   public void register() {
-    this.commandManager.command(
-      this.commandManager.commandBuilder("memory", "mem", "ram")
-        .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.memory.description"))
-        .handler(this::executeMemory)
-    );
+    this.commands.register(this.commandManager.commandBuilder("memory", "mem", "ram")
+      .permission(Constants.PERMISSION_COMMAND_TICKINFO)
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.memory.description"))
+      .handler(this::executeMemory));
   }
 
   private void executeMemory(final @NonNull CommandContext<Commander> ctx) {

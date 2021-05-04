@@ -39,7 +39,7 @@ public final class BukkitUser extends AbstractUser<Player> {
   private final transient BukkitAudiences audiences;
   private transient Audience audience;
 
-  private @NonNull BukkitUser(final @NonNull TabTPS tabTPS, final @NonNull Player player) {
+  private BukkitUser(final @NonNull TabTPS tabTPS, final @NonNull Player player) {
     super(tabTPS, player, player.getUniqueId());
     this.audiences = ((TabTPSPlugin) tabTPS.platform()).audiences();
   }

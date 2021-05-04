@@ -24,6 +24,7 @@
 package xyz.jpenilla.tabtps.common.command.exception;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -32,7 +33,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public final class CommandCompletedException extends RuntimeException implements ComponentMessageThrowable {
   private static final long serialVersionUID = -3747530074315156805L;
 
-  private final Component message;
+  private final @Nullable Component message;
 
   private CommandCompletedException(final @Nullable Component message) {
     this.message = message;
@@ -42,8 +43,8 @@ public final class CommandCompletedException extends RuntimeException implements
     return new CommandCompletedException(null);
   }
 
-  public static @NonNull CommandCompletedException withMessage(final @NonNull Component component) {
-    return new CommandCompletedException(component);
+  public static @NonNull CommandCompletedException withMessage(final @NonNull ComponentLike message) {
+    return new CommandCompletedException(message.asComponent());
   }
 
   @Override

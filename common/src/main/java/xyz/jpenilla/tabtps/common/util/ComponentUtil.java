@@ -25,10 +25,15 @@ package xyz.jpenilla.tabtps.common.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
+
+import static net.kyori.adventure.text.Component.text;
 
 public final class ComponentUtil {
   public static final Pattern SPECIAL_CHARACTERS_PATTERN = Pattern.compile("[^\\s\\w\\-]");
@@ -46,14 +51,21 @@ public final class ComponentUtil {
     });
   }
 
-  public static @NonNull Component gradient(final @NonNull String textContent, final @NonNull TextColor @NonNull ... colors) {
+  public static @NonNull Component gradient(final @NonNull String textContent, final @Nullable Consumer<Style.@NonNull Builder> style, final @NonNull TextColor @NonNull ... colors) {
     final Gradient gradient = new Gradient(colors);
-    final TextComponent.Builder builder = Component.text();
+    final TextComponent.Builder builder = text();
+    if (style != null) {
+      builder.style(style);
+    }
     final char[] content = textContent.toCharArray();
     gradient.length(content.length);
     for (final char c : content) {
-      builder.append(Component.text(c, gradient.nextColor()));
+      builder.append(text(c, gradient.nextColor()));
     }
     return builder.build();
+  }
+
+  public static @NonNull Component gradient(final @NonNull String textContent, final @NonNull TextColor @NonNull ... colors) {
+    return gradient(textContent, null, colors);
   }
 }

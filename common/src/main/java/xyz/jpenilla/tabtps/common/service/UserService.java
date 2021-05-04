@@ -65,7 +65,7 @@ public abstract class UserService<P, U extends User<P>> {
   protected abstract @NonNull U create(final @NonNull P base);
 
   private @NonNull Path userFile(final @NonNull UUID uniqueId) {
-    return this.userDataDirectory.resolve(uniqueId.toString() + ".json");
+    return this.userDataDirectory.resolve(uniqueId + ".json");
   }
 
   private @NonNull U loadUser(final @NonNull P base) {
@@ -107,7 +107,7 @@ public abstract class UserService<P, U extends User<P>> {
   public @NonNull U user(final @NonNull UUID uniqueId) {
     final U user = this.userMap.get(uniqueId);
     if (user == null) {
-      throw new IllegalStateException("No user loaded for UUID: " + uniqueId.toString());
+      throw new IllegalStateException("No user loaded for UUID: " + uniqueId);
     }
     return user;
   }
@@ -149,7 +149,7 @@ public abstract class UserService<P, U extends User<P>> {
   public void removeUser(final @NonNull UUID uniqueId) {
     final U user = this.userMap.remove(uniqueId);
     if (user == null) {
-      throw new IllegalStateException("Cannot remove non-existing user " + uniqueId.toString());
+      throw new IllegalStateException("Cannot remove non-existing user " + uniqueId);
     }
     user.tab().stopDisplay();
     user.actionBar().stopDisplay();

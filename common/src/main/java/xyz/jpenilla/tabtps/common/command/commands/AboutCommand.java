@@ -25,18 +25,26 @@ package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
-import com.google.common.collect.ImmutableList;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
-import xyz.jpenilla.tabtps.common.util.ComponentUtil;
 import xyz.jpenilla.tabtps.common.util.Constants;
-import xyz.jpenilla.tabtps.common.util.Serializers;
+
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.translatable;
+import static net.kyori.adventure.text.event.ClickEvent.openUrl;
+import static net.kyori.adventure.text.format.NamedTextColor.AQUA;
+import static net.kyori.adventure.text.format.NamedTextColor.BLUE;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
+import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
+import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
+import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
+import static xyz.jpenilla.tabtps.common.util.Serializers.MINIMESSAGE;
 
 public final class AboutCommand extends TabTPSCommand {
   public AboutCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -45,20 +53,28 @@ public final class AboutCommand extends TabTPSCommand {
 
   @Override
   public void register() {
-    this.commands.registerSubcommand(builder ->
-      builder.literal("about")
-        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.about.description"))
-        .handler(this::executeAbout)
-    );
+    this.commands.registerSubcommand(builder -> builder.literal("about")
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.about.description"))
+      .handler(this::executeAbout));
   }
 
   private void executeAbout(final @NonNull CommandContext<Commander> ctx) {
-    final Component header = ComponentUtil.gradient("                                  ", NamedTextColor.WHITE, NamedTextColor.BLACK, NamedTextColor.WHITE).decorate(TextDecoration.STRIKETHROUGH);
-    ImmutableList.of(
+    final Component header = gradient("                                  ", style -> style.decorate(STRIKETHROUGH), BLUE, WHITE, BLUE);
+    ctx.getSender().sendMessage(TextComponent.ofChildren(
       header,
-      Serializers.MINIMESSAGE.parse("<hover:show_text:'<rainbow>click me!'><click:open_url:https://github.com/jpenilla/TabTPS>TabTPS <gradient:blue:aqua>" + Constants.TABTPS_VERSION),
-      Serializers.MINIMESSAGE.parse("<gray>By <gradient:gold:yellow>jmp"),
+      newline(),
+      text()
+        .content("TabTPS ")
+        .append(gradient(Constants.TABTPS_VERSION, BLUE, AQUA))
+        .clickEvent(openUrl("https://github.com/jpenilla/TabTPS"))
+        .hoverEvent(MINIMESSAGE.parse("<rainbow>click me!")),
+      newline(),
+      text()
+        .content("By ")
+        .color(GRAY)
+        .append(text("jmp", BLUE)),
+      newline(),
       header
-    ).forEach(ctx.getSender()::sendMessage);
+    ));
   }
 }

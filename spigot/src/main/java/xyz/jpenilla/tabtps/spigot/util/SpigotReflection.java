@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.spigot.util;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -51,9 +52,6 @@ public final class SpigotReflection {
     return INSTANCE;
   }
 
-  private SpigotReflection() {
-  }
-
   private final Class<?> MinecraftServer_class = needNmsClass("MinecraftServer");
   private final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
   private final Class<?> EntityPlayer_class = needNmsClass("EntityPlayer");
@@ -62,8 +60,21 @@ public final class SpigotReflection {
   private final MethodHandle MinecraftServer_getServer_method = needStaticMethod(this.MinecraftServer_class, "getServer", this.MinecraftServer_class);
 
   private final Field EntityPlayer_ping_field = needField(this.EntityPlayer_class, "ping");
-  private final Field MinecraftServer_recentTickTimes_field = needField(this.MinecraftServer_class, "h");
+  private final Field MinecraftServer_recentTickTimes_field;
   private final Field MinecraftServer_recentTps_field = needField(this.MinecraftServer_class, "recentTps");
+
+  private SpigotReflection() {
+    final String recentTimes;
+    final int ver = PaperLib.getMinecraftVersion();
+    if (ver < 13) {
+      recentTimes = "h";
+    } else if (ver == 14 || ver == 15) {
+      recentTimes = "f";
+    } else { // if (ver >= 16) {
+      recentTimes = "h";
+    }
+    this.MinecraftServer_recentTickTimes_field = needField(this.MinecraftServer_class, recentTimes);
+  }
 
   public int ping(final @NonNull Player player) {
     final Object nmsPlayer = invokeOrThrow(this.CraftPlayer_getHandle_method, player);

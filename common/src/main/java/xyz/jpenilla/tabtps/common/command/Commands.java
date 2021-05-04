@@ -25,19 +25,14 @@ package xyz.jpenilla.tabtps.common.command;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
-import cloud.commandframework.permission.PredicatePermission;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public final class Commands {
   private final TabTPS tabTPS;
   private final CommandManager<Commander> commandManager;
-  private final Map<String, PredicatePermission<Commander>> permissionPredicates = new HashMap<>();
 
   public Commands(final @NonNull TabTPS tabTPS, final @NonNull CommandManager<Commander> commandManager) {
     this.tabTPS = tabTPS;
@@ -49,17 +44,15 @@ public final class Commands {
     return this.commandManager;
   }
 
-  public void registerPermissionPredicate(final @NonNull String key, final @NonNull PredicatePermission<Commander> predicatePermission) {
-    this.permissionPredicates.put(key, predicatePermission);
-  }
-
-  public @NonNull PredicatePermission<Commander> permissionPredicate(final @NonNull String key) {
-    return Objects.requireNonNull(this.permissionPredicates.get(key), "No permission predicate for key: " + key);
-  }
-
   public void registerSubcommand(final @NonNull UnaryOperator<Command.Builder<Commander>> modifier) {
-    this.commandManager.command(modifier.apply(
-      this.commandManager.commandBuilder("tabtps")
-    ));
+    this.commandManager.command(modifier.apply(this.rootBuilder()));
+  }
+
+  public Command.@NonNull Builder<Commander> rootBuilder() {
+    return this.commandManager.commandBuilder("tabtps");
+  }
+
+  public void register(final Command.@NonNull Builder<Commander> builder) {
+    this.commandManager.command(builder);
   }
 }

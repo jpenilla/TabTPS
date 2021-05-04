@@ -41,6 +41,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.kyori.adventure.text.Component.translatable;
+
 public final class HelpCommand extends TabTPSCommand {
   public HelpCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
     super(tabTPS, commands);
@@ -54,11 +56,10 @@ public final class HelpCommand extends TabTPSCommand {
       .withSuggestionsProvider(this::helpQuerySuggestions)
       .build();
 
-    this.commands.registerSubcommand(builder ->
-      builder.literal("help")
-        .argument(queryArgument, RichDescription.translatable("tabtps.command.help.arguments.query"))
-        .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Component.translatable("tabtps.command.help.description"))
-        .handler(this::executeHelp));
+    this.commands.registerSubcommand(builder -> builder.literal("help")
+      .argument(queryArgument, RichDescription.translatable("tabtps.command.help.arguments.query"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.help.description"))
+      .handler(this::executeHelp));
   }
 
   private void executeHelp(final @NonNull CommandContext<Commander> context) {
@@ -79,7 +80,7 @@ public final class HelpCommand extends TabTPSCommand {
   }
 
   private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull String... args) {
-    return Component.translatable(
+    return translatable(
       "tabtps.help." + key,
       Arrays.stream(args)
         .map(Component::text)
