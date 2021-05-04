@@ -1,19 +1,19 @@
 plugins {
   id("com.github.johnrengelman.shadow")
-  id("net.minecrell.plugin-yml.bukkit") version "0.3.0"
+  id("net.minecrell.plugin-yml.bukkit")
 }
 
 dependencies {
-  implementation(project(":tabtps-common"))
+  implementation(projects.tabtpsCommon)
 
-  compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
-  implementation("io.papermc", "paperlib", "1.0.6")
-  implementation("xyz.jpenilla", "jmplib", "1.0.1+33-SNAPSHOT")
-  implementation("org.bstats", "bstats-bukkit", "2.2.1")
-  implementation("org.slf4j", "slf4j-jdk14", "1.7.30")
+  compileOnly(libs.paperApi)
+  implementation(libs.paperLib)
+  implementation(libs.jmpLib)
+  implementation(libs.bstatsBukkit)
+  implementation(libs.slf4jJdk14)
 
-  implementation("cloud.commandframework", "cloud-paper", "1.5.0-SNAPSHOT")
-  implementation("me.lucko", "commodore", "1.9") {
+  implementation(libs.cloudPaper)
+  implementation(libs.commodore) {
     exclude("com.mojang")
   }
 }

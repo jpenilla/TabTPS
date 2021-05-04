@@ -1,11 +1,19 @@
-rootProject.name = "TabTPS"
+enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
   repositories {
-    maven("https://maven.fabricmc.net/")
     gradlePluginPortal()
+    maven("https://maven.fabricmc.net/")
+    maven("https://repo.stellardrift.ca/repository/snapshots/")
   }
 }
+
+plugins {
+  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0-SNAPSHOT"
+}
+
+rootProject.name = "TabTPS"
 
 setupSubproject("tabtps-common") {
   projectDir = file("common")

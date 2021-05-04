@@ -1,57 +1,50 @@
 plugins {
-  id("fabric-loom") version "0.6-SNAPSHOT"
+  id("fabric-loom")
   id("com.github.johnrengelman.shadow")
 }
 
 val shade: Configuration by configurations.creating
-
-val mcVersion = "1.16.5"
+val mcVersion = libs.versions.fabricMinecraft.get()
 
 dependencies {
-  minecraft("com.mojang", "minecraft", mcVersion)
+  minecraft(libs.fabricMinecraft)
   mappings(minecraft.officialMojangMappings())
-  modImplementation("net.fabricmc", "fabric-loader", "0.11.1")
-  modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.32.0+1.16")
+  modImplementation(libs.fabricLoader)
+  modImplementation(libs.fabricApi)
 
-  shade(implementation(project(":tabtps-common")) {
-    exclude("cloud.commandframework")
-    exclude("net.kyori")
-    exclude("org.slf4j")
-  })
-
-  val cloudVersion = "1.5.0-SNAPSHOT"
-  modImplementation(include("cloud.commandframework", "cloud-fabric", cloudVersion))
-  implementation(include("cloud.commandframework", "cloud-minecraft-extras", cloudVersion))
-
-  modImplementation(include("net.kyori", "adventure-platform-fabric", "4.0.0-SNAPSHOT"))
-  implementation(include("net.kyori", "adventure-text-feature-pagination", "4.0.0-SNAPSHOT"))
-  implementation(include("net.kyori", "adventure-text-minimessage", "4.1.0-SNAPSHOT"))
-  val adventureVersion = "4.7.0"
-  implementation(include("net.kyori", "adventure-text-serializer-legacy", adventureVersion))
-  shade(implementation("net.kyori", "adventure-serializer-configurate4", adventureVersion) {
+  implementation(projects.tabtpsCommon)
+  shade(projects.tabtpsCommon) {
     isTransitive = false
-  })
+  }
 
-  implementation(include("org.slf4j", "slf4j-api", "1.7.30"))
-  implementation(include("org.apache.logging.log4j", "log4j-slf4j-impl", "2.8.1"))
+  modImplementation(libs.cloudFabric)
+  include(libs.cloudFabric)
+  implementation(libs.cloudMinecraftExtras)
+  include(libs.cloudMinecraftExtras)
+
+  modImplementation(libs.adventurePlatformFabric)
+  include(libs.adventurePlatformFabric)
+  implementation(libs.adventureTextFeaturePagination)
+  include(libs.adventureTextFeaturePagination)
+  implementation(libs.minimessage)
+  include(libs.minimessage)
+  implementation(libs.adventureTextSerializerLegacy)
+  include(libs.adventureTextSerializerLegacy)
+
+  implementation(libs.bundles.configurate)
+  include(libs.bundles.configurate)
+  implementation(libs.adventureSerializerConfigurate4)
+  include(libs.adventureSerializerConfigurate4)
+
+  implementation(libs.slf4jApi)
+  include(libs.slf4jApi)
+  implementation(libs.log4jSlf4jImpl)
+  include(libs.log4jSlf4jImpl)
 }
 
 tasks {
   shadowJar {
     configurations = listOf(shade)
-    minimize()
-    listOf(
-      "net.kyori.adventure.serializer.configurate4",
-      "org.apache.logging",
-      "org.spongepowered.configurate",
-      "com.typesafe.config",
-      "org.checkerframework"
-    ).forEach { pkg ->
-      relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
-    }
-    dependencies {
-      exclude { it.moduleGroup.contains("leangen") } // provided by cloud-platform-fabric
-    }
   }
   remapJar {
     dependsOn(shadowJar)

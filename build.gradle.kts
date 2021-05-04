@@ -1,13 +1,13 @@
 import net.kyori.indra.IndraCheckstylePlugin
 import net.kyori.indra.IndraLicenseHeaderPlugin
 import net.kyori.indra.IndraPlugin
-import net.kyori.indra.sonatypeSnapshots
+import net.kyori.indra.repository.sonatypeSnapshots
 import java.io.ByteArrayOutputStream
 
 plugins {
   `java-library`
-  id("net.kyori.indra") version "1.3.1"
-  id("com.github.johnrengelman.shadow") version "6.1.0" apply false
+  id("net.kyori.indra")
+  id("com.github.johnrengelman.shadow") apply false
 }
 
 allprojects {
@@ -32,14 +32,13 @@ subprojects {
     maven("https://repo.incendo.org/content/repositories/snapshots")
     maven("https://repo.jpenilla.xyz/snapshots/")
     maven("https://repo.codemc.org/repository/maven-public")
-    maven("https://jitpack.io")
   }
 
   indra {
-    javaVersions.target.set(8)
-    github("jpenilla", "TabTPS") {
-      issues = true
+    javaVersions {
+      target(8)
     }
+    github("jpenilla", "TabTPS")
     mitLicense()
   }
 
