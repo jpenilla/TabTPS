@@ -54,7 +54,7 @@ public final class FabricPingCommand extends PingCommand {
       target.get().stream()
         .map(this.tabTPSFabric.userService()::user)
         .collect(Collectors.toList()),
-      target.getInput(),
+      target.inputString(),
       context.get("page")
     );
   }
