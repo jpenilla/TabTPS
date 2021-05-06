@@ -27,7 +27,6 @@ import io.papermc.lib.PaperLib;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.AbstractUser;
@@ -60,7 +59,7 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public boolean online() {
-    return Bukkit.getPlayer(this.uuid) != null;
+    return this.base.isOnline();
   }
 
   @Override

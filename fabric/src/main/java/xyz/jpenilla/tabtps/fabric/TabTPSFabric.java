@@ -48,7 +48,6 @@ import xyz.jpenilla.tabtps.fabric.command.FabricConsoleCommander;
 import xyz.jpenilla.tabtps.fabric.command.FabricPingCommand;
 import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.fabric.service.FabricLocaleDiscoverer;
-import xyz.jpenilla.tabtps.fabric.service.FabricTickTimeService;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
 
 import java.nio.file.Path;
@@ -62,7 +61,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   private final FabricUserService userService;
   private final TabTPS tabTPS;
   private final FabricServerCommandManager<Commander> commandManager;
-  private final TickTimeService tickTimeService;
   private FabricServerAudiences serverAudiences;
   private MinecraftServer server;
 
@@ -72,7 +70,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     }
     instance = this;
 
-    this.tickTimeService = new FabricTickTimeService(this);
     this.userService = new FabricUserService(this); // todo store in level container?
 
     this.commandManager = new FabricServerCommandManager<>(
@@ -99,7 +96,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
 
     TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new FabricTickInfoCommandFormatter(this)).register();
     new FabricPingCommand(this, this.tabTPS.commands()).register();
-    this.logger.info("Done initializing TabTPS");
+    this.logger.info("Done initializing TabTPS.");
   }
 
   public static @NonNull TabTPSFabric get() {
@@ -161,7 +158,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
 
   @Override
   public @NonNull TickTimeService tickTimeService() {
-    return this.tickTimeService;
+    return (TickTimeService) this.server;
   }
 
   @Override
@@ -191,6 +188,10 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
 
   @Override
   public @NonNull LocaleDiscoverer localeDiscoverer() {
-    return new FabricLocaleDiscoverer("tabtps", "tabtps-fabric");
+    return new FabricLocaleDiscoverer(
+      "tabtps",
+      FabricLoader.getInstance().getModContainer("tabtps-fabric")
+        .orElseThrow(() -> new IllegalStateException("Could not locate mod container!"))
+    );
   }
 }

@@ -24,8 +24,7 @@
 package xyz.jpenilla.tabtps.fabric.access;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.fabric.util.RollingAverage;
-import xyz.jpenilla.tabtps.fabric.util.TickTimes;
+import xyz.jpenilla.tabtps.common.util.TickTimes;
 
 public interface MinecraftServerAccess {
   @NonNull TickTimes tickTimes5s();
@@ -33,12 +32,4 @@ public interface MinecraftServerAccess {
   @NonNull TickTimes tickTimes10s();
 
   @NonNull TickTimes tickTimes60s();
-
-  @NonNull RollingAverage tps5s();
-
-  @NonNull RollingAverage tps1m();
-
-  @NonNull RollingAverage tps5m();
-
-  @NonNull RollingAverage tps15m();
 }

@@ -24,6 +24,7 @@
 package xyz.jpenilla.tabtps.common.config;
 
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -31,10 +32,11 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.Objects;
 
+import static net.kyori.adventure.text.Component.space;
+
 @ConfigSerializable
 public final class DisplayConfig {
-
-  private static final String separatorComment = "The text used to separate modules. Accepts MiniMessage (i.e. \" <gray>|</gray> \")";
+  private static final String SEPARATOR_COMMENT = "The text used to separate modules. Accepts MiniMessage (i.e. \" <gray>|</gray> \")";
 
   @Comment("The permission required to use this display config\nCan be an empty string (\"\") to require no permission")
   private String permission = "tabtps.defaultdisplay";
@@ -82,7 +84,7 @@ public final class DisplayConfig {
 
     @NonNull String theme();
 
-    @NonNull String separator();
+    @NonNull Component separator();
   }
 
   @ConfigSerializable
@@ -92,11 +94,11 @@ public final class DisplayConfig {
     private String modules = "tps,mspt,ping";
     private String theme = "default";
 
-    @Comment(separatorComment)
-    private String separator = " ";
+    @Comment(SEPARATOR_COMMENT)
+    private Component separator = space();
 
     @Override
-    public @NonNull String separator() {
+    public @NonNull Component separator() {
       return this.separator;
     }
 
@@ -136,11 +138,11 @@ public final class DisplayConfig {
     @Comment("What kind of overlay should be used for the boss bar?\nMust be one of: [PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20]")
     private BossBar.Overlay overlay = BossBar.Overlay.NOTCHED_20;
 
-    @Comment(separatorComment)
-    private String separator = " ";
+    @Comment(SEPARATOR_COMMENT)
+    private Component separator = space();
 
     @Override
-    public @NonNull String separator() {
+    public @NonNull Component separator() {
       return this.separator;
     }
 
@@ -207,11 +209,11 @@ public final class DisplayConfig {
     private String footerModules = "tps,mspt";
     private String theme = "default";
 
-    @Comment(separatorComment)
-    private String separator = " ";
+    @Comment(SEPARATOR_COMMENT)
+    private Component separator = space();
 
     @Override
-    public @NonNull String separator() {
+    public @NonNull Component separator() {
       return this.separator;
     }
 

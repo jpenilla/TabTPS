@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
 @Unique
@@ -44,5 +45,12 @@ abstract class PlayerListMixin {
   @Inject(method = "remove", at = @At(value = "HEAD"))
   public void injectRemove(final ServerPlayer serverPlayer, final CallbackInfo ci) {
     TabTPSFabric.get().userService().handleQuit(serverPlayer);
+  }
+
+  @Inject(method = "respawn", at = @At(value = "RETURN"))
+  public void injectRespawn(final ServerPlayer originalPlayer, final boolean var2, final CallbackInfoReturnable<ServerPlayer> cir) {
+    final ServerPlayer recreatedPlayer = cir.getReturnValue();
+    TabTPSFabric.get().userService().handleQuit(recreatedPlayer);
+    TabTPSFabric.get().userService().handleJoin(recreatedPlayer);
   }
 }

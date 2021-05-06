@@ -35,8 +35,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.text;
 
 public final class ModuleRenderer {
   private final List<Module> modules;
@@ -44,13 +48,12 @@ public final class ModuleRenderer {
   private final Component separator;
 
   public static @NonNull Function<Module, Component> standardRenderFunction(final @NonNull Theme theme) {
-    return module ->
-      Component.text()
-        .append(module.label())
-        .append(Component.text(":", theme.colorScheme().textSecondary()))
-        .append(Component.space())
-        .append(module.display())
-        .build();
+    return module -> text()
+      .append(module.label())
+      .append(text(":", theme.colorScheme().textSecondary()))
+      .append(space())
+      .append(module.display())
+      .build();
   }
 
   private ModuleRenderer(
@@ -64,13 +67,13 @@ public final class ModuleRenderer {
   }
 
   public @NonNull Component render() {
-    final TextComponent.Builder builder = Component.text();
+    final TextComponent.Builder builder = text();
     final Iterator<Module> iterator = this.modules.iterator();
     while (iterator.hasNext()) {
       final Module module = iterator.next();
       builder.append(this.moduleRenderFunction.apply(module));
       if (iterator.hasNext()) {
-        builder.append(this.separator);
+        builder.append(Objects.requireNonNull(this.separator, "separator is null but there is more than one module"));
       }
     }
     return builder.build();
@@ -143,21 +146,18 @@ public final class ModuleRenderer {
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    @SuppressWarnings("unchecked")
     public @NonNull Builder modules(
       final @NonNull TabTPS tabTPS,
       final @NonNull Theme theme,
       final @Nullable User<?> player,
       final @NonNull String modules
     ) {
-      return this.modules(
-        Arrays.stream(modules.replace(" ", "").split(","))
-          .filter(s -> s != null && !s.equals(""))
-          .map(ModuleType::fromName)
-          .filter(type -> !type.needsPlayer() || player != null)
-          .map(type -> type.createModule(tabTPS, theme, player))
-          .collect(Collectors.toList())
-      );
+      return this.modules(Arrays.stream(modules.replace(" ", "").split(","))
+        .filter(s -> s != null && !s.isEmpty())
+        .map(ModuleType::fromName)
+        .filter(type -> !type.needsPlayer() || player != null)
+        .map(type -> type.createModule(tabTPS, theme, player))
+        .collect(Collectors.toList()));
     }
 
     /**

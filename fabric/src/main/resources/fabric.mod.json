@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "{project.name}",
+  "id": "{mod_id}",
   "version": "{version}",
-  "name": "{rootProject.name}",
+  "name": "{mod_name}",
   "description": "{description}",
   "authors": [
     "jmp"

@@ -34,7 +34,6 @@ import cloud.commandframework.exceptions.parsing.ParserException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
@@ -49,12 +48,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.event.ClickEvent.copyToClipboard;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
+import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
 public final class ExceptionHandler {
   private final TabTPS tabTPS;
@@ -64,11 +65,7 @@ public final class ExceptionHandler {
   }
 
   private static void decorateAndSend(final @NonNull Commander commander, final @NonNull ComponentLike componentLike) {
-    commander.sendMessage(TextComponent.ofChildren(
-      Constants.PREFIX,
-      Component.space(),
-      componentLike
-    ));
+    commander.sendMessage(TextComponent.ofChildren(Constants.PREFIX, space(), componentLike));
   }
 
   public void apply(final @NonNull CommandManager<Commander> manager) {
@@ -105,16 +102,9 @@ public final class ExceptionHandler {
     hoverText.append(text(stackTrace))
       .append(newline())
       .append(text("    "))
-      .append(translatable(
-        "tabtps.misc.text.click_to_copy",
-        GRAY,
-        TextDecoration.ITALIC
-      ));
+      .append(translatable("tabtps.misc.text.click_to_copy", GRAY, ITALIC));
     final TextComponent.Builder message = text();
-    message.append(translatable(
-      "tabtps.command.exception.command_execution",
-      RED
-    ));
+    message.append(translatable("tabtps.command.exception.command_execution", RED));
     if (commander.hasPermission(Constants.PERMISSION_COMMAND_ERROR_HOVER_STACKTRACE)) {
       message.hoverEvent(hoverText.build());
       message.clickEvent(copyToClipboard(stackTrace));
@@ -141,16 +131,9 @@ public final class ExceptionHandler {
           .collect(Collectors.toList())
       );
     } else {
-      message = Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(cause));
+      message = Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(cause)).color(GRAY);
     }
-    decorateAndSend(
-      commander,
-      translatable(
-        "tabtps.command.exception.invalid_argument",
-        RED,
-        message
-      )
-    );
+    decorateAndSend(commander, translatable("tabtps.command.exception.invalid_argument", RED, message));
   }
 
   private void invalidSender(final @NonNull Commander commander, final @NonNull InvalidCommandSenderException exception) {
@@ -166,10 +149,7 @@ public final class ExceptionHandler {
     final Component message = translatable(
       "tabtps.command.exception.invalid_syntax",
       RED,
-      ComponentUtil.highlight(
-        text(String.format("/%s", exception.getCorrectSyntax()), GRAY),
-        WHITE
-      )
+      ComponentUtil.highlight(text(String.format("/%s", exception.getCorrectSyntax()), GRAY), WHITE)
     );
     decorateAndSend(commander, message);
   }

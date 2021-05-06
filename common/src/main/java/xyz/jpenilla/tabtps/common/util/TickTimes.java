@@ -21,34 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.fabric.service;
+package xyz.jpenilla.tabtps.common.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.service.TickTimeService;
-import xyz.jpenilla.tabtps.common.util.TPSUtil;
-import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
-import xyz.jpenilla.tabtps.fabric.access.MinecraftServerAccess;
+/**
+ * Based on the MIT licensed Paper-Server patch "Add tick times API and /mspt command".
+ *
+ * @author William Blake Galbreath/BillyGalbreath
+ */
+public final class TickTimes {
+  private final long[] times;
 
-public final class FabricTickTimeService implements TickTimeService {
-  private final TabTPSFabric tabTPSFabric;
-
-  public FabricTickTimeService(final @NonNull TabTPSFabric tabTPSFabric) {
-    this.tabTPSFabric = tabTPSFabric;
+  public TickTimes(final int length) {
+    this.times = new long[length];
   }
 
-  @Override
-  public double averageMspt() {
-    return TPSUtil.toMilliseconds(TPSUtil.average(this.tabTPSFabric.server().tickTimes));
+  public void add(final int index, final long time) {
+    this.times[index % this.times.length] = time;
   }
 
-  @Override
-  public double @NonNull [] recentTps() {
-    final MinecraftServerAccess access = (MinecraftServerAccess) this.tabTPSFabric.server();
-    final double[] tps = new double[4];
-    tps[0] = access.tps5s().average();
-    tps[1] = access.tps1m().average();
-    tps[2] = access.tps5m().average();
-    tps[3] = access.tps15m().average();
-    return tps;
+  public long[] times() {
+    return this.times.clone();
   }
 }

@@ -25,8 +25,7 @@ package xyz.jpenilla.tabtps.common.util;
 
 import cloud.commandframework.types.tuples.Pair;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.LinearComponents;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.config.Theme;
@@ -38,6 +37,13 @@ import java.util.List;
 import java.util.LongSummaryStatistics;
 import java.util.function.LongPredicate;
 import java.util.stream.LongStream;
+
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.translatable;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
+import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
+import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
 
 public final class TPSUtil {
   private static final DecimalFormat FORMAT = new DecimalFormat("###.00");
@@ -67,7 +73,7 @@ public final class TPSUtil {
       color1 = colors.lowPerformance();
       color2 = colors.lowPerformanceSecondary();
     }
-    return ComponentUtil.gradient(round(tps), color1, color2);
+    return gradient(round(tps), color1, color2);
   }
 
   public static double toMilliseconds(final long time) {
@@ -91,23 +97,23 @@ public final class TPSUtil {
       color1 = colors.lowPerformance();
       color2 = colors.lowPerformanceSecondary();
     }
-    return ComponentUtil.gradient(round(mspt), color1, color2);
+    return gradient(round(mspt), color1, color2);
   }
 
   public static @NonNull List<Component> formatTickTimes(final @NonNull List<Pair<String, long[]>> times) {
     final List<Component> output = new ArrayList<>();
     output.add(
-      LinearComponents.linear(
-        Component.translatable("tabtps.label.mspt", NamedTextColor.GRAY),
-        Component.space(),
-        Component.text("-", NamedTextColor.WHITE),
-        Component.space(),
-        Component.translatable("tabtps.label.average", NamedTextColor.GRAY),
-        Component.text(", ", NamedTextColor.WHITE),
-        Component.translatable("tabtps.label.minimum", NamedTextColor.GRAY),
-        Component.text(", ", NamedTextColor.WHITE),
-        Component.translatable("tabtps.label.maximum", NamedTextColor.GRAY)
-      ).hoverEvent(Component.translatable("tabtps.command.tickinfo.text.mspt_hover", NamedTextColor.GRAY))
+      TextComponent.ofChildren(
+        translatable("tabtps.label.mspt", GRAY),
+        space(),
+        text("-", WHITE),
+        space(),
+        translatable("tabtps.label.average", GRAY),
+        text(", ", WHITE),
+        translatable("tabtps.label.minimum", GRAY),
+        text(", ", WHITE),
+        translatable("tabtps.label.maximum", GRAY)
+      ).hoverEvent(translatable("tabtps.command.tickinfo.text.mspt_hover", GRAY))
     );
 
     final Iterator<Pair<String, long[]>> iterator = times.iterator();
@@ -116,7 +122,7 @@ public final class TPSUtil {
       final String branch = iterator.hasNext() ? "├─" : "└─";
       output.add(formatStatistics(
         branch,
-        Component.text(pair.getFirst()),
+        text(pair.getFirst()),
         pair.getSecond()
       ));
     }
@@ -125,20 +131,20 @@ public final class TPSUtil {
 
   private static @NonNull Component formatStatistics(final @NonNull String branch, final @NonNull Component time, final long @NonNull [] times) {
     final LongSummaryStatistics statistics = LongStream.of(times).filter(NOT_ZERO).summaryStatistics();
-    return LinearComponents.linear(
-      Component.space(),
-      Component.text(branch, NamedTextColor.WHITE),
-      Component.space(),
-      time.color(NamedTextColor.GRAY),
-      Component.space(),
-      Component.text("-", NamedTextColor.WHITE),
-      Component.space(),
+    return TextComponent.ofChildren(
+      space(),
+      text(branch, WHITE),
+      space(),
+      time.color(GRAY),
+      space(),
+      text("-", WHITE),
+      space(),
       TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getAverage()), Theme.DEFAULT.colorScheme()),
-      Component.text(",", NamedTextColor.WHITE),
-      Component.space(),
+      text(",", WHITE),
+      space(),
       TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMin()), Theme.DEFAULT.colorScheme()),
-      Component.text(",", NamedTextColor.WHITE),
-      Component.space(),
+      text(",", WHITE),
+      space(),
       TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMax()), Theme.DEFAULT.colorScheme())
     );
   }

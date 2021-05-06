@@ -30,26 +30,22 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import net.minecraft.network.chat.ComponentUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.spongepowered.asm.mixin.Implements;
-import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 
 /**
  * Mixing into brig doesn't work on fabric. :(
  *
  * <p>todo: Enable this mixin instead of {@link ExceptionHandlerMixin} once fabric loader is fixed</p>
  */
-@Unique
 @Mixin(value = CommandSyntaxException.class, remap = false)
-@Implements({@Interface(iface = ComponentMessageThrowable.class, prefix = "tabtps$")})
-abstract class CommandSyntaxExceptionMixin {
+abstract class CommandSyntaxExceptionMixin implements ComponentMessageThrowable {
   @SuppressWarnings("checkstyle:MethodName")
   @Shadow
   public abstract Message getRawMessage();
 
-  public @NonNull Component tabtps$componentMessage() {
+  @Override
+  public @NonNull Component componentMessage() {
     final net.minecraft.network.chat.Component minecraft = ComponentUtils.fromMessage(this.getRawMessage());
     return FabricAudiences.nonWrappingSerializer().deserialize(minecraft);
   }

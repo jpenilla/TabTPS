@@ -31,7 +31,6 @@ import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
-import xyz.jpenilla.tabtps.common.util.Serializers;
 
 public final class TabDisplayTask implements Display {
   private final ModuleRenderer headerRenderer;
@@ -43,12 +42,12 @@ public final class TabDisplayTask implements Display {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.headerRenderer = ModuleRenderer.builder()
       .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), user, settings.headerModules())
-      .separator(Serializers.MINIMESSAGE.parse(settings.separator()))
+      .separator(settings.separator())
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.footerRenderer = ModuleRenderer.builder()
       .modules(tabTPS, tabTPS.configManager().theme(settings.theme()), user, settings.footerModules())
-      .separator(Serializers.MINIMESSAGE.parse(settings.separator()))
+      .separator(settings.separator())
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.user = user;
@@ -59,6 +58,7 @@ public final class TabDisplayTask implements Display {
   public void run() {
     if (!this.user.online()) {
       this.user.tab().stopDisplay();
+      return;
     }
     if (this.headerRenderer.moduleCount() > 0) {
       this.user.sendPlayerListHeader(this.headerRenderer.render());

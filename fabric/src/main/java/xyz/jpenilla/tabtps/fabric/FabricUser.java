@@ -32,7 +32,6 @@ import xyz.jpenilla.tabtps.common.AbstractUser;
 
 public final class FabricUser extends AbstractUser<ServerPlayer> {
   private transient final TabTPSFabric tabTPSFabric;
-  private transient Audience audience;
 
   private FabricUser(final @NonNull TabTPSFabric tabTPS, final @NonNull ServerPlayer player) {
     super(tabTPS.tabTPS(), player, player.getUUID());
@@ -50,7 +49,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public boolean online() {
-    return this.tabTPSFabric.server().getPlayerList().getPlayer(this.uuid) != null;
+    return this.tabTPSFabric.server().getPlayerList().getPlayer(this.uuid) == this.base;
   }
 
   @Override
@@ -65,9 +64,6 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public @NonNull Audience audience() {
-    if (this.audience == null) {
-      this.audience = this.tabTPSFabric.serverAudiences().audience(this.base);
-    }
-    return this.audience;
+    return this.tabTPSFabric.serverAudiences().audience(this.base);
   }
 }

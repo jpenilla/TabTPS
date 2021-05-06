@@ -56,8 +56,8 @@ tasks {
   processResources {
     filesMatching("fabric.mod.json") {
       mapOf(
-        "{project.name}" to project.name,
-        "{rootProject.name}" to rootProject.name,
+        "{mod_id}" to project.name,
+        "{mod_name}" to rootProject.name,
         "{version}" to version.toString(),
         "{description}" to project.description,
         "{github}" to "https://github.com/jpenilla/TabTPS"

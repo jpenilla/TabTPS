@@ -24,6 +24,7 @@
 package xyz.jpenilla.tabtps.common;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.config.PluginSettings;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
@@ -44,24 +45,10 @@ public abstract class AbstractUser<P> implements User<P> {
     this.base = base;
     this.uuid = uuid;
 
-    this.tabDisplayHandler = new DisplayHandler<>(
-      tabTPS,
-      this,
-      tabTPS.configManager().pluginSettings().updateRates().tab(),
-      config -> new TabDisplayTask(this.tabTPS, this, config.tabSettings())
-    );
-    this.actionBarDisplayHandler = new DisplayHandler<>(
-      tabTPS,
-      this,
-      tabTPS.configManager().pluginSettings().updateRates().actionBar(),
-      config -> new ActionBarDisplayTask(this.tabTPS, this, config.actionBarSettings())
-    );
-    this.bossBarDisplayHandler = new DisplayHandler<>(
-      tabTPS,
-      this,
-      tabTPS.configManager().pluginSettings().updateRates().bossBar(),
-      config -> new BossBarDisplayTask(this.tabTPS, this, config.bossBarSettings())
-    );
+    final PluginSettings.UpdateRates rates = tabTPS.configManager().pluginSettings().updateRates();
+    this.tabDisplayHandler = new DisplayHandler<>(tabTPS, this, rates.tab(), config -> new TabDisplayTask(this.tabTPS, this, config.tabSettings()));
+    this.actionBarDisplayHandler = new DisplayHandler<>(tabTPS, this, rates.actionBar(), config -> new ActionBarDisplayTask(this.tabTPS, this, config.actionBarSettings()));
+    this.bossBarDisplayHandler = new DisplayHandler<>(tabTPS, this, rates.bossBar(), config -> new BossBarDisplayTask(this.tabTPS, this, config.bossBarSettings()));
   }
 
   @Override

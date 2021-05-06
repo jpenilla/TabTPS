@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.fabric.service;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
@@ -36,20 +35,18 @@ import java.util.Set;
 
 public final class FabricLocaleDiscoverer implements LocaleDiscoverer {
   private final String bundleName;
-  private final String modId;
+  private final ModContainer mod;
 
-  public FabricLocaleDiscoverer(final @NonNull String bundleName, final @NonNull String modId) {
+  public FabricLocaleDiscoverer(final @NonNull String bundleName, final @NonNull ModContainer mod) {
     this.bundleName = bundleName;
-    this.modId = modId;
+    this.mod = mod;
   }
 
   @Override
   public @NonNull Set<Locale> availableLocales() throws IOException {
-    final ModContainer container = FabricLoader.getInstance().getModContainer(this.modId)
-      .orElseThrow(() -> new IllegalArgumentException("Could not find mod container for mod id: " + this.modId));
     return LocaleDiscoverer.localesFromPathStrings(
       this.bundleName,
-      Files.list(container.getRootPath()).map(Path::toString).map(it -> it.substring(1))
+      Files.list(this.mod.getRootPath()).map(Path::toString).map(it -> it.substring(1))
     );
   }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.fabric.util;
+package xyz.jpenilla.tabtps.common.util;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

@@ -25,6 +25,7 @@ package xyz.jpenilla.tabtps.fabric.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,21 +35,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import xyz.jpenilla.tabtps.common.service.TickTimeService;
+import xyz.jpenilla.tabtps.common.util.RollingAverage;
+import xyz.jpenilla.tabtps.common.util.TPSUtil;
+import xyz.jpenilla.tabtps.common.util.TickTimes;
 import xyz.jpenilla.tabtps.fabric.access.MinecraftServerAccess;
-import xyz.jpenilla.tabtps.fabric.util.RollingAverage;
-import xyz.jpenilla.tabtps.fabric.util.TickTimes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.BooleanSupplier;
 
 /**
- * Adds TPS and tick time rolling averages, based on MIT-licensed code from the PaperMC project.
+ * Adds TPS and tick time rolling averages.
  */
 @Unique
 @Mixin(MinecraftServer.class)
-@Implements({@Interface(iface = MinecraftServerAccess.class, prefix = "tabtps$")})
-abstract class MinecraftServerMixin {
+@Implements({@Interface(iface = TickTimeService.class, prefix = "tabtps$")})
+abstract class MinecraftServerMixin implements MinecraftServerAccess {
   private final TickTimes tickTimes5s = new TickTimes(100);
   private final TickTimes tickTimes10s = new TickTimes(200);
   private final TickTimes tickTimes60s = new TickTimes(1200);
@@ -58,8 +61,10 @@ abstract class MinecraftServerMixin {
   private final RollingAverage tps5m = new RollingAverage(60 * 5);
   private final RollingAverage tps15m = new RollingAverage(60 * 15);
 
-  @Shadow private int tickCount;
   private long previousTime;
+
+  @Shadow private int tickCount;
+  @Shadow @Final public long[] tickTimes;
 
   @Inject(method = "tickServer", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
   public void injectTick(final BooleanSupplier var1, final CallbackInfo ci, final long tickStartTimeNanos, final long tickDurationNanos) {
@@ -81,31 +86,31 @@ abstract class MinecraftServerMixin {
     }
   }
 
-  public @NonNull TickTimes tabtps$tickTimes5s() {
+  public double tabtps$averageMspt() {
+    return TPSUtil.toMilliseconds(TPSUtil.average(this.tickTimes));
+  }
+
+  public double @NonNull [] tabtps$recentTps() {
+    final double[] tps = new double[4];
+    tps[0] = this.tps5s.average();
+    tps[1] = this.tps1m.average();
+    tps[2] = this.tps5m.average();
+    tps[3] = this.tps15m.average();
+    return tps;
+  }
+
+  @Override
+  public @NonNull TickTimes tickTimes5s() {
     return this.tickTimes5s;
   }
 
-  public @NonNull TickTimes tabtps$tickTimes10s() {
+  @Override
+  public @NonNull TickTimes tickTimes10s() {
     return this.tickTimes10s;
   }
 
-  public @NonNull TickTimes tabtps$tickTimes60s() {
+  @Override
+  public @NonNull TickTimes tickTimes60s() {
     return this.tickTimes60s;
-  }
-
-  public @NonNull RollingAverage tabtps$tps5s() {
-    return this.tps5s;
-  }
-
-  public @NonNull RollingAverage tabtps$tps1m() {
-    return this.tps1m;
-  }
-
-  public @NonNull RollingAverage tabtps$tps5m() {
-    return this.tps5m;
-  }
-
-  public @NonNull RollingAverage tabtps$tps15m() {
-    return this.tps15m;
   }
 }

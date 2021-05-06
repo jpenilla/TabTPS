@@ -32,6 +32,7 @@ import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
+import xyz.jpenilla.tabtps.common.util.Serializers;
 
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
@@ -41,7 +42,11 @@ public class ConfigLoader<C> {
 
   static {
     SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
-      .registerAll(ConfigurateComponentSerializer.configurate().serializers())
+      .registerAll(ConfigurateComponentSerializer.builder()
+        .scalarSerializer(Serializers.MINIMESSAGE)
+        .outputStringComponents(true)
+        .build()
+        .serializers())
       .build();
   }
 
@@ -53,10 +58,6 @@ public class ConfigLoader<C> {
     final @NonNull Path configPath,
     final @NonNull ConfigurationOptions options
   ) {
-    this.loader = HoconConfigurationLoader.builder()
-      .path(configPath)
-      .defaultOptions(options.serializers(SERIALIZERS))
-      .build();
     try {
       this.mapper = ObjectMapper.factory().get(configClass);
     } catch (final SerializationException ex) {
@@ -65,6 +66,11 @@ public class ConfigLoader<C> {
         ex
       );
     }
+    this.loader = HoconConfigurationLoader.builder()
+      .path(configPath)
+      .defaultOptions(options.serializers(builder -> builder.registerAll(SERIALIZERS)
+        .registerAnnotatedObjects(ObjectMapper.factory())))
+      .build();
   }
 
   public ConfigLoader(
