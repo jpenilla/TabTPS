@@ -56,10 +56,12 @@ import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.Style.style;
 import static net.kyori.adventure.text.format.TextColor.color;
+import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
 
 public class PingCommand extends TabTPSCommand {
   public PingCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -139,11 +141,7 @@ public class PingCommand extends TabTPSCommand {
       throw CommandCompletedException.withMessage(TextComponent.ofChildren(
         Constants.PREFIX,
         space(),
-        translatable(
-          "tabtps.misc.command.text.no_players_found",
-          RED,
-          text(inputString)
-        )
+        translatable("tabtps.misc.command.text.no_players_found", RED, text(inputString))
       ));
     }
     if (targets.size() > 1) {
@@ -195,7 +193,7 @@ public class PingCommand extends TabTPSCommand {
       translatable(
         targets.size() == 1 ? "tabtps.command.ping.text.amount_players_singular" : "tabtps.command.ping.text.amount_players",
         GRAY,
-        text(this.tabTPS.platform().userService().onlinePlayers(), NamedTextColor.GREEN)
+        text(this.tabTPS.platform().userService().onlinePlayers(), GREEN)
       ),
       text(')', WHITE)
     );
@@ -221,7 +219,7 @@ public class PingCommand extends TabTPSCommand {
       .width(38)
       .line(line -> {
         line.character('-');
-        line.style(style(color(0x47C8FF), TextDecoration.STRIKETHROUGH));
+        line.style(style(color(0x47C8FF), STRIKETHROUGH));
       })
       .build(
         TextComponent.ofChildren(

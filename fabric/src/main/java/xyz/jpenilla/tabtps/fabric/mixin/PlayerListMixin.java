@@ -27,14 +27,12 @@ import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
-@Unique
 @Mixin(PlayerList.class)
 abstract class PlayerListMixin {
   @Inject(method = "placeNewPlayer", at = @At(value = "RETURN"))
@@ -49,8 +47,6 @@ abstract class PlayerListMixin {
 
   @Inject(method = "respawn", at = @At(value = "RETURN"))
   public void injectRespawn(final ServerPlayer originalPlayer, final boolean var2, final CallbackInfoReturnable<ServerPlayer> cir) {
-    final ServerPlayer recreatedPlayer = cir.getReturnValue();
-    TabTPSFabric.get().userService().handleQuit(recreatedPlayer);
-    TabTPSFabric.get().userService().handleJoin(recreatedPlayer);
+    TabTPSFabric.get().userService().replacePlayer(cir.getReturnValue());
   }
 }

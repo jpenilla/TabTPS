@@ -23,12 +23,14 @@
  */
 package xyz.jpenilla.tabtps.common.service;
 
+import cloud.commandframework.types.tuples.Pair;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.User;
+import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,6 +43,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 public abstract class UserService<P, U extends User<P>> {
   private final Gson gson = new GsonBuilder()
@@ -96,6 +99,25 @@ public abstract class UserService<P, U extends User<P>> {
     }
   }
 
+  /**
+   * Replace the {@link U user} instance for a player when it has become invalidated,
+   * usually due to respawning.
+   *
+   * @param newPlayer the new backing {@link P player} instance
+   */
+  public void replacePlayer(final @NonNull P newPlayer) {
+    final UUID uuid = this.uuid(newPlayer);
+    final U oldUser = this.userMap.get(uuid);
+    if (oldUser == null) {
+      throw new IllegalArgumentException("Cannot replace a player who is not logged in!");
+    }
+    this.shutdownDisplays(oldUser);
+    final U newUser = this.create(newPlayer);
+    newUser.populate(oldUser);
+    this.startEnabledDisplays(newUser);
+    this.userMap.put(uuid, newUser);
+  }
+
   public @NonNull U user(final @NonNull P base) {
     final U user = this.userMap.get(this.uuid(base));
     if (user != null) {
@@ -128,17 +150,9 @@ public abstract class UserService<P, U extends User<P>> {
 
   public void reload() {
     this.flush();
-    this.platformPlayers().stream().map(this::user).forEach(user -> {
-      if (user.tab().enabled()) {
-        user.tab().startDisplay();
-      }
-      if (user.actionBar().enabled()) {
-        user.actionBar().startDisplay();
-      }
-      if (user.bossBar().enabled()) {
-        user.bossBar().startDisplay();
-      }
-    });
+    this.platformPlayers().stream()
+      .map(this::user)
+      .forEach(this::startEnabledDisplays);
   }
 
   public void flush() {
@@ -147,14 +161,12 @@ public abstract class UserService<P, U extends User<P>> {
   }
 
   public void removeUser(final @NonNull UUID uniqueId) {
-    final U user = this.userMap.remove(uniqueId);
-    if (user == null) {
+    final U removed = this.userMap.remove(uniqueId);
+    if (removed == null) {
       throw new IllegalStateException("Cannot remove non-existing user " + uniqueId);
     }
-    user.tab().stopDisplay();
-    user.actionBar().stopDisplay();
-    user.bossBar().stopDisplay();
-    this.saveUser(uniqueId, user);
+    this.shutdownDisplays(removed);
+    this.saveUser(uniqueId, removed);
   }
 
   private void createEmptyFile(final @NonNull Path file) {
@@ -170,36 +182,34 @@ public abstract class UserService<P, U extends User<P>> {
     final U user = this.user(platformPlayer);
 
     this.platform.tabTPS().findDisplayConfig(user).ifPresent(config -> {
-      if (config.actionBarSettings().allow()) {
-        if (config.actionBarSettings().enableOnLogin()) {
-          user.actionBar().enabled(true);
+      Stream.of(
+        Pair.of(config.actionBarSettings(), user.actionBar()),
+        Pair.of(config.bossBarSettings(), user.bossBar()),
+        Pair.of(config.tabSettings(), user.tab())
+      ).forEach(pair -> {
+        if (pair.getFirst().allow() && pair.getFirst().enableOnLogin()) {
+          pair.getSecond().enabled(true);
         }
-        if (user.actionBar().enabled()) {
-          user.actionBar().startDisplay();
-        }
-      }
-
-      if (config.bossBarSettings().allow()) {
-        if (config.bossBarSettings().enableOnLogin()) {
-          user.bossBar().enabled(true);
-        }
-        if (user.bossBar().enabled()) {
-          user.bossBar().startDisplay();
-        }
-      }
-
-      if (config.tabSettings().allow()) {
-        if (config.tabSettings().enableOnLogin()) {
-          user.tab().enabled(true);
-        }
-        if (user.tab().enabled()) {
-          user.tab().startDisplay();
-        }
-      }
+      });
+      this.startEnabledDisplays(user);
     });
   }
 
   public void handleQuit(final @NonNull P platformPlayer) {
     this.removeUser(this.uuid(platformPlayer));
+  }
+
+  private void shutdownDisplays(final @NonNull U user) {
+    Stream.of(user.tab(), user.actionBar(), user.bossBar())
+      .forEach(DisplayHandler::stopDisplay);
+  }
+
+  private void startEnabledDisplays(final @NonNull U user) {
+    Stream.of(user.tab(), user.actionBar(), user.bossBar())
+      .forEach(display -> {
+        if (display.enabled()) {
+          display.startDisplay();
+        }
+      });
   }
 }

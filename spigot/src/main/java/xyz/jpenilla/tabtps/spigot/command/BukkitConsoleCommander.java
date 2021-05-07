@@ -33,7 +33,7 @@ public final class BukkitConsoleCommander implements ConsoleCommander {
   private final CommandSender commandSender;
   private final Audience audience;
 
-  private @NonNull BukkitConsoleCommander(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
+  private BukkitConsoleCommander(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
     this.commandSender = sender;
     this.audience = bukkitAudiences.sender(sender);
   }

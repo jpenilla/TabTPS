@@ -52,7 +52,7 @@ public final class BukkitPingCommand extends PingCommand {
     this.pingTargets(
       context.getSender(),
       target.getPlayers().stream()
-        .map(player -> this.plugin.userService().user(player))
+        .map(this.plugin.userService()::user)
         .collect(Collectors.toList()),
       target.getSelector(),
       context.get("page")
