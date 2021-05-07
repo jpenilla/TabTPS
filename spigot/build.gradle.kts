@@ -50,7 +50,7 @@ tasks {
     }
   }
 
-  build {
+  assemble {
     dependsOn(shadowJar)
   }
 

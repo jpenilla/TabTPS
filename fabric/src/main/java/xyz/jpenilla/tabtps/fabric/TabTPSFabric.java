@@ -32,6 +32,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.platform.fabric.FabricServerAudiences;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
+import xyz.jpenilla.tabtps.common.command.DelegateUser;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
@@ -74,15 +76,16 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
       commandSourceStack -> {
         final Entity entity = commandSourceStack.getEntity();
         if (entity instanceof ServerPlayer player) {
-          return this.userService().user(player);
+          final FabricUser user = this.userService().user(player);
+          return new DelegateUser<>(user, commandSourceStack);
         }
         return new FabricConsoleCommander(this, commandSourceStack);
       },
       commander -> {
         if (commander instanceof FabricConsoleCommander consoleCommander) {
           return consoleCommander.commandSourceStack();
-        } else if (commander instanceof FabricUser user) {
-          return user.base().createCommandSourceStack();
+        } else if (commander instanceof DelegateUser<?, ?> user) {
+          return (CommandSourceStack) user.c();
         }
         throw new IllegalArgumentException();
       }
