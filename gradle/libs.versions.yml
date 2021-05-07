@@ -17,7 +17,7 @@ versions:
   minimessage: 4.1.0-SNAPSHOT
   cloud: 1.5.0-SNAPSHOT
   commodore: 1.9
-  configurate: 4.1.0
+  configurate: 4.1.1-SNAPSHOT
   typesafeConfig: 1.+
   checkerQual: 3.13.0
   slf4j: 1.7.30
