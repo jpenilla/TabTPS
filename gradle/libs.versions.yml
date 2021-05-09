@@ -8,7 +8,7 @@ plugins:
   net.kyori.blossom: 1.2.0
   com.github.johnrengelman.shadow: 7.0.0
   fabric-loom: 0.7-SNAPSHOT
-  net.minecrell.plugin-yml.bukkit: 0.3.0
+  net.minecrell.plugin-yml.bukkit: 0.4.0
 
 versions:
   adventure: 4.7.0
@@ -17,7 +17,7 @@ versions:
   minimessage: 4.1.0-SNAPSHOT
   cloud: 1.5.0-SNAPSHOT
   commodore: 1.9
-  configurate: 4.1.1-SNAPSHOT
+  configurate: 4.1.1
   typesafeConfig: 1.+
   checkerQual: 3.13.0
   slf4j: 1.7.30
