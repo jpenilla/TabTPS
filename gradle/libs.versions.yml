@@ -4,7 +4,7 @@ metadata:
     - plugins
 
 plugins:
-  net.kyori.indra: 2.0.2
+  net.kyori.indra: 2.0.3
   net.kyori.blossom: 1.2.0
   com.github.johnrengelman.shadow: 7.0.0
   fabric-loom: 0.7-SNAPSHOT
