@@ -5,27 +5,20 @@ pluginManagement {
   repositories {
     gradlePluginPortal()
     maven("https://maven.fabricmc.net/")
-    maven("https://repo.stellardrift.ca/repository/snapshots/")
   }
 }
 
 plugins {
-  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0-SNAPSHOT"
+  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0"
 }
 
 rootProject.name = "TabTPS"
 
-setupSubproject("tabtps-common") {
-  projectDir = file("common")
-}
-setupSubproject("tabtps-spigot") {
-  projectDir = file("spigot")
-}
-setupSubproject("tabtps-fabric") {
-  projectDir = file("fabric")
-}
-
-inline fun setupSubproject(name: String, block: ProjectDescriptor.() -> Unit) {
-  include(name)
-  project(":$name").apply(block)
+sequenceOf(
+  "common",
+  "spigot",
+  "fabric"
+).forEach { module ->
+  include("tabtps-$module")
+  project(":tabtps-$module").projectDir = file(module)
 }
