@@ -30,6 +30,8 @@ import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
 import io.papermc.lib.PaperLib;
+import java.nio.file.Path;
+import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -50,9 +52,6 @@ import xyz.jpenilla.tabtps.spigot.command.PaperTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.spigot.service.BukkitUserService;
 import xyz.jpenilla.tabtps.spigot.service.PaperTickTimeService;
 import xyz.jpenilla.tabtps.spigot.service.SpigotTickTimeService;
-
-import java.nio.file.Path;
-import java.util.logging.Level;
 
 public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;

@@ -25,6 +25,9 @@ package xyz.jpenilla.tabtps.fabric;
 
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.fabric.FabricServerCommandManager;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -49,10 +52,6 @@ import xyz.jpenilla.tabtps.fabric.command.FabricPingCommand;
 import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.fabric.service.FabricLocaleDiscoverer;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
-
-import java.nio.file.Path;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<ServerPlayer, FabricUser> {
   private static TabTPSFabric instance = null;

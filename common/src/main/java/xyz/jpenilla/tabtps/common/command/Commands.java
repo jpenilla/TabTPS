@@ -25,10 +25,9 @@ package xyz.jpenilla.tabtps.common.command;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
+import java.util.function.UnaryOperator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
-
-import java.util.function.UnaryOperator;
 
 public final class Commands {
   private final TabTPS tabTPS;

@@ -23,14 +23,13 @@
  */
 package xyz.jpenilla.tabtps.common.config;
 
+import java.util.Objects;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
-
-import java.util.Objects;
 
 import static net.kyori.adventure.text.Component.space;
 

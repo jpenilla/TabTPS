@@ -23,14 +23,13 @@
  */
 package xyz.jpenilla.tabtps.common;
 
+import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.config.PluginSettings;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
-
-import java.util.UUID;
 
 public abstract class AbstractUser<P> implements User<P> {
   protected final transient TabTPS tabTPS;

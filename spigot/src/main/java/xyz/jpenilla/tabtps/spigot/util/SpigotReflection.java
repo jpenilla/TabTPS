@@ -24,16 +24,15 @@
 package xyz.jpenilla.tabtps.spigot.util;
 
 import io.papermc.lib.PaperLib;
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Objects;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import xyz.jpenilla.jmplib.Crafty;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
-
-import java.lang.invoke.MethodHandle;
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Objects;
 
 import static xyz.jpenilla.jmplib.Crafty.needCraftClass;
 import static xyz.jpenilla.jmplib.Crafty.needNmsClass;

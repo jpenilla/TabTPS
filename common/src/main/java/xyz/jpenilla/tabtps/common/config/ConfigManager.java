@@ -23,9 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.config;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.spongepowered.configurate.ConfigurateException;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.spongepowered.configurate.ConfigurateException;
 
 public final class ConfigManager {
   private final Path dataDirectory;

@@ -23,15 +23,14 @@
  */
 package xyz.jpenilla.tabtps.fabric.service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.fabric.FabricUser;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
 
 public final class FabricUserService extends UserService<ServerPlayer, FabricUser> {
   private final TabTPSFabric tabTPSFabric;

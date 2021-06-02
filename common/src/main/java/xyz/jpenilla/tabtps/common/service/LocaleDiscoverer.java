@@ -23,9 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.service;
 
-import net.kyori.adventure.translation.Translator;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -37,6 +34,8 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
+import net.kyori.adventure.translation.Translator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface LocaleDiscoverer {
   String PROPERTIES_EXTENSION = ".properties";
@@ -68,7 +67,7 @@ public interface LocaleDiscoverer {
       final Enumeration<URL> urls = this.getClass().getClassLoader().getResources("META-INF");
       while (urls.hasMoreElements()) {
         final URL url = urls.nextElement();
-        final JarURLConnection connection = (JarURLConnection) (url.openConnection());
+        final JarURLConnection connection = (JarURLConnection) url.openConnection();
         try (final JarFile jar = connection.getJarFile()) {
           locales.addAll(localesFromPathStrings(
             this.bundleName,

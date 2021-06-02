@@ -24,7 +24,6 @@
 package xyz.jpenilla.tabtps.common.util;
 
 import com.sun.management.OperatingSystemMXBean;
-
 import java.lang.management.ManagementFactory;
 import java.util.DoubleSummaryStatistics;
 import java.util.concurrent.Executors;

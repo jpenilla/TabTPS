@@ -29,6 +29,11 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.execution.CommandExecutionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import cloud.commandframework.minecraft.extras.RichDescription;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.feature.pagination.Pagination;
@@ -42,12 +47,6 @@ import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.PingUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
@@ -156,10 +155,7 @@ public class PingCommand extends TabTPSCommand {
         targetPlayer.displayName(),
         TextComponent.ofChildren(
           PingUtil.coloredPing(targetPlayer, Theme.DEFAULT.colorScheme()),
-          translatable(
-            "tabtps.label.milliseconds_short",
-            Theme.DEFAULT.colorScheme().textSecondary()
-          )
+          translatable("tabtps.label.milliseconds_short", Theme.DEFAULT.colorScheme().textSecondary())
         )
       )));
   }
@@ -215,10 +211,7 @@ public class PingCommand extends TabTPSCommand {
     return Pagination.builder()
       .resultsPerPage(10)
       .width(38)
-      .line(line -> {
-        line.character('-');
-        line.style(style(color(0x47C8FF), STRIKETHROUGH));
-      })
+      .line(line -> line.character('-').style(style(color(0x47C8FF), STRIKETHROUGH)))
       .build(
         TextComponent.ofChildren(
           Constants.PREFIX,
