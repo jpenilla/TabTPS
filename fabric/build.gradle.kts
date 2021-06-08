@@ -35,11 +35,6 @@ dependencies {
   include(libs.bundles.configurate)
   implementation(libs.adventureSerializerConfigurate4)
   include(libs.adventureSerializerConfigurate4)
-
-  implementation(libs.slf4jApi)
-  include(libs.slf4jApi)
-  implementation(libs.log4jSlf4jImpl)
-  include(libs.log4jSlf4jImpl)
 }
 
 tasks {
