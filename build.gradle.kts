@@ -1,38 +1,19 @@
-import net.kyori.indra.IndraCheckstylePlugin
-import net.kyori.indra.IndraLicenseHeaderPlugin
-import net.kyori.indra.IndraPlugin
-import net.kyori.indra.repository.sonatypeSnapshots
-import java.io.ByteArrayOutputStream
-
 plugins {
-  `java-library`
   id("net.kyori.indra")
-  id("com.github.johnrengelman.shadow") apply false
+  id("net.kyori.indra.git")
 }
 
-allprojects {
-  group = "xyz.jpenilla"
-  version = "1.3.6+${lastCommitHash()}-SNAPSHOT"
-  description = "Monitor your server's performance in real time"
-}
+group = "xyz.jpenilla"
+version = "1.3.6-SNAPSHOT"
+  .run { if (endsWith("-SNAPSHOT")) "$this+${lastCommitHash()}" else this }
+description = "Monitor your server's performance in real time"
 
 subprojects {
-  apply<JavaLibraryPlugin>()
-  apply<IndraPlugin>()
-  apply<IndraCheckstylePlugin>()
-  apply<IndraLicenseHeaderPlugin>()
-
-  repositories {
-    //mavenLocal()
-    mavenCentral()
-    sonatypeSnapshots()
-    maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://repo.incendo.org/content/repositories/snapshots")
-    maven("https://repo.jpenilla.xyz/snapshots/")
-    maven("https://repo.codemc.org/repository/maven-public")
-  }
+  plugins.apply("java-library")
+  plugins.apply("net.kyori.indra")
+  plugins.apply("net.kyori.indra.publishing")
+  plugins.apply("net.kyori.indra.checkstyle")
+  plugins.apply("net.kyori.indra.license-header")
 
   indra {
     javaVersions {
@@ -46,11 +27,10 @@ subprojects {
     withType<JavaCompile> {
       options.compilerArgs.add("-Xlint:-processing")
     }
-    withType<Jar> {
-      onlyIf { archiveClassifier.get() != "javadoc" }
-    }
-    withType<Javadoc> {
-      onlyIf { false }
+    sequenceOf(javadoc, javadocJar).forEach {
+      it.configure {
+        onlyIf { false }
+      }
     }
   }
 }
@@ -59,9 +39,6 @@ tasks.withType<Jar> {
   onlyIf { false }
 }
 
-fun lastCommitHash(): String = ByteArrayOutputStream().apply {
-  exec {
-    commandLine = listOf("git", "rev-parse", "--short", "HEAD")
-    standardOutput = this@apply
-  }
-}.toString(Charsets.UTF_8.name()).trim()
+fun lastCommitHash(): String =
+  rootProject.indraGit.commit()?.name?.substring(0, 7)
+    ?: error("Could not determine git commit hash")

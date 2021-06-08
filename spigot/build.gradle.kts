@@ -1,6 +1,7 @@
 plugins {
   id("com.github.johnrengelman.shadow")
   id("net.minecrell.plugin-yml.bukkit")
+  id("xyz.jpenilla.run-paper")
 }
 
 dependencies {
@@ -19,12 +20,16 @@ dependencies {
 }
 
 tasks {
+  runServer {
+    minecraftVersion("1.16.5")
+  }
+  jar {
+    archiveClassifier.set("unshaded")
+  }
   shadowJar {
-    archiveClassifier.set("")
-    archiveFileName.set("${project.name}-${project.version}.jar")
-    destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
+    archiveClassifier.set(null as String?)
     minimize()
-    listOf(
+    sequenceOf(
       "org.slf4j",
       "cloud.commandframework",
       "io.leangen.geantyref",
@@ -38,6 +43,10 @@ tasks {
       "xyz.jpenilla.jmplib"
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
+    }
+    doLast {
+      val archive = archiveFile.get().asFile
+      archive.copyTo(rootProject.layout.buildDirectory.dir("libs").get().asFile.resolve(archive.name), overwrite = true)
     }
   }
   build {
