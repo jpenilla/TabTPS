@@ -24,18 +24,11 @@
 package xyz.jpenilla.tabtps.common;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.PropertyResourceBundle;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.stream.Stream;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
@@ -59,7 +52,7 @@ public final class TabTPS {
   public TabTPS(final @NonNull TabTPSPlatform<?, ?> platform) {
     this.platform = platform;
     try {
-      this.loadTranslations();
+      Messages.load();
       this.configManager = new ConfigManager(platform.dataDirectory());
       this.configManager.load();
       final ScheduledThreadPoolExecutor ex = new ScheduledThreadPoolExecutor(4);
@@ -104,19 +97,6 @@ public final class TabTPS {
       new PingCommand(this, this.commands),
       new MemoryCommand(this, this.commands)
     ).forEach(TabTPSCommand::register);
-  }
-
-  private void loadTranslations() throws IOException {
-    final TranslationRegistry registry = TranslationRegistry.create(Key.key("tabtps", "translations"));
-    final Set<Locale> locales = this.platform.localeDiscoverer().availableLocales();
-    locales.forEach(locale ->
-      registry.registerAll(
-        locale,
-        PropertyResourceBundle.getBundle("tabtps", locale, UTF8ResourceBundleControl.get()),
-        true
-      )
-    );
-    GlobalTranslator.get().addSource(registry);
   }
 
   public @NonNull TabTPSPlatform<?, ?> platform() {

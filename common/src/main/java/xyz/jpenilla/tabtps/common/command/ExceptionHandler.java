@@ -41,6 +41,7 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
@@ -101,9 +102,9 @@ public final class ExceptionHandler {
     hoverText.append(text(stackTrace))
       .append(newline())
       .append(text("    "))
-      .append(translatable("tabtps.misc.text.click_to_copy", GRAY, ITALIC));
+      .append(Messages.MISC_TEXT_CLICK_TO_COPY.styled(GRAY, ITALIC));
     final TextComponent.Builder message = text();
-    message.append(translatable("tabtps.command.exception.command_execution", RED));
+    message.append(Messages.COMMAND_EXCEPTION_COMMAND_EXECUTION.styled(RED));
     if (commander.hasPermission(Constants.PERMISSION_COMMAND_ERROR_HOVER_STACKTRACE)) {
       message.hoverEvent(hoverText.build());
       message.clickEvent(copyToClipboard(stackTrace));
@@ -112,8 +113,7 @@ public final class ExceptionHandler {
   }
 
   private void noPermission(final @NonNull Commander commander, final @NonNull NoPermissionException exception) {
-    final Component message = translatable("tabtps.command.exception.no_permission", RED);
-    decorateAndSend(commander, message);
+    decorateAndSend(commander, Messages.COMMAND_EXCEPTION_NO_PERMISSION.styled(RED));
   }
 
   private void argumentParsing(final @NonNull Commander commander, final @NonNull ArgumentParseException exception) {
@@ -122,7 +122,7 @@ public final class ExceptionHandler {
     if (cause instanceof ParserException) {
       final ParserException ex = (ParserException) cause;
       message = translatable(
-        "tabtps.command.caption." + ex.errorCaption().getKey(),
+        Messages.bundleName() + "/command.caption." + ex.errorCaption().getKey(),
         GRAY,
         Arrays.stream(ex.captionVariables())
           .map(CaptionVariable::getValue)
@@ -132,12 +132,11 @@ public final class ExceptionHandler {
     } else {
       message = Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(cause)).color(GRAY);
     }
-    decorateAndSend(commander, translatable("tabtps.command.exception.invalid_argument", RED, message));
+    decorateAndSend(commander, Messages.COMMAND_EXCEPTION_INVALID_ARGUMENT.styled(RED, message));
   }
 
   private void invalidSender(final @NonNull Commander commander, final @NonNull InvalidCommandSenderException exception) {
-    final Component message = translatable(
-      "tabtps.command.exception.invalid_sender_type",
+    final Component message = Messages.COMMAND_EXCEPTION_INVALID_SENDER_TYPE.styled(
       RED,
       text(exception.getRequiredSender().getSimpleName())
     );
@@ -145,8 +144,7 @@ public final class ExceptionHandler {
   }
 
   private void invalidSyntax(final @NonNull Commander commander, final @NonNull InvalidSyntaxException exception) {
-    final Component message = translatable(
-      "tabtps.command.exception.invalid_syntax",
+    final Component message = Messages.COMMAND_EXCEPTION_INVALID_SYNTAX.styled(
       RED,
       ComponentUtil.highlight(text(String.format("/%s", exception.getCorrectSyntax()), GRAY), WHITE)
     );

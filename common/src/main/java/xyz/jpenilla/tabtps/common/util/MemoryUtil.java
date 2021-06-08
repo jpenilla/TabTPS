@@ -33,11 +33,11 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import xyz.jpenilla.tabtps.common.Messages;
 
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.NamedTextColor.AQUA;
 import static net.kyori.adventure.text.format.NamedTextColor.BLUE;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
@@ -96,22 +96,22 @@ public final class MemoryUtil {
     final TextComponent.Builder hover = text()
       .append(humanReadableByteCountBin(used))
       .append(space())
-      .append(translatable("tabtps.label.used", WHITE))
+      .append(Messages.LABEL_USED.styled(WHITE))
       .append(text("/", GRAY))
       .append(humanReadableByteCountBin(committed))
       .append(space())
-      .append(translatable("tabtps.label.allocated", WHITE))
+      .append(Messages.LABEL_ALLOCATED.styled(WHITE))
       .append(newline());
     if (max != -1) {
       hover.append(humanReadableByteCountBin(adjustedMax))
         .append(space())
-        .append(translatable("tabtps.label.maximum", WHITE))
+        .append(Messages.LABEL_MAXIMUM.styled(WHITE))
         .append(text(",", GRAY))
         .append(space());
     }
     hover.append(humanReadableByteCountBin(adjustedInit))
       .append(space())
-      .append(translatable("tabtps.label.initial_amount"));
+      .append(Messages.LABEL_INITIAL_AMOUNT);
     builder.hoverEvent(hover.build());
 
     builder.append(text("[", GRAY));

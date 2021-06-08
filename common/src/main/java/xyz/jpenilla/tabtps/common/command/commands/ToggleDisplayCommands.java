@@ -29,8 +29,8 @@ import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -38,13 +38,14 @@ import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.util.Constants;
+import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
 
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.event.ClickEvent.runCommand;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
+import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
 public final class ToggleDisplayCommands extends TabTPSCommand {
   public ToggleDisplayCommands(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -58,19 +59,19 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     this.commands.register(toggle.literal("tab")
       .senderType(User.class)
       .permission(commander -> this.togglePermission(commander, DisplayConfig::tabSettings))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.toggle_tab.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TOGGLE_TAB_DESCRIPTION.plain())
       .handler(this::toggleTab));
 
     this.commands.register(toggle.literal("actionbar")
       .senderType(User.class)
       .permission(commander -> this.togglePermission(commander, DisplayConfig::actionBarSettings))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.toggle_actionbar.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TOGGLE_ACTIONBAR_DESCRIPTION.plain())
       .handler(this::toggleActionBar));
 
     this.commands.register(toggle.literal("bossbar")
       .senderType(User.class)
       .permission(commander -> this.togglePermission(commander, DisplayConfig::bossBarSettings))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.toggle_bossbar.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TOGGLE_BOSSBAR_DESCRIPTION.plain())
       .handler(this::toggleBossBar));
   }
 
@@ -87,11 +88,11 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     if (user.tab().enabled()) {
       user.tab().stopDisplay();
       user.tab().enabled(false);
-      user.sendMessage(feedbackMessage("/tabtps toggle tab", "tabtps.command.toggle.tab.disabled", RED));
+      user.sendMessage(feedbackMessage("/tabtps toggle tab", Messages.COMMAND_TOGGLE_TAB_DISABLED, RED));
     } else {
       user.tab().enabled(true);
       user.tab().startDisplay();
-      user.sendMessage(feedbackMessage("/tabtps toggle tab", "tabtps.command.toggle.tab.enabled", GREEN));
+      user.sendMessage(feedbackMessage("/tabtps toggle tab", Messages.COMMAND_TOGGLE_TAB_ENABLED, GREEN));
     }
   }
 
@@ -100,11 +101,11 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     if (user.actionBar().enabled()) {
       user.actionBar().stopDisplay();
       user.actionBar().enabled(false);
-      user.sendMessage(feedbackMessage("/tabtps toggle actionbar", "tabtps.command.toggle.actionbar.disabled", RED));
+      user.sendMessage(feedbackMessage("/tabtps toggle actionbar", Messages.COMMAND_TOGGLE_ACTIONBAR_DISABLED, RED));
     } else {
       user.actionBar().enabled(true);
       user.actionBar().startDisplay();
-      user.sendMessage(feedbackMessage("/tabtps toggle actionbar", "tabtps.command.toggle.actionbar.enabled", GREEN));
+      user.sendMessage(feedbackMessage("/tabtps toggle actionbar", Messages.COMMAND_TOGGLE_ACTIONBAR_ENABLED, GREEN));
     }
   }
 
@@ -113,24 +114,24 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     if (user.bossBar().enabled()) {
       user.bossBar().stopDisplay();
       user.bossBar().enabled(false);
-      user.sendMessage(feedbackMessage("/tabtps toggle bossbar", "tabtps.command.toggle.bossbar.disabled", RED));
+      user.sendMessage(feedbackMessage("/tabtps toggle bossbar", Messages.COMMAND_TOGGLE_BOSSBAR_DISABLED, RED));
     } else {
       user.bossBar().enabled(true);
       user.bossBar().startDisplay();
-      user.sendMessage(feedbackMessage("/tabtps toggle bossbar", "tabtps.command.toggle.bossbar.enabled", GREEN));
+      user.sendMessage(feedbackMessage("/tabtps toggle bossbar", Messages.COMMAND_TOGGLE_BOSSBAR_ENABLED, GREEN));
     }
   }
 
-  private static @NonNull Component feedbackMessage(final @NonNull String command, final @NonNull String key, final @NonNull TextColor color) {
+  private static @NonNull Component feedbackMessage(final @NonNull String command, final @NonNull TranslatableProvider translatable, final @NonNull TextColor color) {
     return text()
       .append(Constants.PREFIX)
       .append(space())
-      .append(translatable()
-        .key(key)
-        .color(color)
-        .decorate(TextDecoration.ITALIC)
-        .hoverEvent(translatable("tabtps.misc.text.click_to_toggle", GREEN))
-        .clickEvent(runCommand(command)))
+      .append(translatable.build(tr -> {
+        tr.color(color);
+        tr.decorate(ITALIC);
+        tr.hoverEvent(Messages.MISC_TEXT_CLICK_TO_TOGGLE.styled(GREEN));
+        tr.clickEvent(runCommand(command));
+      }))
       .build();
   }
 }

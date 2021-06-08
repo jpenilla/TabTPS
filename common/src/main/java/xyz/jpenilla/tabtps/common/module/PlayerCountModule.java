@@ -27,6 +27,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
@@ -41,7 +42,7 @@ public final class PlayerCountModule extends AbstractModule {
 
   @Override
   public @NonNull Component label() {
-    return Component.translatable("tabtps.label.player_count", this.theme.colorScheme().text());
+    return Messages.LABEL_PLAYER_COUNT.styled(this.theme.colorScheme().text());
   }
 
   @Override

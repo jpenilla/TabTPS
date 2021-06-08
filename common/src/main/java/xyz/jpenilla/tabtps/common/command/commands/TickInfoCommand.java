@@ -37,6 +37,7 @@ import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
@@ -53,7 +54,6 @@ import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
@@ -76,7 +76,7 @@ public final class TickInfoCommand extends TabTPSCommand {
   public void register() {
     this.commands.register(this.commandManager.commandBuilder("tickinfo", "mspt", "tps")
       .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.tickinfo.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TICKINFO_DESCRIPTION.plain())
       .handler(this::executeTickInfo));
   }
 
@@ -94,12 +94,12 @@ public final class TickInfoCommand extends TabTPSCommand {
     messages.add(TextComponent.ofChildren(
       Constants.PREFIX,
       space(),
-      translatable("tabtps.command.tickinfo.text.header", GRAY, ITALIC)
+      Messages.COMMAND_TICKINFO_TEXT_HEADER.styled(GRAY, ITALIC)
     ));
     messages.add(this.formatTPS());
     messages.addAll(this.formatter.formatTickTimes());
     messages.add(this.cpuRenderer.render().hoverEvent(
-      translatable("tabtps.command.tickinfo.text.cpu_hover", GRAY)
+      Messages.COMMAND_TICKINFO_TEXT_CPU_HOVER.styled(GRAY)
     ));
     messages.add(this.renderMemory());
     messages.add(MemoryUtil.renderBar(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 91));
@@ -110,14 +110,14 @@ public final class TickInfoCommand extends TabTPSCommand {
     return this.memoryRenderer.render()
       .hoverEvent(text()
         .color(GRAY)
-        .append(translatable("tabtps.command.tickinfo.text.memory_hover"))
+        .append(Messages.COMMAND_TICKINFO_TEXT_MEMORY_HOVER)
         .append(newline())
-        .append(translatable("tabtps.label.used"))
+        .append(Messages.LABEL_USED)
         .append(text("/", WHITE))
-        .append(translatable("tabtps.label.allocated"))
+        .append(Messages.LABEL_ALLOCATED)
         .append(space())
         .append(text("(", WHITE))
-        .append(translatable("tabtps.label.maximum"))
+        .append(Messages.LABEL_MAXIMUM)
         .append(text(")", WHITE))
         .build());
   }
@@ -125,8 +125,8 @@ public final class TickInfoCommand extends TabTPSCommand {
   private @NonNull Component formatTPS() {
     final double[] tps = this.tabTPS.platform().tickTimeService().recentTps();
     final TextComponent.Builder builder = text()
-      .hoverEvent(translatable("tabtps.command.tickinfo.text.tps_hover", GRAY))
-      .append(translatable("tabtps.label.tps", GRAY))
+      .hoverEvent(Messages.COMMAND_TICKINFO_TEXT_TPS_HOVER.styled(GRAY))
+      .append(Messages.LABEL_TPS.styled(GRAY))
       .append(text(":", WHITE))
       .append(space());
     final Iterator<Double> tpsIterator = Arrays.stream(tps).iterator();
@@ -161,7 +161,7 @@ public final class TickInfoCommand extends TabTPSCommand {
     @Override
     public @NonNull List<Component> formatTickTimes() {
       return Collections.singletonList(
-        this.msptRenderer.render().hoverEvent(translatable("tabtps.command.tickinfo.text.mspt_hover", GRAY))
+        this.msptRenderer.render().hoverEvent(Messages.COMMAND_TICKINFO_TEXT_MSPT_HOVER.styled(GRAY))
       );
     }
   }

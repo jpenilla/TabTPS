@@ -21,30 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.common.module;
+<%def propPattern = ~/[.-]/
+%>package $packageName;
 
-import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.Messages;
-import xyz.jpenilla.tabtps.common.TabTPS;
-import xyz.jpenilla.tabtps.common.config.Theme;
-import xyz.jpenilla.tabtps.common.util.TPSUtil;
+import org.checkerframework.framework.qual.DefaultQualifier;
+import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
 
-public final class TPSModule extends AbstractModule {
-  public TPSModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme
-  ) {
-    super(tabTPS, theme);
+@DefaultQualifier(NonNull.class)
+public final class ${className} {
+  private static final String BUNDLE_NAME = "${bundleName}";
+<%
+for (prop in keys.sort()) {
+  def propKey = propPattern.matcher(prop.toUpperCase()).replaceAll("_")
+%>
+  public static final TranslatableProvider ${propKey} = create("${prop}");<%
+}%>
+
+  private static TranslatableProvider create(final String key) {
+    return TranslatableProvider.create(BUNDLE_NAME, key);
   }
 
-  @Override
-  public @NonNull Component label() {
-    return Messages.LABEL_TPS.styled(this.theme.colorScheme().text());
+  public static String bundleName() {
+    return BUNDLE_NAME;
   }
 
-  @Override
-  public @NonNull Component display() {
-    return TPSUtil.coloredTps(this.tabTPS.platform().tickTimeService().recentTps()[0], this.theme.colorScheme());
+  public static void load() {
+    TranslatableProvider.loadBundle(
+      BUNDLE_NAME,
+      ${className}.class
+    );
+  }
+
+  private ${className}() {
   }
 }

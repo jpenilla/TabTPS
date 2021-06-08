@@ -28,6 +28,7 @@ import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
@@ -36,7 +37,6 @@ import xyz.jpenilla.tabtps.common.util.Constants;
 
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.event.ClickEvent.openUrl;
 import static net.kyori.adventure.text.format.NamedTextColor.AQUA;
 import static net.kyori.adventure.text.format.NamedTextColor.BLUE;
@@ -54,7 +54,7 @@ public final class AboutCommand extends TabTPSCommand {
   @Override
   public void register() {
     this.commands.registerSubcommand(builder -> builder.literal("about")
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.about.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_ABOUT_DESCRIPTION.plain())
       .handler(this::executeAbout));
   }
 

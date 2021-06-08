@@ -38,31 +38,33 @@ import net.kyori.adventure.translation.Translator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface LocaleDiscoverer {
+  Locale DEFAULT_LOCALE = Locale.ENGLISH;
   String PROPERTIES_EXTENSION = ".properties";
 
-  static @NonNull LocaleDiscoverer standard(final String bundleName) {
-    return new DefaultImpl(bundleName);
+  static @NonNull LocaleDiscoverer standard() {
+    return new DefaultImpl();
   }
 
   static @NonNull Set<Locale> localesFromPathStrings(final @NonNull String bundleId, final @NonNull Stream<String> pathStrings) {
-    return pathStrings
-      .filter(path -> path.startsWith(bundleId + "_") && path.endsWith(PROPERTIES_EXTENSION))
-      .map(path -> path.replaceFirst(bundleId + "_", "").replaceFirst(PROPERTIES_EXTENSION, ""))
-      .map(Translator::parseLocale)
+    final String expectedPrefix = bundleId.replace(".", "/");
+    return pathStrings.map(s -> s.replace("\\", "/"))
+      .filter(path -> path.startsWith(expectedPrefix) && path.endsWith(PROPERTIES_EXTENSION))
+      .map(path -> path.replaceFirst(expectedPrefix, "").replaceFirst(PROPERTIES_EXTENSION, ""))
+      .map(string -> {
+        if (string.isEmpty()) {
+          return DEFAULT_LOCALE;
+        } else {
+          return Translator.parseLocale(string.substring(1));
+        }
+      })
       .collect(Collectors.toSet());
   }
 
-  @NonNull Set<Locale> availableLocales() throws IOException;
+  @NonNull Set<Locale> availableLocales(final String bundleName) throws IOException;
 
   final class DefaultImpl implements LocaleDiscoverer {
-    private final String bundleName;
-
-    private DefaultImpl(final String bundleName) {
-      this.bundleName = bundleName;
-    }
-
     @Override
-    public @NonNull Set<Locale> availableLocales() throws IOException {
+    public @NonNull Set<Locale> availableLocales(final String bundleName) throws IOException {
       final Set<Locale> locales = new HashSet<>();
       final Enumeration<URL> urls = this.getClass().getClassLoader().getResources("META-INF");
       while (urls.hasMoreElements()) {
@@ -70,7 +72,7 @@ public interface LocaleDiscoverer {
         final JarURLConnection connection = (JarURLConnection) url.openConnection();
         try (final JarFile jar = connection.getJarFile()) {
           locales.addAll(localesFromPathStrings(
-            this.bundleName,
+            bundleName,
             jar.stream().map(ZipEntry::toString)
           ));
         }

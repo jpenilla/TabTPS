@@ -33,18 +33,16 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
 
 public final class FabricLocaleDiscoverer implements LocaleDiscoverer {
-  private final String bundleName;
   private final ModContainer mod;
 
-  public FabricLocaleDiscoverer(final @NonNull String bundleName, final @NonNull ModContainer mod) {
-    this.bundleName = bundleName;
+  public FabricLocaleDiscoverer(final @NonNull ModContainer mod) {
     this.mod = mod;
   }
 
   @Override
-  public @NonNull Set<Locale> availableLocales() throws IOException {
+  public @NonNull Set<Locale> availableLocales(final String bundleName) throws IOException {
     return LocaleDiscoverer.localesFromPathStrings(
-      this.bundleName,
+      bundleName,
       Files.list(this.mod.getRootPath()).map(Path::toString).map(it -> it.substring(1))
     );
   }

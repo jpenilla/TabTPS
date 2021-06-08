@@ -35,11 +35,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.config.Theme;
 
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
@@ -103,15 +103,15 @@ public final class TPSUtil {
     final Component header = text()
       .color(GRAY)
       .append(
-        translatable("tabtps.label.mspt"),
+        Messages.LABEL_MSPT,
         text(" - ", WHITE),
-        translatable("tabtps.label.average"),
+        Messages.LABEL_AVERAGE,
         text(", ", WHITE),
-        translatable("tabtps.label.minimum"),
+        Messages.LABEL_MINIMUM,
         text(", ", WHITE),
-        translatable("tabtps.label.maximum")
+        Messages.LABEL_MAXIMUM
       )
-      .hoverEvent(translatable("tabtps.command.tickinfo.text.mspt_hover", GRAY))
+      .hoverEvent(Messages.COMMAND_TICKINFO_TEXT_MSPT_HOVER.styled(GRAY))
       .build();
 
     final List<Component> output = new ArrayList<>();

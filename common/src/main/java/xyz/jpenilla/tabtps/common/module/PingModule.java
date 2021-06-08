@@ -25,6 +25,7 @@ package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.Theme;
@@ -44,14 +45,14 @@ public final class PingModule extends AbstractModule {
 
   @Override
   public @NonNull Component label() {
-    return Component.translatable("tabtps.label.ping", this.theme.colorScheme().text());
+    return Messages.LABEL_PING.styled(this.theme.colorScheme().text());
   }
 
   @Override
   public @NonNull Component display() {
     return Component.text()
       .append(PingUtil.coloredPing(this.user, this.theme.colorScheme()))
-      .append(Component.translatable("tabtps.label.milliseconds_short", this.theme.colorScheme().textSecondary()))
+      .append(Messages.LABEL_MILLISECONDS_SHORT.styled(this.theme.colorScheme().textSecondary()))
       .build();
   }
 }

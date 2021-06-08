@@ -25,6 +25,7 @@ package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
@@ -39,7 +40,7 @@ public final class MSPTModule extends AbstractModule {
 
   @Override
   public @NonNull Component label() {
-    return Component.translatable("tabtps.label.mspt", this.theme.colorScheme().text());
+    return Messages.LABEL_MSPT.styled(this.theme.colorScheme().text());
   }
 
   @Override

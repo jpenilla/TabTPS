@@ -26,6 +26,7 @@ package xyz.jpenilla.tabtps.common.module;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
@@ -40,7 +41,7 @@ public final class CPUModule extends AbstractModule {
 
   @Override
   public @NonNull Component label() {
-    return Component.translatable("tabtps.label.cpu", this.theme.colorScheme().text());
+    return Messages.LABEL_CPU.styled(this.theme.colorScheme().text());
   }
 
   @Override
@@ -54,9 +55,9 @@ public final class CPUModule extends AbstractModule {
       .append(Component.text("%", this.theme.colorScheme().text()));
     builder.append(Component.space())
       .append(Component.text("(", this.theme.colorScheme().textSecondary()))
-      .append(Component.translatable("tabtps.label.cpu.system_short", this.theme.colorScheme().text()))
+      .append(Messages.LABEL_CPU_SYSTEM_SHORT.styled(this.theme.colorScheme().text()))
       .append(Component.text(", ", this.theme.colorScheme().textSecondary()))
-      .append(Component.translatable("tabtps.label.cpu.process_short", this.theme.colorScheme().text()))
+      .append(Messages.LABEL_CPU_PROCESS_SHORT.styled(this.theme.colorScheme().text()))
       .append(Component.text(")", this.theme.colorScheme().textSecondary()));
     return builder.build();
   }

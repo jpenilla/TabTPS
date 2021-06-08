@@ -52,6 +52,6 @@ public interface TabTPSPlatform<P, U extends User<P>> {
   @NonNull CommandManager<Commander> commandManager();
 
   default @NonNull LocaleDiscoverer localeDiscoverer() {
-    return LocaleDiscoverer.standard("tabtps");
+    return LocaleDiscoverer.standard();
   }
 }

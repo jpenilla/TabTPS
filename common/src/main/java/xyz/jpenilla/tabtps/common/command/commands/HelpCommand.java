@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
@@ -56,8 +57,8 @@ public final class HelpCommand extends TabTPSCommand {
       .build();
 
     this.commands.registerSubcommand(builder -> builder.literal("help")
-      .argument(queryArgument, RichDescription.translatable("tabtps.command.help.arguments.query"))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.help.description"))
+      .argument(queryArgument, RichDescription.of(Messages.COMMAND_HELP_ARGUMENTS_QUERY))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_HELP_DESCRIPTION.plain())
       .handler(this::executeHelp));
   }
 
@@ -80,7 +81,7 @@ public final class HelpCommand extends TabTPSCommand {
 
   private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull String... args) {
     return translatable(
-      "tabtps.help." + key,
+      Messages.bundleName() + "/help." + key,
       Arrays.stream(args)
         .map(Component::text)
         .collect(Collectors.toList())

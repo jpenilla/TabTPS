@@ -27,13 +27,13 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.util.Constants;
 
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
@@ -48,7 +48,7 @@ public final class ReloadCommand extends TabTPSCommand {
   public void register() {
     this.commands.registerSubcommand(builder -> builder.literal("reload")
       .permission(Constants.PERMISSION_COMMAND_RELOAD)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.reload.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_RELOAD_DESCRIPTION.plain())
       .handler(this::executeReload));
   }
 

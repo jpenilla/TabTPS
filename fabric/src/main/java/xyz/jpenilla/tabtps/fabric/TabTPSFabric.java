@@ -188,7 +188,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   @Override
   public @NonNull LocaleDiscoverer localeDiscoverer() {
     return new FabricLocaleDiscoverer(
-      "tabtps",
       FabricLoader.getInstance().getModContainer("tabtps-fabric")
         .orElseThrow(() -> new IllegalStateException("Could not locate mod container!"))
     );

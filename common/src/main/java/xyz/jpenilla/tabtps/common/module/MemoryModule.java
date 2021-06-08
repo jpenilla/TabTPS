@@ -27,6 +27,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.ComponentUtil;
@@ -52,14 +53,12 @@ public final class MemoryModule extends AbstractModule {
   }
 
   @Override
-  public @NonNull
-  Component label() {
-    return Component.translatable("tabtps.label.memory", this.theme.colorScheme().text());
+  public @NonNull Component label() {
+    return Messages.LABEL_MEMORY.styled(this.theme.colorScheme().text());
   }
 
   @Override
-  public @NonNull
-  Component display() {
+  public @NonNull Component display() {
     final TextColor color1 = this.theme.colorScheme().goodPerformance();
     final TextColor color2 = this.theme.colorScheme().goodPerformanceSecondary();
     final TextComponent.Builder builder = Component.text()
@@ -71,7 +70,7 @@ public final class MemoryModule extends AbstractModule {
     if (this.alwaysShowMax || MemoryUtil.committedMemory() != MemoryUtil.maxMemory()) {
       builder.append(Component.space())
         .append(Component.text("(", this.theme.colorScheme().textSecondary()))
-        .append(Component.translatable("tabtps.label.maximum_short_lower", this.theme.colorScheme().text()))
+        .append(Messages.LABEL_MAXIMUM_SHORT_LOWER.styled(this.theme.colorScheme().text()))
         .append(Component.space())
         .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.maxMemory()), color1, color2))
         .append(Component.text("M", this.theme.colorScheme().text()))

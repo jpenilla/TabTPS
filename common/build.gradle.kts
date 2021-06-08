@@ -1,5 +1,13 @@
+import ca.stellardrift.build.localization.TemplateType
+
 plugins {
   id("net.kyori.blossom")
+  id("ca.stellardrift.localization")
+}
+
+localization {
+  templateType.set(TemplateType.JAVA)
+  templateFile.set(projectDir.resolve("src/main/template/messages.java.tmpl"))
 }
 
 tasks.jar {

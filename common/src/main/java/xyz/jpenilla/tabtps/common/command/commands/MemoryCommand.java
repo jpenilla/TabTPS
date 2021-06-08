@@ -33,6 +33,7 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
@@ -42,7 +43,6 @@ import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
-import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
@@ -55,7 +55,7 @@ public final class MemoryCommand extends TabTPSCommand {
   public void register() {
     this.commands.register(this.commandManager.commandBuilder("memory", "mem", "ram")
       .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, translatable("tabtps.command.memory.description"))
+      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_MEMORY_DESCRIPTION.plain())
       .handler(this::executeMemory));
   }
 
@@ -65,7 +65,7 @@ public final class MemoryCommand extends TabTPSCommand {
     final Component header = TextComponent.ofChildren(
       Constants.PREFIX,
       space(),
-      translatable("tabtps.command.memory.text.header", GRAY, ITALIC)
+      Messages.COMMAND_MEMORY_TEXT_HEADER.styled(GRAY, ITALIC)
     );
     messages.add(header);
     if (!this.tabTPS.configManager().pluginSettings().ignoredMemoryPools().contains("Heap Memory Usage")) {
