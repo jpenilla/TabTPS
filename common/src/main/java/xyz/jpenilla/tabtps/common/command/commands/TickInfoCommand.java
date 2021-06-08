@@ -125,7 +125,7 @@ public final class TickInfoCommand extends TabTPSCommand {
   private @NonNull Component formatTPS() {
     final double[] tps = this.tabTPS.platform().tickTimeService().recentTps();
     final TextComponent.Builder builder = text()
-      .hoverEvent(translatable("taptps.command.tickinfo.text.tps_hover", GRAY))
+      .hoverEvent(translatable("tabtps.command.tickinfo.text.tps_hover", GRAY))
       .append(translatable("tabtps.label.tps", GRAY))
       .append(text(":", WHITE))
       .append(space());
