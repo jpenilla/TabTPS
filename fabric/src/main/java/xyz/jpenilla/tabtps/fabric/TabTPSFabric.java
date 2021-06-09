@@ -42,7 +42,6 @@ import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
-import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.common.util.Constants;
@@ -50,7 +49,6 @@ import xyz.jpenilla.tabtps.common.util.UpdateChecker;
 import xyz.jpenilla.tabtps.fabric.command.FabricConsoleCommander;
 import xyz.jpenilla.tabtps.fabric.command.FabricPingCommand;
 import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
-import xyz.jpenilla.tabtps.fabric.service.FabricLocaleDiscoverer;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
 
 public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<ServerPlayer, FabricUser> {
@@ -183,13 +181,5 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   @Override
   public @NonNull FabricServerCommandManager<Commander> commandManager() {
     return this.commandManager;
-  }
-
-  @Override
-  public @NonNull LocaleDiscoverer localeDiscoverer() {
-    return new FabricLocaleDiscoverer(
-      FabricLoader.getInstance().getModContainer("tabtps-fabric")
-        .orElseThrow(() -> new IllegalStateException("Could not locate mod container!"))
-    );
   }
 }

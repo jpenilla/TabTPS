@@ -28,7 +28,6 @@ import java.nio.file.Path;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import xyz.jpenilla.tabtps.common.command.Commander;
-import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
 
@@ -50,8 +49,4 @@ public interface TabTPSPlatform<P, U extends User<P>> {
   @NonNull Logger logger();
 
   @NonNull CommandManager<Commander> commandManager();
-
-  default @NonNull LocaleDiscoverer localeDiscoverer() {
-    return LocaleDiscoverer.standard();
-  }
 }
