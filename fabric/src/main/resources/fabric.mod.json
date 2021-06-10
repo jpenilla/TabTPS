@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "{mod_id}",
-  "version": "{version}",
-  "name": "{mod_name}",
-  "description": "{description}",
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${description}",
   "authors": [
     "jmp"
   ],
   "contact": {
-    "homepage": "{github}",
-    "sources": "{github}",
-    "issues": "{github}/issues"
+    "homepage": "${github}",
+    "sources": "${github}",
+    "issues": "${github}/issues"
   },
   "license": "MIT",
   "environment": "*",

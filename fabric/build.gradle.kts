@@ -60,14 +60,16 @@ tasks {
     }
   }
   processResources {
+    val replacements = mapOf(
+      "mod_id" to project.name,
+      "mod_name" to rootProject.name,
+      "version" to version.toString(),
+      "description" to project.description,
+      "github" to "https://github.com/jpenilla/TabTPS"
+    )
+    inputs.properties(replacements)
     filesMatching("fabric.mod.json") {
-      mapOf(
-        "{mod_id}" to project.name,
-        "{mod_name}" to rootProject.name,
-        "{version}" to version.toString(),
-        "{description}" to project.description,
-        "{github}" to "https://github.com/jpenilla/TabTPS"
-      ).entries.forEach { (k, v) -> filter { it.replace(k, v as String) } }
+      expand(replacements)
     }
   }
 }
