@@ -37,7 +37,14 @@ dependencies {
   include(libs.adventureSerializerConfigurate4)
 }
 
+indra {
+  javaVersions().target(16)
+}
+
 tasks {
+  runServer {
+    standardInput = System.`in`
+  }
   shadowJar {
     configurations = listOf(shade)
   }
