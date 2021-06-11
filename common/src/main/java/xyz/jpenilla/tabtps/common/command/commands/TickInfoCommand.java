@@ -25,6 +25,15 @@ package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -39,16 +48,6 @@ import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
 import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
-
-import java.lang.management.ManagementFactory;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
 
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.newline;
@@ -126,7 +125,7 @@ public final class TickInfoCommand extends TabTPSCommand {
   private @NonNull Component formatTPS() {
     final double[] tps = this.tabTPS.platform().tickTimeService().recentTps();
     final TextComponent.Builder builder = text()
-      .hoverEvent(translatable("taptps.command.tickinfo.text.tps_hover", GRAY))
+      .hoverEvent(translatable("tabtps.command.tickinfo.text.tps_hover", GRAY))
       .append(translatable("tabtps.label.tps", GRAY))
       .append(text(":", WHITE))
       .append(space());

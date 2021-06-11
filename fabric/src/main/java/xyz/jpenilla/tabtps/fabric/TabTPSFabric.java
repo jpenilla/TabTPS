@@ -25,6 +25,9 @@ package xyz.jpenilla.tabtps.fabric;
 
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.fabric.FabricServerCommandManager;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -50,10 +53,6 @@ import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.fabric.service.FabricLocaleDiscoverer;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
 
-import java.nio.file.Path;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
 public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<ServerPlayer, FabricUser> {
   private static TabTPSFabric instance = null;
   private final Path configDirectory = FabricLoader.getInstance().getConfigDir().resolve("TabTPS");
@@ -76,16 +75,16 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
       AsynchronousCommandExecutionCoordinator.<Commander>newBuilder().build(),
       commandSourceStack -> {
         final Entity entity = commandSourceStack.getEntity();
-        if (entity instanceof ServerPlayer) {
-          return this.userService().user((ServerPlayer) entity);
+        if (entity instanceof ServerPlayer player) {
+          return this.userService().user(player);
         }
         return new FabricConsoleCommander(this, commandSourceStack);
       },
       commander -> {
-        if (commander instanceof FabricConsoleCommander) {
-          return ((FabricConsoleCommander) commander).commandSourceStack();
-        } else if (commander instanceof FabricUser) {
-          return ((FabricUser) commander).base().createCommandSourceStack();
+        if (commander instanceof FabricConsoleCommander consoleCommander) {
+          return consoleCommander.commandSourceStack();
+        } else if (commander instanceof FabricUser user) {
+          return user.base().createCommandSourceStack();
         }
         throw new IllegalArgumentException();
       }

@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common;
 
+import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -30,8 +31,6 @@ import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
-
-import java.util.UUID;
 
 public interface User<P> extends Commander {
   @NonNull UUID uuid();

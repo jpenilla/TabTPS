@@ -4,32 +4,33 @@ metadata:
     - plugins
 
 plugins:
-  net.kyori.indra: 2.0.3
-  net.kyori.blossom: 1.2.0
+  net.kyori.indra: &indra 2.0.5
+  net.kyori.indra.git: *indra
+  net.kyori.blossom: 1.3.0
   com.github.johnrengelman.shadow: 7.0.0
-  fabric-loom: 0.7-SNAPSHOT
   net.minecrell.plugin-yml.bukkit: 0.4.0
+  xyz.jpenilla.run-paper: 1.0.3-SNAPSHOT
 
 versions:
-  adventure: 4.7.0
+  adventure: 4.8.0
   adventurePagination: 4.0.0-SNAPSHOT
   adventurePlatform: 4.0.0-SNAPSHOT
   minimessage: 4.1.0-SNAPSHOT
   cloud: 1.5.0-SNAPSHOT
-  commodore: 1.9
+  commodore: 1.10-SNAPSHOT
   configurate: 4.1.1
   typesafeConfig: 1.+
-  checkerQual: 3.13.0
+  checkerQual: 3.14.0
   slf4j: 1.7.30
-  log4jSlf4jImpl: 2.8.1
   gson: 2.8.0
   guava: 21.0
   bstats: 2.2.1
   paperApi: 1.16.5-R0.1-SNAPSHOT
   paperLib: 1.0.6
-  fabricApi: 0.32.0+1.16
-  fabricLoader: 0.11.0
-  fabricMinecraft: 1.16.5
+  fabricApi: 0.34.9+1.17
+  fabricLoader: 0.11.3
+  fabricMinecraft: 1.17
+  adventurePlatformFabric: 4.1.0-SNAPSHOT
 
 dependencies:
   adventureBom:
@@ -58,7 +59,7 @@ dependencies:
   adventurePlatformFabric:
     group: net.kyori
     name: adventure-platform-fabric
-    version: { ref: adventurePlatform }
+    version: { ref: adventurePlatformFabric }
   minimessage:
     group: net.kyori
     name: adventure-text-minimessage
@@ -112,15 +113,11 @@ dependencies:
     group: org.slf4j
     name: slf4j-jdk14
     version: { ref: slf4j }
-  log4jSlf4jImpl:
-    group: org.apache.logging.log4j
-    name: log4j-slf4j-impl
-    version: { ref: log4jSlf4jImpl }
 
   jmpLib:
     group: xyz.jpenilla
     name: jmplib
-    version: 1.0.1+33-SNAPSHOT
+    version: 1.0.1+37-SNAPSHOT
 
   gson:
     group: com.google.code.gson

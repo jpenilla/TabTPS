@@ -23,15 +23,14 @@
  */
 package xyz.jpenilla.tabtps.common.display;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.util.RunnableFuturePair;
-
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 public final class DisplayHandler<D extends Display> {
   private transient final TabTPS tabTPS;

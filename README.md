@@ -3,7 +3,7 @@
 # TabTPS ![plugin version badge](https://img.shields.io/github/v/release/jmanpenilla/TabTPS?color=blue&label=version&style=plastic)
 Minecraft server mod/plugin to show TPS, MSPT, and other information in the tab menu, boss bar, and action bar.
 
-Supports Minecraft versions 1.8.8-1.16+ on Paper/Spigot.
+Supports Minecraft versions 1.8.8-1.17+ on Paper/Spigot.
 
 Fabric version requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 

@@ -23,6 +23,8 @@
  */
 package xyz.jpenilla.tabtps.common.config;
 
+import java.nio.file.Path;
+import java.util.function.UnaryOperator;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -33,9 +35,6 @@ import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import xyz.jpenilla.tabtps.common.util.Serializers;
-
-import java.nio.file.Path;
-import java.util.function.UnaryOperator;
 
 public class ConfigLoader<C> {
   private static final TypeSerializerCollection SERIALIZERS;

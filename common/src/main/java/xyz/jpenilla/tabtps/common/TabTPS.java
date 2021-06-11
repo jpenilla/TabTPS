@@ -23,6 +23,15 @@
  */
 package xyz.jpenilla.tabtps.common;
 
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.PropertyResourceBundle;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.stream.Stream;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -39,16 +48,6 @@ import xyz.jpenilla.tabtps.common.command.commands.ToggleDisplayCommands;
 import xyz.jpenilla.tabtps.common.config.ConfigManager;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.util.CPUMonitor;
-
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.PropertyResourceBundle;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.stream.Stream;
 
 public final class TabTPS {
   private final TabTPSPlatform<?, ?> platform;

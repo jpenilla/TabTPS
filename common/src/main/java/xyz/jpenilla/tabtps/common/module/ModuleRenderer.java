@@ -23,14 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.module;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import xyz.jpenilla.tabtps.common.TabTPS;
-import xyz.jpenilla.tabtps.common.User;
-import xyz.jpenilla.tabtps.common.config.Theme;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -38,6 +30,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import xyz.jpenilla.tabtps.common.TabTPS;
+import xyz.jpenilla.tabtps.common.User;
+import xyz.jpenilla.tabtps.common.config.Theme;
 
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;

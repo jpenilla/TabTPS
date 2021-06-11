@@ -23,17 +23,16 @@
  */
 package xyz.jpenilla.tabtps.common.module;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import xyz.jpenilla.tabtps.common.TabTPS;
-import xyz.jpenilla.tabtps.common.User;
-import xyz.jpenilla.tabtps.common.config.Theme;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import xyz.jpenilla.tabtps.common.TabTPS;
+import xyz.jpenilla.tabtps.common.User;
+import xyz.jpenilla.tabtps.common.config.Theme;
 
 public final class ModuleType<T extends Module> {
   private static final Map<String, ModuleType<? extends Module>> TYPES_BY_NAME = new HashMap<>();

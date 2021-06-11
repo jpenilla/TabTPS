@@ -37,11 +37,6 @@ public final class Constants {
   private static final String DOT = ".";
   private static final String PERMISSION_ROOT = "tabtps";
 
-  private static final String PERMISSION_TOGGLE_ROOT = PERMISSION_ROOT + DOT + "internal" + DOT + "toggle";
-  public static final String PERMISSION_TOGGLE_TAB = PERMISSION_TOGGLE_ROOT + DOT + "tab";
-  public static final String PERMISSION_TOGGLE_ACTIONBAR = PERMISSION_TOGGLE_ROOT + DOT + "actionbar";
-  public static final String PERMISSION_TOGGLE_BOSSBAR = PERMISSION_TOGGLE_ROOT + DOT + "bossbar";
-
   public static final String PERMISSION_COMMAND_TICKINFO = PERMISSION_ROOT + DOT + "tps";
   public static final String PERMISSION_COMMAND_PING = PERMISSION_ROOT + DOT + "ping";
   public static final String PERMISSION_COMMAND_PING_OTHERS = PERMISSION_ROOT + DOT + "ping" + DOT + "others";

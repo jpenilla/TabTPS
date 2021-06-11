@@ -27,11 +27,6 @@ import cloud.commandframework.types.tuples.Pair;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.TabTPSPlatform;
-import xyz.jpenilla.tabtps.common.User;
-import xyz.jpenilla.tabtps.common.display.DisplayHandler;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -44,6 +39,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.TabTPSPlatform;
+import xyz.jpenilla.tabtps.common.User;
+import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 
 public abstract class UserService<P, U extends User<P>> {
   private final Gson gson = new GsonBuilder()

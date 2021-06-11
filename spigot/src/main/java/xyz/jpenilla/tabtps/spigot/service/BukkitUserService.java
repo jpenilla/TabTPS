@@ -23,6 +23,9 @@
  */
 package xyz.jpenilla.tabtps.spigot.service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,10 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.spigot.BukkitUser;
 import xyz.jpenilla.tabtps.spigot.TabTPSPlugin;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
 
 public final class BukkitUserService extends UserService<Player, BukkitUser> {
   public BukkitUserService(final @NonNull TabTPSPlugin plugin) {

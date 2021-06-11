@@ -23,11 +23,10 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
-import net.kyori.adventure.text.format.TextColor;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Arrays;
 import java.util.Collections;
+import net.kyori.adventure.text.format.TextColor;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Utility class for creating {@link TextColor} gradients.

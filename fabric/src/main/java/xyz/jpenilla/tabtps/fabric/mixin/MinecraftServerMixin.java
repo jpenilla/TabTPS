@@ -23,6 +23,9 @@
  */
 package xyz.jpenilla.tabtps.fabric.mixin;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.function.BooleanSupplier;
 import net.minecraft.server.MinecraftServer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.asm.mixin.Final;
@@ -40,10 +43,6 @@ import xyz.jpenilla.tabtps.common.util.RollingAverage;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.common.util.TickTimes;
 import xyz.jpenilla.tabtps.fabric.access.MinecraftServerAccess;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.function.BooleanSupplier;
 
 /**
  * Adds TPS and tick time rolling averages.

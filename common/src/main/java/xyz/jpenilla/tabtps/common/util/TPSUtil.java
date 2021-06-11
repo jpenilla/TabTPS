@@ -24,12 +24,6 @@
 package xyz.jpenilla.tabtps.common.util;
 
 import cloud.commandframework.types.tuples.Pair;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextColor;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.config.Theme;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,6 +31,11 @@ import java.util.List;
 import java.util.LongSummaryStatistics;
 import java.util.function.LongPredicate;
 import java.util.stream.LongStream;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.config.Theme;
 
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -101,20 +100,22 @@ public final class TPSUtil {
   }
 
   public static @NonNull List<Component> formatTickTimes(final @NonNull List<Pair<String, long[]>> times) {
+    final Component header = text()
+      .color(GRAY)
+      .append(
+        translatable("tabtps.label.mspt"),
+        text(" - ", WHITE),
+        translatable("tabtps.label.average"),
+        text(", ", WHITE),
+        translatable("tabtps.label.minimum"),
+        text(", ", WHITE),
+        translatable("tabtps.label.maximum")
+      )
+      .hoverEvent(translatable("tabtps.command.tickinfo.text.mspt_hover", GRAY))
+      .build();
+
     final List<Component> output = new ArrayList<>();
-    output.add(
-      TextComponent.ofChildren(
-        translatable("tabtps.label.mspt", GRAY),
-        space(),
-        text("-", WHITE),
-        space(),
-        translatable("tabtps.label.average", GRAY),
-        text(", ", WHITE),
-        translatable("tabtps.label.minimum", GRAY),
-        text(", ", WHITE),
-        translatable("tabtps.label.maximum", GRAY)
-      ).hoverEvent(translatable("tabtps.command.tickinfo.text.mspt_hover", GRAY))
-    );
+    output.add(header);
 
     final Iterator<Pair<String, long[]>> iterator = times.iterator();
     while (iterator.hasNext()) {
@@ -136,15 +137,11 @@ public final class TPSUtil {
       text(branch, WHITE),
       space(),
       time.color(GRAY),
-      space(),
-      text("-", WHITE),
-      space(),
+      text(" - ", WHITE),
       TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getAverage()), Theme.DEFAULT.colorScheme()),
-      text(",", WHITE),
-      space(),
+      text(", ", WHITE),
       TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMin()), Theme.DEFAULT.colorScheme()),
-      text(",", WHITE),
-      space(),
+      text(", ", WHITE),
       TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMax()), Theme.DEFAULT.colorScheme())
     );
   }

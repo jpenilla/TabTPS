@@ -23,10 +23,9 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Based on the MIT licensed Paper-Server patch "Further improve server tick loop".

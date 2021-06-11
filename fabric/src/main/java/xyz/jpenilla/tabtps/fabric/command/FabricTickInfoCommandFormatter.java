@@ -25,14 +25,13 @@ package xyz.jpenilla.tabtps.fabric.command;
 
 import cloud.commandframework.types.tuples.Pair;
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 import xyz.jpenilla.tabtps.fabric.access.MinecraftServerAccess;
-
-import java.util.List;
 
 public final class FabricTickInfoCommandFormatter implements TickInfoCommand.Formatter {
   private final TabTPSFabric tabTPSFabric;

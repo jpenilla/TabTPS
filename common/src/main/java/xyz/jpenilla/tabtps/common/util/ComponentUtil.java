@@ -23,15 +23,14 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 import static net.kyori.adventure.text.Component.text;
 

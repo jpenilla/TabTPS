@@ -4,7 +4,7 @@ plugins {
 }
 
 val shade: Configuration by configurations.creating
-val mcVersion = libs.versions.fabricMinecraft.get()
+val minecraftVersion = libs.versions.fabricMinecraft.get()
 
 dependencies {
   minecraft(libs.fabricMinecraft)
@@ -35,33 +35,41 @@ dependencies {
   include(libs.bundles.configurate)
   implementation(libs.adventureSerializerConfigurate4)
   include(libs.adventureSerializerConfigurate4)
+}
 
-  implementation(libs.slf4jApi)
-  include(libs.slf4jApi)
-  implementation(libs.log4jSlf4jImpl)
-  include(libs.log4jSlf4jImpl)
+indra {
+  javaVersions().target(16)
 }
 
 tasks {
+  runServer {
+    standardInput = System.`in`
+  }
   shadowJar {
     configurations = listOf(shade)
   }
+  jar {
+    archiveClassifier.set("dev")
+  }
   remapJar {
-    dependsOn(shadowJar)
-    archiveClassifier.set("")
-    archiveFileName.set("${project.name}-mc$mcVersion-${project.version}.jar")
-    destinationDirectory.set(rootProject.rootDir.resolve("build").resolve("libs"))
-    input.set(shadowJar.get().outputs.files.singleFile)
+    input.set(shadowJar.flatMap { it.archiveFile })
+    archiveFileName.set("${project.name}-mc$minecraftVersion-${project.version}.jar")
+    doLast {
+      val archive = archiveFile.get().asFile
+      archive.copyTo(rootProject.layout.buildDirectory.dir("libs").get().asFile.resolve(archive.name), overwrite = true)
+    }
   }
   processResources {
+    val replacements = mapOf(
+      "mod_id" to project.name,
+      "mod_name" to rootProject.name,
+      "version" to version.toString(),
+      "description" to project.description,
+      "github" to "https://github.com/jpenilla/TabTPS"
+    )
+    inputs.properties(replacements)
     filesMatching("fabric.mod.json") {
-      mapOf(
-        "{mod_id}" to project.name,
-        "{mod_name}" to rootProject.name,
-        "{version}" to version.toString(),
-        "{description}" to project.description,
-        "{github}" to "https://github.com/jpenilla/TabTPS"
-      ).entries.forEach { (k, v) -> filter { it.replace(k, v as String) } }
+      expand(replacements)
     }
   }
 }

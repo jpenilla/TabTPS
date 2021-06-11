@@ -26,13 +26,12 @@ package xyz.jpenilla.tabtps.fabric.command;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.fabric.argument.server.MultiplePlayerSelectorArgument;
 import cloud.commandframework.fabric.data.MultiplePlayerSelector;
+import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
-
-import java.util.stream.Collectors;
 
 public final class FabricPingCommand extends PingCommand {
   private final TabTPSFabric tabTPSFabric;

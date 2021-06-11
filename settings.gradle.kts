@@ -1,31 +1,40 @@
 enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+dependencyResolutionManagement {
+  repositories {
+    //mavenLocal()
+    mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.spongepowered.org/repository/maven-public/")
+    maven("https://repo.incendo.org/content/repositories/snapshots")
+    maven("https://repo.jpenilla.xyz/snapshots/")
+    maven("https://repo.codemc.org/repository/maven-public")
+  }
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+}
+
 pluginManagement {
   repositories {
     gradlePluginPortal()
     maven("https://maven.fabricmc.net/")
-    maven("https://repo.stellardrift.ca/repository/snapshots/")
+    maven("https://repo.jpenilla.xyz/snapshots")
   }
 }
 
 plugins {
-  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0-SNAPSHOT"
+  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0"
+  id("fabric-loom") version "0.8-SNAPSHOT"
 }
 
 rootProject.name = "TabTPS"
 
-setupSubproject("tabtps-common") {
-  projectDir = file("common")
-}
-setupSubproject("tabtps-spigot") {
-  projectDir = file("spigot")
-}
-setupSubproject("tabtps-fabric") {
-  projectDir = file("fabric")
-}
-
-inline fun setupSubproject(name: String, block: ProjectDescriptor.() -> Unit) {
-  include(name)
-  project(":$name").apply(block)
+sequenceOf(
+  "common",
+  "spigot",
+  "fabric"
+).forEach { module ->
+  include("tabtps-$module")
+  project(":tabtps-$module").projectDir = file(module)
 }

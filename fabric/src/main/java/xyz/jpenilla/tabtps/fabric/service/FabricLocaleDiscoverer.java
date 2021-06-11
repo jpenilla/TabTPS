@@ -23,15 +23,14 @@
  */
 package xyz.jpenilla.tabtps.fabric.service;
 
-import net.fabricmc.loader.api.ModContainer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Set;
+import net.fabricmc.loader.api.ModContainer;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import xyz.jpenilla.tabtps.common.service.LocaleDiscoverer;
 
 public final class FabricLocaleDiscoverer implements LocaleDiscoverer {
   private final String bundleName;
