@@ -5,7 +5,8 @@
 /target/
 */target/
 BuildTools/
-run
+run/
+/spigot/run*/
 # Ignore Gradle project-specific cache directory
 .gradle
 
