@@ -36,8 +36,14 @@ import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
 public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Formatter {
-  private final Class<?> _MinecraftServer = Crafty.needNmsClass("MinecraftServer");
-  private final Class<?> _MinecraftServer_TickTimes = Crafty.needNmsClass("MinecraftServer$TickTimes");
+  private final Class<?> _MinecraftServer = Crafty.needNMSClassOrElse(
+    "MinecraftServer",
+    "net.minecraft.server.MinecraftServer"
+  );
+  private final Class<?> _MinecraftServer_TickTimes = Crafty.needNMSClassOrElse(
+    "MinecraftServer$TickTimes",
+    "net.minecraft.server.MinecraftServer$TickTimes"
+  );
 
   private final MethodHandle _getServer = Objects.requireNonNull(Crafty.findStaticMethod(this._MinecraftServer, "getServer", this._MinecraftServer));
   private final MethodHandle _getTimes = Objects.requireNonNull(Crafty.findMethod(this._MinecraftServer_TickTimes, "getTimes", long[].class));
