@@ -35,25 +35,27 @@ import xyz.jpenilla.jmplib.Crafty;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
 import static xyz.jpenilla.jmplib.Crafty.needCraftClass;
-import static xyz.jpenilla.jmplib.Crafty.needNmsClass;
+import static xyz.jpenilla.jmplib.Crafty.needNMSClassOrElse;
 
 public final class SpigotReflection {
-  private static SpigotReflection INSTANCE;
-
-  public static @NonNull SpigotReflection get() {
-    if (INSTANCE == null) {
-      synchronized (SpigotReflection.class) {
-        if (INSTANCE == null) {
-          INSTANCE = new SpigotReflection();
-        }
-      }
-    }
-    return INSTANCE;
+  private static final class Holder {
+    static final SpigotReflection INSTANCE = new SpigotReflection();
   }
 
-  private final Class<?> MinecraftServer_class;
+  public static @NonNull SpigotReflection get() {
+    return Holder.INSTANCE;
+  }
+
+  private final Class<?> MinecraftServer_class = needNMSClassOrElse(
+    "MinecraftServer",
+    "net.minecraft.server.MinecraftServer"
+  );
   private final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
-  private final Class<?> EntityPlayer_class;
+  private final Class<?> EntityPlayer_class = needNMSClassOrElse(
+    "EntityPlayer",
+    "net.minecraft.server.level.EntityPlayer",
+    "net.minecraft.server.level.ServerPlayer"
+  );
 
   private final MethodHandle CraftPlayer_getHandle_method;
   private final MethodHandle MinecraftServer_getServer_method;
@@ -63,13 +65,6 @@ public final class SpigotReflection {
   private final Field MinecraftServer_recentTps_field; // Spigot added field
 
   private SpigotReflection() {
-    if (PaperLib.getMinecraftVersion() < 17) {
-      this.MinecraftServer_class = needNmsClass("MinecraftServer");
-      this.EntityPlayer_class = needNmsClass("EntityPlayer");
-    } else {
-      this.MinecraftServer_class = needClass("net.minecraft.server.MinecraftServer");
-      this.EntityPlayer_class = needClass("net.minecraft.server.level.EntityPlayer");
-    }
     this.CraftPlayer_getHandle_method = needMethod(this.CraftPlayer_class, "getHandle", this.EntityPlayer_class);
 
     final String pingFieldName;
@@ -121,14 +116,6 @@ public final class SpigotReflection {
       return (double[]) this.MinecraftServer_recentTps_field.get(server);
     } catch (final IllegalAccessException e) {
       throw new IllegalStateException("Failed to get server TPS", e);
-    }
-  }
-
-  private static @NonNull Class<?> needClass(final @NonNull String name) {
-    try {
-      return Class.forName(name);
-    } catch (final ClassNotFoundException ex) {
-      throw new RuntimeException(String.format("Failed to find class '%s'", name), ex);
     }
   }
 
