@@ -1,3 +1,5 @@
+import xyz.jpenilla.runpaper.task.RunServerTask
+
 plugins {
   id("com.github.johnrengelman.shadow")
   id("net.minecrell.plugin-yml.bukkit")
@@ -21,8 +23,19 @@ dependencies {
 
 tasks {
   runServer {
-    minecraftVersion("1.16.5")
+    minecraftVersion("1.17")
   }
+
+  mapOf(
+    setOf("1.8.8", "1.9.4", "1.10.2", "1.11.2", "1.12.2") to 8,
+    setOf("1.13.2", "1.14.4", "1.15.2") to 11,
+    setOf("1.16.5", "1.17") to 16
+  ).forEach { (minecraftVersions, javaVersion) ->
+    for (version in minecraftVersions) {
+      createVersionedRun(version, javaVersion)
+    }
+  }
+
   jar {
     archiveClassifier.set("unshaded")
   }
@@ -62,4 +75,17 @@ bukkit {
   loadBefore = listOf("Essentials")
   softDepend = listOf("PlaceholderAPI", "ViaVersion")
   authors = listOf("jmp")
+}
+
+fun TaskContainerScope.createVersionedRun(
+  version: String,
+  javaVersion: Int
+) = register<RunServerTask>("runServer${version.replace('.', '_')}") {
+  group = "tabtps"
+  pluginJars.from(shadowJar.flatMap { it.archiveFile })
+  minecraftVersion(version)
+  runDirectory(file("run$version"))
+  javaLauncher.set(project.javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(javaVersion))
+  })
 }

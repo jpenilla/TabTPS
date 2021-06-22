@@ -117,7 +117,7 @@ dependencies:
   jmpLib:
     group: xyz.jpenilla
     name: jmplib
-    version: 1.0.1+38-SNAPSHOT
+    version: 1.0.1+39-SNAPSHOT
 
   gson:
     group: com.google.code.gson
