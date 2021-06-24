@@ -15,7 +15,7 @@ versions:
   adventure: 4.8.0
   adventurePagination: 4.0.0-SNAPSHOT
   adventurePlatform: 4.0.0-SNAPSHOT
-  minimessage: 4.1.0-SNAPSHOT
+  minimessage: 4.2.0-SNAPSHOT
   cloud: 1.5.0-SNAPSHOT
   commodore: 1.10-SNAPSHOT
   configurate: 4.1.1
