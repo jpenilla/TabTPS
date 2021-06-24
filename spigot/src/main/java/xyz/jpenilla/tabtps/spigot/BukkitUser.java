@@ -64,6 +64,9 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public int ping() {
+    if (PaperLib.getMinecraftVersion() >= 17) {
+      return this.base.getPing();
+    }
     return PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()
       ? SpigotReflection.get().ping(this.base)
       : this.base.spigot().getPing();

@@ -34,6 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import xyz.jpenilla.jmplib.Crafty;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
+import static xyz.jpenilla.jmplib.Crafty.findField;
 import static xyz.jpenilla.jmplib.Crafty.needCraftClass;
 import static xyz.jpenilla.jmplib.Crafty.needNMSClassOrElse;
 
@@ -46,37 +47,26 @@ public final class SpigotReflection {
     return Holder.INSTANCE;
   }
 
-  private final Class<?> MinecraftServer_class = needNMSClassOrElse(
+  private static final Class<?> MinecraftServer_class = needNMSClassOrElse(
     "MinecraftServer",
     "net.minecraft.server.MinecraftServer"
   );
-  private final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
-  private final Class<?> EntityPlayer_class = needNMSClassOrElse(
+  private static final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
+  private static final Class<?> EntityPlayer_class = needNMSClassOrElse(
     "EntityPlayer",
     "net.minecraft.server.level.EntityPlayer",
     "net.minecraft.server.level.ServerPlayer"
   );
 
-  private final MethodHandle CraftPlayer_getHandle_method;
-  private final MethodHandle MinecraftServer_getServer_method;
+  private static final MethodHandle CraftPlayer_getHandle_method = needMethod(CraftPlayer_class, "getHandle", EntityPlayer_class);
+  private static final MethodHandle MinecraftServer_getServer_method = needStaticMethod(MinecraftServer_class, "getServer", MinecraftServer_class);
 
-  private final Field EntityPlayer_ping_field;
-  private final Field MinecraftServer_recentTickTimes_field;
-  private final Field MinecraftServer_recentTps_field; // Spigot added field
+  private static final @Nullable Field EntityPlayer_ping_field = findField(EntityPlayer_class, "ping");
+  private static final Field MinecraftServer_recentTps_field = needField(MinecraftServer_class, "recentTps"); // Spigot added field
 
-  private SpigotReflection() {
-    this.CraftPlayer_getHandle_method = needMethod(this.CraftPlayer_class, "getHandle", this.EntityPlayer_class);
+  private final Field MinecraftServer_recentTickTimes_field = tickTimesField();
 
-    final String pingFieldName;
-    if (PaperLib.getMinecraftVersion() < 17) {
-      pingFieldName = "ping";
-    } else {
-      pingFieldName = "e";
-    }
-    this.EntityPlayer_ping_field = needField(this.EntityPlayer_class, pingFieldName);
-    this.MinecraftServer_getServer_method = needStaticMethod(this.MinecraftServer_class, "getServer", this.MinecraftServer_class);
-    this.MinecraftServer_recentTps_field = needField(this.MinecraftServer_class, "recentTps");
-
+  private static @NonNull Field tickTimesField() {
     final String recentTimes;
     final int ver = PaperLib.getMinecraftVersion();
     if (ver < 13) {
@@ -88,20 +78,23 @@ public final class SpigotReflection {
     } else { // else if (ver >= 17) {
       recentTimes = "n";
     }
-    this.MinecraftServer_recentTickTimes_field = needField(this.MinecraftServer_class, recentTimes);
+    return needField(MinecraftServer_class, recentTimes);
   }
 
   public int ping(final @NonNull Player player) {
-    final Object nmsPlayer = invokeOrThrow(this.CraftPlayer_getHandle_method, player);
+    if (EntityPlayer_ping_field == null) {
+      throw new IllegalStateException("The ping Field is null!");
+    }
+    final Object nmsPlayer = invokeOrThrow(CraftPlayer_getHandle_method, player);
     try {
-      return this.EntityPlayer_ping_field.getInt(nmsPlayer);
+      return EntityPlayer_ping_field.getInt(nmsPlayer);
     } catch (final IllegalAccessException e) {
       throw new IllegalStateException(String.format("Failed to get ping for player: '%s'", player.getName()), e);
     }
   }
 
   public double averageTickTime() {
-    final Object server = invokeOrThrow(this.MinecraftServer_getServer_method);
+    final Object server = invokeOrThrow(MinecraftServer_getServer_method);
     try {
       final long[] recentMspt = (long[]) this.MinecraftServer_recentTickTimes_field.get(server);
       return TPSUtil.toMilliseconds(TPSUtil.average(recentMspt));
@@ -111,9 +104,9 @@ public final class SpigotReflection {
   }
 
   public double @NonNull [] recentTps() {
-    final Object server = invokeOrThrow(this.MinecraftServer_getServer_method);
+    final Object server = invokeOrThrow(MinecraftServer_getServer_method);
     try {
-      return (double[]) this.MinecraftServer_recentTps_field.get(server);
+      return (double[]) MinecraftServer_recentTps_field.get(server);
     } catch (final IllegalAccessException e) {
       throw new IllegalStateException("Failed to get server TPS", e);
     }
