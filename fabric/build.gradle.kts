@@ -1,5 +1,5 @@
 plugins {
-  id("fabric-loom")
+  id("quiet-fabric-loom")
   id("com.github.johnrengelman.shadow")
 }
 
