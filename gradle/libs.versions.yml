@@ -13,7 +13,7 @@ plugins:
   xyz.jpenilla.run-paper: 1.0.3
 
 versions:
-  adventure: 4.8.0
+  adventure: 4.8.1
   adventurePagination: 4.0.0-SNAPSHOT
   adventurePlatform: 4.0.0-SNAPSHOT
   minimessage: 4.2.0-SNAPSHOT

@@ -25,7 +25,7 @@ package xyz.jpenilla.tabtps.common.command.exception;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -54,6 +54,6 @@ public final class CommandCompletedException extends RuntimeException implements
 
   @Override
   public @NonNull String getMessage() {
-    return PlainComponentSerializer.plain().serializeOr(this.message, "No message.");
+    return PlainTextComponentSerializer.plainText().serializeOr(this.message, "No message.");
   }
 }
