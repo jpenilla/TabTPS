@@ -78,8 +78,8 @@ public abstract class UserService<P, U extends User<P>> {
       try (final BufferedReader reader = Files.newBufferedReader(file)) {
         final U deserialized = this.gson.fromJson(reader, this.userClass);
         user.populate(deserialized);
-      } catch (final IOException e) {
-        this.platform.logger().warn("Failed to load data for user with UUID: " + uniqueId, e);
+      } catch (final Exception ex) {
+        this.platform.logger().warn("Failed to load data for user with UUID: " + uniqueId, ex);
       }
     }
     this.userMap.put(uniqueId, user);
