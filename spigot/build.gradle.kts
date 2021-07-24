@@ -23,13 +23,13 @@ dependencies {
 
 tasks {
   runServer {
-    minecraftVersion("1.17")
+    minecraftVersion("1.17.1")
   }
 
   mapOf(
     setOf("1.8.8", "1.9.4", "1.10.2", "1.11.2", "1.12.2") to 8,
     setOf("1.13.2", "1.14.4", "1.15.2") to 11,
-    setOf("1.16.5", "1.17") to 16
+    setOf("1.16.5", "1.17.1") to 16
   ).forEach { (minecraftVersions, javaVersion) ->
     for (version in minecraftVersions) {
       createVersionedRun(version, javaVersion)
