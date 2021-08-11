@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "xyz.jpenilla"
-version = "1.3.9"
+version = "1.3.10-SNAPSHOT"
   .run { if (endsWith("-SNAPSHOT")) "$this+${lastCommitHash()}" else this }
 description = "Monitor your server's performance in real time"
 
