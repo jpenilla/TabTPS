@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.fabric;
 
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.fabric.FabricServerCommandManager;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -70,7 +70,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     this.userService = new FabricUserService(this); // todo store in level container?
 
     this.commandManager = new FabricServerCommandManager<>(
-      AsynchronousCommandExecutionCoordinator.<Commander>newBuilder().build(),
+      CommandExecutionCoordinator.simpleCoordinator(),
       commandSourceStack -> {
         final Entity entity = commandSourceStack.getEntity();
         if (entity instanceof ServerPlayer player) {

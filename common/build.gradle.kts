@@ -1,4 +1,5 @@
 import ca.stellardrift.build.localization.TemplateType
+import java.util.Locale
 
 plugins {
   id("net.kyori.blossom")
@@ -12,7 +13,7 @@ localization {
 
 tasks.jar {
   from(rootProject.file("license.txt")) {
-    rename { "license_${rootProject.name.toLowerCase()}.txt" }
+    rename { "license_${rootProject.name.toLowerCase(Locale.ENGLISH)}.txt" }
   }
 }
 

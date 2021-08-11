@@ -26,14 +26,12 @@ package xyz.jpenilla.tabtps.spigot;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.brigadier.CloudBrigadierManager;
 import cloud.commandframework.bukkit.CloudBukkitCapabilities;
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
-import com.google.common.collect.ImmutableList;
 import io.papermc.lib.PaperLib;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
@@ -65,7 +63,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
     PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
     if (this.craftBukkit()) {
-      Bukkit.getPluginManager().disablePlugin(this);
+      this.getServer().getPluginManager().disablePlugin(this);
       return;
     }
     if (PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()) {
@@ -84,10 +82,10 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
     this.tabTPS = new TabTPS(this);
     this.registerCommands();
 
-    Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
+    this.getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
 
     if (this.tabTPS.configManager().pluginSettings().updateChecker()) {
-      Bukkit.getScheduler().runTaskAsynchronously(this, () ->
+      this.getServer().getScheduler().runTaskAsynchronously(this, () ->
         UpdateChecker.checkVersion(this.getDescription().getVersion()).forEach(this.logger::info)
       );
     }
@@ -103,21 +101,20 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
 
   @Override
   public void shutdown() {
-    Bukkit.getPluginManager().disablePlugin(this);
+    this.getServer().getPluginManager().disablePlugin(this);
   }
 
   @Override
   public void onReload() {
     if (PaperLib.getMinecraftVersion() >= 13) {
-      Bukkit.getScheduler().runTask(this, () -> ImmutableList.copyOf(Bukkit.getOnlinePlayers()).forEach(Player::updateCommands));
+      this.getServer().getOnlinePlayers().forEach(Player::updateCommands);
     }
   }
 
   private void setupCommandManager() throws Exception {
     this.commandManager = new PaperCommandManager<>(
       this,
-      AsynchronousCommandExecutionCoordinator
-        .<Commander>newBuilder().build(),
+      CommandExecutionCoordinator.simpleCoordinator(),
       commandSender -> {
         if (commandSender instanceof Player) {
           return this.userService().user((Player) commandSender);
@@ -147,7 +144,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
     /* Register Asynchronous Completion Listener */
     if (this.commandManager.queryCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
       this.commandManager.registerAsynchronousCompletions();
-      this.logger.info("Successfully registered asynchronous command completion listener.");
+      this.logger().info("Successfully registered asynchronous command completion listener.");
     }
   }
 
@@ -187,7 +184,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
 
   @Override
   public int maxPlayers() {
-    return Bukkit.getMaxPlayers();
+    return this.getServer().getMaxPlayers();
   }
 
   @Override

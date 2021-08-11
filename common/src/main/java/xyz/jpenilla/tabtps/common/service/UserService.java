@@ -82,7 +82,6 @@ public abstract class UserService<P, U extends User<P>> {
         this.platform.logger().warn("Failed to load data for user with UUID: " + uniqueId, ex);
       }
     }
-    this.userMap.put(uniqueId, user);
     return user;
   }
 
@@ -118,11 +117,7 @@ public abstract class UserService<P, U extends User<P>> {
   }
 
   public @NonNull U user(final @NonNull P base) {
-    final U user = this.userMap.get(this.uuid(base));
-    if (user != null) {
-      return user;
-    }
-    return this.loadUser(base);
+    return this.userMap.computeIfAbsent(this.uuid(base), uuid -> this.loadUser(base));
   }
 
   public @NonNull U user(final @NonNull UUID uniqueId) {
