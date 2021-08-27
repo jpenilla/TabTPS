@@ -71,6 +71,8 @@ public final class SpigotReflection {
     final int ver = PaperLib.getMinecraftVersion();
     if (ver < 13) {
       recentTimes = "h";
+    } else if (ver == 13) {
+      recentTimes = "d";
     } else if (ver == 14 || ver == 15) {
       recentTimes = "f";
     } else if (ver == 16) {
