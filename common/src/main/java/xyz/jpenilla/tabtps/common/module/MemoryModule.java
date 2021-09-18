@@ -30,7 +30,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
-import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 
 public final class MemoryModule extends AbstractModule {
@@ -62,17 +62,17 @@ public final class MemoryModule extends AbstractModule {
     final TextColor color1 = this.theme.colorScheme().goodPerformance();
     final TextColor color2 = this.theme.colorScheme().goodPerformanceSecondary();
     final TextComponent.Builder builder = Component.text()
-      .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.usedMemory()), color1, color2))
+      .append(Components.gradient(String.valueOf(MemoryUtil.usedMemory()), color1, color2))
       .append(Component.text("M", this.theme.colorScheme().text()))
       .append(Component.text("/", this.theme.colorScheme().textSecondary()))
-      .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.committedMemory()), color1, color2))
+      .append(Components.gradient(String.valueOf(MemoryUtil.committedMemory()), color1, color2))
       .append(Component.text("M", this.theme.colorScheme().text()));
     if (this.alwaysShowMax || MemoryUtil.committedMemory() != MemoryUtil.maxMemory()) {
       builder.append(Component.space())
         .append(Component.text("(", this.theme.colorScheme().textSecondary()))
         .append(Messages.LABEL_MAXIMUM_SHORT_LOWER.styled(this.theme.colorScheme().text()))
         .append(Component.space())
-        .append(ComponentUtil.gradient(String.valueOf(MemoryUtil.maxMemory()), color1, color2))
+        .append(Components.gradient(String.valueOf(MemoryUtil.maxMemory()), color1, color2))
         .append(Component.text("M", this.theme.colorScheme().text()))
         .append(Component.text(")", this.theme.colorScheme().textSecondary()));
     }

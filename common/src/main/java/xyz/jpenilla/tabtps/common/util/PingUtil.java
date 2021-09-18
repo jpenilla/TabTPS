@@ -51,6 +51,6 @@ public final class PingUtil {
       color1 = colors.lowPerformance();
       color2 = colors.lowPerformanceSecondary();
     }
-    return ComponentUtil.gradient(String.valueOf(ping), color1, color2);
+    return Components.gradient(String.valueOf(ping), color1, color2);
   }
 }

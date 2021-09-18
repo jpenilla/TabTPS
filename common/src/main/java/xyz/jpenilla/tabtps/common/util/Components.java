@@ -26,23 +26,26 @@ package xyz.jpenilla.tabtps.common.util;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
 import static net.kyori.adventure.text.Component.text;
 
-public final class ComponentUtil {
+@DefaultQualifier(NonNull.class)
+public final class Components {
   public static final Pattern SPECIAL_CHARACTERS_PATTERN = Pattern.compile("[^\\s\\w\\-]");
 
-  private ComponentUtil() {
+  private Components() {
   }
 
-  public static @NonNull Component highlight(
-    final @NonNull Component component,
-    final @NonNull TextColor highlightColor
+  public static Component highlight(
+    final Component component,
+    final TextColor highlightColor
   ) {
     return component.replaceText(config -> {
       config.match(SPECIAL_CHARACTERS_PATTERN);
@@ -50,7 +53,7 @@ public final class ComponentUtil {
     });
   }
 
-  public static @NonNull Component gradient(final @NonNull String textContent, final @Nullable Consumer<Style.@NonNull Builder> style, final @NonNull TextColor @NonNull ... colors) {
+  public static Component gradient(final String textContent, final @Nullable Consumer<Style.Builder> style, final TextColor ... colors) {
     final Gradient gradient = new Gradient(colors);
     final TextComponent.Builder builder = text();
     if (style != null) {
@@ -64,7 +67,19 @@ public final class ComponentUtil {
     return builder.build();
   }
 
-  public static @NonNull Component gradient(final @NonNull String textContent, final @NonNull TextColor @NonNull ... colors) {
+  public static Component gradient(final String textContent, final TextColor ... colors) {
     return gradient(textContent, null, colors);
+  }
+
+  public static TextComponent ofChildren(final ComponentLike... children) {
+    if (children.length == 0) {
+      return Component.empty();
+    }
+
+    final TextComponent.Builder builder = Component.text();
+    for (final ComponentLike child : children) {
+      builder.append(child);
+    }
+    return builder.build();
   }
 }

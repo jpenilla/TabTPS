@@ -140,8 +140,8 @@ public final class MemoryUtil {
   public static @NonNull Component humanReadableByteCountBin(final long bytes) {
     final long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
     if (absB < 1024) {
-      return TextComponent.ofChildren(
-        ComponentUtil.gradient(String.valueOf(bytes), BLUE, AQUA),
+      return Components.ofChildren(
+        Components.gradient(String.valueOf(bytes), BLUE, AQUA),
         text("B", GRAY)
       );
     }
@@ -152,8 +152,8 @@ public final class MemoryUtil {
       ci.next();
     }
     value *= Long.signum(bytes);
-    return TextComponent.ofChildren(
-      ComponentUtil.gradient(String.format("%.1f", value / 1024.0), BLUE, AQUA),
+    return Components.ofChildren(
+      Components.gradient(String.format("%.1f", value / 1024.0), BLUE, AQUA),
       text(String.format("%ciB", ci.current()), GRAY)
     );
   }

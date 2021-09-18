@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
-import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Components;
 
 public final class CPUModule extends AbstractModule {
   public CPUModule(
@@ -47,11 +47,11 @@ public final class CPUModule extends AbstractModule {
   @Override
   public @NonNull Component display() {
     final TextComponent.Builder builder = Component.text()
-      .append(ComponentUtil.gradient(String.valueOf(this.tabTPS.cpuMonitor().recentSystemCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
+      .append(Components.gradient(String.valueOf(this.tabTPS.cpuMonitor().recentSystemCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
       .append(Component.text("%", this.theme.colorScheme().text()))
       .append(Component.text(",", this.theme.colorScheme().textSecondary()))
       .append(Component.space())
-      .append(ComponentUtil.gradient(String.valueOf(this.tabTPS.cpuMonitor().recentProcessCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
+      .append(Components.gradient(String.valueOf(this.tabTPS.cpuMonitor().recentProcessCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
       .append(Component.text("%", this.theme.colorScheme().text()));
     builder.append(Component.space())
       .append(Component.text("(", this.theme.colorScheme().textSecondary()))

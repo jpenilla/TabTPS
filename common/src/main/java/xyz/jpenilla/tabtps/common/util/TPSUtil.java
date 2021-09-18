@@ -32,7 +32,6 @@ import java.util.LongSummaryStatistics;
 import java.util.function.LongPredicate;
 import java.util.stream.LongStream;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
@@ -42,7 +41,7 @@ import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
-import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
+import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 
 public final class TPSUtil {
   private static final DecimalFormat FORMAT = new DecimalFormat("###.00");
@@ -132,7 +131,7 @@ public final class TPSUtil {
 
   private static @NonNull Component formatStatistics(final @NonNull String branch, final @NonNull Component time, final long @NonNull [] times) {
     final LongSummaryStatistics statistics = LongStream.of(times).filter(NOT_ZERO).summaryStatistics();
-    return TextComponent.ofChildren(
+    return Components.ofChildren(
       space(),
       text(branch, WHITE),
       space(),

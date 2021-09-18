@@ -26,13 +26,13 @@ package xyz.jpenilla.tabtps.common.command.commands;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.Constants;
 
 import static net.kyori.adventure.text.Component.newline;
@@ -43,7 +43,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.BLUE;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
-import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
+import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 import static xyz.jpenilla.tabtps.common.util.Serializers.MINIMESSAGE;
 
 public final class AboutCommand extends TabTPSCommand {
@@ -60,7 +60,7 @@ public final class AboutCommand extends TabTPSCommand {
 
   private void executeAbout(final @NonNull CommandContext<Commander> ctx) {
     final Component header = gradient("                                  ", style -> style.decorate(STRIKETHROUGH), BLUE, WHITE, BLUE);
-    ctx.getSender().sendMessage(TextComponent.ofChildren(
+    ctx.getSender().sendMessage(Components.ofChildren(
       header,
       newline(),
       text()

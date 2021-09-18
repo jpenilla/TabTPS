@@ -13,15 +13,15 @@ plugins:
   xyz.jpenilla.run-paper: 1.0.4
 
 versions:
-  adventure: 4.8.1
+  adventure: 4.9.1
   adventurePagination: 4.0.0-SNAPSHOT
-  adventurePlatform: 4.0.0-SNAPSHOT
+  adventurePlatform: 4.0.0
   minimessage: 4.2.0-SNAPSHOT
   cloud: 1.5.0
   commodore: "1.10"
-  configurate: 4.1.1
+  configurate: 4.1.2
   typesafeConfig: 1.+
-  checkerQual: 3.14.0
+  checkerQual: 3.18.0
   slf4j: 1.7.30
   gson: 2.8.0
   guava: 21.0

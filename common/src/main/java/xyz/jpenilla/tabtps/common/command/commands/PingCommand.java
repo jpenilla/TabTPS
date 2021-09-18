@@ -35,7 +35,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.feature.pagination.Pagination;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
@@ -46,6 +45,7 @@ import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
 import xyz.jpenilla.tabtps.common.config.Theme;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.PingUtil;
 import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
@@ -109,7 +109,7 @@ public class PingCommand extends TabTPSCommand {
   private void onPingSelf(final @NonNull CommandContext<Commander> context) {
     final Commander sender = context.getSender();
     if (!(sender instanceof User)) {
-      throw CommandCompletedException.withMessage(TextComponent.ofChildren(
+      throw CommandCompletedException.withMessage(Components.ofChildren(
         Constants.PREFIX,
         space(),
         Messages.COMMAND_PING_TEXT_CONSOLE_MUST_PROVIDE_PLAYER.styled(RED)
@@ -121,7 +121,7 @@ public class PingCommand extends TabTPSCommand {
       .append(space())
       .append(Messages.COMMAND_PING_SELF_TEXT_YOUR_PING.styled(
         GRAY,
-        TextComponent.ofChildren(
+        Components.ofChildren(
           PingUtil.coloredPing(player, Theme.DEFAULT.colorScheme()),
           Messages.LABEL_MILLISECONDS_SHORT.styled(Theme.DEFAULT.colorScheme().textSecondary())
         )
@@ -135,7 +135,7 @@ public class PingCommand extends TabTPSCommand {
     final int page
   ) {
     if (targets.isEmpty()) {
-      throw CommandCompletedException.withMessage(TextComponent.ofChildren(
+      throw CommandCompletedException.withMessage(Components.ofChildren(
         Constants.PREFIX,
         space(),
         Messages.MISC_COMMAND_TEXT_NO_PLAYERS_FOUND.styled(RED, text(inputString))
@@ -152,7 +152,7 @@ public class PingCommand extends TabTPSCommand {
       .append(Messages.COMMAND_PING_TARGET_TEXT_TARGETS_PING.styled(
         GRAY,
         targetPlayer.displayName(),
-        TextComponent.ofChildren(
+        Components.ofChildren(
           PingUtil.coloredPing(targetPlayer, Theme.DEFAULT.colorScheme()),
           Messages.LABEL_MILLISECONDS_SHORT.styled(Theme.DEFAULT.colorScheme().textSecondary())
         )
@@ -168,7 +168,7 @@ public class PingCommand extends TabTPSCommand {
     final List<Component> content = new ArrayList<>();
     final List<Integer> pings = new ArrayList<>();
     targets.stream().sorted(Comparator.comparing(User::ping)).forEach(player -> {
-      content.add(TextComponent.ofChildren(
+      content.add(Components.ofChildren(
         space(),
         text("-", GRAY),
         space(),
@@ -184,12 +184,12 @@ public class PingCommand extends TabTPSCommand {
     final TranslatableProvider playerAmountTranslatable = targets.size() == 1
       ? Messages.COMMAND_PING_TEXT_AMOUNT_PLAYERS_SINGULAR
       : Messages.COMMAND_PING_TEXT_AMOUNT_PLAYERS;
-    final Component playerAmount = TextComponent.ofChildren(
+    final Component playerAmount = Components.ofChildren(
       text('(', WHITE),
       playerAmountTranslatable.styled(GRAY, text(this.tabTPS.platform().userService().onlinePlayers(), GREEN)),
       text(')', WHITE)
     );
-    final Component summary = TextComponent.ofChildren(
+    final Component summary = Components.ofChildren(
       Messages.COMMAND_PING_TEXT_AVERAGE_PING.styled(WHITE),
       text(": ", GRAY),
       PingUtil.coloredPing(avgPing, Theme.DEFAULT.colorScheme()),
@@ -211,7 +211,7 @@ public class PingCommand extends TabTPSCommand {
       .width(38)
       .line(line -> line.character('-').style(style(color(0x47C8FF), STRIKETHROUGH)))
       .build(
-        TextComponent.ofChildren(
+        Components.ofChildren(
           Constants.PREFIX,
           space(),
           Messages.COMMAND_PING_TEXT_PLAYER_PINGS

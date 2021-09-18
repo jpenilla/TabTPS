@@ -46,6 +46,7 @@ import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.module.MemoryModule;
 import xyz.jpenilla.tabtps.common.module.Module;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
@@ -91,7 +92,7 @@ public final class TickInfoCommand extends TabTPSCommand {
   private void executeTickInfo(final @NonNull CommandContext<Commander> ctx) {
     final List<Component> messages = new ArrayList<>();
     messages.add(empty());
-    messages.add(TextComponent.ofChildren(
+    messages.add(Components.ofChildren(
       Constants.PREFIX,
       space(),
       Messages.COMMAND_TICKINFO_TEXT_HEADER.styled(GRAY, ITALIC)

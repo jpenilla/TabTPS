@@ -44,7 +44,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
-import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.Constants;
 
 import static net.kyori.adventure.text.Component.newline;
@@ -65,7 +65,7 @@ public final class ExceptionHandler {
   }
 
   private static void decorateAndSend(final @NonNull Commander commander, final @NonNull ComponentLike componentLike) {
-    commander.sendMessage(TextComponent.ofChildren(Constants.PREFIX, space(), componentLike));
+    commander.sendMessage(Components.ofChildren(Constants.PREFIX, space(), componentLike));
   }
 
   public void apply(final @NonNull CommandManager<Commander> manager) {
@@ -146,7 +146,7 @@ public final class ExceptionHandler {
   private void invalidSyntax(final @NonNull Commander commander, final @NonNull InvalidSyntaxException exception) {
     final Component message = Messages.COMMAND_EXCEPTION_INVALID_SYNTAX.styled(
       RED,
-      ComponentUtil.highlight(text(String.format("/%s", exception.getCorrectSyntax()), GRAY), WHITE)
+      Components.highlight(text(String.format("/%s", exception.getCorrectSyntax()), GRAY), WHITE)
     );
     decorateAndSend(commander, message);
   }

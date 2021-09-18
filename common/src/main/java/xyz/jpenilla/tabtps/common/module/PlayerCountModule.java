@@ -30,7 +30,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
-import xyz.jpenilla.tabtps.common.util.ComponentUtil;
+import xyz.jpenilla.tabtps.common.util.Components;
 
 public final class PlayerCountModule extends AbstractModule {
   public PlayerCountModule(
@@ -51,9 +51,9 @@ public final class PlayerCountModule extends AbstractModule {
     final TextColor color2 = this.theme.colorScheme().goodPerformanceSecondary();
     final TextColor textColor = this.theme.colorScheme().textSecondary();
     return LinearComponents.linear(
-      ComponentUtil.gradient(String.valueOf(this.tabTPS.platform().userService().onlinePlayers()), color1, color2),
+      Components.gradient(String.valueOf(this.tabTPS.platform().userService().onlinePlayers()), color1, color2),
       Component.text("/", textColor),
-      ComponentUtil.gradient(String.valueOf(this.tabTPS.platform().maxPlayers()), color1, color2)
+      Components.gradient(String.valueOf(this.tabTPS.platform().maxPlayers()), color1, color2)
     );
   }
 }

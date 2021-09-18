@@ -31,13 +31,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.Constants;
 import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 
@@ -62,7 +62,7 @@ public final class MemoryCommand extends TabTPSCommand {
   private void executeMemory(final @NonNull CommandContext<Commander> ctx) {
     final List<Component> messages = new ArrayList<>();
     messages.add(empty());
-    final Component header = TextComponent.ofChildren(
+    final Component header = Components.ofChildren(
       Constants.PREFIX,
       space(),
       Messages.COMMAND_MEMORY_TEXT_HEADER.styled(GRAY, ITALIC)

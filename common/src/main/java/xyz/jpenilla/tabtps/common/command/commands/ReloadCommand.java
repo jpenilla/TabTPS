@@ -25,19 +25,19 @@ package xyz.jpenilla.tabtps.common.command.commands;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
-import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
+import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.Constants;
 
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
-import static xyz.jpenilla.tabtps.common.util.ComponentUtil.gradient;
+import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 
 public final class ReloadCommand extends TabTPSCommand {
   public ReloadCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -54,7 +54,7 @@ public final class ReloadCommand extends TabTPSCommand {
 
   private void executeReload(final @NonNull CommandContext<Commander> ctx) {
     this.tabTPS.reload();
-    ctx.getSender().sendMessage(TextComponent.ofChildren(
+    ctx.getSender().sendMessage(Components.ofChildren(
       Constants.PREFIX,
       gradient(" Reload complete.", style -> style.decorate(ITALIC), GREEN, DARK_GREEN)
     ));
