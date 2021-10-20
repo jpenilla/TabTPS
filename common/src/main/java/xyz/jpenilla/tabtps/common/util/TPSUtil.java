@@ -44,18 +44,14 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 
 public final class TPSUtil {
-  private static final DecimalFormat FORMAT = new DecimalFormat("###.00");
+  private static final DecimalFormat FORMAT = new DecimalFormat("0.00");
   private static final LongPredicate NOT_ZERO = l -> l != 0;
 
   private TPSUtil() {
   }
 
-  private static @NonNull String round(final double value) {
-    final String formatted = FORMAT.format(value);
-    if (formatted.startsWith(".")) {
-      return "0" + formatted;
-    }
-    return formatted;
+  private static @NonNull String formatDouble(final double value) {
+    return FORMAT.format(value);
   }
 
   public static @NonNull Component coloredTps(final double tps, final Theme.@NonNull Colors colors) {
@@ -71,7 +67,7 @@ public final class TPSUtil {
       color1 = colors.lowPerformance();
       color2 = colors.lowPerformanceSecondary();
     }
-    return gradient(round(tps), color1, color2);
+    return gradient(formatDouble(tps), color1, color2);
   }
 
   public static double toMilliseconds(final long time) {
@@ -95,7 +91,7 @@ public final class TPSUtil {
       color1 = colors.lowPerformance();
       color2 = colors.lowPerformanceSecondary();
     }
-    return gradient(round(mspt), color1, color2);
+    return gradient(formatDouble(mspt), color1, color2);
   }
 
   public static @NonNull List<Component> formatTickTimes(final @NonNull List<Pair<String, long[]>> times) {

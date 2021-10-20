@@ -34,6 +34,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 
 @DefaultQualifier(NonNull.class)
@@ -73,13 +74,9 @@ public final class Components {
 
   public static TextComponent ofChildren(final ComponentLike... children) {
     if (children.length == 0) {
-      return Component.empty();
+      return empty();
     }
 
-    final TextComponent.Builder builder = Component.text();
-    for (final ComponentLike child : children) {
-      builder.append(child);
-    }
-    return builder.build();
+    return text().append(children).build();
   }
 }

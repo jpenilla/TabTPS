@@ -13,7 +13,7 @@ plugins:
   xyz.jpenilla.run-paper: 1.0.4
 
 versions:
-  adventure: 4.9.1
+  adventure: 4.9.2
   adventurePagination: 4.0.0-SNAPSHOT
   adventurePlatform: 4.0.0
   minimessage: 4.2.0-SNAPSHOT
@@ -21,7 +21,7 @@ versions:
   commodore: "1.10"
   configurate: 4.1.2
   typesafeConfig: 1.+
-  checkerQual: 3.18.0
+  checkerQual: 3.18.1
   slf4j: 1.7.30
   gson: 2.8.0
   guava: 21.0
@@ -118,7 +118,7 @@ dependencies:
   jmpLib:
     group: xyz.jpenilla
     name: jmplib
-    version: 1.0.1+39-SNAPSHOT
+    version: 1.0.1+43-SNAPSHOT
 
   gson:
     group: com.google.code.gson
