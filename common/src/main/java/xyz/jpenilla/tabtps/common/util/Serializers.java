@@ -30,6 +30,6 @@ public final class Serializers {
   private Serializers() {
   }
 
-  public static final MiniMessage MINIMESSAGE = MiniMessage.get();
+  public static final MiniMessage MINIMESSAGE = MiniMessage.miniMessage();
   public static final LegacyComponentSerializer LEGACY_SECTION = LegacyComponentSerializer.builder().hexColors().build();
 }
