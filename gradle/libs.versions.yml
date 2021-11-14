@@ -22,7 +22,7 @@ versions:
   configurate: 4.1.2
   typesafeConfig: 1.+
   checkerQual: 3.19.0
-  slf4j: 1.7.31
+  slf4j: 1.7.32
   gson: 2.8.0
   guava: 21.0
   bstats: 2.2.1

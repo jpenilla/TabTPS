@@ -19,13 +19,14 @@ pluginManagement {
   repositories {
     gradlePluginPortal()
     maven("https://maven.fabricmc.net/")
+    maven("https://maven.quiltmc.org/repository/release/")
     maven("https://repo.jpenilla.xyz/snapshots/")
   }
 }
 
 plugins {
   id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0"
-  id("quiet-fabric-loom") version "0.8-SNAPSHOT"
+  id("quiet-fabric-loom") version "0.10-SNAPSHOT"
 }
 
 rootProject.name = "TabTPS"
