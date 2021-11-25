@@ -27,10 +27,10 @@ versions:
   guava: 21.0
   bstats: 2.2.1
   paperApi: 1.16.5-R0.1-SNAPSHOT
-  paperLib: 1.0.6
-  fabricApi: 0.37.0+1.17
-  fabricLoader: 0.11.6
-  fabricMinecraft: 1.17.1
+  paperLib: 1.0.7
+  fabricApi: 0.43.0+1.18
+  fabricLoader: 0.12.5
+  fabricMinecraft: 1.18-pre8
   adventurePlatformFabric: 4.1.0-SNAPSHOT
 
 dependencies:

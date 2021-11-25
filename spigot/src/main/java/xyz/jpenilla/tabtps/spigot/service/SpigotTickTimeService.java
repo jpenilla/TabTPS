@@ -25,16 +25,17 @@ package xyz.jpenilla.tabtps.spigot.service;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
-import xyz.jpenilla.tabtps.spigot.util.SpigotReflection;
+
+import static xyz.jpenilla.tabtps.spigot.util.SpigotReflection.spigotReflection;
 
 public final class SpigotTickTimeService implements TickTimeService {
   @Override
   public double averageMspt() {
-    return SpigotReflection.get().averageTickTime();
+    return spigotReflection().averageTickTime();
   }
 
   @Override
   public double @NonNull [] recentTps() {
-    return SpigotReflection.get().recentTps();
+    return spigotReflection().recentTps();
   }
 }

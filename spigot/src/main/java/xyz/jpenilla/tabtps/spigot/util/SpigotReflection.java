@@ -43,7 +43,7 @@ public final class SpigotReflection {
     static final SpigotReflection INSTANCE = new SpigotReflection();
   }
 
-  public static @NonNull SpigotReflection get() {
+  public static @NonNull SpigotReflection spigotReflection() {
     return Holder.INSTANCE;
   }
 
@@ -52,16 +52,16 @@ public final class SpigotReflection {
     "net.minecraft.server.MinecraftServer"
   );
   private static final Class<?> CraftPlayer_class = needCraftClass("entity.CraftPlayer");
-  private static final Class<?> EntityPlayer_class = needNMSClassOrElse(
+  private static final Class<?> ServerPlayer_class = needNMSClassOrElse(
     "EntityPlayer",
     "net.minecraft.server.level.EntityPlayer",
     "net.minecraft.server.level.ServerPlayer"
   );
 
-  private static final MethodHandle CraftPlayer_getHandle_method = needMethod(CraftPlayer_class, "getHandle", EntityPlayer_class);
+  private static final MethodHandle CraftPlayer_getHandle_method = needMethod(CraftPlayer_class, "getHandle", ServerPlayer_class);
   private static final MethodHandle MinecraftServer_getServer_method = needStaticMethod(MinecraftServer_class, "getServer", MinecraftServer_class);
 
-  private static final @Nullable Field EntityPlayer_ping_field = findField(EntityPlayer_class, "ping");
+  private static final Field ServerPlayer_latency_field = pingField();
   private static final Field MinecraftServer_recentTps_field = needField(MinecraftServer_class, "recentTps"); // Spigot added field
 
   private final Field MinecraftServer_recentTickTimes_field = tickTimesField();
@@ -77,19 +77,34 @@ public final class SpigotReflection {
       recentTimes = "f";
     } else if (ver == 16) {
       recentTimes = "h";
-    } else { // else if (ver >= 17) {
+    } else if (ver == 17) {
       recentTimes = "n";
+    } else { // else if (ver >= 18) {
+      recentTimes = "p";
     }
     return needField(MinecraftServer_class, recentTimes);
   }
 
-  public int ping(final @NonNull Player player) {
-    if (EntityPlayer_ping_field == null) {
-      throw new IllegalStateException("The ping Field is null!");
+  private static @NonNull Field pingField() {
+    final @Nullable Field mojang = findField(ServerPlayer_class, "latency");
+    if (mojang != null) {
+      return mojang;
     }
+    final @Nullable Field spigotNamedOld = findField(ServerPlayer_class, "ping");
+    if (spigotNamedOld != null) {
+      return spigotNamedOld;
+    }
+    final @Nullable Field obf = findField(ServerPlayer_class, "e"); // 1.18
+    if (obf == null) {
+      throw new IllegalStateException("Cannot find ServerPlayer#latency!");
+    }
+    return obf;
+  }
+
+  public int ping(final @NonNull Player player) {
     final Object nmsPlayer = invokeOrThrow(CraftPlayer_getHandle_method, player);
     try {
-      return EntityPlayer_ping_field.getInt(nmsPlayer);
+      return ServerPlayer_latency_field.getInt(nmsPlayer);
     } catch (final IllegalAccessException e) {
       throw new IllegalStateException(String.format("Failed to get ping for player: '%s'", player.getName()), e);
     }

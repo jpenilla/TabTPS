@@ -32,7 +32,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.util.Serializers;
-import xyz.jpenilla.tabtps.spigot.util.SpigotReflection;
+
+import static xyz.jpenilla.tabtps.spigot.util.SpigotReflection.spigotReflection;
 
 public final class BukkitUser extends AbstractUser<Player> {
   private final transient BukkitAudiences audiences;
@@ -68,7 +69,7 @@ public final class BukkitUser extends AbstractUser<Player> {
       return this.base.getPing();
     }
     return PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()
-      ? SpigotReflection.get().ping(this.base)
+      ? spigotReflection().ping(this.base)
       : this.base.spigot().getPing();
   }
 
