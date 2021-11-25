@@ -18,6 +18,7 @@ subprojects {
   indra {
     javaVersions {
       target(8)
+      minimumToolchain(17)
     }
     github("jpenilla", "TabTPS")
     mitLicense()

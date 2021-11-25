@@ -22,8 +22,10 @@ dependencies {
   implementation(libs.cloudMinecraftExtras)
   include(libs.cloudMinecraftExtras)
 
-  modImplementation(libs.adventurePlatformFabric)
   include(libs.adventurePlatformFabric)
+  modImplementation(libs.adventurePlatformFabric) {
+    exclude("ca.stellardrift", "colonel")
+  }
   implementation(libs.adventureTextFeaturePagination)
   include(libs.adventureTextFeaturePagination)
   implementation(libs.minimessage)
@@ -38,7 +40,7 @@ dependencies {
 }
 
 indra {
-  javaVersions().target(16)
+  javaVersions().target(17)
 }
 
 tasks {
