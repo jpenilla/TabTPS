@@ -10,7 +10,7 @@ plugins:
   ca.stellardrift.localization: 5.0.1-SNAPSHOT
   com.github.johnrengelman.shadow: 7.1.0
   net.minecrell.plugin-yml.bukkit: 0.5.0
-  xyz.jpenilla.run-paper: 1.0.4
+  xyz.jpenilla.run-paper: 1.0.5
 
 versions:
   adventure: 4.9.3
