@@ -17,7 +17,7 @@ versions:
   adventurePagination: 4.0.0-SNAPSHOT
   adventurePlatform: 4.0.1-SNAPSHOT
   minimessage: 4.2.0-SNAPSHOT
-  cloud: 1.5.0
+  cloud: 1.6.0-SNAPSHOT
   commodore: "1.10"
   configurate: 4.1.2
   typesafeConfig: 1.+
@@ -27,11 +27,11 @@ versions:
   guava: 21.0
   bstats: 2.2.1
   paperApi: 1.16.5-R0.1-SNAPSHOT
-  paperLib: 1.0.7
-  fabricApi: 0.43.0+1.18
+  paperLib: 1.0.8-SNAPSHOT
+  fabricApi: 0.43.1+1.18
   fabricLoader: 0.12.5
-  fabricMinecraft: 1.18-pre8
-  adventurePlatformFabric: 4.1.0-SNAPSHOT
+  fabricMinecraft: 1.18-rc4
+  adventurePlatformFabric: 5.0.0-SNAPSHOT
 
 dependencies:
   adventureBom:
@@ -66,10 +66,13 @@ dependencies:
     name: adventure-text-minimessage
     version: { ref: minimessage }
 
+  cloudBom:
+    group: cloud.commandframework
+    name: cloud-bom
+    version: { ref: cloud }
   cloudCore:
     group: cloud.commandframework
     name: cloud-core
-    version: { ref: cloud }
   cloudMinecraftExtras:
     group: cloud.commandframework
     name: cloud-minecraft-extras
@@ -77,7 +80,6 @@ dependencies:
   cloudPaper:
     group: cloud.commandframework
     name: cloud-paper
-    version: { ref: cloud }
   cloudFabric:
     group: cloud.commandframework
     name: cloud-fabric

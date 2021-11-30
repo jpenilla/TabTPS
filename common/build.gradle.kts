@@ -20,6 +20,7 @@ tasks.jar {
 dependencies {
   compileOnlyApi(libs.gson)
   compileOnlyApi(libs.guava)
+  api(platform(libs.cloudBom))
   api(libs.cloudCore)
   api(libs.cloudMinecraftExtras)
   api(libs.configurateHocon)
