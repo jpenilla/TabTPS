@@ -31,7 +31,7 @@ versions:
   fabricApi: 0.43.1+1.18
   fabricLoader: 0.12.8
   fabricMinecraft: 1.18
-  adventurePlatformFabric: 5.0.0-SNAPSHOT
+  adventurePlatformFabric: 5.0.0
 
 dependencies:
   adventureBom:
