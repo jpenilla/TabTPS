@@ -10,7 +10,7 @@ plugins:
   ca.stellardrift.localization: 5.0.1-SNAPSHOT
   com.github.johnrengelman.shadow: 7.1.0
   net.minecrell.plugin-yml.bukkit: 0.5.0
-  xyz.jpenilla.run-paper: 1.0.5
+  xyz.jpenilla.run-paper: 1.0.4
 
 versions:
   adventure: 4.9.3
@@ -29,8 +29,8 @@ versions:
   paperApi: 1.16.5-R0.1-SNAPSHOT
   paperLib: 1.0.8-SNAPSHOT
   fabricApi: 0.43.1+1.18
-  fabricLoader: 0.12.5
-  fabricMinecraft: 1.18-rc4
+  fabricLoader: 0.12.8
+  fabricMinecraft: 1.18
   adventurePlatformFabric: 5.0.0-SNAPSHOT
 
 dependencies:
