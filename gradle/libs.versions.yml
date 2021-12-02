@@ -15,7 +15,7 @@ plugins:
 versions:
   adventure: 4.9.3
   adventurePagination: 4.0.0-SNAPSHOT
-  adventurePlatform: 4.0.1-SNAPSHOT
+  adventurePlatform: 4.0.1
   minimessage: 4.2.0-SNAPSHOT
   cloud: 1.6.0-SNAPSHOT
   commodore: "1.10"
@@ -120,7 +120,7 @@ dependencies:
   jmpLib:
     group: xyz.jpenilla
     name: jmplib
-    version: 1.0.1+44-SNAPSHOT
+    version: 1.0.1+45-SNAPSHOT
 
   gson:
     group: com.google.code.gson
