@@ -22,22 +22,10 @@ dependencies {
 }
 
 tasks {
-  runServer {
-    minecraftVersion("1.18")
-  }
-
-  mapOf(
-    setOf("1.8.8", "1.9.4", "1.10.2", "1.11.2") to 11,
-    setOf("1.12.2", "1.13.2", "1.14.4", "1.15.2", "1.16.5", "1.17.1", "1.18") to 17,
-  ).forEach { (minecraftVersions, javaVersion) ->
-    for (version in minecraftVersions) {
-      createVersionedRun(version, javaVersion)
-    }
-  }
-
   jar {
     archiveClassifier.set("unshaded")
   }
+
   shadowJar {
     archiveClassifier.set(null as String?)
     minimize()
@@ -61,8 +49,35 @@ tasks {
       archive.copyTo(rootProject.layout.buildDirectory.dir("libs").get().asFile.resolve(archive.name), overwrite = true)
     }
   }
+
   build {
     dependsOn(shadowJar)
+  }
+
+  runServer {
+    minecraftVersion("1.18")
+  }
+
+  mapOf(
+    11 to setOf(
+      "1.8.8",
+      "1.9.4",
+      "1.10.2",
+      "1.11.2"
+    ),
+    17 to setOf(
+      "1.12.2",
+      "1.13.2",
+      "1.14.4",
+      "1.15.2",
+      "1.16.5",
+      "1.17.1",
+      "1.18"
+    ),
+  ).forEach { (javaVersion, minecraftVersions) ->
+    for (version in minecraftVersions) {
+      createVersionedRun(version, javaVersion)
+    }
   }
 }
 
