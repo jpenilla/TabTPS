@@ -4,8 +4,7 @@ plugins {
 }
 
 group = "xyz.jpenilla"
-version = "1.3.11-SNAPSHOT"
-  .run { if (endsWith("-SNAPSHOT")) "$this+${lastCommitHash()}" else this }
+version = "1.3.11".decorateVersion()
 description = "Monitor your server's performance in real time"
 
 subprojects {
@@ -43,3 +42,6 @@ tasks.withType<Jar> {
 fun lastCommitHash(): String =
   rootProject.indraGit.commit()?.name?.substring(0, 7)
     ?: error("Could not determine git commit hash")
+
+fun String.decorateVersion(): String =
+  if (endsWith("-SNAPSHOT")) "$this+${lastCommitHash()}" else this
