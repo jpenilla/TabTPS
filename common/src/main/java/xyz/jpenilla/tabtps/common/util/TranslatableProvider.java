@@ -26,6 +26,7 @@ package xyz.jpenilla.tabtps.common.util;
 import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -142,7 +143,16 @@ public final class TranslatableProvider implements ComponentLike {
   private static Set<Locale> availableLocales(final String bundleName, final Class<?> clazz) {
     final String bundlePath = bundleName.replace('.', '/');
     try {
-      final Path codeSource = Paths.get(clazz.getProtectionDomain().getCodeSource().getLocation().toURI());
+      URL sourceUrl = clazz.getProtectionDomain().getCodeSource().getLocation();
+      // Some class loaders give the full url to the class, some give the URL to its jar.
+      // We want the containing jar, so we will unwrap jar-schema code sources.
+      if (sourceUrl.getProtocol().equals("jar")) {
+        final int exclamationIdx = sourceUrl.getPath().lastIndexOf('!');
+        if (exclamationIdx != -1) {
+          sourceUrl = new URL(sourceUrl.getPath().substring(0, exclamationIdx));
+        }
+      }
+      final Path codeSource = Paths.get(sourceUrl.toURI());
 
       final Set<Locale> known = new HashSet<>();
 

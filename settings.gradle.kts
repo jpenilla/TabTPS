@@ -7,8 +7,8 @@ dependencyResolutionManagement {
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.spongepowered.org/repository/maven-public/")
-    maven("https://repo.incendo.org/content/repositories/snapshots")
     maven("https://repo.jpenilla.xyz/snapshots/")
+    maven("https://repo.incendo.org/content/repositories/snapshots")
     maven("https://repo.codemc.org/repository/maven-public")
   }
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -26,6 +26,7 @@ pluginManagement {
 plugins {
   id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0"
   id("quiet-fabric-loom") version "0.10-SNAPSHOT"
+  id("org.spongepowered.gradle.vanilla") version "0.2"
 }
 
 rootProject.name = "TabTPS"
@@ -33,6 +34,7 @@ rootProject.name = "TabTPS"
 sequenceOf(
   "common",
   "spigot",
+  "sponge",
   "fabric"
 ).forEach { module ->
   include("tabtps-$module")
