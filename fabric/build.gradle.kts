@@ -44,17 +44,10 @@ indra {
 }
 
 tasks {
-  runServer {
-    standardInput = System.`in`
-  }
   shadowJar {
     configurations = listOf(shade)
   }
-  jar {
-    archiveClassifier.set("dev")
-  }
   remapJar {
-    input.set(shadowJar.flatMap { it.archiveFile })
     archiveFileName.set("${project.name}-mc$minecraftVersion-${project.version}.jar")
     doLast {
       val archive = archiveFile.get().asFile
