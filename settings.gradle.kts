@@ -1,4 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -24,7 +23,7 @@ pluginManagement {
 }
 
 plugins {
-  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.0"
+  id("ca.stellardrift.polyglot-version-catalogs") version "5.0.1"
   id("quiet-fabric-loom") version "0.11-SNAPSHOT"
   id("org.spongepowered.gradle.vanilla") version "0.2"
 }
