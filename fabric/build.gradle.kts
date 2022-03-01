@@ -28,8 +28,6 @@ dependencies {
   }
   implementation(libs.adventureTextFeaturePagination)
   include(libs.adventureTextFeaturePagination)
-  implementation(libs.minimessage)
-  include(libs.minimessage)
   implementation(libs.adventureTextSerializerLegacy)
   include(libs.adventureTextSerializerLegacy)
 

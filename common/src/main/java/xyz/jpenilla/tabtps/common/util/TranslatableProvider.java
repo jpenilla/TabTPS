@@ -120,7 +120,7 @@ public final class TranslatableProvider implements ComponentLike {
       bundleName
     );
 
-    GlobalTranslator.get().addSource(registry);
+    GlobalTranslator.translator().addSource(registry);
   }
 
   private static void registerAll(final TranslationRegistry registry, final Set<Locale> locales, final String bundleName) {

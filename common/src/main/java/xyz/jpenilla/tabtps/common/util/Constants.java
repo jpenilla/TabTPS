@@ -32,7 +32,7 @@ public final class Constants {
   public static final String TABTPS_VERSION = "${VERSION}";
 
   public static final String PREFIX_MINIMESSAGE = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white>";
-  public static final Component PREFIX = Serializers.MINIMESSAGE.parse(PREFIX_MINIMESSAGE);
+  public static final Component PREFIX = Serializers.MINIMESSAGE.deserialize(PREFIX_MINIMESSAGE);
 
   private static final String DOT = ".";
   private static final String PERMISSION_ROOT = "tabtps";

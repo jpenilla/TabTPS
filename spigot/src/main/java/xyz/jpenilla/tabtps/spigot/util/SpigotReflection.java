@@ -61,7 +61,7 @@ public final class SpigotReflection {
   private static final MethodHandle CraftPlayer_getHandle_method = needMethod(CraftPlayer_class, "getHandle", ServerPlayer_class);
   private static final MethodHandle MinecraftServer_getServer_method = needStaticMethod(MinecraftServer_class, "getServer", MinecraftServer_class);
 
-  private static final Field ServerPlayer_latency_field = pingField();
+  private static final @Nullable Field ServerPlayer_latency_field = pingField();
   private static final Field MinecraftServer_recentTps_field = needField(MinecraftServer_class, "recentTps"); // Spigot added field
 
   private final Field MinecraftServer_recentTickTimes_field = tickTimesField();
@@ -79,29 +79,27 @@ public final class SpigotReflection {
       recentTimes = "h";
     } else if (ver == 17) {
       recentTimes = "n";
-    } else { // else if (ver >= 18) {
-      recentTimes = "p";
+    } else if (ver == 18) {
+      recentTimes = "o";
+    } else {
+      throw new IllegalStateException("Don't know tickTimes field name!");
     }
     return needField(MinecraftServer_class, recentTimes);
   }
 
-  private static @NonNull Field pingField() {
+  private static @Nullable Field pingField() {
     final @Nullable Field mojang = findField(ServerPlayer_class, "latency");
     if (mojang != null) {
       return mojang;
     }
     final @Nullable Field spigotNamedOld = findField(ServerPlayer_class, "ping");
-    if (spigotNamedOld != null) {
-      return spigotNamedOld;
-    }
-    final @Nullable Field obf = findField(ServerPlayer_class, "e"); // 1.18
-    if (obf == null) {
-      throw new IllegalStateException("Cannot find ServerPlayer#latency!");
-    }
-    return obf;
+    return spigotNamedOld;
   }
 
   public int ping(final @NonNull Player player) {
+    if (ServerPlayer_latency_field == null) {
+      throw new IllegalStateException("ServerPlayer_latency_field is null");
+    }
     final Object nmsPlayer = invokeOrThrow(CraftPlayer_getHandle_method, player);
     try {
       return ServerPlayer_latency_field.getInt(nmsPlayer);

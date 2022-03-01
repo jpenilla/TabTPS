@@ -67,7 +67,7 @@ public final class AboutCommand extends TabTPSCommand {
         .content("TabTPS ")
         .append(gradient(Constants.TABTPS_VERSION, BLUE, AQUA))
         .clickEvent(openUrl("https://github.com/jpenilla/TabTPS"))
-        .hoverEvent(MINIMESSAGE.parse("<rainbow>click me!")),
+        .hoverEvent(MINIMESSAGE.deserialize("<rainbow>click me!")),
       newline(),
       text()
         .content("By ")
