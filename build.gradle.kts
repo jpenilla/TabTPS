@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "xyz.jpenilla"
-version = "1.3.12-SNAPSHOT".decorateVersion()
+version = "1.3.12".decorateVersion()
 description = "Monitor your server's performance in real time"
 
 subprojects {
