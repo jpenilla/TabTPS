@@ -1,6 +1,6 @@
 plugins {
+  id("platform-conventions")
   id("quiet-fabric-loom")
-  id("com.github.johnrengelman.shadow")
 }
 
 val shade: Configuration by configurations.creating
@@ -47,10 +47,6 @@ tasks {
   }
   remapJar {
     archiveFileName.set("${project.name}-mc$minecraftVersion-${project.version}.jar")
-    doLast {
-      val archive = archiveFile.get().asFile
-      archive.copyTo(rootProject.layout.buildDirectory.dir("libs").get().asFile.resolve(archive.name), overwrite = true)
-    }
   }
   processResources {
     val replacements = mapOf(
@@ -65,4 +61,8 @@ tasks {
       expand(replacements)
     }
   }
+}
+
+tabTPSPlatform {
+  productionJar.set(tasks.remapJar.flatMap { it.archiveFile })
 }

@@ -4,7 +4,7 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 import java.util.Locale
 
 plugins {
-  id("com.github.johnrengelman.shadow")
+  id("platform-conventions")
   id("org.spongepowered.gradle.plugin")
   id("org.spongepowered.gradle.vanilla")
 }
@@ -82,12 +82,9 @@ tasks {
       }
       exclude(dependency("io.leangen.geantyref:geantyref"))
     }
-    doLast {
-      val archive = archiveFile.get().asFile
-      archive.copyTo(rootProject.layout.buildDirectory.dir("libs").get().asFile.resolve(archive.name), overwrite = true)
-    }
   }
-  assemble {
-    dependsOn(shadowJar)
-  }
+}
+
+tabTPSPlatform {
+  productionJar.set(tasks.shadowJar.flatMap { it.archiveFile })
 }

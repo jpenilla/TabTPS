@@ -1,7 +1,7 @@
 import xyz.jpenilla.runpaper.task.RunServerTask
 
 plugins {
-  id("com.github.johnrengelman.shadow")
+  id("platform-conventions")
   id("net.minecrell.plugin-yml.bukkit")
   id("xyz.jpenilla.run-paper")
 }
@@ -44,14 +44,6 @@ tasks {
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
     }
-    doLast {
-      val archive = archiveFile.get().asFile
-      archive.copyTo(rootProject.layout.buildDirectory.dir("libs").get().asFile.resolve(archive.name), overwrite = true)
-    }
-  }
-
-  assemble {
-    dependsOn(shadowJar)
   }
 
   runServer {
@@ -89,6 +81,10 @@ bukkit {
   loadBefore = listOf("Essentials")
   softDepend = listOf("PlaceholderAPI", "ViaVersion")
   authors = listOf("jmp")
+}
+
+tabTPSPlatform {
+  productionJar.set(tasks.shadowJar.flatMap { it.archiveFile })
 }
 
 fun TaskContainerScope.createVersionedRun(
