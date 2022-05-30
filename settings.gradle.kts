@@ -28,7 +28,7 @@ pluginManagement {
 
 plugins {
   id("ca.stellardrift.polyglot-version-catalogs") version "5.0.1"
-  id("quiet-fabric-loom") version "0.11-SNAPSHOT"
+  id("quiet-fabric-loom") version "0.12-SNAPSHOT"
   id("org.spongepowered.gradle.vanilla") version "0.2"
 }
 
