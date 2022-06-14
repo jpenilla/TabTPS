@@ -67,24 +67,26 @@ public final class SpigotReflection {
   private final Field MinecraftServer_recentTickTimes_field = tickTimesField();
 
   private static @NonNull Field tickTimesField() {
-    final String recentTimes;
+    final String tickTimes;
     final int ver = PaperLib.getMinecraftVersion();
     if (ver < 13) {
-      recentTimes = "h";
+      tickTimes = "h";
     } else if (ver == 13) {
-      recentTimes = "d";
+      tickTimes = "d";
     } else if (ver == 14 || ver == 15) {
-      recentTimes = "f";
+      tickTimes = "f";
     } else if (ver == 16) {
-      recentTimes = "h";
+      tickTimes = "h";
     } else if (ver == 17) {
-      recentTimes = "n";
+      tickTimes = "n";
     } else if (ver == 18) {
-      recentTimes = "o";
+      tickTimes = "o";
+    } else if (ver == 19) {
+      tickTimes = "k";
     } else {
       throw new IllegalStateException("Don't know tickTimes field name!");
     }
-    return needField(MinecraftServer_class, recentTimes);
+    return needField(MinecraftServer_class, tickTimes);
   }
 
   private static @Nullable Field pingField() {
