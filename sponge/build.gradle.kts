@@ -20,7 +20,7 @@ dependencies {
 
 sponge {
   injectRepositories(false)
-  apiVersion("8.0.0")
+  apiVersion("8.1.0-SNAPSHOT")
   plugin(rootProject.name.toLowerCase(Locale.ENGLISH)) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
@@ -62,7 +62,6 @@ tasks {
     archiveClassifier.set(null as String?)
     sequenceOf(
       "org.slf4j",
-      "net.kyori.adventure.text.minimessage",
       "net.kyori.adventure.text.feature.pagination",
       "net.kyori.adventure.serializer.configurate4",
       "org.apache.logging.slf4j",
@@ -76,7 +75,6 @@ tasks {
     dependencies {
       exclude {
         it.moduleGroup == "net.kyori"
-          && it.moduleName != "adventure-text-minimessage"
           && it.moduleName != "adventure-serializer-configurate4"
           && it.moduleName != "adventure-text-feature-pagination"
       }

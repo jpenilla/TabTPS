@@ -68,8 +68,12 @@ public final class HelpCommand extends TabTPSCommand {
   }
 
   public @NonNull List<String> helpQuerySuggestions(final @NonNull CommandContext<Commander> context, final @NonNull String input) {
-    return ((CommandHelpHandler.IndexHelpTopic<Commander>) this.commands.commandManager().getCommandHelpHandler().queryHelp(context.getSender(), ""))
-      .getEntries().stream().map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString).collect(Collectors.toList());
+    return ((CommandHelpHandler.IndexHelpTopic<Commander>) this.commands.commandManager().createCommandHelpHandler()
+      .queryHelp(context.getSender(), ""))
+      .getEntries()
+      .stream()
+      .map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString)
+      .collect(Collectors.toList());
   }
 
   private @NonNull MinecraftHelp<Commander> help() {

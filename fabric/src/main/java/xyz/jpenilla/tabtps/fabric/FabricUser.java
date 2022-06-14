@@ -44,7 +44,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public @NonNull Component displayName() {
-    return this.tabTPSFabric.serverAudiences().toAdventure(this.base.getDisplayName());
+    return this.base.getDisplayName().asComponent();
   }
 
   @Override

@@ -132,7 +132,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
     );
 
     /* Register Brigadier */
-    if (this.commandManager.queryCapability(CloudBukkitCapabilities.BRIGADIER)) {
+    if (this.commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
       this.commandManager.registerBrigadier();
       final CloudBrigadierManager<Commander, ?> brigadierManager = this.commandManager.brigadierManager();
       if (brigadierManager != null) {
@@ -142,7 +142,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
     }
 
     /* Register Asynchronous Completion Listener */
-    if (this.commandManager.queryCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+    if (this.commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
       this.commandManager.registerAsynchronousCompletions();
       this.logger().info("Successfully registered asynchronous command completion listener.");
     }
