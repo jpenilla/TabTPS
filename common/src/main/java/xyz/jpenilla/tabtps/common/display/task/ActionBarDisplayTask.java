@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.display.task;
 
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
@@ -54,5 +55,10 @@ public final class ActionBarDisplayTask implements Display {
       return;
     }
     this.user.sendActionBar(this.renderer.render());
+  }
+
+  @Override
+  public void disable() {
+    this.user.sendActionBar(Component.empty());
   }
 }
