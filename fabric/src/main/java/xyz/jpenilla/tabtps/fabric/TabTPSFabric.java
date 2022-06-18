@@ -31,7 +31,6 @@ import java.util.concurrent.CompletableFuture;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.kyori.adventure.platform.fabric.FabricServerAudiences;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -60,7 +59,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   private final FabricUserService userService;
   private final TabTPS tabTPS;
   private final FabricServerCommandManager<Commander> commandManager;
-  private FabricServerAudiences serverAudiences;
   private MinecraftServer server;
 
   public TabTPSFabric() {
@@ -79,7 +77,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
           final FabricUser user = this.userService().user(player);
           return new DelegateUser<>(user, commandSourceStack);
         }
-        return new FabricConsoleCommander(this, commandSourceStack);
+        return new FabricConsoleCommander(commandSourceStack);
       },
       commander -> {
         if (commander instanceof FabricConsoleCommander consoleCommander) {
@@ -107,7 +105,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   public void onInitialize() {
     ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
       this.server = minecraftServer;
-      this.serverAudiences = FabricServerAudiences.of(minecraftServer);
 
       CompletableFuture.runAsync(() -> UpdateChecker.checkVersion(Constants.TABTPS_VERSION).forEach(this.logger::info));
     });
@@ -121,7 +118,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
         }
       }
       this.server = null;
-      this.serverAudiences = null;
     });
 
     /* Seems to trigger too early for permission checks with LP (NPE)
@@ -131,10 +127,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     ServerPlayConnectionEvents.DISCONNECT.register((serverGamePacketListener, minecraftServer) ->
       this.userService.handleQuit(serverGamePacketListener.player));
     */
-  }
-
-  public @NonNull FabricServerAudiences serverAudiences() {
-    return Objects.requireNonNull(this.serverAudiences, "serverAudiences is null");
   }
 
   public @NonNull MinecraftServer server() {

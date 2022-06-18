@@ -27,29 +27,18 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.kyori.adventure.audience.Audience;
 import net.minecraft.commands.CommandSourceStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
-import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
-public final class FabricConsoleCommander implements ConsoleCommander {
-  private final TabTPSFabric tabTPSFabric;
-  private final CommandSourceStack commandSourceStack;
-
-  public FabricConsoleCommander(final @NonNull TabTPSFabric tabTPSFabric, final @NonNull CommandSourceStack commandSourceStack) {
-    this.tabTPSFabric = tabTPSFabric;
-    this.commandSourceStack = commandSourceStack;
-  }
-
+@DefaultQualifier(NonNull.class)
+public record FabricConsoleCommander(CommandSourceStack commandSourceStack) implements ConsoleCommander {
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return Permissions.check(this.commandSourceStack, permissionString, this.commandSourceStack.getServer().getOperatorUserPermissionLevel());
   }
 
   @Override
-  public @NonNull Audience audience() {
-    return this.tabTPSFabric.serverAudiences().audience(this.commandSourceStack);
-  }
-
-  public @NonNull CommandSourceStack commandSourceStack() {
+  public Audience audience() {
     return this.commandSourceStack;
   }
 }

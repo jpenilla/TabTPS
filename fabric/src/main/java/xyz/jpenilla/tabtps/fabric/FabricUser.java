@@ -64,6 +64,6 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public @NonNull Audience audience() {
-    return this.tabTPSFabric.serverAudiences().audience(this.base);
+    return this.base;
   }
 }
