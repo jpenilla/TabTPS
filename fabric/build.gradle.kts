@@ -1,6 +1,6 @@
 plugins {
-  id("platform-conventions")
   id("quiet-fabric-loom")
+  id("tabtps.platform")
 }
 
 val shade: Configuration by configurations.creating

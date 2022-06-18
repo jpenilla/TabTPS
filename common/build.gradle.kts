@@ -2,7 +2,7 @@ import ca.stellardrift.build.localization.TemplateType
 import java.util.Locale
 
 plugins {
-  id("base-conventions")
+  id("tabtps.base")
   id("net.kyori.blossom")
   id("ca.stellardrift.localization")
 }

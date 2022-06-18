@@ -4,7 +4,7 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 import java.util.Locale
 
 plugins {
-  id("platform-conventions")
+  id("tabtps.platform")
   id("org.spongepowered.gradle.plugin")
   id("org.spongepowered.gradle.vanilla")
 }

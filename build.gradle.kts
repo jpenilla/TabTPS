@@ -1,5 +1,5 @@
 plugins {
-  id("parent-conventions")
+  id("tabtps.parent")
 }
 
 group = "xyz.jpenilla"

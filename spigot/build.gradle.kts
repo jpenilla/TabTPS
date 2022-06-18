@@ -1,7 +1,7 @@
 import xyz.jpenilla.runpaper.task.RunServerTask
 
 plugins {
-  id("platform-conventions")
+  id("tabtps.platform")
   id("net.minecrell.plugin-yml.bukkit")
   id("xyz.jpenilla.run-paper")
 }
