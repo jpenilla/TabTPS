@@ -3,6 +3,8 @@ plugins {
   id("com.github.johnrengelman.shadow")
 }
 
+decorateVersion()
+
 val platformExt = extensions.create("tabTPSPlatform", TabTPSPlatformExtension::class)
 
 tasks {

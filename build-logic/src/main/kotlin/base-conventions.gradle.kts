@@ -6,6 +6,7 @@ plugins {
   id("net.kyori.indra.publishing")
   id("net.kyori.indra.checkstyle")
   id("net.kyori.indra.license-header")
+  id("net.kyori.indra.git")
 }
 
 indra {
