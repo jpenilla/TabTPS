@@ -20,7 +20,7 @@ dependencies {
 
 sponge {
   injectRepositories(false)
-  apiVersion("8.1.0-SNAPSHOT")
+  apiVersion("8.1.0")
   plugin(rootProject.name.toLowerCase(Locale.ENGLISH)) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)

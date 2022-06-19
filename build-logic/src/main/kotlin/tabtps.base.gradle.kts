@@ -3,11 +3,14 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
   id("net.kyori.indra")
-  id("net.kyori.indra.publishing")
   id("net.kyori.indra.checkstyle")
   id("net.kyori.indra.license-header")
   id("net.kyori.indra.git")
 }
+
+group = rootProject.group
+version = rootProject.version
+description = rootProject.description
 
 indra {
   javaVersions {

@@ -24,6 +24,7 @@ pluginManagement {
     maven("https://maven.fabricmc.net/")
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://repo.jpenilla.xyz/snapshots/")
+    maven("https://repo.spongepowered.org/repository/maven-public/")
   }
   includeBuild("build-logic")
 }
