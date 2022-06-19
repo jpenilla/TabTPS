@@ -23,9 +23,7 @@ dependencies {
   include(libs.cloudMinecraftExtras)
 
   include(libs.adventurePlatformFabric)
-  modImplementation(libs.adventurePlatformFabric) {
-    exclude("ca.stellardrift", "colonel")
-  }
+  modImplementation(libs.adventurePlatformFabric)
   implementation(libs.adventureTextFeaturePagination)
   include(libs.adventureTextFeaturePagination)
   implementation(libs.adventureTextSerializerLegacy)
