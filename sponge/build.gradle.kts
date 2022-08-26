@@ -9,11 +9,17 @@ plugins {
   id("org.spongepowered.gradle.vanilla")
 }
 
+// Workaround weird interaction between VanillaGradle and shadow
+val shade: Configuration by configurations.creating
+configurations.implementation {
+  extendsFrom(shade)
+}
+
 dependencies {
   compileOnly(libs.mixin)
-  implementation(libs.cloudSponge)
-  implementation(projects.tabtpsCommon)
-  implementation(libs.log4jSlf4jImpl) {
+  shade(libs.cloudSponge)
+  shade(projects.tabtpsCommon)
+  shade(libs.log4jSlf4jImpl) {
     isTransitive = false
   }
 }
@@ -59,6 +65,7 @@ tasks {
     }
   }
   shadowJar {
+    configurations = listOf(shade)
     archiveClassifier.set(null as String?)
     sequenceOf(
       "org.slf4j",
