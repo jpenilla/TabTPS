@@ -29,7 +29,7 @@ versions:
   fabricApi: 0.60.0+1.19.2
   fabricLoader: 0.14.9
   fabricMinecraft: 1.19.2
-  adventurePlatformFabric: 5.4.0-SNAPSHOT
+  adventurePlatformFabric: 5.5.0-SNAPSHOT
   mixin: 0.8.5
 
   # buildSrc
