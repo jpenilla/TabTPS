@@ -132,7 +132,8 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
     );
 
     /* Register Brigadier */
-    if (this.commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
+    if (this.commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)
+      || this.commandManager.hasCapability(CloudBukkitCapabilities.COMMODORE_BRIGADIER)) {
       this.commandManager.registerBrigadier();
       final CloudBrigadierManager<Commander, ?> brigadierManager = this.commandManager.brigadierManager();
       if (brigadierManager != null) {
