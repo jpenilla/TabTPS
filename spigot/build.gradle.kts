@@ -11,7 +11,7 @@ dependencies {
 
   compileOnly(libs.paperApi)
   implementation(libs.paperLib)
-  implementation(libs.jmpLib)
+  implementation(libs.legacyPluginBase)
   implementation(libs.bstatsBukkit)
   implementation(libs.slf4jJdk14)
 

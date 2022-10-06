@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.jmplib.Crafty;
+import xyz.jpenilla.pluginbase.legacy.Crafty;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 

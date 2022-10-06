@@ -4,5 +4,5 @@
   <!-- no javadoc on test classes -->
   <suppress files="src[\\/]test[\\/]java[\\/].*" checks="FilteringWriteTag"/>
   <suppress files="src[\\/]test[\\/]java[\\/].*" checks="MissingJavadoc.*"/>
-  <suppress files="src/main/java/xyz/jpenilla/tabtps/common/util/CPUMonitor.java" checks="IllegalImport"/> <!-- uses com.sun.management.OperatingSystemMXBean -->
+  <suppress files="src[\\/]main[\\/]java[\\/]xyz[\\/]jpenilla[\\/]tabtps[\\/]common[\\/]util[\\/]CPUMonitor.java" checks="IllegalImport"/> <!-- uses com.sun.management.OperatingSystemMXBean -->
 </suppressions>

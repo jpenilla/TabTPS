@@ -36,7 +36,7 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.jpenilla.jmplib.BasePlugin;
+import xyz.jpenilla.pluginbase.legacy.PluginBase;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -51,7 +51,7 @@ import xyz.jpenilla.tabtps.spigot.service.BukkitUserService;
 import xyz.jpenilla.tabtps.spigot.service.PaperTickTimeService;
 import xyz.jpenilla.tabtps.spigot.service.SpigotTickTimeService;
 
-public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Player, BukkitUser> {
+public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;
   private PaperCommandManager<Commander> commandManager;
   private UserService<Player, BukkitUser> userService;
@@ -59,7 +59,7 @@ public final class TabTPSPlugin extends BasePlugin implements TabTPSPlatform<Pla
   private Logger logger;
 
   @Override
-  public void onPluginEnable() {
+  public void enable() {
     PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
     if (this.craftBukkit()) {

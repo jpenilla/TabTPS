@@ -31,12 +31,12 @@ import java.util.Objects;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import xyz.jpenilla.jmplib.Crafty;
+import xyz.jpenilla.pluginbase.legacy.Crafty;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
-import static xyz.jpenilla.jmplib.Crafty.findField;
-import static xyz.jpenilla.jmplib.Crafty.needCraftClass;
-import static xyz.jpenilla.jmplib.Crafty.needNMSClassOrElse;
+import static xyz.jpenilla.pluginbase.legacy.Crafty.findField;
+import static xyz.jpenilla.pluginbase.legacy.Crafty.needCraftClass;
+import static xyz.jpenilla.pluginbase.legacy.Crafty.needNMSClassOrElse;
 
 public final class SpigotReflection {
   private static final class Holder {
