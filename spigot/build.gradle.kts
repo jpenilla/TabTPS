@@ -40,7 +40,7 @@ tasks {
       "me.lucko.commodore",
       "org.checkerframework",
       "org.bstats",
-      "xyz.jpenilla.jmplib"
+      "xyz.jpenilla.pluginbase"
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
     }

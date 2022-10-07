@@ -7,6 +7,6 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.indraCommon)
-  implementation(libs.shadow)
+  implementation(libs.build.indraCommon)
+  implementation(libs.build.shadow)
 }
