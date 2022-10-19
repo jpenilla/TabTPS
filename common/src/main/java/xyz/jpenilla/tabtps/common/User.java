@@ -50,4 +50,8 @@ public interface User<P> extends Commander {
   @NonNull DisplayHandler<ActionBarDisplayTask> actionBar();
 
   @NonNull DisplayHandler<BossBarDisplayTask> bossBar();
+
+  void markDirty();
+
+  boolean shouldSave();
 }

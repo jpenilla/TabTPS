@@ -41,26 +41,26 @@ public final class SpongeUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public @NonNull Component displayName() {
-    return this.base.displayName().get();
+    return this.base().displayName().get();
   }
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return this.base.hasPermission(permissionString);
+    return this.base().hasPermission(permissionString);
   }
 
   @Override
   public boolean online() {
-    return this.base.isOnline();
+    return this.base().isOnline();
   }
 
   @Override
   public int ping() {
-    return ((net.minecraft.server.level.ServerPlayer) this.base).latency;
+    return ((net.minecraft.server.level.ServerPlayer) this.base()).latency;
   }
 
   @Override
   public @NonNull Audience audience() {
-    return this.base;
+    return this.base();
   }
 }

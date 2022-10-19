@@ -50,33 +50,33 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public @NonNull Component displayName() {
-    return Serializers.LEGACY_SECTION.deserialize(this.base.getDisplayName());
+    return Serializers.LEGACY_SECTION.deserialize(this.base().getDisplayName());
   }
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return this.base.hasPermission(permissionString);
+    return this.base().hasPermission(permissionString);
   }
 
   @Override
   public boolean online() {
-    return this.base.isOnline();
+    return this.base().isOnline();
   }
 
   @Override
   public int ping() {
     if (PaperLib.getMinecraftVersion() >= 17) {
-      return this.base.getPing();
+      return this.base().getPing();
     }
     return PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()
-      ? spigotReflection().ping(this.base)
-      : this.base.spigot().getPing();
+      ? spigotReflection().ping(this.base())
+      : this.base().spigot().getPing();
   }
 
   @Override
   public @NonNull Audience audience() {
     if (this.audience == null) {
-      this.audience = this.audiences.player(this.uuid);
+      this.audience = this.audiences.player(this.uuid());
     }
     return this.audience;
   }

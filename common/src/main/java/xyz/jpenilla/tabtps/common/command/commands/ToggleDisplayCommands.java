@@ -94,6 +94,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.tab().startDisplay();
       user.sendMessage(feedbackMessage("/tabtps toggle tab", Messages.COMMAND_TOGGLE_TAB_ENABLED, GREEN));
     }
+    user.markDirty();
   }
 
   private void toggleActionBar(final @NonNull CommandContext<Commander> context) {
@@ -107,6 +108,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.actionBar().startDisplay();
       user.sendMessage(feedbackMessage("/tabtps toggle actionbar", Messages.COMMAND_TOGGLE_ACTIONBAR_ENABLED, GREEN));
     }
+    user.markDirty();
   }
 
   private void toggleBossBar(final @NonNull CommandContext<Commander> context) {
@@ -120,6 +122,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       user.bossBar().startDisplay();
       user.sendMessage(feedbackMessage("/tabtps toggle bossbar", Messages.COMMAND_TOGGLE_BOSSBAR_ENABLED, GREEN));
     }
+    user.markDirty();
   }
 
   private static @NonNull Component feedbackMessage(final @NonNull String command, final @NonNull TranslatableProvider translatable, final @NonNull TextColor color) {

@@ -160,7 +160,9 @@ public abstract class UserService<P, U extends User<P>> {
       throw new IllegalStateException("Cannot remove non-existing user " + uniqueId);
     }
     this.shutdownDisplays(removed);
-    this.saveUser(uniqueId, removed);
+    if (removed.shouldSave()) {
+      this.saveUser(uniqueId, removed);
+    }
   }
 
   private void createEmptyFile(final @NonNull Path file) {

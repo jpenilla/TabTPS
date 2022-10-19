@@ -32,22 +32,36 @@ import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
 public abstract class AbstractUser<P> implements User<P> {
-  protected final transient TabTPS tabTPS;
-  protected final transient P base;
-  protected final transient UUID uuid;
+  private final transient P base;
+  private final transient UUID uuid;
   private final DisplayHandler<TabDisplayTask> tabDisplayHandler;
   private final DisplayHandler<ActionBarDisplayTask> actionBarDisplayHandler;
   private final DisplayHandler<BossBarDisplayTask> bossBarDisplayHandler;
+  private transient boolean dirty = false;
 
   protected AbstractUser(final @NonNull TabTPS tabTPS, final @NonNull P base, final @NonNull UUID uuid) {
-    this.tabTPS = tabTPS;
     this.base = base;
     this.uuid = uuid;
 
     final PluginSettings.UpdateRates rates = tabTPS.configManager().pluginSettings().updateRates();
-    this.tabDisplayHandler = new DisplayHandler<>(tabTPS, this, rates.tab(), config -> new TabDisplayTask(this.tabTPS, this, config.tabSettings()));
-    this.actionBarDisplayHandler = new DisplayHandler<>(tabTPS, this, rates.actionBar(), config -> new ActionBarDisplayTask(this.tabTPS, this, config.actionBarSettings()));
-    this.bossBarDisplayHandler = new DisplayHandler<>(tabTPS, this, rates.bossBar(), config -> new BossBarDisplayTask(this.tabTPS, this, config.bossBarSettings()));
+    this.tabDisplayHandler = new DisplayHandler<>(
+      tabTPS,
+      this,
+      rates.tab(),
+      config -> new TabDisplayTask(tabTPS, this, config.tabSettings())
+    );
+    this.actionBarDisplayHandler = new DisplayHandler<>(
+      tabTPS,
+      this,
+      rates.actionBar(),
+      config -> new ActionBarDisplayTask(tabTPS, this, config.actionBarSettings())
+    );
+    this.bossBarDisplayHandler = new DisplayHandler<>(
+      tabTPS,
+      this,
+      rates.bossBar(),
+      config -> new BossBarDisplayTask(tabTPS, this, config.bossBarSettings())
+    );
   }
 
   @Override
@@ -61,17 +75,17 @@ public abstract class AbstractUser<P> implements User<P> {
   }
 
   @Override
-  public @NonNull DisplayHandler<TabDisplayTask> tab() {
+  public final @NonNull DisplayHandler<TabDisplayTask> tab() {
     return this.tabDisplayHandler;
   }
 
   @Override
-  public @NonNull DisplayHandler<ActionBarDisplayTask> actionBar() {
+  public final @NonNull DisplayHandler<ActionBarDisplayTask> actionBar() {
     return this.actionBarDisplayHandler;
   }
 
   @Override
-  public @NonNull DisplayHandler<BossBarDisplayTask> bossBar() {
+  public final @NonNull DisplayHandler<BossBarDisplayTask> bossBar() {
     return this.bossBarDisplayHandler;
   }
 
@@ -80,5 +94,15 @@ public abstract class AbstractUser<P> implements User<P> {
     this.bossBarDisplayHandler.enabled(deserialized.bossBar().enabled());
     this.actionBarDisplayHandler.enabled(deserialized.actionBar().enabled());
     this.tabDisplayHandler.enabled(deserialized.tab().enabled());
+  }
+
+  @Override
+  public final void markDirty() {
+    this.dirty = true;
+  }
+
+  @Override
+  public final boolean shouldSave() {
+    return this.dirty;
   }
 }

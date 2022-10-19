@@ -36,7 +36,6 @@ public final class TabDisplayTask implements Display {
   private final ModuleRenderer headerRenderer;
   private final ModuleRenderer footerRenderer;
   private final User<?> user;
-  private final TabTPS tabTPS;
 
   public TabDisplayTask(final @NonNull TabTPS tabTPS, final @NonNull User<?> user, final DisplayConfig.@NonNull TabSettings settings) {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
@@ -51,7 +50,6 @@ public final class TabDisplayTask implements Display {
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.user = user;
-    this.tabTPS = tabTPS;
   }
 
   @Override

@@ -34,7 +34,6 @@ import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
 
 public final class ActionBarDisplayTask implements Display {
   private final User<?> user;
-  private final TabTPS tabTPS;
   private final ModuleRenderer renderer;
 
   public ActionBarDisplayTask(final @NonNull TabTPS tabTPS, final @NonNull User<?> user, final DisplayConfig.@NonNull ActionBarSettings settings) {
@@ -45,7 +44,6 @@ public final class ActionBarDisplayTask implements Display {
       .moduleRenderFunction(ModuleRenderer.standardRenderFunction(theme))
       .build();
     this.user = user;
-    this.tabTPS = tabTPS;
   }
 
   @Override

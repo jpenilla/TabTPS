@@ -44,26 +44,26 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public @NonNull Component displayName() {
-    return this.base.getDisplayName().asComponent();
+    return this.base().getDisplayName().asComponent();
   }
 
   @Override
   public boolean online() {
-    return this.tabTPSFabric.server().getPlayerList().getPlayer(this.uuid) == this.base;
+    return this.tabTPSFabric.server().getPlayerList().getPlayer(this.uuid()) == this.base();
   }
 
   @Override
   public int ping() {
-    return this.base.latency;
+    return this.base().latency;
   }
 
   @Override
   public boolean hasPermission(final @NonNull String permissionString) {
-    return Permissions.check(this.base, permissionString, this.base.getServer().getOperatorUserPermissionLevel());
+    return Permissions.check(this.base(), permissionString, this.base().getServer().getOperatorUserPermissionLevel());
   }
 
   @Override
   public @NonNull Audience audience() {
-    return this.base;
+    return this.base();
   }
 }

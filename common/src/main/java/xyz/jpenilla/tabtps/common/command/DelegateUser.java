@@ -100,6 +100,16 @@ public final class DelegateUser<U, C> implements User<U> {
   }
 
   @Override
+  public void markDirty() {
+    this.user.markDirty();
+  }
+
+  @Override
+  public boolean shouldSave() {
+    return this.user.shouldSave();
+  }
+
+  @Override
   public boolean hasPermission(final @NonNull String permissionString) {
     return this.user.hasPermission(permissionString);
   }
