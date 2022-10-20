@@ -94,6 +94,9 @@ public abstract class AbstractUser<P> implements User<P> {
     this.bossBarDisplayHandler.enabled(deserialized.bossBar().enabled());
     this.actionBarDisplayHandler.enabled(deserialized.actionBar().enabled());
     this.tabDisplayHandler.enabled(deserialized.tab().enabled());
+    if (deserialized.shouldSave()) {
+      this.markDirty();
+    }
   }
 
   @Override
