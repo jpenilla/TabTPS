@@ -23,89 +23,116 @@
  */
 package xyz.jpenilla.tabtps.common;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.config.PluginSettings;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
+@DefaultQualifier(NonNull.class)
 public abstract class AbstractUser<P> implements User<P> {
-  private final transient P base;
-  private final transient UUID uuid;
-  private final DisplayHandler<TabDisplayTask> tabDisplayHandler;
-  private final DisplayHandler<ActionBarDisplayTask> actionBarDisplayHandler;
-  private final DisplayHandler<BossBarDisplayTask> bossBarDisplayHandler;
-  private transient boolean dirty = false;
+  private final P base;
+  private final UUID uuid;
+  private final State state;
 
-  protected AbstractUser(final @NonNull TabTPS tabTPS, final @NonNull P base, final @NonNull UUID uuid) {
+  protected AbstractUser(final TabTPS tabTPS, final P base, final UUID uuid) {
     this.base = base;
     this.uuid = uuid;
-
-    final PluginSettings.UpdateRates rates = tabTPS.configManager().pluginSettings().updateRates();
-    this.tabDisplayHandler = new DisplayHandler<>(
-      tabTPS,
-      this,
-      rates.tab(),
-      config -> new TabDisplayTask(tabTPS, this, config.tabSettings())
-    );
-    this.actionBarDisplayHandler = new DisplayHandler<>(
-      tabTPS,
-      this,
-      rates.actionBar(),
-      config -> new ActionBarDisplayTask(tabTPS, this, config.actionBarSettings())
-    );
-    this.bossBarDisplayHandler = new DisplayHandler<>(
-      tabTPS,
-      this,
-      rates.bossBar(),
-      config -> new BossBarDisplayTask(tabTPS, this, config.bossBarSettings())
-    );
+    this.state = new StateImpl(tabTPS, this);
   }
 
   @Override
-  public final @NonNull UUID uuid() {
+  public final UUID uuid() {
     return this.uuid;
   }
 
   @Override
-  public final @NonNull P base() {
+  public final P base() {
     return this.base;
   }
 
   @Override
-  public final @NonNull DisplayHandler<TabDisplayTask> tab() {
-    return this.tabDisplayHandler;
+  public State state() {
+    return this.state;
   }
 
-  @Override
-  public final @NonNull DisplayHandler<ActionBarDisplayTask> actionBar() {
-    return this.actionBarDisplayHandler;
-  }
+  public static final class StateImpl implements State {
+    private final DisplayHandler<TabDisplayTask> tabDisplayHandler;
+    private final DisplayHandler<ActionBarDisplayTask> actionBarDisplayHandler;
+    private final DisplayHandler<BossBarDisplayTask> bossBarDisplayHandler;
+    private transient boolean dirty = false;
 
-  @Override
-  public final @NonNull DisplayHandler<BossBarDisplayTask> bossBar() {
-    return this.bossBarDisplayHandler;
-  }
-
-  @Override
-  public final void populate(final @NonNull User<P> deserialized) {
-    this.bossBarDisplayHandler.enabled(deserialized.bossBar().enabled());
-    this.actionBarDisplayHandler.enabled(deserialized.actionBar().enabled());
-    this.tabDisplayHandler.enabled(deserialized.tab().enabled());
-    if (deserialized.shouldSave()) {
-      this.markDirty();
+    private StateImpl(
+      final TabTPS tabTPS,
+      final User<?> user
+    ) {
+      final PluginSettings.UpdateRates rates = tabTPS.configManager().pluginSettings().updateRates();
+      this.tabDisplayHandler = new DisplayHandler<>(
+        tabTPS,
+        user,
+        rates.tab(),
+        config -> new TabDisplayTask(tabTPS, user, config.tabSettings())
+      );
+      this.actionBarDisplayHandler = new DisplayHandler<>(
+        tabTPS,
+        user,
+        rates.actionBar(),
+        config -> new ActionBarDisplayTask(tabTPS, user, config.actionBarSettings())
+      );
+      this.bossBarDisplayHandler = new DisplayHandler<>(
+        tabTPS,
+        user,
+        rates.bossBar(),
+        config -> new BossBarDisplayTask(tabTPS, user, config.bossBarSettings())
+      );
     }
-  }
 
-  @Override
-  public final void markDirty() {
-    this.dirty = true;
-  }
+    @Override
+    public void populate(final State from) {
+      this.bossBarDisplayHandler.enabled(from.bossBar().enabled());
+      this.actionBarDisplayHandler.enabled(from.actionBar().enabled());
+      this.tabDisplayHandler.enabled(from.tab().enabled());
+      if (from.shouldSave()) {
+        this.markDirty();
+      }
+    }
 
-  @Override
-  public final boolean shouldSave() {
-    return this.dirty;
+    @Override
+    public DisplayHandler<TabDisplayTask> tab() {
+      return this.tabDisplayHandler;
+    }
+
+    @Override
+    public DisplayHandler<ActionBarDisplayTask> actionBar() {
+      return this.actionBarDisplayHandler;
+    }
+
+    @Override
+    public DisplayHandler<BossBarDisplayTask> bossBar() {
+      return this.bossBarDisplayHandler;
+    }
+
+    @Override
+    public List<DisplayHandler<?>> displays() {
+      return Collections.unmodifiableList(Arrays.asList(
+        this.tab(), this.actionBar(), this.bossBar()
+      ));
+    }
+
+    @Override
+    public void markDirty() {
+      this.dirty = true;
+    }
+
+    @Override
+    public boolean shouldSave() {
+      return this.dirty;
+    }
   }
 }

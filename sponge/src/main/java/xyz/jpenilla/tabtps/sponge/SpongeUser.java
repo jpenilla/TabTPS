@@ -26,26 +26,28 @@ package xyz.jpenilla.tabtps.sponge;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
+@DefaultQualifier(NonNull.class)
 public final class SpongeUser extends AbstractUser<ServerPlayer> {
-  private SpongeUser(final @NonNull TabTPS tabTPS, final @NonNull ServerPlayer player) {
+  private SpongeUser(final TabTPS tabTPS, final ServerPlayer player) {
     super(tabTPS, player, player.uniqueId());
   }
 
-  public static @NonNull SpongeUser from(final @NonNull TabTPS tabTPS, final @NonNull ServerPlayer player) {
+  public static SpongeUser from(final TabTPS tabTPS, final ServerPlayer player) {
     return new SpongeUser(tabTPS, player);
   }
 
   @Override
-  public @NonNull Component displayName() {
+  public Component displayName() {
     return this.base().displayName().get();
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return this.base().hasPermission(permissionString);
   }
 
@@ -60,7 +62,7 @@ public final class SpongeUser extends AbstractUser<ServerPlayer> {
   }
 
   @Override
-  public @NonNull Audience audience() {
+  public Audience audience() {
     return this.base();
   }
 }

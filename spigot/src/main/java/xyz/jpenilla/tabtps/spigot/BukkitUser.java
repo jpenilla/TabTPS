@@ -28,33 +28,36 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 
 import static xyz.jpenilla.tabtps.spigot.util.SpigotReflection.spigotReflection;
 
+@DefaultQualifier(NonNull.class)
 public final class BukkitUser extends AbstractUser<Player> {
-  private final transient BukkitAudiences audiences;
-  private transient Audience audience;
+  private final BukkitAudiences audiences;
+  private @MonotonicNonNull Audience audience;
 
-  private BukkitUser(final @NonNull TabTPS tabTPS, final @NonNull Player player) {
+  private BukkitUser(final TabTPS tabTPS, final Player player) {
     super(tabTPS, player, player.getUniqueId());
     this.audiences = ((TabTPSPlugin) tabTPS.platform()).audiences();
   }
 
-  public static @NonNull BukkitUser from(final @NonNull TabTPS tabTPS, final @NonNull Player player) {
+  public static BukkitUser from(final TabTPS tabTPS, final Player player) {
     return new BukkitUser(tabTPS, player);
   }
 
   @Override
-  public @NonNull Component displayName() {
+  public Component displayName() {
     return Serializers.LEGACY_SECTION.deserialize(this.base().getDisplayName());
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return this.base().hasPermission(permissionString);
   }
 
@@ -74,7 +77,7 @@ public final class BukkitUser extends AbstractUser<Player> {
   }
 
   @Override
-  public @NonNull Audience audience() {
+  public Audience audience() {
     if (this.audience == null) {
       this.audience = this.audiences.player(this.uuid());
     }

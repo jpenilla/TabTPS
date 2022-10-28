@@ -23,35 +23,68 @@
  */
 package xyz.jpenilla.tabtps.common;
 
+import java.util.List;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
+@DefaultQualifier(NonNull.class)
 public interface User<P> extends Commander {
-  @NonNull UUID uuid();
+  UUID uuid();
 
-  @NonNull Component displayName();
+  Component displayName();
 
   boolean online();
 
   int ping();
 
-  void populate(final @NonNull User<P> deserialized);
+  P base();
 
-  @NonNull P base();
+  State state();
 
-  @NonNull DisplayHandler<TabDisplayTask> tab();
+  default DisplayHandler<TabDisplayTask> tab() {
+    return this.state().tab();
+  }
 
-  @NonNull DisplayHandler<ActionBarDisplayTask> actionBar();
+  default DisplayHandler<ActionBarDisplayTask> actionBar() {
+    return this.state().actionBar();
+  }
 
-  @NonNull DisplayHandler<BossBarDisplayTask> bossBar();
+  default DisplayHandler<BossBarDisplayTask> bossBar() {
+    return this.state().bossBar();
+  }
 
-  void markDirty();
+  default List<DisplayHandler<?>> displays() {
+    return this.state().displays();
+  }
 
-  boolean shouldSave();
+  default void markDirty() {
+    this.state().markDirty();
+  }
+
+  default boolean shouldSave() {
+    return this.state().shouldSave();
+  }
+
+  interface State {
+    void populate(final State from);
+
+    DisplayHandler<TabDisplayTask> tab();
+
+    DisplayHandler<ActionBarDisplayTask> actionBar();
+
+    DisplayHandler<BossBarDisplayTask> bossBar();
+
+    List<DisplayHandler<?>> displays();
+
+    void markDirty();
+
+    boolean shouldSave();
+  }
 }

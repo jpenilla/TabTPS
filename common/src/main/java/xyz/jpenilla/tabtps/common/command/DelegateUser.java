@@ -29,10 +29,6 @@ import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import xyz.jpenilla.tabtps.common.User;
-import xyz.jpenilla.tabtps.common.display.DisplayHandler;
-import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
-import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
-import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
 public final class DelegateUser<U, C> implements User<U> {
   private final User<U> user;
@@ -75,38 +71,13 @@ public final class DelegateUser<U, C> implements User<U> {
   }
 
   @Override
-  public void populate(final @NonNull User<U> deserialized) {
-    this.user.populate(deserialized);
-  }
-
-  @Override
   public @NonNull U base() {
     return this.user.base();
   }
 
   @Override
-  public @NonNull DisplayHandler<TabDisplayTask> tab() {
-    return this.user.tab();
-  }
-
-  @Override
-  public @NonNull DisplayHandler<ActionBarDisplayTask> actionBar() {
-    return this.user.actionBar();
-  }
-
-  @Override
-  public @NonNull DisplayHandler<BossBarDisplayTask> bossBar() {
-    return this.user.bossBar();
-  }
-
-  @Override
-  public void markDirty() {
-    this.user.markDirty();
-  }
-
-  @Override
-  public boolean shouldSave() {
-    return this.user.shouldSave();
+  public @NonNull State state() {
+    return this.user.state();
   }
 
   @Override

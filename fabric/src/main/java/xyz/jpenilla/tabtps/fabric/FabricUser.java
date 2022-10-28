@@ -28,22 +28,24 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 
+@DefaultQualifier(NonNull.class)
 public final class FabricUser extends AbstractUser<ServerPlayer> {
-  private transient final TabTPSFabric tabTPSFabric;
+  private final TabTPSFabric tabTPSFabric;
 
-  private FabricUser(final @NonNull TabTPSFabric tabTPS, final @NonNull ServerPlayer player) {
+  private FabricUser(final TabTPSFabric tabTPS, final ServerPlayer player) {
     super(tabTPS.tabTPS(), player, player.getUUID());
     this.tabTPSFabric = tabTPS;
   }
 
-  public static @NonNull FabricUser from(final @NonNull TabTPSFabric tabTPSFabric, final @NonNull ServerPlayer player) {
+  public static FabricUser from(final TabTPSFabric tabTPSFabric, final ServerPlayer player) {
     return new FabricUser(tabTPSFabric, player);
   }
 
   @Override
-  public @NonNull Component displayName() {
+  public Component displayName() {
     return this.base().getDisplayName().asComponent();
   }
 
@@ -58,12 +60,12 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return Permissions.check(this.base(), permissionString, this.base().getServer().getOperatorUserPermissionLevel());
   }
 
   @Override
-  public @NonNull Audience audience() {
+  public Audience audience() {
     return this.base();
   }
 }

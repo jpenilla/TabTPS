@@ -26,32 +26,34 @@ package xyz.jpenilla.tabtps.sponge.service;
 import java.util.Collection;
 import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.sponge.SpongeUser;
 import xyz.jpenilla.tabtps.sponge.TabTPSPlugin;
 
+@DefaultQualifier(NonNull.class)
 public final class SpongeUserService extends UserService<ServerPlayer, SpongeUser> {
   private final TabTPSPlugin plugin;
 
-  public SpongeUserService(final @NonNull TabTPSPlugin platform) {
-    super(platform, SpongeUser.class);
+  public SpongeUserService(final TabTPSPlugin platform) {
+    super(platform);
     this.plugin = platform;
   }
 
   @Override
-  protected @NonNull UUID uuid(final @NonNull ServerPlayer base) {
+  protected UUID uuid(final ServerPlayer base) {
     return base.uniqueId();
   }
 
   @Override
-  protected @NonNull SpongeUser create(final @NonNull ServerPlayer base) {
+  protected SpongeUser create(final ServerPlayer base) {
     return SpongeUser.from(this.plugin.tabTPS(), base);
   }
 
   @Override
-  protected @NonNull Collection<ServerPlayer> platformPlayers() {
+  protected Collection<ServerPlayer> platformPlayers() {
     return Sponge.server().onlinePlayers();
   }
 }

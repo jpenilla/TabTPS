@@ -135,7 +135,7 @@ dependencies:
   legacyPluginBase:
     group: xyz.jpenilla
     name: legacy-plugin-base
-    version: 0.0.1+58-SNAPSHOT
+    version: 0.0.1+66-SNAPSHOT
 
   gson:
     group: com.google.code.gson

@@ -40,44 +40,43 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
+import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 
+@DefaultQualifier(NonNull.class)
 public abstract class UserService<P, U extends User<P>> {
-  private final Gson gson = new GsonBuilder()
+  private static final Gson GSON = new GsonBuilder()
     .setPrettyPrinting()
     .create();
+
   protected final TabTPSPlatform<P, U> platform;
-  private final Class<U> userClass;
   private final Path userDataDirectory;
   private final Map<UUID, U> userMap = new ConcurrentHashMap<>();
 
-  protected UserService(
-    final @NonNull TabTPSPlatform<P, U> platform,
-    final @NonNull Class<U> userClass
-  ) {
+  protected UserService(final TabTPSPlatform<P, U> platform) {
     this.platform = platform;
-    this.userClass = userClass;
     this.userDataDirectory = platform.dataDirectory().resolve("userdata");
   }
 
-  protected abstract @NonNull UUID uuid(final @NonNull P base);
+  protected abstract UUID uuid(final P base);
 
-  protected abstract @NonNull U create(final @NonNull P base);
+  protected abstract U create(final P base);
 
-  private @NonNull Path userFile(final @NonNull UUID uniqueId) {
+  private Path userFile(final UUID uniqueId) {
     return this.userDataDirectory.resolve(uniqueId + ".json");
   }
 
-  private @NonNull U loadUser(final @NonNull P base) {
+  private U loadUser(final P base) {
     final UUID uniqueId = this.uuid(base);
     final Path file = this.userFile(uniqueId);
     final U user = this.create(base);
     if (Files.exists(file)) {
       try (final BufferedReader reader = Files.newBufferedReader(file)) {
-        final U deserialized = this.gson.fromJson(reader, this.userClass);
-        user.populate(deserialized);
+        final User.State deserialized = GSON.fromJson(reader, AbstractUser.StateImpl.class);
+        user.state().populate(deserialized);
       } catch (final Exception ex) {
         this.platform.logger().warn("Failed to load data for user with UUID: " + uniqueId, ex);
       }
@@ -85,13 +84,13 @@ public abstract class UserService<P, U extends User<P>> {
     return user;
   }
 
-  private void saveUser(final @NonNull UUID uuid, final @NonNull U user) {
+  private void saveUser(final UUID uuid, final U user) {
     final Path file = this.userFile(uuid);
     if (!Files.exists(file)) {
       this.createEmptyFile(file);
     }
     try (final BufferedWriter writer = Files.newBufferedWriter(file)) {
-      this.gson.toJson(user, writer);
+      GSON.toJson(user.state(), writer);
     } catch (final IOException e) {
       this.platform.logger().warn("Failed to save data for user with UUID: " + uuid, e);
     }
@@ -103,7 +102,7 @@ public abstract class UserService<P, U extends User<P>> {
    *
    * @param newPlayer the new backing {@link P player} instance
    */
-  public void replacePlayer(final @NonNull P newPlayer) {
+  public final void replacePlayer(final P newPlayer) {
     final UUID uuid = this.uuid(newPlayer);
     final U oldUser = this.userMap.get(uuid);
     if (oldUser == null) {
@@ -111,16 +110,16 @@ public abstract class UserService<P, U extends User<P>> {
     }
     this.shutdownDisplays(oldUser);
     final U newUser = this.create(newPlayer);
-    newUser.populate(oldUser);
+    newUser.state().populate(oldUser.state());
     this.startEnabledDisplays(newUser);
     this.userMap.put(uuid, newUser);
   }
 
-  public @NonNull U user(final @NonNull P base) {
+  public final U user(final P base) {
     return this.userMap.computeIfAbsent(this.uuid(base), uuid -> this.loadUser(base));
   }
 
-  public @NonNull U user(final @NonNull UUID uniqueId) {
+  public final U user(final UUID uniqueId) {
     final U user = this.userMap.get(uniqueId);
     if (user == null) {
       throw new IllegalStateException("No user loaded for UUID: " + uniqueId);
@@ -128,33 +127,33 @@ public abstract class UserService<P, U extends User<P>> {
     return user;
   }
 
-  public @NonNull Map<UUID, U> userStorage() {
+  public final Map<UUID, U> userStorage() {
     return Collections.unmodifiableMap(this.userMap);
   }
 
-  public @NonNull Collection<U> onlineUsers() {
+  public final Collection<U> onlineUsers() {
     return Collections.unmodifiableCollection(this.userMap.values());
   }
 
-  protected abstract @NonNull Collection<P> platformPlayers();
+  protected abstract Collection<P> platformPlayers();
 
-  public int onlinePlayers() {
+  public final int onlinePlayers() {
     return this.userMap.size();
   }
 
-  public void reload() {
+  public final void reload() {
     this.flush();
     this.platformPlayers().stream()
       .map(this::user)
       .forEach(this::startEnabledDisplays);
   }
 
-  public void flush() {
+  public final void flush() {
     final Set<UUID> users = ImmutableSet.copyOf(this.userMap.keySet());
     users.forEach(this::removeUser);
   }
 
-  public void removeUser(final @NonNull UUID uniqueId) {
+  public final void removeUser(final UUID uniqueId) {
     final U removed = this.userMap.remove(uniqueId);
     if (removed == null) {
       throw new IllegalStateException("Cannot remove non-existing user " + uniqueId);
@@ -165,7 +164,7 @@ public abstract class UserService<P, U extends User<P>> {
     }
   }
 
-  private void createEmptyFile(final @NonNull Path file) {
+  private void createEmptyFile(final Path file) {
     try {
       Files.createDirectories(this.userDataDirectory);
       Files.createFile(file);
@@ -174,7 +173,7 @@ public abstract class UserService<P, U extends User<P>> {
     }
   }
 
-  public void handleJoin(final @NonNull P platformPlayer) {
+  public final void handleJoin(final P platformPlayer) {
     final U user = this.user(platformPlayer);
 
     this.platform.tabTPS().findDisplayConfig(user).ifPresent(config -> {
@@ -191,21 +190,19 @@ public abstract class UserService<P, U extends User<P>> {
     });
   }
 
-  public void handleQuit(final @NonNull P platformPlayer) {
+  public final void handleQuit(final P platformPlayer) {
     this.removeUser(this.uuid(platformPlayer));
   }
 
-  private void shutdownDisplays(final @NonNull U user) {
-    Stream.of(user.tab(), user.actionBar(), user.bossBar())
-      .forEach(DisplayHandler::stopDisplay);
+  private void shutdownDisplays(final U user) {
+    user.displays().forEach(DisplayHandler::stopDisplay);
   }
 
-  private void startEnabledDisplays(final @NonNull U user) {
-    Stream.of(user.tab(), user.actionBar(), user.bossBar())
-      .forEach(display -> {
-        if (display.enabled()) {
-          display.startDisplay();
-        }
-      });
+  private void startEnabledDisplays(final U user) {
+    user.displays().forEach(display -> {
+      if (display.enabled()) {
+        display.startDisplay();
+      }
+    });
   }
 }

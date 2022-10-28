@@ -29,28 +29,30 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.spigot.BukkitUser;
 import xyz.jpenilla.tabtps.spigot.TabTPSPlugin;
 
+@DefaultQualifier(NonNull.class)
 public final class BukkitUserService extends UserService<Player, BukkitUser> {
-  public BukkitUserService(final @NonNull TabTPSPlugin plugin) {
-    super(plugin, BukkitUser.class);
+  public BukkitUserService(final TabTPSPlugin plugin) {
+    super(plugin);
   }
 
   @Override
-  protected @NonNull UUID uuid(final @NotNull Player base) {
+  protected UUID uuid(final @NotNull Player base) {
     return base.getUniqueId();
   }
 
   @Override
-  protected @NonNull BukkitUser create(final @NotNull Player base) {
+  protected BukkitUser create(final @NotNull Player base) {
     return BukkitUser.from(this.platform.tabTPS(), base);
   }
 
   @Override
-  protected @NonNull Collection<Player> platformPlayers() {
+  protected Collection<Player> platformPlayers() {
     return Collections.unmodifiableCollection(Bukkit.getOnlinePlayers());
   }
 }

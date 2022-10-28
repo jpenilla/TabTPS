@@ -28,30 +28,32 @@ import java.util.Collections;
 import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.fabric.FabricUser;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
+@DefaultQualifier(NonNull.class)
 public final class FabricUserService extends UserService<ServerPlayer, FabricUser> {
   private final TabTPSFabric tabTPSFabric;
 
-  public FabricUserService(final @NonNull TabTPSFabric platform) {
-    super(platform, FabricUser.class);
+  public FabricUserService(final TabTPSFabric platform) {
+    super(platform);
     this.tabTPSFabric = platform;
   }
 
   @Override
-  protected @NonNull UUID uuid(final @NonNull ServerPlayer base) {
+  protected UUID uuid(final ServerPlayer base) {
     return base.getUUID();
   }
 
   @Override
-  protected @NonNull FabricUser create(final @NonNull ServerPlayer base) {
+  protected FabricUser create(final ServerPlayer base) {
     return FabricUser.from(this.tabTPSFabric, base);
   }
 
   @Override
-  protected @NonNull Collection<ServerPlayer> platformPlayers() {
+  protected Collection<ServerPlayer> platformPlayers() {
     return Collections.unmodifiableCollection(this.tabTPSFabric.server().getPlayerList().getPlayers());
   }
 }

@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.sponge;
 
 import cloud.commandframework.CommandManager;
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.sponge.CloudInjectionModule;
 import cloud.commandframework.sponge.SpongeCommandManager;
 import com.google.inject.Inject;
@@ -73,7 +73,7 @@ public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUs
   ) {
     final CloudInjectionModule<Commander> cloudModule = new CloudInjectionModule<>(
       Commander.class,
-      AsynchronousCommandExecutionCoordinator.<Commander>newBuilder().build(),
+      CommandExecutionCoordinator.simpleCoordinator(),
       commander -> {
         if (commander instanceof SpongeConsoleCommander) {
           return ((SpongeConsoleCommander) commander).commandCause();
