@@ -1,4 +1,4 @@
-import xyz.jpenilla.runpaper.task.RunServerTask
+import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
   id("tabtps.platform")
@@ -51,8 +51,10 @@ tasks {
   }
 
   mapOf(
-    11 to setOf(
+    8 to setOf(
       "1.8.8",
+    ),
+    11 to setOf(
       "1.9.4",
       "1.10.2",
       "1.11.2",
@@ -91,7 +93,7 @@ tabTPSPlatform {
 fun TaskContainerScope.createVersionedRun(
   version: String,
   javaVersion: Int
-) = register<RunServerTask>("runServer${version.replace('.', '_')}") {
+) = register<RunServer>("runServer${version.replace('.', '_')}") {
   group = "tabtps"
   pluginJars.from(shadowJar.flatMap { it.archiveFile })
   minecraftVersion(version)
