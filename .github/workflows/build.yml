@@ -1,5 +1,8 @@
 name: Build TabTPS
-on: [ push, pull_request ]
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
 jobs:
   build:
     # Only run on PRs if the source branch is on someone else's repo
