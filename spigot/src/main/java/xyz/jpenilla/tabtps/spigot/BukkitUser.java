@@ -79,7 +79,7 @@ public final class BukkitUser extends AbstractUser<Player> {
   @Override
   public Audience audience() {
     if (this.audience == null) {
-      this.audience = this.audiences.player(this.uuid());
+      this.audience = this.audiences.player(this.base());
     }
     return this.audience;
   }
