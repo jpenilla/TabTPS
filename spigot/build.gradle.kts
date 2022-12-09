@@ -47,7 +47,7 @@ tasks {
   }
 
   runServer {
-    minecraftVersion("1.19.2")
+    minecraftVersion("1.19.3")
   }
 
   mapOf(
@@ -67,7 +67,7 @@ tasks {
       "1.16.5",
       "1.17.1",
       "1.18.2",
-      "1.19.2",
+      "1.19.3",
     ),
   ).forEach { (javaVersion, minecraftVersions) ->
     for (version in minecraftVersions) {

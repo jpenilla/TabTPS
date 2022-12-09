@@ -12,7 +12,7 @@ dependencyResolutionManagement {
     maven("https://oss.sonatype.org/content/repositories/snapshots/") {
       mavenContent { snapshotsOnly() }
     }
-    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.spongepowered.org/repository/maven-public/")
   }
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -22,8 +22,12 @@ pluginManagement {
   repositories {
     gradlePluginPortal()
     maven("https://maven.fabricmc.net/")
-    maven("https://maven.quiltmc.org/repository/release/")
-    maven("https://repo.jpenilla.xyz/snapshots/")
+    maven("https://maven.quiltmc.org/repository/release/") {
+      mavenContent { releasesOnly() }
+    }
+    maven("https://repo.jpenilla.xyz/snapshots/") {
+      mavenContent { snapshotsOnly() }
+    }
     maven("https://repo.spongepowered.org/repository/maven-public/")
   }
   includeBuild("build-logic")
