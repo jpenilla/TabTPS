@@ -3,5 +3,5 @@ plugins {
 }
 
 group = "xyz.jpenilla"
-version = "1.3.16-SNAPSHOT"
+version = "1.3.16"
 description = "Monitor your server's performance in real time"
