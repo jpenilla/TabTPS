@@ -74,7 +74,7 @@ public class PingCommand extends TabTPSCommand {
       .handler(this::onPingSelf));
 
     this.commands.register(this.commandManager.commandBuilder("pingall")
-      .argument(IntegerArgument.<Commander>newBuilder("page")
+      .argument(IntegerArgument.<Commander>builder("page")
           .withMin(1)
           .withMax(999)
           .asOptionalWithDefault(1),
@@ -90,7 +90,7 @@ public class PingCommand extends TabTPSCommand {
   ) {
     this.commands.register(this.commandManager.commandBuilder("ping")
       .argument(targetsArgument, RichDescription.of(Messages.COMMAND_PING_TARGET_ARGUMENTS_TARGET))
-      .argument(IntegerArgument.<Commander>newBuilder("page")
+      .argument(IntegerArgument.<Commander>builder("page")
           .withMin(1)
           .withMax(999)
           .asOptionalWithDefault(1),

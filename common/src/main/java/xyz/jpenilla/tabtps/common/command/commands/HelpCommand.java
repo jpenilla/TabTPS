@@ -50,7 +50,7 @@ public final class HelpCommand extends TabTPSCommand {
 
   @Override
   public void register() {
-    final CommandArgument<Commander, String> queryArgument = StringArgument.<Commander>newBuilder("query")
+    final CommandArgument<Commander, String> queryArgument = StringArgument.<Commander>builder("query")
       .greedy()
       .asOptional()
       .withSuggestionsProvider(this::helpQuerySuggestions)
