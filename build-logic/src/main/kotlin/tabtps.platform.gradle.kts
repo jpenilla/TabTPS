@@ -1,6 +1,7 @@
 plugins {
   id("tabtps.base")
   id("com.github.johnrengelman.shadow")
+  id("com.modrinth.minotaur")
 }
 
 decorateVersion()
@@ -15,4 +16,12 @@ tasks {
   assemble {
     dependsOn(copyJar)
   }
+}
+
+modrinth {
+  projectId.set("cUhi3iB2")
+  versionType.set("release")
+  file.set(platformExt.productionJar)
+  changelog.set(releaseNotes)
+  token.set(providers.environmentVariable("MODRINTH_TOKEN"))
 }

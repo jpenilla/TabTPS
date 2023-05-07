@@ -46,8 +46,10 @@ tasks {
     }
   }
 
+  val mcVer = libs.versions.minecraft.get()
+
   runServer {
-    minecraftVersion("1.19.3")
+    minecraftVersion(mcVer)
   }
 
   mapOf(
@@ -67,7 +69,7 @@ tasks {
       "1.16.5",
       "1.17.1",
       "1.18.2",
-      "1.19.3",
+      mcVer,
     ),
   ).forEach { (javaVersion, minecraftVersions) ->
     for (version in minecraftVersions) {
@@ -102,4 +104,8 @@ fun TaskContainerScope.createVersionedRun(
   javaLauncher.set(project.javaToolchains.launcherFor {
     languageVersion.set(JavaLanguageVersion.of(javaVersion))
   })
+}
+
+modrinth {
+  gameVersions.addAll(bukkitVersions)
 }
