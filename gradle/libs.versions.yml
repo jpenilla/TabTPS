@@ -27,9 +27,9 @@ versions:
   bstats: 3.0.0
   paperApi: 1.16.5-R0.1-SNAPSHOT
   paperLib: 1.0.8-SNAPSHOT
-  fabricApi: 0.78.0+1.19.4
-  fabricLoader: 0.14.19
-  minecraft: 1.19.4
+  fabricApi: 0.83.0+1.20
+  fabricLoader: 0.14.21
+  minecraft: '1.20'
   adventurePlatformFabric: 5.8.0
   mixin: 0.8.5
 
