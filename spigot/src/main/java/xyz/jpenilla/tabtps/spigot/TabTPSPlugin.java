@@ -93,7 +93,7 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
   }
 
   @Override
-  public void onDisable() {
+  public void disable() {
     if (this.tabTPS != null) { // don't shutdown if we have an exception before init completes
       this.tabTPS.shutdown();
     }

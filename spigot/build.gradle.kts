@@ -69,6 +69,7 @@ tasks {
       "1.16.5",
       "1.17.1",
       "1.18.2",
+      "1.19.4",
       mcVer,
     ),
   ).forEach { (javaVersion, minecraftVersions) ->
