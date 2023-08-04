@@ -81,7 +81,7 @@ public final class SpigotReflection {
       tickTimes = "n";
     } else if (ver == 18) {
       tickTimes = "o";
-    } else if (ver == 19) {
+    } else if (ver == 19 || ver == 20) {
       tickTimes = "k";
     } else {
       throw new IllegalStateException("Don't know tickTimes field name!");
