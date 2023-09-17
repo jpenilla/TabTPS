@@ -29,7 +29,7 @@ public final class Constants {
   private Constants() {
   }
 
-  public static final String TABTPS_VERSION = "${VERSION}";
+  public static final String TABTPS_VERSION = "{{ version }}";
 
   public static final String PREFIX_MINIMESSAGE = "<white>[<gradient:blue:aqua>TabTPS</gradient>]</white>";
   public static final Component PREFIX = Serializers.MINIMESSAGE.deserialize(PREFIX_MINIMESSAGE);

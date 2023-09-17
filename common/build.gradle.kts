@@ -1,5 +1,4 @@
 import ca.stellardrift.build.localization.TemplateType
-import java.util.Locale
 
 plugins {
   id("tabtps.base")
@@ -9,12 +8,12 @@ plugins {
 
 localization {
   templateType.set(TemplateType.JAVA)
-  templateFile.set(projectDir.resolve("src/main/template/messages.java.tmpl"))
+  templateFile.set(projectDir.resolve("src/main/message-templates/messages.java.tmpl"))
 }
 
 tasks.jar {
   from(rootProject.file("license.txt")) {
-    rename { "license_${rootProject.name.toLowerCase(Locale.ENGLISH)}.txt" }
+    rename { "license_${rootProject.name.lowercase()}.txt" }
   }
 }
 
@@ -34,6 +33,12 @@ dependencies {
   api(libs.slf4jApi)
 }
 
-blossom {
-  replaceToken("\${VERSION}", version.toString(), "src/main/java/xyz/jpenilla/tabtps/common/util/Constants.java")
+sourceSets {
+  main {
+    blossom {
+      javaSources {
+        property("version", project.version.toString())
+      }
+    }
+  }
 }

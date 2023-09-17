@@ -42,7 +42,7 @@ tasks {
       "org.bstats",
       "xyz.jpenilla.pluginbase"
     ).forEach { pkg ->
-      relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
+      relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
     }
   }
 

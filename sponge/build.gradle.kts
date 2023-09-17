@@ -1,7 +1,6 @@
 import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
 import org.spongepowered.plugin.metadata.model.PluginDependency
-import java.util.Locale
 
 plugins {
   id("tabtps.platform")
@@ -27,7 +26,7 @@ dependencies {
 sponge {
   injectRepositories(false)
   apiVersion("8.1.0")
-  plugin(rootProject.name.toLowerCase(Locale.ENGLISH)) {
+  plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
       version("1.0")
@@ -77,7 +76,7 @@ tasks {
       "com.typesafe.config",
       "xyz.jpenilla.jmplib"
     ).forEach { pkg ->
-      relocate(pkg, "${rootProject.group}.${rootProject.name.toLowerCase()}.lib.$pkg")
+      relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
     }
     dependencies {
       exclude {

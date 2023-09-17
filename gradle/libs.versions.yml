@@ -4,11 +4,11 @@ metadata:
     - plugins
 
 plugins:
-  net.kyori.blossom: 1.3.1
-  ca.stellardrift.localization: 5.0.1
+  net.kyori.blossom: 2.1.0
+  ca.stellardrift.localization: 6.1.0
   net.minecrell.plugin-yml.bukkit: 0.5.3
   xyz.jpenilla.run-paper: 2.1.0
-  org.spongepowered.gradle.plugin: 2.0.2
+  org.spongepowered.gradle.plugin: 2.2.0
 
 versions:
   adventure: 4.14.0
@@ -34,8 +34,8 @@ versions:
   mixin: 0.8.5
 
   # buildSrc
-  indra: 2.1.1
-  shadow: 7.1.2
+  indra: 3.1.3
+  shadow: 8.1.1
   minotaur: 2.7.5
   hangarPublishPlugin: 0.0.5
 
@@ -182,8 +182,12 @@ dependencies:
     group: net.kyori
     name: indra-common
     version: { ref: indra }
+  build-indraLicenser:
+    group: net.kyori
+    name: indra-licenser-cadix
+    version: { ref: indra }
   build-shadow:
-    group: gradle.plugin.com.github.johnrengelman
+    group: com.github.johnrengelman
     name: shadow
     version: { ref: shadow }
   build-minotaur:
