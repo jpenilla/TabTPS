@@ -4,7 +4,7 @@ import org.gradle.kotlin.dsl.withType
 plugins {
   id("net.kyori.indra")
   id("net.kyori.indra.checkstyle")
-  id("net.kyori.indra.license-header")
+  id("net.kyori.indra.licenser.spotless")
   id("net.kyori.indra.git")
 }
 

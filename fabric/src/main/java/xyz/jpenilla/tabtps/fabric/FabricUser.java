@@ -56,7 +56,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public int ping() {
-    return this.base().latency;
+    return this.base().connection.latency();
   }
 
   @Override

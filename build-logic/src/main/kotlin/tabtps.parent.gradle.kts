@@ -7,7 +7,7 @@ plugins {
 
 hangarPublish.publications.register("plugin") {
   version.set(project.version as String)
-  namespace("jmp", "TabTPS")
+  id.set("TabTPS")
   channel.set("Release")
   changelog.set(releaseNotes)
   apiKey.set(providers.environmentVariable("HANGAR_UPLOAD_KEY"))
