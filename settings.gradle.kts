@@ -32,8 +32,9 @@ pluginManagement {
 
 plugins {
   id("ca.stellardrift.polyglot-version-catalogs") version "6.1.0"
-  id("quiet-fabric-loom") version "1.3-SNAPSHOT"
+  id("quiet-fabric-loom") version "1.4-SNAPSHOT"
   id("org.spongepowered.gradle.vanilla") version "0.2.1-SNAPSHOT"
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
 rootProject.name = "TabTPS"
