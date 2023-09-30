@@ -25,6 +25,7 @@ package xyz.jpenilla.tabtps.fabric.mixin;
 
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,7 +37,7 @@ import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 @Mixin(PlayerList.class)
 abstract class PlayerListMixin {
   @Inject(method = "placeNewPlayer", at = @At(value = "RETURN"))
-  public void injectPlaceNewPlayer(final Connection connection, final ServerPlayer serverPlayer, final CallbackInfo ci) {
+  public void injectPlaceNewPlayer(final Connection connection, final ServerPlayer serverPlayer, final CommonListenerCookie commonListenerCookie, final CallbackInfo ci) {
     TabTPSFabric.get().userService().handleJoin(serverPlayer);
   }
 
