@@ -10,6 +10,7 @@ dependencies {
   implementation(projects.tabtpsCommon)
 
   compileOnly(libs.paperApi)
+  implementation(libs.adventurePlatformBukkit)
   implementation(libs.paperLib)
   implementation(libs.legacyPluginBase)
   implementation(libs.bstatsBukkit)
