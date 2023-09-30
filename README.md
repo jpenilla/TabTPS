@@ -4,9 +4,9 @@
 Minecraft server mod/plugin to show TPS, MSPT, and other information in the tab menu, boss bar, and action bar.
 
 Current supported platforms:
-- [Paper](https://papermc.io)/Spigot API (Minecraft versions 1.8.8-1.20.1+)
+- [Paper](https://papermc.io)/Spigot API (Minecraft versions 1.8.8-1.20.2+)
 - [Sponge](https://spongepowered.org) 8+
-- Fabric (Minecraft 1.20.1, requires [Fabric API](https://modrinth.com/mod/fabric-api))
+- Fabric (Minecraft 1.20.2, requires [Fabric API](https://modrinth.com/mod/fabric-api))
 
 ## Features
 
