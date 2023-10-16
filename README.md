@@ -55,3 +55,5 @@ Current supported platforms:
 #### Reload command
 * Command: ``/tabtps reload``
 * Permission required: ``tabtps.reload``
+
+[![crowdin](https://badges.crowdin.net/badge/light/crowdin-on-dark.png)](https://crowdin.com/project/tabtps)
