@@ -1,6 +1,8 @@
 <img src="https://i.imgur.com/gtxPU4S.png" width="128">
 
-# TabTPS ![plugin version badge](https://img.shields.io/github/v/release/jmanpenilla/TabTPS?color=blue&label=version&style=plastic)
+# TabTPS
+![plugin version badge](https://img.shields.io/github/v/release/jmanpenilla/TabTPS?color=blue&label=version&style=plastic) [![Crowdin](https://badges.crowdin.net/tabtps/localized.svg)](https://crowdin.com/project/tabtps)
+
 Minecraft server mod/plugin to show TPS, MSPT, and other information in the tab menu, boss bar, and action bar.
 
 Current supported platforms:
@@ -55,5 +57,3 @@ Current supported platforms:
 #### Reload command
 * Command: ``/tabtps reload``
 * Permission required: ``tabtps.reload``
-
-[![crowdin](https://badges.crowdin.net/badge/light/crowdin-on-dark.png)](https://crowdin.com/project/tabtps)
