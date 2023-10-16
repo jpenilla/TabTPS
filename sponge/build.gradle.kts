@@ -17,15 +17,18 @@ configurations.implementation {
 dependencies {
   compileOnly(libs.mixin)
   shade(libs.cloudSponge)
-  shade(projects.tabtpsCommon)
-  shade(libs.log4jSlf4jImpl) {
-    isTransitive = false
+  shade(projects.tabtpsCommon) {
+    exclude("org.slf4j")
   }
+}
+
+java {
+  disableAutoTargetJvm()
 }
 
 sponge {
   injectRepositories(false)
-  apiVersion("8.1.0")
+  apiVersion("11.0.0-SNAPSHOT")
   plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
@@ -52,7 +55,7 @@ sponge {
 }
 
 minecraft {
-  version("1.16.5")
+  version("1.20.2")
   platform(MinecraftPlatform.JOINED)
 }
 
@@ -67,10 +70,8 @@ tasks {
     configurations = listOf(shade)
     archiveClassifier.set(null as String?)
     sequenceOf(
-      "org.slf4j",
       "net.kyori.adventure.text.feature.pagination",
       "net.kyori.adventure.serializer.configurate4",
-      "org.apache.logging.slf4j",
       "cloud.commandframework",
       "org.spongepowered.configurate",
       "com.typesafe.config",
@@ -101,4 +102,14 @@ modrinth {
     "1.19.4",
     "1.20.2"
   )
+}
+
+configurations.spongeRuntime {
+  resolutionStrategy {
+    eachDependency {
+      if (target.name == "spongevanilla") {
+        useVersion("1.20.+")
+      }
+    }
+  }
 }

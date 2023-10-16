@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.sponge;
 
+import java.lang.reflect.Field;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -58,7 +59,21 @@ public final class SpongeUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public int ping() {
-    return ((net.minecraft.server.level.ServerPlayer) this.base()).latency;
+    final Throwable err;
+    try {
+      return ((net.minecraft.server.level.ServerPlayer) this.base()).connection.latency();
+    } catch (final LinkageError e) {
+      err = e;
+    } catch (final NullPointerException e) {
+      return -1;
+    }
+    try {
+      final Field latency = ServerPlayer.class.getDeclaredField("latency");
+      return latency.getInt(this.base());
+    } catch (final ReflectiveOperationException e) {
+      err.addSuppressed(e);
+    }
+    throw new RuntimeException("Failed to get ping", err);
   }
 
   @Override

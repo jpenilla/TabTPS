@@ -14,6 +14,9 @@ dependencyResolutionManagement {
     }
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.spongepowered.org/repository/maven-public/")
+    maven("https://repo.spongepowered.org/repository/maven-snapshots/") {
+      mavenContent { snapshotsOnly() }
+    }
   }
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
