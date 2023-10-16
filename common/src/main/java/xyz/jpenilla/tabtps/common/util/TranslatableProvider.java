@@ -117,13 +117,14 @@ public final class TranslatableProvider implements ComponentLike {
     registerAll(
       registry,
       availableLocales(bundleName, clazz),
-      bundleName
+      bundleName,
+      false
     );
 
     GlobalTranslator.translator().addSource(registry);
   }
 
-  private static void registerAll(final TranslationRegistry registry, final Set<Locale> locales, final String bundleName) {
+  private static void registerAll(final TranslationRegistry registry, final Set<Locale> locales, final String bundleName, final boolean escapeSingleQuotes) {
     for (final Locale locale : locales) {
       final ResourceBundle bundle = PropertyResourceBundle.getBundle(bundleName, locale, UTF8ResourceBundleControl.get());
       for (final String key : bundle.keySet()) {
@@ -131,7 +132,10 @@ public final class TranslatableProvider implements ComponentLike {
           registry.register(
             formatKey(bundleName, key),
             locale,
-            new MessageFormat(TranslationRegistry.SINGLE_QUOTE_PATTERN.matcher(bundle.getString(key)).replaceAll("''"))
+            new MessageFormat(
+              escapeSingleQuotes ? TranslationRegistry.SINGLE_QUOTE_PATTERN.matcher(bundle.getString(key)).replaceAll("''") : bundle.getString(key),
+              locale
+            )
           );
         } catch (final IllegalArgumentException | MissingResourceException | ClassCastException ex) {
           LOGGER.warn("Failed to load translation for key '{}' from bundle '{}' with the '{}' locale.", key, bundleName, locale.getDisplayName(), ex);
