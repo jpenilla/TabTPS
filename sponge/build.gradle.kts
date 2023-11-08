@@ -4,7 +4,7 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
   id("tabtps.platform")
-  id("org.spongepowered.gradle.plugin")
+  alias(libs.plugins.sponge.gradle)
   id("org.spongepowered.gradle.vanilla")
 }
 

@@ -2,8 +2,8 @@ import ca.stellardrift.build.localization.TemplateType
 
 plugins {
   id("tabtps.base")
-  id("net.kyori.blossom")
-  id("ca.stellardrift.localization")
+  alias(libs.plugins.blossom)
+  alias(libs.plugins.localization)
 }
 
 localization {

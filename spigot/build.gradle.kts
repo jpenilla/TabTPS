@@ -2,8 +2,8 @@ import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
   id("tabtps.platform")
-  id("net.minecrell.plugin-yml.bukkit")
-  id("xyz.jpenilla.run-paper")
+  alias(libs.plugins.pluginYml.bukkit)
+  alias(libs.plugins.runPaper)
 }
 
 dependencies {
