@@ -92,6 +92,7 @@ public final class BossBarDisplayTask implements Display {
   private BossBar.@NonNull Color color() {
     switch (this.settings.fillMode()) {
       case MSPT:
+      case REVERSE_MSPT:
         final double mspt = this.tabTPS.platform().tickTimeService().averageMspt();
         if (mspt < 25) {
           return this.settings.colors().goodPerformance();
@@ -100,6 +101,7 @@ public final class BossBarDisplayTask implements Display {
         } else {
           return this.settings.colors().lowPerformance();
         }
+      case REVERSE_TPS:
       case TPS:
         final double tps = this.tabTPS.platform().tickTimeService().recentTps()[0];
         if (tps > 18.50D) {
