@@ -109,6 +109,7 @@ fun TaskContainerScope.createVersionedRun(
   })
 }
 
-modrinth {
-  gameVersions.addAll(bukkitVersions)
+publishMods.modrinth {
+  modLoaders.add("paper")
+  minecraftVersions.addAll(bukkitVersions)
 }

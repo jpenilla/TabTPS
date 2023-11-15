@@ -1,7 +1,9 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
   id("tabtps.base")
   id("com.github.johnrengelman.shadow")
-  id("com.modrinth.minotaur")
+  id("me.modmuss50.mod-publish-plugin")
 }
 
 decorateVersion()
@@ -18,10 +20,10 @@ tasks {
   }
 }
 
-modrinth {
+publishMods.modrinth {
   projectId.set("cUhi3iB2")
-  versionType.set("release")
+  type.set(ReleaseType.STABLE)
   file.set(platformExt.productionJar)
   changelog.set(releaseNotes)
-  token.set(providers.environmentVariable("MODRINTH_TOKEN"))
+  accessToken.set(providers.environmentVariable("MODRINTH_TOKEN"))
 }

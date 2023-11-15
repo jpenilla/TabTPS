@@ -64,3 +64,8 @@ tasks {
 tabTPSPlatform {
   productionJar.set(tasks.remapJar.flatMap { it.archiveFile })
 }
+
+publishMods.modrinth {
+  modLoaders.add("fabric")
+  minecraftVersions.add(minecraftVersion)
+}
