@@ -1,0 +1,13 @@
+name: TabTPS
+version: $version
+main: xyz.jpenilla.tabtps.spigot.TabTPSPlugin
+description: $description
+authors:
+  - jmp
+website: $github
+api-version: 1.13
+softdepend:
+  - PlaceholderAPI
+  - ViaVersion
+loadbefore:
+  - Essentials

@@ -41,7 +41,7 @@ plugins {
 
 rootProject.name = "TabTPS"
 
-sequenceOf(
+listOf(
   "common",
   "spigot",
   "sponge",

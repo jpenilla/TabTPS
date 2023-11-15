@@ -2,7 +2,6 @@ import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
   id("tabtps.platform")
-  alias(libs.plugins.pluginYml.bukkit)
   alias(libs.plugins.runPaper)
 }
 
@@ -78,16 +77,18 @@ tasks {
       createVersionedRun(version, javaVersion)
     }
   }
-}
 
-bukkit {
-  main = "xyz.jpenilla.tabtps.spigot.TabTPSPlugin"
-  name = rootProject.name
-  apiVersion = "1.13"
-  website = "https://github.com/jpenilla/TabTPS"
-  loadBefore = listOf("Essentials")
-  softDepend = listOf("PlaceholderAPI", "ViaVersion")
-  authors = listOf("jmp")
+  processResources {
+    val replacements = mapOf(
+      "version" to version.toString(),
+      "description" to project.description,
+      "github" to "https://github.com/jpenilla/TabTPS"
+    )
+    inputs.properties(replacements)
+    filesMatching("plugin.yml") {
+      expand(replacements)
+    }
+  }
 }
 
 tabTPSPlatform {
