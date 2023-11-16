@@ -24,7 +24,7 @@ paperLib = "1.0.8"
 fabricApi = "0.90.7+1.20.2"
 fabricLoader = "0.14.24"
 minecraft = "1.20.2"
-adventurePlatformFabric = "5.10.0"
+adventurePlatformFabric = "5.10.1"
 mixin = "0.8.5"
 
 # buildSrc
