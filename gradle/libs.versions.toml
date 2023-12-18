@@ -5,7 +5,7 @@ runPaper = { id = "xyz.jpenilla.run-paper", version = "2.2.2" }
 sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.2.0" }
 
 [versions]
-adventure = "4.14.0"
+adventure = "4.15.0"
 adventurePagination = "4.0.0-SNAPSHOT"
 adventurePlatform = "4.3.1"
 cloud = "1.8.4"
