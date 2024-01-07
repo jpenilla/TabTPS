@@ -63,7 +63,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
   private long previousTime;
 
   @Shadow private int tickCount;
-  @Shadow @Final public long[] tickTimes;
+  @Shadow @Final private long[] tickTimesNanos;
 
   @Inject(method = "tickServer", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
   public void injectTick(final BooleanSupplier var1, final CallbackInfo ci, final long tickStartTimeNanos, final long tickDurationNanos) {
@@ -86,7 +86,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
   }
 
   public double tabtps$averageMspt() {
-    return TPSUtil.toMilliseconds(TPSUtil.average(this.tickTimes));
+    return TPSUtil.toMilliseconds(TPSUtil.average(this.tickTimesNanos));
   }
 
   public double @NonNull [] tabtps$recentTps() {

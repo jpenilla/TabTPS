@@ -1,5 +1,3 @@
-import io.papermc.hangarpublishplugin.model.Platforms
-
 plugins {
   base
   id("io.papermc.hangar-publish-plugin")
@@ -12,7 +10,7 @@ hangarPublish.publications.register("plugin") {
   changelog.set(releaseNotes)
   apiKey.set(providers.environmentVariable("HANGAR_UPLOAD_KEY"))
   platforms {
-    register(Platforms.PAPER) {
+    paper {
       jar.set(project(":tabtps-spigot").the<TabTPSPlatformExtension>().productionJar)
       val vers = bukkitVersions.toMutableList()
       vers -= "1.8.8"

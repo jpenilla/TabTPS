@@ -30,11 +30,11 @@ pluginManagement {
     }
     maven("https://repo.spongepowered.org/repository/maven-public/")
   }
-  includeBuild("build-logic")
+  includeBuild("gradle/build-logic")
 }
 
 plugins {
-  id("quiet-fabric-loom") version "1.4-SNAPSHOT"
+  id("quiet-fabric-loom") version "1.5-SNAPSHOT"
   id("org.spongepowered.gradle.vanilla") version "0.2.1-SNAPSHOT"
   id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }

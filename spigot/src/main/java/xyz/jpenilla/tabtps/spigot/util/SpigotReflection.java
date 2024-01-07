@@ -81,8 +81,10 @@ public final class SpigotReflection {
       tickTimes = "n";
     } else if (ver == 18) {
       tickTimes = "o";
-    } else if (ver == 19 || ver == 20) {
+    } else if (ver == 19 || ver == 20 && PaperLib.getMinecraftPatchVersion() < 3) {
       tickTimes = "k";
+    } else if (ver == 20) {
+      tickTimes = "ac";
     } else {
       throw new IllegalStateException("Don't know tickTimes field name!");
     }
