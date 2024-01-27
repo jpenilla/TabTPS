@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
+import io.leangen.geantyref.GenericTypeReflector;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -139,7 +140,7 @@ public final class ExceptionHandler {
   private void invalidSender(final @NonNull ExceptionContext<Commander, InvalidCommandSenderException> ctx) {
     final Component message = Messages.COMMAND_EXCEPTION_INVALID_SENDER_TYPE.styled(
       RED,
-      text(ctx.exception().requiredSender().getSimpleName())
+      text(GenericTypeReflector.erase(ctx.exception().requiredSender()).getSimpleName())
     );
     decorateAndSend(ctx.context().sender(), message);
   }

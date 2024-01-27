@@ -29,7 +29,6 @@ import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.execution.CommandExecutionHandler;
 import org.incendo.cloud.permission.PredicatePermission;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
@@ -59,33 +58,25 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     final Command.Builder<Commander> toggle = this.commands.rootBuilder().literal("toggle");
 
     this.commands.register(toggle.literal("tab")
-      .senderType(User.class)
-      .permission(PredicatePermission.of(commander -> this.togglePermission(commander, DisplayConfig::tabSettings)))
+      .senderType(User.TYPE)
+      .permission(PredicatePermission.of(user -> this.togglePermission(user, DisplayConfig::tabSettings)))
       .commandDescription(richDescription(Messages.COMMAND_TOGGLE_TAB_DESCRIPTION.plain()))
-      .handler(wrap(this::toggleTab)));
+      .handler(this::toggleTab));
 
     this.commands.register(toggle.literal("actionbar")
-      .senderType(User.class)
-      .permission(PredicatePermission.of(commander -> this.togglePermission(commander, DisplayConfig::actionBarSettings)))
+      .senderType(User.TYPE)
+      .permission(PredicatePermission.of(user -> this.togglePermission(user, DisplayConfig::actionBarSettings)))
       .commandDescription(richDescription(Messages.COMMAND_TOGGLE_ACTIONBAR_DESCRIPTION.plain()))
-      .handler(wrap(this::toggleActionBar)));
+      .handler(this::toggleActionBar));
 
     this.commands.register(toggle.literal("bossbar")
-      .senderType(User.class)
-      .permission(PredicatePermission.of(commander -> this.togglePermission(commander, DisplayConfig::bossBarSettings)))
+      .senderType(User.TYPE)
+      .permission(PredicatePermission.of(user -> this.togglePermission(user, DisplayConfig::bossBarSettings)))
       .commandDescription(richDescription(Messages.COMMAND_TOGGLE_BOSSBAR_DESCRIPTION.plain()))
-      .handler(wrap(this::toggleBossBar)));
+      .handler(this::toggleBossBar));
   }
 
-  // todo
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  private static CommandExecutionHandler<User> wrap(final CommandExecutionHandler<User<?>> handler) {
-    return (CommandExecutionHandler) handler;
-  }
-
-  private boolean togglePermission(final @NonNull Commander commander, final @NonNull Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
-    if (!(commander instanceof User)) return true; // todo ?
-    final User<?> user = (User<?>) commander;
+  private boolean togglePermission(final @NonNull User<?> user, final @NonNull Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
     return this.tabTPS.findDisplayConfig(user)
       .map(config -> function.apply(config).allow())
       .orElse(false);
