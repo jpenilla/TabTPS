@@ -8,9 +8,10 @@ sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.2.0" }
 adventure = "4.15.0"
 adventurePagination = "4.0.0-SNAPSHOT"
 adventurePlatform = "4.3.2"
-cloud = "1.8.4"
-cloudSponge = "1.8.0-SNAPSHOT"
-commodore = "2.2"
+cloud = "2.0.0-beta.1"
+cloudMinecraft = "2.0.0-beta.1"
+cloudModded = "2.0.0-beta.1"
+cloudSponge = "2.0.0-SNAPSHOT"
 configurate = "4.1.2"
 typesafeConfig = "1.4.3"
 checkerQual = "3.42.0"
@@ -43,16 +44,15 @@ adventurePlatformBukkit = { group = "net.kyori", name = "adventure-platform-bukk
 adventurePlatformFabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventurePlatformFabric" }
 minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 
-cloudBom = { group = "cloud.commandframework", name = "cloud-bom", version.ref = "cloud" }
-cloudCore = { group = "cloud.commandframework", name = "cloud-core" }
-cloudMinecraftExtras = { group = "cloud.commandframework", name = "cloud-minecraft-extras", version.ref = "cloud" }
-cloudPaper = { group = "cloud.commandframework", name = "cloud-paper" }
-cloudSponge = { group = "cloud.commandframework", name = "cloud-sponge", version.ref = "cloudSponge" }
-cloudFabric = { group = "cloud.commandframework", name = "cloud-fabric", version.ref = "cloud" }
+cloudBom = { group = "org.incendo", name = "cloud-bom", version.ref = "cloud" }
+cloudMinecraftBom = { module = "org.incendo:cloud-minecraft-bom", version.ref = "cloudMinecraft" }
+cloudCore = { group = "org.incendo", name = "cloud-core" }
+cloudMinecraftExtras = { group = "org.incendo", name = "cloud-minecraft-extras", version.ref = "cloudMinecraft" }
+cloudPaper = { group = "org.incendo", name = "cloud-paper" }
+cloudSponge = { group = "org.incendo", name = "cloud-sponge", version.ref = "cloudSponge" }
+cloudFabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloudModded" }
 
 mixin = { group = "org.spongepowered", name = "mixin", version.ref = "mixin" }
-
-commodore = { group = "me.lucko", name = "commodore", version.ref = "commodore" }
 
 configurateCore = { group = "org.spongepowered", name = "configurate-core", version.ref = "configurate" }
 configurateHocon = { group = "org.spongepowered", name = "configurate-hocon", version.ref = "configurate" }

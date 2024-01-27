@@ -23,12 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.arguments.CommandArgument;
-import cloud.commandframework.arguments.standard.IntegerArgument;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.execution.CommandExecutionHandler;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
-import cloud.commandframework.minecraft.extras.RichDescription;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,6 +31,10 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.feature.pagination.Pagination;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.component.DefaultValue;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.execution.CommandExecutionHandler;
+import org.incendo.cloud.parser.ParserDescriptor;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
@@ -60,6 +58,8 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.Style.style;
 import static net.kyori.adventure.text.format.TextColor.color;
 import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
+import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
 
 public class PingCommand extends TabTPSCommand {
   public PingCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -70,44 +70,36 @@ public class PingCommand extends TabTPSCommand {
   public void register() {
     this.commands.register(this.commandManager.commandBuilder("ping")
       .permission(Constants.PERMISSION_COMMAND_PING)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_PING_SELF_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_PING_SELF_DESCRIPTION.plain()))
       .handler(this::onPingSelf));
 
     this.commands.register(this.commandManager.commandBuilder("pingall")
-      .argument(IntegerArgument.<Commander>builder("page")
-          .withMin(1)
-          .withMax(999)
-          .asOptionalWithDefault(1),
-        RichDescription.of(Messages.COMMAND_PING_ARGUMENTS_PAGE))
+      .optional("page", integerParser(1, 999), DefaultValue.constant(1), richDescription(Messages.COMMAND_PING_ARGUMENTS_PAGE))
       .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_PING_ALL_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_PING_ALL_DESCRIPTION.plain()))
       .handler(this::onPingAll));
   }
 
   protected <T> void registerPingTargetsCommand(
-    final @NonNull CommandArgument<Commander, T> targetsArgument,
+    final @NonNull ParserDescriptor<Commander, T> targetsArgument,
     final @NonNull CommandExecutionHandler<Commander> handler
   ) {
     this.commands.register(this.commandManager.commandBuilder("ping")
-      .argument(targetsArgument, RichDescription.of(Messages.COMMAND_PING_TARGET_ARGUMENTS_TARGET))
-      .argument(IntegerArgument.<Commander>builder("page")
-          .withMin(1)
-          .withMax(999)
-          .asOptionalWithDefault(1),
-        RichDescription.of(Messages.COMMAND_PING_ARGUMENTS_PAGE))
+      .required("target", targetsArgument, richDescription(Messages.COMMAND_PING_TARGET_ARGUMENTS_TARGET))
+      .optional("page", integerParser(1, 999), DefaultValue.constant(1), richDescription(Messages.COMMAND_PING_ARGUMENTS_PAGE))
       .permission(Constants.PERMISSION_COMMAND_PING_OTHERS)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_PING_TARGET_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_PING_TARGET_DESCRIPTION.plain()))
       .handler(handler));
   }
 
   private void onPingAll(final @NonNull CommandContext<Commander> context) {
-    final Commander sender = context.getSender();
+    final Commander sender = context.sender();
     final int page = context.get("page");
     this.pingMultiple(sender, Collections.unmodifiableCollection(this.tabTPS.platform().userService().onlineUsers()), page, "pingall");
   }
 
   private void onPingSelf(final @NonNull CommandContext<Commander> context) {
-    final Commander sender = context.getSender();
+    final Commander sender = context.sender();
     if (!(sender instanceof User)) {
       throw CommandCompletedException.withMessage(Components.ofChildren(
         Constants.PREFIX,

@@ -23,9 +23,8 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -37,6 +36,7 @@ import xyz.jpenilla.tabtps.common.util.Constants;
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 
 public final class ReloadCommand extends TabTPSCommand {
@@ -48,13 +48,13 @@ public final class ReloadCommand extends TabTPSCommand {
   public void register() {
     this.commands.registerSubcommand(builder -> builder.literal("reload")
       .permission(Constants.PERMISSION_COMMAND_RELOAD)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_RELOAD_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_RELOAD_DESCRIPTION.plain()))
       .handler(this::executeReload));
   }
 
   private void executeReload(final @NonNull CommandContext<Commander> ctx) {
     this.tabTPS.reload();
-    ctx.getSender().sendMessage(Components.ofChildren(
+    ctx.sender().sendMessage(Components.ofChildren(
       Constants.PREFIX,
       gradient(" Reload complete.", style -> style.decorate(ITALIC), GREEN, DARK_GREEN)
     ));

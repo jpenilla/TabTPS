@@ -23,10 +23,10 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
 import java.util.function.UnaryOperator;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
 public final class Commands {
@@ -51,7 +51,7 @@ public final class Commands {
     return this.commandManager.commandBuilder("tabtps");
   }
 
-  public void register(final Command.@NonNull Builder<Commander> builder) {
+  public void register(final Command.@NonNull Builder<? extends Commander> builder) {
     this.commandManager.command(builder);
   }
 }

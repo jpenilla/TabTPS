@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
-import cloud.commandframework.types.tuples.Pair;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,6 +33,7 @@ import java.util.stream.LongStream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.type.tuple.Pair;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.config.Theme;
 
@@ -118,8 +118,8 @@ public final class TPSUtil {
       final String branch = iterator.hasNext() ? "├─" : "└─";
       output.add(formatStatistics(
         branch,
-        text(pair.getFirst()),
-        pair.getSecond()
+        text(pair.first()),
+        pair.second()
       ));
     }
     return output;

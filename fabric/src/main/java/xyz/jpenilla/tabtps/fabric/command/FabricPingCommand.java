@@ -23,15 +23,16 @@
  */
 package xyz.jpenilla.tabtps.fabric.command;
 
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.fabric.argument.server.MultiplePlayerSelectorArgument;
-import cloud.commandframework.fabric.data.MultiplePlayerSelector;
 import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.modded.data.MultiplePlayerSelector;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
+
+import static org.incendo.cloud.minecraft.modded.parser.VanillaArgumentParsers.multiplePlayerSelectorParser;
 
 public final class FabricPingCommand extends PingCommand {
   private final TabTPSFabric tabTPSFabric;
@@ -43,14 +44,14 @@ public final class FabricPingCommand extends PingCommand {
 
   @Override
   public void register() {
-    this.registerPingTargetsCommand(MultiplePlayerSelectorArgument.of("target"), this::handlePingTargets);
+    this.registerPingTargetsCommand(multiplePlayerSelectorParser(), this::handlePingTargets);
   }
 
   private void handlePingTargets(final @NonNull CommandContext<Commander> context) {
     final MultiplePlayerSelector target = context.get("target");
     this.pingTargets(
-      context.getSender(),
-      target.get().stream()
+      context.sender(),
+      target.values().stream()
         .map(this.tabTPSFabric.userService()::user)
         .collect(Collectors.toList()),
       target.inputString(),

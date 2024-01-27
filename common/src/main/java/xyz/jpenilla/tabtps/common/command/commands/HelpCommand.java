@@ -23,18 +23,16 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.CommandHelpHandler;
-import cloud.commandframework.arguments.CommandArgument;
-import cloud.commandframework.arguments.standard.StringArgument;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
-import cloud.commandframework.minecraft.extras.MinecraftHelp;
-import cloud.commandframework.minecraft.extras.RichDescription;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.component.TypedCommandComponent;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.help.result.CommandEntry;
+import org.incendo.cloud.minecraft.extras.ImmutableMinecraftHelp;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -42,6 +40,9 @@ import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 
 import static net.kyori.adventure.text.Component.translatable;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
+import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
+import static org.incendo.cloud.suggestion.SuggestionProvider.blockingStrings;
 
 public final class HelpCommand extends TabTPSCommand {
   public HelpCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -50,43 +51,44 @@ public final class HelpCommand extends TabTPSCommand {
 
   @Override
   public void register() {
-    final CommandArgument<Commander, String> queryArgument = StringArgument.<Commander>builder("query")
-      .greedy()
-      .asOptional()
-      .withSuggestionsProvider(this::helpQuerySuggestions)
+    final TypedCommandComponent<Commander, String> queryArgument = TypedCommandComponent.<Commander, String>builder()
+      .name("query")
+      .parser(greedyStringParser())
+      .optional()
+      .suggestionProvider(blockingStrings(this::helpQuerySuggestions))
+      .description(richDescription(Messages.COMMAND_HELP_ARGUMENTS_QUERY))
       .build();
 
     this.commands.registerSubcommand(builder -> builder.literal("help")
-      .argument(queryArgument, RichDescription.of(Messages.COMMAND_HELP_ARGUMENTS_QUERY))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_HELP_DESCRIPTION.plain())
+      .argument(queryArgument)
+      .commandDescription(richDescription(Messages.COMMAND_HELP_DESCRIPTION.plain()))
       .handler(this::executeHelp));
   }
 
   private void executeHelp(final @NonNull CommandContext<Commander> context) {
     final String query = context.getOrDefault("query", null);
-    this.help().queryCommands(query == null ? "" : query, context.getSender());
+    this.help().queryCommands(query == null ? "" : query, context.sender());
   }
 
-  public @NonNull List<String> helpQuerySuggestions(final @NonNull CommandContext<Commander> context, final @NonNull String input) {
-    return ((CommandHelpHandler.IndexHelpTopic<Commander>) this.commands.commandManager().createCommandHelpHandler()
-      .queryHelp(context.getSender(), ""))
-      .getEntries()
+  public @NonNull Iterable<String> helpQuerySuggestions(final @NonNull CommandContext<Commander> context, final @NonNull CommandInput input) {
+    return this.commands.commandManager().createHelpHandler()
+      .queryRootIndex(context.sender())
+      .entries()
       .stream()
-      .map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString)
+      .map(CommandEntry::syntax)
       .collect(Collectors.toList());
   }
 
   private @NonNull MinecraftHelp<Commander> help() {
     final MinecraftHelp<Commander> help = MinecraftHelp.createNative("/tabtps help", this.commands.commandManager());
-    help.setHelpColors(this.tabTPS.configManager().pluginSettings().helpColors().toCloud());
-    help.messageProvider(HelpCommand::helpMessage);
-    return help;
+    return ImmutableMinecraftHelp.copyOf(help).withColors(this.tabTPS.configManager().pluginSettings().helpColors().toCloud())
+      .withMessageProvider(HelpCommand::helpMessage);
   }
 
-  private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull String... args) {
+  private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull Map<String, String> args) {
     return translatable(
       Messages.bundleName() + "/help." + key,
-      Arrays.stream(args)
+      args.values().stream() // todo
         .map(Component::text)
         .collect(Collectors.toList())
     );

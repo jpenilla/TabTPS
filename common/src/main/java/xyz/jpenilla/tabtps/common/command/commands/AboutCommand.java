@@ -23,10 +23,9 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -43,6 +42,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.BLUE;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 import static xyz.jpenilla.tabtps.common.util.Serializers.MINIMESSAGE;
 
@@ -54,13 +54,13 @@ public final class AboutCommand extends TabTPSCommand {
   @Override
   public void register() {
     this.commands.registerSubcommand(builder -> builder.literal("about")
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_ABOUT_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_ABOUT_DESCRIPTION.plain()))
       .handler(this::executeAbout));
   }
 
   private void executeAbout(final @NonNull CommandContext<Commander> ctx) {
     final Component header = gradient("                                  ", style -> style.decorate(STRIKETHROUGH), BLUE, WHITE, BLUE);
-    ctx.getSender().sendMessage(Components.ofChildren(
+    ctx.sender().sendMessage(Components.ofChildren(
       header,
       newline(),
       text()

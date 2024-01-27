@@ -23,9 +23,9 @@
  */
 package xyz.jpenilla.tabtps.common;
 
-import cloud.commandframework.CommandManager;
 import java.nio.file.Path;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.CommandManager;
 import org.slf4j.Logger;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;

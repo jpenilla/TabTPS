@@ -23,8 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
 import java.util.ArrayList;
@@ -32,6 +30,7 @@ import java.util.Comparator;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -45,6 +44,7 @@ import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 
 public final class MemoryCommand extends TabTPSCommand {
   public MemoryCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -55,7 +55,7 @@ public final class MemoryCommand extends TabTPSCommand {
   public void register() {
     this.commands.register(this.commandManager.commandBuilder("memory", "mem", "ram")
       .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_MEMORY_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_MEMORY_DESCRIPTION.plain()))
       .handler(this::executeMemory));
   }
 
@@ -79,6 +79,6 @@ public final class MemoryCommand extends TabTPSCommand {
       .sorted(Comparator.comparing(MemoryPoolMXBean::getName))
       .map(bean -> MemoryUtil.renderBar(bean.getName(), bean.getUsage(), 60))
       .forEach(messages::add);
-    messages.forEach(ctx.getSender()::sendMessage);
+    messages.forEach(ctx.sender()::sendMessage);
   }
 }

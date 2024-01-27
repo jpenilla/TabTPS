@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.service;
 
-import cloud.commandframework.types.tuples.Pair;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,6 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.type.tuple.Pair;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.User;
@@ -182,8 +182,8 @@ public abstract class UserService<P, U extends User<P>> {
         Pair.of(config.bossBarSettings(), user.bossBar()),
         Pair.of(config.tabSettings(), user.tab())
       ).forEach(pair -> {
-        if (pair.getFirst().allow() && pair.getFirst().enableOnLogin()) {
-          pair.getSecond().enabled(true);
+        if (pair.first().allow() && pair.first().enableOnLogin()) {
+          pair.second().enabled(true);
         }
       });
       this.startEnabledDisplays(user);

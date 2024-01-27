@@ -23,17 +23,18 @@
  */
 package xyz.jpenilla.tabtps.spigot;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.brigadier.CloudBrigadierManager;
-import cloud.commandframework.bukkit.CloudBukkitCapabilities;
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.paper.PaperCommandManager;
 import io.papermc.lib.PaperLib;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.brigadier.CloudBrigadierManager;
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.pluginbase.legacy.PluginBase;
@@ -72,11 +73,7 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
       this.tickTimeService = new PaperTickTimeService();
     }
 
-    try {
-      this.setupCommandManager();
-    } catch (final Exception e) {
-      throw new IllegalStateException("Failed to initialize command manager", e);
-    }
+    this.setupCommandManager();
     this.userService = new BukkitUserService(this);
 
     this.tabTPS = new TabTPS(this);
@@ -111,41 +108,34 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
     }
   }
 
-  private void setupCommandManager() throws Exception {
+  private void setupCommandManager() {
     this.commandManager = new PaperCommandManager<>(
       this,
-      CommandExecutionCoordinator.simpleCoordinator(),
-      commandSender -> {
-        if (commandSender instanceof Player) {
-          return this.userService().user((Player) commandSender);
+      ExecutionCoordinator.simpleCoordinator(),
+      SenderMapper.create(
+        commandSender -> {
+          if (commandSender instanceof Player) {
+            return this.userService().user((Player) commandSender);
+          }
+          return BukkitConsoleCommander.from(this.audiences(), commandSender);
+        },
+        commander -> {
+          if (commander instanceof BukkitConsoleCommander) {
+            return ((BukkitConsoleCommander) commander).commandSender();
+          } else if (commander instanceof BukkitUser) {
+            return ((BukkitUser) commander).base();
+          }
+          throw new IllegalArgumentException();
         }
-        return BukkitConsoleCommander.from(this.audiences(), commandSender);
-      },
-      commander -> {
-        if (commander instanceof BukkitConsoleCommander) {
-          return ((BukkitConsoleCommander) commander).commandSender();
-        } else if (commander instanceof BukkitUser) {
-          return ((BukkitUser) commander).base();
-        }
-        throw new IllegalArgumentException();
-      }
+      )
     );
 
-    /* Register Brigadier */
-    if (this.commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)
-      || this.commandManager.hasCapability(CloudBukkitCapabilities.COMMODORE_BRIGADIER)) {
+    if (this.commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
       this.commandManager.registerBrigadier();
       final CloudBrigadierManager<Commander, ?> brigadierManager = this.commandManager.brigadierManager();
-      if (brigadierManager != null) {
-        brigadierManager.setNativeNumberSuggestions(false);
-      }
-      this.logger().info("Successfully registered Mojang Brigadier support for commands.");
-    }
-
-    /* Register Asynchronous Completion Listener */
-    if (this.commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+      brigadierManager.setNativeNumberSuggestions(false);
+    } else if (this.commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
       this.commandManager.registerAsynchronousCompletions();
-      this.logger().info("Successfully registered asynchronous command completion listener.");
     }
   }
 

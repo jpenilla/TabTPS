@@ -23,8 +23,6 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,6 +35,7 @@ import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -58,6 +57,7 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 
 public final class TickInfoCommand extends TabTPSCommand {
   private static final Function<Module, Component> MODULE_RENDERER = ModuleRenderer.standardRenderFunction(Theme.DEFAULT);
@@ -77,7 +77,7 @@ public final class TickInfoCommand extends TabTPSCommand {
   public void register() {
     this.commands.register(this.commandManager.commandBuilder("tickinfo", "mspt", "tps")
       .permission(Constants.PERMISSION_COMMAND_TICKINFO)
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TICKINFO_DESCRIPTION.plain())
+      .commandDescription(richDescription(Messages.COMMAND_TICKINFO_DESCRIPTION.plain()))
       .handler(this::executeTickInfo));
   }
 
@@ -104,7 +104,7 @@ public final class TickInfoCommand extends TabTPSCommand {
     ));
     messages.add(this.renderMemory());
     messages.add(MemoryUtil.renderBar(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage(), 91));
-    messages.forEach(ctx.getSender()::sendMessage);
+    messages.forEach(ctx.sender()::sendMessage);
   }
 
   private @NonNull Component renderMemory() {

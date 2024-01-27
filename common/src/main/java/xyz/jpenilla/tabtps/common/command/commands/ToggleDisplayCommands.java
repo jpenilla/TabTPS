@@ -23,13 +23,14 @@
  */
 package xyz.jpenilla.tabtps.common.command.commands;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.execution.CommandExecutionHandler;
+import org.incendo.cloud.permission.PredicatePermission;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
@@ -46,6 +47,7 @@ import static net.kyori.adventure.text.event.ClickEvent.runCommand;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
+import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 
 public final class ToggleDisplayCommands extends TabTPSCommand {
   public ToggleDisplayCommands(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
@@ -58,21 +60,27 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
 
     this.commands.register(toggle.literal("tab")
       .senderType(User.class)
-      .permission(commander -> this.togglePermission(commander, DisplayConfig::tabSettings))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TOGGLE_TAB_DESCRIPTION.plain())
-      .handler(this::toggleTab));
+      .permission(PredicatePermission.of(commander -> this.togglePermission(commander, DisplayConfig::tabSettings)))
+      .commandDescription(richDescription(Messages.COMMAND_TOGGLE_TAB_DESCRIPTION.plain()))
+      .handler(wrap(this::toggleTab)));
 
     this.commands.register(toggle.literal("actionbar")
       .senderType(User.class)
-      .permission(commander -> this.togglePermission(commander, DisplayConfig::actionBarSettings))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TOGGLE_ACTIONBAR_DESCRIPTION.plain())
-      .handler(this::toggleActionBar));
+      .permission(PredicatePermission.of(commander -> this.togglePermission(commander, DisplayConfig::actionBarSettings)))
+      .commandDescription(richDescription(Messages.COMMAND_TOGGLE_ACTIONBAR_DESCRIPTION.plain()))
+      .handler(wrap(this::toggleActionBar)));
 
     this.commands.register(toggle.literal("bossbar")
       .senderType(User.class)
-      .permission(commander -> this.togglePermission(commander, DisplayConfig::bossBarSettings))
-      .meta(MinecraftExtrasMetaKeys.DESCRIPTION, Messages.COMMAND_TOGGLE_BOSSBAR_DESCRIPTION.plain())
-      .handler(this::toggleBossBar));
+      .permission(PredicatePermission.of(commander -> this.togglePermission(commander, DisplayConfig::bossBarSettings)))
+      .commandDescription(richDescription(Messages.COMMAND_TOGGLE_BOSSBAR_DESCRIPTION.plain()))
+      .handler(wrap(this::toggleBossBar)));
+  }
+
+  // todo
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static CommandExecutionHandler<User> wrap(final CommandExecutionHandler<User<?>> handler) {
+    return (CommandExecutionHandler) handler;
   }
 
   private boolean togglePermission(final @NonNull Commander commander, final @NonNull Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
@@ -83,8 +91,8 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       .orElse(false);
   }
 
-  private void toggleTab(final @NonNull CommandContext<Commander> context) {
-    final User<?> user = (User<?>) context.getSender();
+  private void toggleTab(final @NonNull CommandContext<User<?>> context) {
+    final User<?> user = context.sender();
     if (user.tab().enabled()) {
       user.tab().stopDisplay();
       user.tab().enabled(false);
@@ -97,8 +105,8 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     user.markDirty();
   }
 
-  private void toggleActionBar(final @NonNull CommandContext<Commander> context) {
-    final User<?> user = (User<?>) context.getSender();
+  private void toggleActionBar(final @NonNull CommandContext<User<?>> context) {
+    final User<?> user = context.sender();
     if (user.actionBar().enabled()) {
       user.actionBar().stopDisplay();
       user.actionBar().enabled(false);
@@ -111,8 +119,8 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     user.markDirty();
   }
 
-  private void toggleBossBar(final @NonNull CommandContext<Commander> context) {
-    final User<?> user = (User<?>) context.getSender();
+  private void toggleBossBar(final @NonNull CommandContext<User<?>> context) {
+    final User<?> user = context.sender();
     if (user.bossBar().enabled()) {
       user.bossBar().stopDisplay();
       user.bossBar().enabled(false);
