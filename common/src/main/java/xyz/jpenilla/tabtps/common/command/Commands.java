@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -43,7 +43,7 @@ public final class Commands {
     return this.commandManager;
   }
 
-  public void registerSubcommand(final @NonNull UnaryOperator<Command.Builder<Commander>> modifier) {
+  public void registerSubcommand(final @NonNull Function<Command.Builder<Commander>, Command.Builder<? extends Commander>> modifier) {
     this.commandManager.command(modifier.apply(this.rootBuilder()));
   }
 
