@@ -109,13 +109,7 @@ public final class PluginSettings {
     private TextColor accent = NamedTextColor.DARK_GRAY;
 
     public MinecraftHelp.@NonNull HelpColors toCloud() {
-      return MinecraftHelp.helpColors(
-        this.primary,
-        this.highlight,
-        this.alternateHighlight,
-        this.text,
-        this.accent
-      );
+      return MinecraftHelp.helpColors(this.primary, this.highlight, this.alternateHighlight, this.text, this.accent);
     }
   }
 }

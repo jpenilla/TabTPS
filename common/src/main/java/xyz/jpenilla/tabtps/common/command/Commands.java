@@ -30,11 +30,9 @@ import org.incendo.cloud.CommandManager;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
 public final class Commands {
-  private final TabTPS tabTPS;
   private final CommandManager<Commander> commandManager;
 
   public Commands(final @NonNull TabTPS tabTPS, final @NonNull CommandManager<Commander> commandManager) {
-    this.tabTPS = tabTPS;
     this.commandManager = commandManager;
     new ExceptionHandler(tabTPS).apply(commandManager);
   }
