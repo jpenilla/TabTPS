@@ -91,7 +91,6 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
         }
       )
     );
-    this.commandManager.brigadierManager().setNativeNumberSuggestions(false);
 
     this.tabTPS = new TabTPS(this);
 

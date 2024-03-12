@@ -31,7 +31,6 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.SenderMapper;
-import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
@@ -132,8 +131,6 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
 
     if (this.commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
       this.commandManager.registerBrigadier();
-      final CloudBrigadierManager<Commander, ?> brigadierManager = this.commandManager.brigadierManager();
-      brigadierManager.setNativeNumberSuggestions(false);
     } else if (this.commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
       this.commandManager.registerAsynchronousCompletions();
     }
