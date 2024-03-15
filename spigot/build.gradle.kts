@@ -16,9 +16,6 @@ dependencies {
   implementation(libs.slf4jJdk14)
 
   implementation(libs.cloudPaper)
-  implementation(libs.commodore) {
-    exclude("com.mojang")
-  }
 }
 
 tasks {

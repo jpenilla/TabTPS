@@ -23,8 +23,6 @@
  */
 package xyz.jpenilla.tabtps.fabric;
 
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.fabric.FabricServerCommandManager;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -36,6 +34,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.fabric.FabricServerCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.tabtps.common.TabTPS;
@@ -70,25 +71,26 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     this.userService = new FabricUserService(this); // todo store in level container?
 
     this.commandManager = new FabricServerCommandManager<>(
-      CommandExecutionCoordinator.simpleCoordinator(),
-      commandSourceStack -> {
-        final Entity entity = commandSourceStack.getEntity();
-        if (entity instanceof ServerPlayer player) {
-          final FabricUser user = this.userService().user(player);
-          return new DelegateUser<>(user, commandSourceStack);
+      ExecutionCoordinator.simpleCoordinator(),
+      SenderMapper.create(
+        commandSourceStack -> {
+          final Entity entity = commandSourceStack.getEntity();
+          if (entity instanceof ServerPlayer player) {
+            final FabricUser user = this.userService().user(player);
+            return new DelegateUser<>(user, commandSourceStack);
+          }
+          return new FabricConsoleCommander(commandSourceStack);
+        },
+        commander -> {
+          if (commander instanceof FabricConsoleCommander consoleCommander) {
+            return consoleCommander.commandSourceStack();
+          } else if (commander instanceof DelegateUser<?, ?> user) {
+            return (CommandSourceStack) user.c();
+          }
+          throw new IllegalArgumentException();
         }
-        return new FabricConsoleCommander(commandSourceStack);
-      },
-      commander -> {
-        if (commander instanceof FabricConsoleCommander consoleCommander) {
-          return consoleCommander.commandSourceStack();
-        } else if (commander instanceof DelegateUser<?, ?> user) {
-          return (CommandSourceStack) user.c();
-        }
-        throw new IllegalArgumentException();
-      }
+      )
     );
-    this.commandManager.brigadierManager().setNativeNumberSuggestions(false);
 
     this.tabTPS = new TabTPS(this);
 

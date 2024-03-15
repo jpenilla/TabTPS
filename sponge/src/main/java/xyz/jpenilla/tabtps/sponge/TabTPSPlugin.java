@@ -23,16 +23,17 @@
  */
 package xyz.jpenilla.tabtps.sponge;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.sponge.CloudInjectionModule;
-import cloud.commandframework.sponge.SpongeCommandManager;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import java.nio.file.Path;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.sponge.CloudInjectionModule;
+import org.incendo.cloud.sponge.SpongeCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -73,22 +74,24 @@ public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUs
   ) {
     final CloudInjectionModule<Commander> cloudModule = new CloudInjectionModule<>(
       Commander.class,
-      CommandExecutionCoordinator.simpleCoordinator(),
-      commander -> {
-        if (commander instanceof SpongeConsoleCommander) {
-          return ((SpongeConsoleCommander) commander).commandCause();
-        } else if (commander instanceof DelegateUser) {
-          return (CommandCause) ((DelegateUser<?, ?>) commander).c();
+      ExecutionCoordinator.simpleCoordinator(),
+      SenderMapper.create(
+        commandCause -> {
+          if (commandCause.subject() instanceof ServerPlayer) {
+            final SpongeUser user = this.userService().user((ServerPlayer) commandCause.subject());
+            return new DelegateUser<>(user, commandCause);
+          }
+          return new SpongeConsoleCommander(commandCause);
+        },
+        commander -> {
+          if (commander instanceof SpongeConsoleCommander) {
+            return ((SpongeConsoleCommander) commander).commandCause();
+          } else if (commander instanceof DelegateUser) {
+            return (CommandCause) ((DelegateUser<?, ?>) commander).c();
+          }
+          throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
-      },
-      commandCause -> {
-        if (commandCause.subject() instanceof ServerPlayer) {
-          final SpongeUser user = this.userService().user((ServerPlayer) commandCause.subject());
-          return new DelegateUser<>(user, commandCause);
-        }
-        return new SpongeConsoleCommander(commandCause);
-      }
+      )
     );
     this.injector = injector.createChildInjector(cloudModule);
     this.game = game;

@@ -23,18 +23,16 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
 public final class Commands {
-  private final TabTPS tabTPS;
   private final CommandManager<Commander> commandManager;
 
   public Commands(final @NonNull TabTPS tabTPS, final @NonNull CommandManager<Commander> commandManager) {
-    this.tabTPS = tabTPS;
     this.commandManager = commandManager;
     new ExceptionHandler(tabTPS).apply(commandManager);
   }
@@ -43,7 +41,7 @@ public final class Commands {
     return this.commandManager;
   }
 
-  public void registerSubcommand(final @NonNull UnaryOperator<Command.Builder<Commander>> modifier) {
+  public void registerSubcommand(final @NonNull Function<Command.Builder<Commander>, Command.Builder<? extends Commander>> modifier) {
     this.commandManager.command(modifier.apply(this.rootBuilder()));
   }
 
@@ -51,7 +49,7 @@ public final class Commands {
     return this.commandManager.commandBuilder("tabtps");
   }
 
-  public void register(final Command.@NonNull Builder<Commander> builder) {
+  public void register(final Command.@NonNull Builder<? extends Commander> builder) {
     this.commandManager.command(builder);
   }
 }

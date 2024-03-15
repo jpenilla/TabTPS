@@ -21,6 +21,7 @@ dependencies {
   compileOnlyApi(libs.gson)
   compileOnlyApi(libs.guava)
   api(platform(libs.cloudBom))
+  api(platform(libs.cloudMinecraftBom))
   api(libs.cloudCore)
   api(libs.cloudMinecraftExtras)
   api(libs.configurateHocon)

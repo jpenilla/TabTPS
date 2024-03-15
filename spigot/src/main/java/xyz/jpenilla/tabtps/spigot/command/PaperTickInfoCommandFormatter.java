@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.spigot.command;
 
-import cloud.commandframework.types.tuples.Pair;
 import com.google.common.collect.ImmutableList;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
@@ -31,6 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.type.tuple.Pair;
 import xyz.jpenilla.pluginbase.legacy.Crafty;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;

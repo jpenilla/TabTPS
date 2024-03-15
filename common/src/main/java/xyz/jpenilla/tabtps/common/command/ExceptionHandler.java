@@ -23,14 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.captions.CaptionVariable;
-import cloud.commandframework.exceptions.ArgumentParseException;
-import cloud.commandframework.exceptions.CommandExecutionException;
-import cloud.commandframework.exceptions.InvalidCommandSenderException;
-import cloud.commandframework.exceptions.InvalidSyntaxException;
-import cloud.commandframework.exceptions.NoPermissionException;
-import cloud.commandframework.exceptions.parsing.ParserException;
+import io.leangen.geantyref.GenericTypeReflector;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -41,6 +34,15 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.caption.CaptionVariable;
+import org.incendo.cloud.exception.ArgumentParseException;
+import org.incendo.cloud.exception.CommandExecutionException;
+import org.incendo.cloud.exception.InvalidCommandSenderException;
+import org.incendo.cloud.exception.InvalidSyntaxException;
+import org.incendo.cloud.exception.NoPermissionException;
+import org.incendo.cloud.exception.handling.ExceptionContext;
+import org.incendo.cloud.exception.parsing.ParserException;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
@@ -69,20 +71,20 @@ public final class ExceptionHandler {
   }
 
   public void apply(final @NonNull CommandManager<Commander> manager) {
-    manager.registerExceptionHandler(CommandExecutionException.class, this::commandExecution);
-    manager.registerExceptionHandler(NoPermissionException.class, this::noPermission);
-    manager.registerExceptionHandler(ArgumentParseException.class, this::argumentParsing);
-    manager.registerExceptionHandler(InvalidCommandSenderException.class, this::invalidSender);
-    manager.registerExceptionHandler(InvalidSyntaxException.class, this::invalidSyntax);
+    manager.exceptionController().registerHandler(CommandExecutionException.class, this::commandExecution);
+    manager.exceptionController().registerHandler(NoPermissionException.class, this::noPermission);
+    manager.exceptionController().registerHandler(ArgumentParseException.class, this::argumentParsing);
+    manager.exceptionController().registerHandler(InvalidCommandSenderException.class, this::invalidSender);
+    manager.exceptionController().registerHandler(InvalidSyntaxException.class, this::invalidSyntax);
   }
 
-  private void commandExecution(final @NonNull Commander commander, final @NonNull CommandExecutionException exception) {
-    final Throwable cause = exception.getCause();
+  private void commandExecution(final @NonNull ExceptionContext<Commander, CommandExecutionException> ctx) {
+    final Throwable cause = ctx.exception().getCause();
 
     if (cause instanceof CommandCompletedException) {
       final Component message = ((CommandCompletedException) cause).componentMessage();
       if (message != null) {
-        commander.sendMessage(message);
+        ctx.context().sender().sendMessage(message);
       }
       return;
     }
@@ -105,49 +107,49 @@ public final class ExceptionHandler {
       .append(Messages.MISC_TEXT_CLICK_TO_COPY.styled(GRAY, ITALIC));
     final TextComponent.Builder message = text();
     message.append(Messages.COMMAND_EXCEPTION_COMMAND_EXECUTION.styled(RED));
-    if (commander.hasPermission(Constants.PERMISSION_COMMAND_ERROR_HOVER_STACKTRACE)) {
+    if (ctx.context().sender().hasPermission(Constants.PERMISSION_COMMAND_ERROR_HOVER_STACKTRACE)) {
       message.hoverEvent(hoverText.build());
       message.clickEvent(copyToClipboard(stackTrace));
     }
-    decorateAndSend(commander, message);
+    decorateAndSend(ctx.context().sender(), message);
   }
 
-  private void noPermission(final @NonNull Commander commander, final @NonNull NoPermissionException exception) {
-    decorateAndSend(commander, Messages.COMMAND_EXCEPTION_NO_PERMISSION.styled(RED));
+  private void noPermission(final @NonNull ExceptionContext<Commander, NoPermissionException> ctx) {
+    decorateAndSend(ctx.context().sender(), Messages.COMMAND_EXCEPTION_NO_PERMISSION.styled(RED));
   }
 
-  private void argumentParsing(final @NonNull Commander commander, final @NonNull ArgumentParseException exception) {
-    final Throwable cause = exception.getCause();
+  private void argumentParsing(final @NonNull ExceptionContext<Commander, ArgumentParseException> ctx) {
+    final Throwable cause = ctx.exception().getCause();
     final Component message;
     if (cause instanceof ParserException) {
       final ParserException ex = (ParserException) cause;
       message = translatable(
-        Messages.bundleName() + "/command.caption." + ex.errorCaption().getKey(),
+        Messages.bundleName() + "/command.caption." + ex.errorCaption().key(),
         GRAY,
         Arrays.stream(ex.captionVariables())
-          .map(CaptionVariable::getValue)
+          .map(CaptionVariable::value)
           .map(Component::text)
           .collect(Collectors.toList())
       );
     } else {
       message = Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(cause)).color(GRAY);
     }
-    decorateAndSend(commander, Messages.COMMAND_EXCEPTION_INVALID_ARGUMENT.styled(RED, message));
+    decorateAndSend(ctx.context().sender(), Messages.COMMAND_EXCEPTION_INVALID_ARGUMENT.styled(RED, message));
   }
 
-  private void invalidSender(final @NonNull Commander commander, final @NonNull InvalidCommandSenderException exception) {
+  private void invalidSender(final @NonNull ExceptionContext<Commander, InvalidCommandSenderException> ctx) {
     final Component message = Messages.COMMAND_EXCEPTION_INVALID_SENDER_TYPE.styled(
       RED,
-      text(exception.getRequiredSender().getSimpleName())
+      text(GenericTypeReflector.erase(ctx.exception().requiredSender()).getSimpleName())
     );
-    decorateAndSend(commander, message);
+    decorateAndSend(ctx.context().sender(), message);
   }
 
-  private void invalidSyntax(final @NonNull Commander commander, final @NonNull InvalidSyntaxException exception) {
+  private void invalidSyntax(final @NonNull ExceptionContext<Commander, InvalidSyntaxException> ctx) {
     final Component message = Messages.COMMAND_EXCEPTION_INVALID_SYNTAX.styled(
       RED,
-      Components.highlight(text(String.format("/%s", exception.getCorrectSyntax()), GRAY), WHITE)
+      Components.highlight(text(String.format("/%s", ctx.exception().correctSyntax()), GRAY), WHITE)
     );
-    decorateAndSend(commander, message);
+    decorateAndSend(ctx.context().sender(), message);
   }
 }

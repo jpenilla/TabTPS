@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common;
 
+import io.leangen.geantyref.TypeToken;
 import java.util.List;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
@@ -36,6 +37,8 @@ import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
 @DefaultQualifier(NonNull.class)
 public interface User<P> extends Commander {
+  TypeToken<User<?>> TYPE = new TypeToken<User<?>>() {};
+
   UUID uuid();
 
   Component displayName();

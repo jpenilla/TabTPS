@@ -23,11 +23,11 @@
  */
 package xyz.jpenilla.tabtps.sponge.command;
 
-import cloud.commandframework.types.tuples.Pair;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.type.tuple.Pair;
 import org.spongepowered.api.Sponge;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
