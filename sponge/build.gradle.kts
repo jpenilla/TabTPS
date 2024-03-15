@@ -72,7 +72,7 @@ tasks {
     sequenceOf(
       "net.kyori.adventure.text.feature.pagination",
       "net.kyori.adventure.serializer.configurate4",
-      "cloud.commandframework",
+      "org.incendo.cloud",
       "org.spongepowered.configurate",
       "com.typesafe.config",
       "xyz.jpenilla.jmplib"

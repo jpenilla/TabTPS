@@ -18,6 +18,9 @@ tasks {
   assemble {
     dependsOn(copyJar)
   }
+  shadowJar {
+    mergeServiceFiles()
+  }
 }
 
 publishMods.modrinth {

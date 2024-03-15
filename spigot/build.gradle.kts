@@ -28,7 +28,7 @@ tasks {
     minimize()
     sequenceOf(
       "org.slf4j",
-      "cloud.commandframework",
+      "org.incendo.cloud",
       "io.leangen.geantyref",
       "io.papermc.lib",
       "net.kyori",
