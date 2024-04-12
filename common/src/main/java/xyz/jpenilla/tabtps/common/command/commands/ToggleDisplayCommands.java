@@ -58,26 +58,29 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     final Command.Builder<Commander> toggle = this.commands.rootBuilder().literal("toggle");
 
     this.commands.register(toggle.literal("tab")
-      .senderType(User.TYPE)
       .permission(PredicatePermission.of(user -> this.togglePermission(user, DisplayConfig::tabSettings)))
+      .senderType(User.TYPE)
       .commandDescription(richDescription(Messages.COMMAND_TOGGLE_TAB_DESCRIPTION.plain()))
       .handler(this::toggleTab));
 
     this.commands.register(toggle.literal("actionbar")
-      .senderType(User.TYPE)
       .permission(PredicatePermission.of(user -> this.togglePermission(user, DisplayConfig::actionBarSettings)))
+      .senderType(User.TYPE)
       .commandDescription(richDescription(Messages.COMMAND_TOGGLE_ACTIONBAR_DESCRIPTION.plain()))
       .handler(this::toggleActionBar));
 
     this.commands.register(toggle.literal("bossbar")
-      .senderType(User.TYPE)
       .permission(PredicatePermission.of(user -> this.togglePermission(user, DisplayConfig::bossBarSettings)))
+      .senderType(User.TYPE)
       .commandDescription(richDescription(Messages.COMMAND_TOGGLE_BOSSBAR_DESCRIPTION.plain()))
       .handler(this::toggleBossBar));
   }
 
-  private boolean togglePermission(final @NonNull User<?> user, final @NonNull Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
-    return this.tabTPS.findDisplayConfig(user)
+  private boolean togglePermission(final @NonNull Commander sender, final @NonNull Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
+    if (!(sender instanceof User<?>)) {
+      return false;
+    }
+    return this.tabTPS.findDisplayConfig((User<?>) sender)
       .map(config -> function.apply(config).allow())
       .orElse(false);
   }
