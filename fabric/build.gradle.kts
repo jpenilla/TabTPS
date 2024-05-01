@@ -36,7 +36,7 @@ dependencies {
 }
 
 indra {
-  javaVersions().target(17)
+  javaVersions().target(21)
 }
 
 tasks {
