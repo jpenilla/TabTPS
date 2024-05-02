@@ -25,7 +25,6 @@ tasks {
 
   shadowJar {
     archiveClassifier.set(null as String?)
-    minimize()
     sequenceOf(
       "org.slf4j",
       "org.incendo.cloud",
