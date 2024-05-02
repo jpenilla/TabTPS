@@ -40,6 +40,9 @@ tasks {
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
     }
+    manifest {
+      attributes("paperweight-mappings-namespace" to "mojang")
+    }
   }
 
   val mcVer = libs.versions.minecraft.get()
