@@ -69,8 +69,10 @@ tasks {
       "1.17.1",
       "1.18.2",
       "1.19.4",
-      mcVer,
     ),
+    21 to setOf(
+      mcVer,
+    )
   ).forEach { (javaVersion, minecraftVersions) ->
     for (version in minecraftVersions) {
       createVersionedRun(version, javaVersion)
