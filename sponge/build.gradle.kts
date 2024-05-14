@@ -55,7 +55,7 @@ sponge {
 }
 
 minecraft {
-  version("1.20.4")
+  version("1.20.6")
   platform(MinecraftPlatform.JOINED)
 }
 
@@ -97,7 +97,7 @@ tabTPSPlatform {
 publishMods.modrinth {
   modLoaders.add("sponge")
   minecraftVersions.addAll(
-    "1.20.4"
+    "1.20.6"
   )
 }
 

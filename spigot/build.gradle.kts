@@ -25,7 +25,6 @@ tasks {
 
   shadowJar {
     archiveClassifier.set(null as String?)
-    minimize()
     sequenceOf(
       "org.slf4j",
       "org.incendo.cloud",
@@ -40,6 +39,9 @@ tasks {
       "xyz.jpenilla.pluginbase"
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
+    }
+    manifest {
+      attributes("paperweight-mappings-namespace" to "mojang")
     }
   }
 
@@ -67,8 +69,10 @@ tasks {
       "1.17.1",
       "1.18.2",
       "1.19.4",
-      mcVer,
     ),
+    21 to setOf(
+      mcVer,
+    )
   ).forEach { (javaVersion, minecraftVersions) ->
     for (version in minecraftVersions) {
       createVersionedRun(version, javaVersion)

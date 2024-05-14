@@ -138,9 +138,13 @@ public final class ExceptionHandler {
   }
 
   private void invalidSender(final @NonNull ExceptionContext<Commander, InvalidCommandSenderException> ctx) {
+    if (ctx.exception().requiredSenderTypes().size() > 1) {
+      // We don't have any command chains that would cause this to happen
+      throw new IllegalStateException();
+    }
     final Component message = Messages.COMMAND_EXCEPTION_INVALID_SENDER_TYPE.styled(
       RED,
-      text(GenericTypeReflector.erase(ctx.exception().requiredSender()).getSimpleName())
+      text(GenericTypeReflector.erase(ctx.exception().requiredSenderTypes().iterator().next()).getSimpleName())
     );
     decorateAndSend(ctx.context().sender(), message);
   }

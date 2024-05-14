@@ -2,7 +2,7 @@ import me.modmuss50.mpp.ReleaseType
 
 plugins {
   id("tabtps.base")
-  id("com.github.johnrengelman.shadow")
+  id("io.github.goooler.shadow")
   id("me.modmuss50.mod-publish-plugin")
 }
 

@@ -26,9 +26,9 @@
     "tabtps-fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.3",
+    "fabricloader": ">=0.15.10",
     "fabric": "*",
     "fabric-permissions-api-v0": "*",
-    "minecraft": "~1.20.4"
+    "minecraft": "~1.20.6"
   }
 }
