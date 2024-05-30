@@ -41,7 +41,7 @@ public final class UserListener {
   }
 
   @Listener
-  public void handleQuit(final ServerSideConnectionEvent.@NonNull Disconnect event) {
+  public void handleQuit(final ServerSideConnectionEvent.@NonNull Leave event) {
     this.plugin.userService().handleQuit(event.player());
   }
 
