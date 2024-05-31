@@ -7,7 +7,7 @@ Minecraft server mod/plugin to show TPS, MSPT, and other information in the tab 
 
 Current supported platforms:
 - [Paper](https://papermc.io)/Spigot API (Minecraft versions 1.8.8-1.20.6+)
-- [Sponge](https://spongepowered.org) 8+
+- [Sponge](https://spongepowered.org) 11+
 - Fabric (Minecraft 1.20.6, requires [Fabric API](https://modrinth.com/mod/fabric-api))
 
 ## Features
