@@ -33,7 +33,7 @@ import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.execution.ExecutionCoordinator;
-import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.pluginbase.legacy.PluginBase;
@@ -53,7 +53,7 @@ import xyz.jpenilla.tabtps.spigot.service.SpigotTickTimeService;
 
 public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;
-  private PaperCommandManager<Commander> commandManager;
+  private LegacyPaperCommandManager<Commander> commandManager;
   private UserService<Player, BukkitUser> userService;
   private TickTimeService tickTimeService;
   private Logger logger;
@@ -108,7 +108,7 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
   }
 
   private void setupCommandManager() {
-    this.commandManager = new PaperCommandManager<>(
+    this.commandManager = new LegacyPaperCommandManager<>(
       this,
       ExecutionCoordinator.simpleCoordinator(),
       SenderMapper.create(
