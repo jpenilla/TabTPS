@@ -28,7 +28,7 @@ java {
 
 sponge {
   injectRepositories(false)
-  apiVersion("11.0.0-SNAPSHOT")
+  apiVersion("12.0.0-SNAPSHOT")
   plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
@@ -55,7 +55,7 @@ sponge {
 }
 
 minecraft {
-  version("1.20.6")
+  version("1.21")
   platform(MinecraftPlatform.JOINED)
 }
 
@@ -97,10 +97,11 @@ tabTPSPlatform {
 publishMods.modrinth {
   modLoaders.add("sponge")
   minecraftVersions.addAll(
-    "1.20.6"
+    "1.21"
   )
 }
 
+/*
 configurations.spongeRuntime {
   resolutionStrategy {
     eachDependency {
@@ -110,3 +111,4 @@ configurations.spongeRuntime {
     }
   }
 }
+ */
