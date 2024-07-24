@@ -102,7 +102,7 @@ public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUs
     }));
     this.commandManager.parserMapper().cloudNumberSuggestions(true);
     this.tabTPS = new TabTPS(this);
-    TickInfoCommand.withFormatter(this.tabTPS(), this.tabTPS().commands(), new SpongeTickInfoCommandFormatter()).register();
+    TickInfoCommand.withFormatter(this.tabTPS(), this.tabTPS().commands(), new SpongeTickInfoCommandFormatter(this)).register();
     new SpongePingCommand(this, this.tabTPS.commands()).register();
     game.eventManager().registerListeners(this.pluginContainer, new UserListener(this));
     this.logger.info("Done initializing TabTPS.");

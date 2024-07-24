@@ -21,30 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.common.module;
+package xyz.jpenilla.tabtps.common.util;
 
-import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.Messages;
-import xyz.jpenilla.tabtps.common.TabTPS;
-import xyz.jpenilla.tabtps.common.config.Theme;
-import xyz.jpenilla.tabtps.common.util.TPSUtil;
-
-public final class TPSModule extends AbstractModule {
-  public TPSModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme
-  ) {
-    super(tabTPS, theme);
-  }
-
-  @Override
-  public @NonNull Component label() {
-    return Messages.LABEL_TPS.styled(this.theme.colorScheme().text());
-  }
-
-  @Override
-  public @NonNull Component display() {
-    return TPSUtil.coloredTps(this.tabTPS.platform().tickTimeService().recentTps()[0], this.tabTPS.platform().tickTimeService().targetTickRate(), this.theme.colorScheme());
-  }
+@FunctionalInterface
+public interface FloatSupplier {
+  float get();
 }

@@ -29,4 +29,10 @@ public interface TickTimeService {
   double averageMspt();
 
   double @NonNull [] recentTps();
+
+  float targetTickRate();
+
+  default float targetMspt() {
+    return 1000.0f / this.targetTickRate();
+  }
 }
