@@ -61,7 +61,7 @@ public final class PaperTickTimeService implements TickTimeService {
       return () -> {
         try {
           return (float) getTickRate.invoke(serverTickManager);
-        } catch (ReflectiveOperationException e) {
+        } catch (final ReflectiveOperationException e) {
           throw new RuntimeException(e);
         }
       };

@@ -37,7 +37,7 @@ import xyz.jpenilla.tabtps.sponge.access.MinecraftServerAccess;
 public final class SpongeTickInfoCommandFormatter implements TickInfoCommand.Formatter {
   private final TabTPSPlatform<?, ?> platform;
 
-  public SpongeTickInfoCommandFormatter(TabTPSPlatform<?, ?> platform) {
+  public SpongeTickInfoCommandFormatter(final TabTPSPlatform<?, ?> platform) {
     this.platform = platform;
   }
 
