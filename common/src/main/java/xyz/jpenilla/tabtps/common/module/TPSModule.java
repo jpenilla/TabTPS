@@ -45,6 +45,6 @@ public final class TPSModule extends AbstractModule {
 
   @Override
   public @NonNull Component display() {
-    return TPSUtil.coloredTps(this.tabTPS.platform().tickTimeService().recentTps()[0], this.theme.colorScheme());
+    return TPSUtil.coloredTps(this.tabTPS.platform().tickTimeService().recentTps()[0], this.tabTPS.platform().tickTimeService().targetTickRate(), this.theme.colorScheme());
   }
 }

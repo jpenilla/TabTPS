@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.BooleanSupplier;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ServerTickRateManager;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Implements;
@@ -65,6 +66,8 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
   @Shadow private int tickCount;
   @Shadow @Final private long[] tickTimesNanos;
 
+  @Shadow public abstract ServerTickRateManager tickRateManager();
+
   @Inject(method = "tickServer", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
   public void injectTick(final BooleanSupplier var1, final CallbackInfo ci, final long tickStartTimeNanos, final long tickDurationNanos) {
     this.tickTimes5s.add(this.tickCount, tickDurationNanos);
@@ -96,6 +99,14 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
     tps[2] = this.tps5m.average();
     tps[3] = this.tps15m.average();
     return tps;
+  }
+
+  public float tabtps$targetTickRate() {
+    return this.tickRateManager().tickrate();
+  }
+
+  public float tabtps$targetMspt() {
+    return this.tickRateManager().millisecondsPerTick();
   }
 
   @Override

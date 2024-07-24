@@ -31,6 +31,7 @@ import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
+import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
 public final class BossBarDisplayTask implements Display {
   private final TabTPS tabTPS;
@@ -78,11 +79,11 @@ public final class BossBarDisplayTask implements Display {
   }
 
   private float msptProgress() {
-    return ensureInRange(this.tabTPS.platform().tickTimeService().averageMspt() / 50.0f);
+    return ensureInRange(this.tabTPS.platform().tickTimeService().averageMspt() / this.tabTPS.platform().tickTimeService().targetMspt());
   }
 
   private float tpsProgress() {
-    return ensureInRange(this.tabTPS.platform().tickTimeService().recentTps()[0] / 20.0f);
+    return ensureInRange(this.tabTPS.platform().tickTimeService().recentTps()[0] / this.tabTPS.platform().tickTimeService().targetTickRate());
   }
 
   private static float ensureInRange(final double value) {
@@ -94,9 +95,10 @@ public final class BossBarDisplayTask implements Display {
       case MSPT:
       case REVERSE_MSPT:
         final double mspt = this.tabTPS.platform().tickTimeService().averageMspt();
-        if (mspt < 25) {
+        final float targetMspt = this.tabTPS.platform().tickTimeService().targetMspt();
+        if (mspt < TPSUtil.scaleMspt(25, targetMspt)) {
           return this.settings.colors().goodPerformance();
-        } else if (mspt < 40) {
+        } else if (mspt < TPSUtil.scaleMspt(40, targetMspt)) {
           return this.settings.colors().mediumPerformance();
         } else {
           return this.settings.colors().lowPerformance();
@@ -104,9 +106,10 @@ public final class BossBarDisplayTask implements Display {
       case REVERSE_TPS:
       case TPS:
         final double tps = this.tabTPS.platform().tickTimeService().recentTps()[0];
-        if (tps > 18.50D) {
+        final float targetTps = this.tabTPS.platform().tickTimeService().targetTickRate();
+        if (tps > TPSUtil.scaleTps(18.50f, targetTps)) {
           return this.settings.colors().goodPerformance();
-        } else if (tps > 15.00D) {
+        } else if (tps > TPSUtil.scaleTps(15.00f, targetTps)) {
           return this.settings.colors().mediumPerformance();
         } else {
           return this.settings.colors().lowPerformance();

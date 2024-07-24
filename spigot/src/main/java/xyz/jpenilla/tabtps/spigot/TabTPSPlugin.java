@@ -138,7 +138,7 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
 
   private void registerCommands() {
     if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
-      TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
+      TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter(this)).register();
     } else {
       TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
     }
