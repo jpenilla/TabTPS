@@ -17,6 +17,12 @@ dependencyResolutionManagement {
     maven("https://repo.spongepowered.org/repository/maven-snapshots/") {
       mavenContent { snapshotsOnly() }
     }
+    mavenLocal {
+      mavenContent {
+        snapshotsOnly()
+        includeGroup("net.kyori")
+      }
+    }
   }
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
@@ -37,6 +43,7 @@ plugins {
   id("quiet-fabric-loom") version "1.7-SNAPSHOT"
   id("org.spongepowered.gradle.vanilla") version "0.2.1-SNAPSHOT"
   id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+  id("net.neoforged.moddev.repositories") version "2.0.1-beta"
 }
 
 rootProject.name = "TabTPS"
@@ -45,7 +52,8 @@ listOf(
   "common",
   "spigot",
   "sponge",
-  "fabric"
+  "fabric",
+  "neoforge",
 ).forEach { module ->
   include("tabtps-$module")
   project(":tabtps-$module").projectDir = file(module)

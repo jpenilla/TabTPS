@@ -21,38 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-<%def propPattern = ~/[.-]/
-%>package $packageName;
+package xyz.jpenilla.tabtps.neoforge.service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
+import net.minecraft.server.level.ServerPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
+import xyz.jpenilla.tabtps.common.service.UserService;
+import xyz.jpenilla.tabtps.neoforge.NeoForgeUser;
+import xyz.jpenilla.tabtps.neoforge.TabTPSNeoForge;
 
 @DefaultQualifier(NonNull.class)
-public final class ${className} {
-  private static final String BUNDLE_NAME = "${bundleName}";
-<%
-for (prop in keys.sort()) {
-  def propKey = propPattern.matcher(prop.toUpperCase()).replaceAll("_")
-%>
-  public static final TranslatableProvider ${propKey} = create("${prop}");<%
-}%>
+public final class NeoForgeUserService extends UserService<ServerPlayer, NeoForgeUser> {
+  private final TabTPSNeoForge tabTPSNeoForge;
 
-  private static TranslatableProvider create(final String key) {
-    return TranslatableProvider.create(BUNDLE_NAME, key);
+  public NeoForgeUserService(final TabTPSNeoForge platform) {
+    super(platform);
+    this.tabTPSNeoForge = platform;
   }
 
-  public static String bundleName() {
-    return BUNDLE_NAME;
+  @Override
+  protected UUID uuid(final ServerPlayer base) {
+    return base.getUUID();
   }
 
-  public static void load() {
-    TranslatableProvider.loadBundle(
-      BUNDLE_NAME //,
-      // ${className}.class
-    );
+  @Override
+  protected NeoForgeUser create(final ServerPlayer base) {
+    return NeoForgeUser.from(this.tabTPSNeoForge, base);
   }
 
-  private ${className}() {
+  @Override
+  protected Collection<ServerPlayer> platformPlayers() {
+    return Collections.unmodifiableCollection(this.tabTPSNeoForge.server().getPlayerList().getPlayers());
   }
 }

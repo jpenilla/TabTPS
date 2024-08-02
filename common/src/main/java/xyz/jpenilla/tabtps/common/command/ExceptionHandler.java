@@ -95,7 +95,7 @@ public final class ExceptionHandler {
     cause.printStackTrace(new PrintWriter(writer));
     final String stackTrace = writer.toString().replaceAll("\t", "    ");
     final TextComponent.Builder hoverText = text();
-    final Component throwableMessage = ComponentMessageThrowable.getOrConvertMessage(cause);
+    final Component throwableMessage = ComponentMessageThrowable.getOrConvertMessage(this.tabTPS.platform().asComponentMessageThrowable(cause));
     if (throwableMessage != null) {
       hoverText.append(throwableMessage)
         .append(newline())
@@ -132,7 +132,7 @@ public final class ExceptionHandler {
           .collect(Collectors.toList())
       );
     } else {
-      message = Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(cause)).color(GRAY);
+      message = Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(this.tabTPS.platform().asComponentMessageThrowable(cause))).color(GRAY);
     }
     decorateAndSend(ctx.context().sender(), Messages.COMMAND_EXCEPTION_INVALID_ARGUMENT.styled(RED, message));
   }

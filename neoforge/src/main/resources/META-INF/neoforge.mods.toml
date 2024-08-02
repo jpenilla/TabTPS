@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+issueTrackerURL = "${github}/issues/"
+showAsResourcePack = false
+
+[[mods]]
+modId = "tabtps"
+version = "${version}"
+displayName = "TabTPS"
+displayURL = "${github}"
+authors = "jmp"
+description = "${description}"
+displayTest = "IGNORE_ALL_VERSION"
+
+[[dependencies.tabtps]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tabtps]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21,1.22)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tabtps]]
+modId = "cloud"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.tabtps]]
+modId = "adventure_platform_neoforge"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "tabtps-neoforge.mixins.json"

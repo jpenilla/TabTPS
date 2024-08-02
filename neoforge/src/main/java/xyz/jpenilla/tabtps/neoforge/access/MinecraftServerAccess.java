@@ -21,38 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-<%def propPattern = ~/[.-]/
-%>package $packageName;
+package xyz.jpenilla.tabtps.neoforge.access;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
-import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
+import xyz.jpenilla.tabtps.common.util.TickTimes;
 
-@DefaultQualifier(NonNull.class)
-public final class ${className} {
-  private static final String BUNDLE_NAME = "${bundleName}";
-<%
-for (prop in keys.sort()) {
-  def propKey = propPattern.matcher(prop.toUpperCase()).replaceAll("_")
-%>
-  public static final TranslatableProvider ${propKey} = create("${prop}");<%
-}%>
+public interface MinecraftServerAccess {
+  @NonNull TickTimes tickTimes5s();
 
-  private static TranslatableProvider create(final String key) {
-    return TranslatableProvider.create(BUNDLE_NAME, key);
-  }
+  @NonNull TickTimes tickTimes10s();
 
-  public static String bundleName() {
-    return BUNDLE_NAME;
-  }
-
-  public static void load() {
-    TranslatableProvider.loadBundle(
-      BUNDLE_NAME //,
-      // ${className}.class
-    );
-  }
-
-  private ${className}() {
-  }
+  @NonNull TickTimes tickTimes60s();
 }
