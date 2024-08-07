@@ -7,7 +7,7 @@ sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.2.0" }
 [versions]
 adventure = "4.17.0"
 adventurePagination = "4.0.0-SNAPSHOT"
-adventurePlatform = "4.3.3"
+adventurePlatform = "4.3.4"
 cloud = "2.0.0-rc.2"
 cloudMinecraft = "2.0.0-beta.9"
 cloudModded = "2.0.0-beta.7"
