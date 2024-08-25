@@ -21,38 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-<%def propPattern = ~/[.-]/
-%>package $packageName;
+package xyz.jpenilla.tabtps.neoforge;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
-import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import xyz.jpenilla.tabtps.common.TabTPS;
 
-@DefaultQualifier(NonNull.class)
-public final class ${className} {
-  private static final String BUNDLE_NAME = "${bundleName}";
-<%
-for (prop in keys.sort()) {
-  def propKey = propPattern.matcher(prop.toUpperCase()).replaceAll("_")
-%>
-  public static final TranslatableProvider ${propKey} = create("${prop}");<%
-}%>
-
-  private static TranslatableProvider create(final String key) {
-    return TranslatableProvider.create(BUNDLE_NAME, key);
-  }
-
-  public static String bundleName() {
-    return BUNDLE_NAME;
-  }
-
-  public static void load() {
-    TranslatableProvider.loadBundle(
-      BUNDLE_NAME //,
-      // ${className}.class
-    );
-  }
-
-  private ${className}() {
+@Mod(value = "tabtps", dist = Dist.CLIENT)
+public final class TabTPSNeoForgeClient {
+  public TabTPSNeoForgeClient() {
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      final TabTPS tabTPS = TabTPSNeoForge.get().tabTPS();
+      tabTPS.shutdown();
+    }));
   }
 }

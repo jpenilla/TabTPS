@@ -25,6 +25,7 @@ package xyz.jpenilla.tabtps.common.util;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
@@ -34,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
@@ -110,13 +112,13 @@ public final class TranslatableProvider implements ComponentLike {
     return bundleName + '/' + key;
   }
 
-  public static void loadBundle(final String bundleName, final Class<?> clazz) {
+  public static void loadBundle(final String bundleName) {
     final TranslationRegistry registry = TranslationRegistry.create(Key.key("tabtps", bundleName));
     registry.defaultLocale(DEFAULT_LOCALE);
 
     registerAll(
       registry,
-      availableLocales(bundleName, clazz),
+      availableLocales(bundleName),
       bundleName,
       false
     );
@@ -124,9 +126,28 @@ public final class TranslatableProvider implements ComponentLike {
     GlobalTranslator.translator().addSource(registry);
   }
 
+  private static final boolean HAS_LIST_OF;
+
+  static {
+    boolean hasListOf;
+    try {
+      List.class.getDeclaredMethod("of");
+      hasListOf = true;
+    } catch (final ReflectiveOperationException e) {
+      hasListOf = false;
+    }
+    HAS_LIST_OF = hasListOf;
+  }
+
   private static void registerAll(final TranslationRegistry registry, final Set<Locale> locales, final String bundleName, final boolean escapeSingleQuotes) {
     for (final Locale locale : locales) {
-      final ResourceBundle bundle = PropertyResourceBundle.getBundle(bundleName, locale, UTF8ResourceBundleControl.get());
+      final ResourceBundle bundle;
+      // custom Control not supported in named modules, so don't try and use one where it's not needed (JRE 9+)
+      if (HAS_LIST_OF) {
+        bundle = PropertyResourceBundle.getBundle(bundleName, locale, TranslatableProvider.class.getClassLoader());
+      } else {
+        bundle = PropertyResourceBundle.getBundle(bundleName, locale, TranslatableProvider.class.getClassLoader(), UTF8ResourceBundleControl.get());
+      }
       for (final String key : bundle.keySet()) {
         try {
           registry.register(
@@ -144,19 +165,30 @@ public final class TranslatableProvider implements ComponentLike {
     }
   }
 
-  private static Set<Locale> availableLocales(final String bundleName, final Class<?> clazz) {
+  public static Path MOD_JAR_OVERRIDE = null;
+
+  private static Path modJar() throws URISyntaxException, MalformedURLException {
+    if (MOD_JAR_OVERRIDE != null) {
+      return MOD_JAR_OVERRIDE;
+    }
+
+    URL sourceUrl = TranslatableProvider.class.getProtectionDomain().getCodeSource().getLocation();
+    // Some class loaders give the full url to the class, some give the URL to its jar.
+    // We want the containing jar, so we will unwrap jar-schema code sources.
+    if (sourceUrl.getProtocol().equals("jar")) {
+      final int exclamationIdx = sourceUrl.getPath().lastIndexOf('!');
+      if (exclamationIdx != -1) {
+        sourceUrl = new URL(sourceUrl.getPath().substring(0, exclamationIdx));
+      }
+    }
+    return Paths.get(sourceUrl.toURI());
+  }
+
+  private static Set<Locale> availableLocales(final String bundleName) {
     final String bundlePath = bundleName.replace('.', '/');
     try {
-      URL sourceUrl = clazz.getProtectionDomain().getCodeSource().getLocation();
-      // Some class loaders give the full url to the class, some give the URL to its jar.
-      // We want the containing jar, so we will unwrap jar-schema code sources.
-      if (sourceUrl.getProtocol().equals("jar")) {
-        final int exclamationIdx = sourceUrl.getPath().lastIndexOf('!');
-        if (exclamationIdx != -1) {
-          sourceUrl = new URL(sourceUrl.getPath().substring(0, exclamationIdx));
-        }
-      }
-      final Path codeSource = Paths.get(sourceUrl.toURI());
+      // If this were meant to be more generic we would pass in the ClassLoader and use its code source here...
+      final Path codeSource = modJar();
 
       final Set<Locale> known = new HashSet<>();
 

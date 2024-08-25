@@ -1,11 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8.4",
-  "package": "xyz.jpenilla.tabtps.fabric.mixin",
+  "package": "xyz.jpenilla.tabtps.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MinecraftServerMixin",
-    "PlayerListMixin"
+    "MinecraftServerMixin"
   ],
   "client": [
   ],

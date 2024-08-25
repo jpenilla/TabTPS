@@ -49,4 +49,8 @@ public interface TabTPSPlatform<P, U extends User<P>> {
   @NonNull Logger logger();
 
   @NonNull CommandManager<Commander> commandManager();
+
+  default Throwable asComponentMessageThrowable(final Throwable thr) {
+    return thr;
+  }
 }
