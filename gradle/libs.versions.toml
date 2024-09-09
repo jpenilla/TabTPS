@@ -28,7 +28,7 @@ minecraft = "1.21.1"
 adventurePlatformFabric = "5.14.1"
 adventurePlatformNeoforge = "6.0.0"
 mixin = "0.8.7"
-neoforge = "21.1.42"
+neoforge = "21.1.46"
 
 # buildSrc
 indra = "3.1.3"
