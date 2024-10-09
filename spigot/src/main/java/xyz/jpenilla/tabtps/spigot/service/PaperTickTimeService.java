@@ -23,11 +23,20 @@
  */
 package xyz.jpenilla.tabtps.spigot.service;
 
+import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
+import xyz.jpenilla.tabtps.common.util.FloatSupplier;
 
 public final class PaperTickTimeService implements TickTimeService {
+  private final FloatSupplier targetTickRateGetter;
+
+  public PaperTickTimeService() {
+    this.targetTickRateGetter = makeTickRateGetter();
+  }
+
   @Override
   public double averageMspt() {
     return Bukkit.getAverageTickTime();
@@ -36,5 +45,28 @@ public final class PaperTickTimeService implements TickTimeService {
   @Override
   public double @NonNull [] recentTps() {
     return Bukkit.getTPS();
+  }
+
+  @Override
+  public float targetTickRate() {
+    return this.targetTickRateGetter.get();
+  }
+
+  private static @NotNull FloatSupplier makeTickRateGetter() {
+    try {
+      final Method getServerTickManager = Bukkit.class.getDeclaredMethod("getServerTickManager");
+      final Object serverTickManager = getServerTickManager.invoke(null);
+      final Method getTickRate = serverTickManager.getClass().getMethod("getTickRate");
+      getTickRate.setAccessible(true);
+      return () -> {
+        try {
+          return (float) getTickRate.invoke(serverTickManager);
+        } catch (final ReflectiveOperationException e) {
+          throw new RuntimeException(e);
+        }
+      };
+    } catch (final ReflectiveOperationException e) {
+      return () -> 20;
+    }
   }
 }

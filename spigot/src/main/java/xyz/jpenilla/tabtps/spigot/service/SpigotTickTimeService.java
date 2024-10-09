@@ -38,4 +38,9 @@ public final class SpigotTickTimeService implements TickTimeService {
   public double @NonNull [] recentTps() {
     return spigotReflection().recentTps();
   }
+
+  @Override
+  public float targetTickRate() {
+    return 20;
+  }
 }
