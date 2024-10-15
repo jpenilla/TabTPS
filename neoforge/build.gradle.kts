@@ -19,11 +19,11 @@ neoForge {
   runs {
     register("client") {
       client()
-      mods.set(emptySet()) // Work around classpath issues by using the production jar for dev runs
+      loadedMods.set(emptySet()) // Work around classpath issues by using the production jar for dev runs
     }
     register("server") {
       server()
-      mods.set(emptySet()) // Work around classpath issues by using the production jar for dev runs
+      loadedMods.set(emptySet()) // Work around classpath issues by using the production jar for dev runs
     }
   }
 }
