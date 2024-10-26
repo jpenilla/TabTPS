@@ -132,7 +132,7 @@ public final class TickInfoCommand extends TabTPSCommand {
       .append(space());
     final Iterator<Double> tpsIterator = Arrays.stream(tps).iterator();
     final Deque<String> tpsDurations = tps.length == 4
-      ? new ArrayDeque<>(Arrays.asList("5s", "1m", "5m", "15m"))
+      ? new ArrayDeque<>(Arrays.asList("15s", "1m", "5m", "15m"))
       : new ArrayDeque<>(Arrays.asList("1m", "5m", "15m"));
     while (tpsIterator.hasNext()) {
       builder.append(TPSUtil.coloredTps(tpsIterator.next(), Theme.DEFAULT.colorScheme()))

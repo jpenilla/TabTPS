@@ -25,6 +25,7 @@ package xyz.jpenilla.tabtps.fabric;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.kyori.adventure.text.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -46,7 +47,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public Component displayName() {
-    return this.base().getDisplayName().asComponent();
+    return MinecraftServerAudiences.of(this.base().getServer()).asAdventure(this.base().getDisplayName());
   }
 
   @Override

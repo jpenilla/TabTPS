@@ -33,6 +33,9 @@ dependencies {
   include(libs.bundles.configurate)
   implementation(libs.adventureSerializerConfigurate4)
   include(libs.adventureSerializerConfigurate4)
+
+  modImplementation(libs.fabricPermissionsApi)
+  include(libs.fabricPermissionsApi)
 }
 
 indra {
