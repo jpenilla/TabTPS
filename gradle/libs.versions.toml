@@ -25,7 +25,7 @@ paperLib = "1.0.8"
 fabricApi = "0.110.0+1.21.3"
 fabricLoader = "0.16.9"
 minecraft = "1.21.3"
-adventurePlatformMod = "6.1.0-SNAPSHOT"
+adventurePlatformMod = "6.1.0"
 mixin = "0.8.7"
 neoforge = "21.3.51-beta"
 neoForm = "1.21.3-20241023.131943"
@@ -80,7 +80,7 @@ paperLib = { group = "io.papermc", name = "paperlib", version.ref = "paperLib" }
 
 fabricApi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabricApi" }
 fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabricLoader" }
-fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.3.2"
+fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.3.3"
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 
 zNeoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
