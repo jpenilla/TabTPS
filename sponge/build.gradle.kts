@@ -27,7 +27,7 @@ java {
 
 sponge {
   injectRepositories(false)
-  apiVersion("12.0.0-SNAPSHOT")
+  apiVersion("13.0.0-SNAPSHOT")
   plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
