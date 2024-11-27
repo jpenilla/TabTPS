@@ -22,12 +22,16 @@ indra {
 }
 
 tasks {
-  withType<JavaCompile> {
+  withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-Xlint:-processing")
   }
   listOf(javadoc, javadocJar).forEach {
     it.configure {
       onlyIf { false }
     }
+  }
+  withType(AbstractArchiveTask::class).configureEach {
+    isReproducibleFileOrder = true
+    isPreserveFileTimestamps = false
   }
 }
