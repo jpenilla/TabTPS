@@ -99,14 +99,12 @@ publishMods.modrinth {
   )
 }
 
-/*
 configurations.spongeRuntime {
   resolutionStrategy {
     eachDependency {
       if (target.name == "spongevanilla") {
-        useVersion("1.20.+")
+        useVersion("1.21.+")
       }
     }
   }
 }
- */
