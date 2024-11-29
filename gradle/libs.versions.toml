@@ -29,6 +29,7 @@ adventurePlatformFabric = "5.14.2"
 adventurePlatformNeoforge = "6.0.0"
 mixin = "0.8.7"
 neoforge = "21.1.82"
+neoForm = "1.21.1-20240808.144430"
 
 # buildSrc
 indra = "3.1.3"

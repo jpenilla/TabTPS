@@ -1,11 +1,10 @@
 import org.spongepowered.gradle.plugin.config.PluginLoaders
-import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
   id("tabtps.platform")
   alias(libs.plugins.sponge.gradle)
-  id("org.spongepowered.gradle.vanilla")
+  id("net.neoforged.moddev")
 }
 
 // Workaround weird interaction between VanillaGradle and shadow
@@ -54,9 +53,8 @@ sponge {
   }
 }
 
-minecraft {
-  version("1.21.1")
-  platform(MinecraftPlatform.JOINED)
+neoForge {
+  neoFormVersion = libs.versions.neoForm
 }
 
 tasks {
