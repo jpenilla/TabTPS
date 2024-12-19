@@ -23,7 +23,7 @@ side = "BOTH"
 [[dependencies.tabtps]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.3]"
+versionRange = "[1.21.4]"
 ordering = "NONE"
 side = "BOTH"
 
