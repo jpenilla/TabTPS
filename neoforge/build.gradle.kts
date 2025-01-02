@@ -8,7 +8,9 @@ plugins {
 val minecraftVersion = libs.versions.minecraft.get()
 
 neoForge {
-  version = libs.versions.neoforge
+  enable {
+    version = libs.versions.neoforge.get()
+  }
 
   mods {
     register("tabtps") {

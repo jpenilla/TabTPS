@@ -23,6 +23,7 @@
  */
 package xyz.jpenilla.tabtps.neoforge.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.BooleanSupplier;
@@ -37,7 +38,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.util.RollingAverage;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
@@ -51,34 +51,60 @@ import xyz.jpenilla.tabtps.neoforge.access.MinecraftServerAccess;
 @Mixin(MinecraftServer.class)
 @Implements({@Interface(iface = TickTimeService.class, prefix = "tabtps$")})
 abstract class MinecraftServerMixin implements MinecraftServerAccess {
+  @Unique
   private final TickTimes tickTimes5s = new TickTimes(100);
+  @Unique
   private final TickTimes tickTimes10s = new TickTimes(200);
+  @Unique
   private final TickTimes tickTimes60s = new TickTimes(1200);
 
-  private final RollingAverage tps5s = new RollingAverage(5);
+  @Unique
+  private final RollingAverage tps15s = new RollingAverage(15);
+  @Unique
   private final RollingAverage tps1m = new RollingAverage(60);
+  @Unique
   private final RollingAverage tps5m = new RollingAverage(60 * 5);
+  @Unique
   private final RollingAverage tps15m = new RollingAverage(60 * 15);
 
+  @Unique
   private long previousTime;
+  @Unique
+  private boolean tickingPaused;
 
   @Shadow private int tickCount;
   @Shadow @Final private long[] tickTimesNanos;
 
-  @Inject(method = "tickServer", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
-  public void injectTick(final BooleanSupplier var1, final CallbackInfo ci, final long tickStartTimeNanos, final long tickDurationNanos) {
+  @Inject(
+    method = "tickServer",
+    at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V", ordinal = 0)
+  )
+  private void injectPause(final BooleanSupplier keepTicking, final CallbackInfo ci) {
+    this.tickingPaused = true;
+  }
+
+  @Inject(method = "tickServer", at = @At(value = "RETURN", ordinal = 1))
+  public void injectTick(
+    final BooleanSupplier keepTicking,
+    final CallbackInfo ci,
+    @Local(ordinal = 0) final long tickStartTimeNanos,
+    @Local(ordinal = 1) final long tickDurationNanos
+  ) {
     this.tickTimes5s.add(this.tickCount, tickDurationNanos);
     this.tickTimes10s.add(this.tickCount, tickDurationNanos);
     this.tickTimes60s.add(this.tickCount, tickDurationNanos);
 
     if (this.tickCount % RollingAverage.SAMPLE_INTERVAL == 0) {
-      if (this.previousTime == 0) {
-        this.previousTime = tickStartTimeNanos - RollingAverage.TICK_TIME;
+      if (this.previousTime == 0 || this.tickingPaused) {
+        this.previousTime = tickStartTimeNanos - tickDurationNanos;
+        if (this.tickingPaused) {
+          this.tickingPaused = false;
+        }
       }
       final long diff = tickStartTimeNanos - this.previousTime;
       this.previousTime = tickStartTimeNanos;
       final BigDecimal currentTps = RollingAverage.TPS_BASE.divide(new BigDecimal(diff), 30, RoundingMode.HALF_UP);
-      this.tps5s.add(currentTps, diff);
+      this.tps15s.add(currentTps, diff);
       this.tps1m.add(currentTps, diff);
       this.tps5m.add(currentTps, diff);
       this.tps15m.add(currentTps, diff);
@@ -91,7 +117,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
 
   public double @NonNull [] tabtps$recentTps() {
     final double[] tps = new double[4];
-    tps[0] = this.tps5s.average();
+    tps[0] = this.tps15s.average();
     tps[1] = this.tps1m.average();
     tps[2] = this.tps5m.average();
     tps[3] = this.tps15m.average();
