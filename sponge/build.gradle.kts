@@ -27,7 +27,7 @@ java {
 
 sponge {
   injectRepositories(false)
-  apiVersion("13.0.0-SNAPSHOT")
+  apiVersion("14.0.0-SNAPSHOT")
   plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
@@ -105,7 +105,7 @@ configurations.spongeRuntime {
   resolutionStrategy {
     eachDependency {
       if (target.name == "spongevanilla") {
-        useVersion("1.21.+")
+        useVersion("1.21.4-14.+")
       }
     }
   }

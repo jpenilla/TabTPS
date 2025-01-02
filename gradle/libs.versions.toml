@@ -2,7 +2,7 @@
 blossom = { id = "net.kyori.blossom", version = "2.1.0" }
 localization = { id = "ca.stellardrift.localization", version = "6.1.0" }
 runPaper = { id = "xyz.jpenilla.run-paper", version = "2.3.1" }
-sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.2.0" }
+sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 
 [versions]
 adventure = "4.17.0"
