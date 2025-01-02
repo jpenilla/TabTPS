@@ -54,7 +54,9 @@ sponge {
 }
 
 neoForge {
-  neoFormVersion = libs.versions.neoForm
+  enable {
+    neoFormVersion = libs.versions.neoForm.get()
+  }
 }
 
 tasks {
