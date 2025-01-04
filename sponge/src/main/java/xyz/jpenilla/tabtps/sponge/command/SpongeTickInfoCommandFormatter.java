@@ -29,11 +29,18 @@ import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.type.tuple.Pair;
 import org.spongepowered.api.Sponge;
+import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.sponge.access.MinecraftServerAccess;
 
 public final class SpongeTickInfoCommandFormatter implements TickInfoCommand.Formatter {
+  private final TabTPSPlatform<?, ?> platform;
+
+  public SpongeTickInfoCommandFormatter(final TabTPSPlatform<?, ?> platform) {
+    this.platform = platform;
+  }
+
   @Override
   public @NonNull List<Component> formatTickTimes() {
     final MinecraftServerAccess server = (MinecraftServerAccess) Sponge.server();
@@ -41,6 +48,6 @@ public final class SpongeTickInfoCommandFormatter implements TickInfoCommand.For
       Pair.of("5s", server.tickTimes5s().times()),
       Pair.of("10s", server.tickTimes10s().times()),
       Pair.of("60s", server.tickTimes60s().times())
-    ));
+    ), this.platform.tickTimeService().targetMspt());
   }
 }

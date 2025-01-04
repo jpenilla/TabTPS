@@ -45,6 +45,6 @@ public final class MSPTModule extends AbstractModule {
 
   @Override
   public @NonNull Component display() {
-    return TPSUtil.coloredMspt(this.tabTPS.platform().tickTimeService().averageMspt(), this.theme.colorScheme());
+    return TPSUtil.coloredMspt(this.tabTPS.platform().tickTimeService().averageMspt(), this.tabTPS.platform().tickTimeService().targetMspt(), this.theme.colorScheme());
   }
 }

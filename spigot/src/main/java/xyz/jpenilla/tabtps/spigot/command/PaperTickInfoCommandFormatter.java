@@ -32,10 +32,13 @@ import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.type.tuple.Pair;
 import xyz.jpenilla.pluginbase.legacy.Crafty;
+import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
 public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Formatter {
+  private final TabTPSPlatform<?, ?> platform;
+
   private final Class<?> _MinecraftServer = Crafty.needNMSClassOrElse(
     "MinecraftServer",
     "net.minecraft.server.MinecraftServer"
@@ -52,7 +55,8 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
   private final Field _tickTimes10s;
   private final Field _tickTimes60s;
 
-  public PaperTickInfoCommandFormatter() {
+  public PaperTickInfoCommandFormatter(final TabTPSPlatform<?, ?> platform) {
+    this.platform = platform;
     try {
       this._tickTimes5s = Crafty.needField(this._MinecraftServer, "tickTimes5s");
       this._tickTimes10s = Crafty.needField(this._MinecraftServer, "tickTimes10s");
@@ -78,7 +82,7 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
         Pair.of("5s", times5s),
         Pair.of("10s", times10s),
         Pair.of("60s", times60s)
-      ));
+      ), this.platform.tickTimeService().targetMspt());
     } catch (final Throwable throwable) {
       throw new IllegalStateException("Failed to retrieve tick time statistics", throwable);
     }

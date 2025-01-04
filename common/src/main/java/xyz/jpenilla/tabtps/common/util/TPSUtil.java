@@ -54,13 +54,27 @@ public final class TPSUtil {
     return FORMAT.format(value);
   }
 
-  public static @NonNull Component coloredTps(final double tps, final Theme.@NonNull Colors colors) {
+  public static float scaleTps(final float tps, final float targetTickRate) {
+    if (Float.compare(20, targetTickRate) == 0) {
+      return tps;
+    }
+    return tps / 20 * targetTickRate;
+  }
+
+  public static double scaleMspt(final float ms, final float targetMspt) {
+    if (Float.compare(50, targetMspt) == 0) {
+      return ms;
+    }
+    return ms / 50 * targetMspt;
+  }
+
+  public static @NonNull Component coloredTps(final double tps, final float targetTps, final Theme.@NonNull Colors colors) {
     final TextColor color1;
     final TextColor color2;
-    if (tps >= 18.5) {
+    if (tps >= scaleTps(18.5f, targetTps)) {
       color1 = colors.goodPerformance();
       color2 = colors.goodPerformanceSecondary();
-    } else if (tps > 15.0) {
+    } else if (tps > scaleTps(15.0f, targetTps)) {
       color1 = colors.mediumPerformance();
       color2 = colors.mediumPerformanceSecondary();
     } else {
@@ -78,13 +92,13 @@ public final class TPSUtil {
     return time * 1.0E-6D;
   }
 
-  public static @NonNull Component coloredMspt(final double mspt, final Theme.@NonNull Colors colors) {
+  public static @NonNull Component coloredMspt(final double mspt, final float targetMspt, final Theme.@NonNull Colors colors) {
     final TextColor color1;
     final TextColor color2;
-    if (mspt <= 25.0) {
+    if (mspt <= scaleMspt(25.0f, targetMspt)) {
       color1 = colors.goodPerformance();
       color2 = colors.goodPerformanceSecondary();
-    } else if (mspt <= 40) {
+    } else if (mspt <= scaleMspt(40.0f, targetMspt)) {
       color1 = colors.mediumPerformance();
       color2 = colors.mediumPerformanceSecondary();
     } else {
@@ -94,7 +108,7 @@ public final class TPSUtil {
     return gradient(formatDouble(mspt), color1, color2);
   }
 
-  public static @NonNull List<Component> formatTickTimes(final @NonNull List<Pair<String, long[]>> times) {
+  public static @NonNull List<Component> formatTickTimes(final @NonNull List<Pair<String, long[]>> times, final float targetMspt) {
     final Component header = text()
       .color(GRAY)
       .append(
@@ -119,13 +133,14 @@ public final class TPSUtil {
       output.add(formatStatistics(
         branch,
         text(pair.first()),
-        pair.second()
+        pair.second(),
+        targetMspt
       ));
     }
     return output;
   }
 
-  private static @NonNull Component formatStatistics(final @NonNull String branch, final @NonNull Component time, final long @NonNull [] times) {
+  private static @NonNull Component formatStatistics(final @NonNull String branch, final @NonNull Component time, final long @NonNull [] times, final float targetMspt) {
     final LongSummaryStatistics statistics = LongStream.of(times).filter(NOT_ZERO).summaryStatistics();
     return Components.ofChildren(
       space(),
@@ -133,11 +148,11 @@ public final class TPSUtil {
       space(),
       time.color(GRAY),
       text(" - ", WHITE),
-      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getAverage()), Theme.DEFAULT.colorScheme()),
+      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getAverage()), targetMspt, Theme.DEFAULT.colorScheme()),
       text(", ", WHITE),
-      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMin()), Theme.DEFAULT.colorScheme()),
+      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMin()), targetMspt, Theme.DEFAULT.colorScheme()),
       text(", ", WHITE),
-      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMax()), Theme.DEFAULT.colorScheme())
+      TPSUtil.coloredMspt(TPSUtil.toMilliseconds(statistics.getMax()), targetMspt, Theme.DEFAULT.colorScheme())
     );
   }
 

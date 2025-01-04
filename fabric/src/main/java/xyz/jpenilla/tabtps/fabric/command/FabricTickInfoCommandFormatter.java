@@ -47,6 +47,6 @@ public final class FabricTickInfoCommandFormatter implements TickInfoCommand.For
       Pair.of("5s", server.tickTimes5s().times()),
       Pair.of("10s", server.tickTimes10s().times()),
       Pair.of("60s", server.tickTimes60s().times())
-    ));
+    ), this.tabTPSFabric.tickTimeService().targetMspt());
   }
 }
