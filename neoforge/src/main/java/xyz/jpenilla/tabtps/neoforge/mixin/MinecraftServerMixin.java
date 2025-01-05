@@ -42,6 +42,7 @@ import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.util.RollingAverage;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.common.util.TickTimes;
+import xyz.jpenilla.tabtps.common.util.TickingState;
 import xyz.jpenilla.tabtps.neoforge.access.MinecraftServerAccess;
 
 /**
@@ -70,7 +71,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
   @Unique
   private long previousTime;
   @Unique
-  private boolean tickingPaused;
+  private TickingState tickingState = TickingState.NOT_TICKING;
 
   @Shadow private int tickCount;
   @Shadow @Final private long[] tickTimesNanos;
@@ -80,7 +81,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
     at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V", ordinal = 0)
   )
   private void injectPause(final BooleanSupplier keepTicking, final CallbackInfo ci) {
-    this.tickingPaused = true;
+    this.tickingState = TickingState.NOT_TICKING;
   }
 
   @Inject(method = "tickServer", at = @At(value = "RETURN", ordinal = 1))
@@ -95,19 +96,21 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
     this.tickTimes60s.add(this.tickCount, tickDurationNanos);
 
     if (this.tickCount % RollingAverage.SAMPLE_INTERVAL == 0) {
-      if (this.previousTime == 0 || this.tickingPaused) {
-        this.previousTime = tickStartTimeNanos - tickDurationNanos;
-        if (this.tickingPaused) {
-          this.tickingPaused = false;
-        }
+      if (this.tickingState == TickingState.NOT_TICKING) {
+        this.tickingState = TickingState.INITIALIZING;
+      } else if (this.tickingState == TickingState.INITIALIZING) {
+        this.tickingState = TickingState.TICKING;
       }
       final long diff = tickStartTimeNanos - this.previousTime;
       this.previousTime = tickStartTimeNanos;
-      final BigDecimal currentTps = RollingAverage.TPS_BASE.divide(new BigDecimal(diff), 30, RoundingMode.HALF_UP);
-      this.tps5s.add(currentTps, diff);
-      this.tps1m.add(currentTps, diff);
-      this.tps5m.add(currentTps, diff);
-      this.tps15m.add(currentTps, diff);
+      // Start measuring on the second tick
+      if (this.tickingState == TickingState.TICKING) {
+        final BigDecimal currentTps = RollingAverage.TPS_BASE.divide(new BigDecimal(diff), 30, RoundingMode.HALF_UP);
+        this.tps5s.add(currentTps, diff);
+        this.tps1m.add(currentTps, diff);
+        this.tps5m.add(currentTps, diff);
+        this.tps15m.add(currentTps, diff);
+      }
     }
   }
 
