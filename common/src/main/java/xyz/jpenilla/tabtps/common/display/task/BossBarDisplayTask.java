@@ -82,7 +82,7 @@ public final class BossBarDisplayTask implements Display {
   }
 
   private float tpsProgress() {
-    return ensureInRange(this.tabTPS.platform().tickTimeService().recentTps()[0] / 20.0f);
+    return ensureInRange(this.tabTPS.platform().tickTimeService().displayTps() / 20.0f);
   }
 
   private static float ensureInRange(final double value) {
@@ -103,7 +103,7 @@ public final class BossBarDisplayTask implements Display {
         }
       case REVERSE_TPS:
       case TPS:
-        final double tps = this.tabTPS.platform().tickTimeService().recentTps()[0];
+        final double tps = this.tabTPS.platform().tickTimeService().displayTps();
         if (tps > 18.50D) {
           return this.settings.colors().goodPerformance();
         } else if (tps > 15.00D) {

@@ -29,4 +29,12 @@ public interface TickTimeService {
   double averageMspt();
 
   double @NonNull [] recentTps();
+
+  default double displayTps() {
+    final double[] recentTps = this.recentTps();
+    if (recentTps.length == 3) {
+      return recentTps[0];
+    }
+    return recentTps[1];
+  }
 }
