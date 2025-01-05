@@ -27,7 +27,7 @@ java {
 
 sponge {
   injectRepositories(false)
-  apiVersion("12.0.0-SNAPSHOT")
+  apiVersion("14.0.0-SNAPSHOT")
   plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
@@ -54,7 +54,9 @@ sponge {
 }
 
 neoForge {
-  neoFormVersion = libs.versions.neoForm
+  enable {
+    neoFormVersion = libs.versions.neoForm.get()
+  }
 }
 
 tasks {
@@ -95,18 +97,16 @@ tabTPSPlatform {
 publishMods.modrinth {
   modLoaders.add("sponge")
   minecraftVersions.addAll(
-    "1.21.1"
+    "1.21.4"
   )
 }
 
-/*
 configurations.spongeRuntime {
   resolutionStrategy {
     eachDependency {
       if (target.name == "spongevanilla") {
-        useVersion("1.20.+")
+        useVersion("1.21.4-14.+")
       }
     }
   }
 }
- */
