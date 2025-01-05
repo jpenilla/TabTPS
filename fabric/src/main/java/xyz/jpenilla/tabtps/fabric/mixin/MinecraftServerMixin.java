@@ -78,7 +78,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
 
   @Inject(
     method = "tickServer",
-    at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V", ordinal = 0)
+    at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V", ordinal = 0, remap = false)
   )
   private void injectPause(final BooleanSupplier keepTicking, final CallbackInfo ci) {
     this.tickingState = TickingState.NOT_TICKING;
