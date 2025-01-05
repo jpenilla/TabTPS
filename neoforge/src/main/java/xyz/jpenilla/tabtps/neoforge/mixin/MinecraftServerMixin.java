@@ -59,7 +59,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
   private final TickTimes tickTimes60s = new TickTimes(1200);
 
   @Unique
-  private final RollingAverage tps15s = new RollingAverage(15);
+  private final RollingAverage tps5s = new RollingAverage(5);
   @Unique
   private final RollingAverage tps1m = new RollingAverage(60);
   @Unique
@@ -104,7 +104,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
       final long diff = tickStartTimeNanos - this.previousTime;
       this.previousTime = tickStartTimeNanos;
       final BigDecimal currentTps = RollingAverage.TPS_BASE.divide(new BigDecimal(diff), 30, RoundingMode.HALF_UP);
-      this.tps15s.add(currentTps, diff);
+      this.tps5s.add(currentTps, diff);
       this.tps1m.add(currentTps, diff);
       this.tps5m.add(currentTps, diff);
       this.tps15m.add(currentTps, diff);
@@ -117,7 +117,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
 
   public double @NonNull [] tabtps$recentTps() {
     final double[] tps = new double[4];
-    tps[0] = this.tps15s.average();
+    tps[0] = this.tps5s.average();
     tps[1] = this.tps1m.average();
     tps[2] = this.tps5m.average();
     tps[3] = this.tps15m.average();
