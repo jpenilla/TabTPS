@@ -30,8 +30,4 @@ tasks {
       onlyIf { false }
     }
   }
-  withType(AbstractArchiveTask::class).configureEach {
-    isReproducibleFileOrder = true
-    isPreserveFileTimestamps = false
-  }
 }
