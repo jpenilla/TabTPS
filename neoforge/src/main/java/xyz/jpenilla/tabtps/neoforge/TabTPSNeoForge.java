@@ -150,7 +150,9 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
         node(Constants.PERMISSION_COMMAND_ERROR_HOVER_STACKTRACE)
       ));
       for (final String permission : this.tabTPS.configManager().displayConfigsByPermission().keySet()) {
-        permissions.add(node(permission));
+        if (!permission.isBlank()) {
+          permissions.add(node(permission));
+        }
       }
       event.addNodes(permissions);
     });
