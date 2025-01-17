@@ -24,15 +24,16 @@
 package xyz.jpenilla.tabtps.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
-public class TabTPSFabricClient implements ClientModInitializer {
+public final class TabTPSFabricClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
-    ClientLifecycleEvents.CLIENT_STOPPING.register(minecraft -> {
+    final Thread thread = new Thread(() -> {
       final TabTPS tabTPS = TabTPSFabric.get().tabTPS();
       tabTPS.shutdown();
     });
+    thread.setName("TabTPS-Client-Shutdown-Thread");
+    Runtime.getRuntime().addShutdownHook(thread);
   }
 }

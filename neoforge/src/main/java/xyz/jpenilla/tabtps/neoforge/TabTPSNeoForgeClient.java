@@ -30,9 +30,11 @@ import xyz.jpenilla.tabtps.common.TabTPS;
 @Mod(value = "tabtps", dist = Dist.CLIENT)
 public final class TabTPSNeoForgeClient {
   public TabTPSNeoForgeClient() {
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+    final Thread thread = new Thread(() -> {
       final TabTPS tabTPS = TabTPSNeoForge.get().tabTPS();
       tabTPS.shutdown();
-    }));
+    });
+    thread.setName("TabTPS-Client-Shutdown-Thread");
+    Runtime.getRuntime().addShutdownHook(thread);
   }
 }
