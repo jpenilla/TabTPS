@@ -4,7 +4,12 @@ dependencyResolutionManagement {
   repositories {
     mavenCentral()
     maven("https://repo.jpenilla.xyz/snapshots/") {
-      mavenContent { snapshotsOnly() }
+      mavenContent {
+        snapshotsOnly()
+        includeGroup("xyz.jpenilla")
+        includeGroup("org.incendo")
+        includeGroup("net.kyori") // TODO adventure mod 6.4.0
+      }
     }
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
       mavenContent { snapshotsOnly() }
