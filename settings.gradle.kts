@@ -8,7 +8,7 @@ dependencyResolutionManagement {
         snapshotsOnly()
         includeGroup("xyz.jpenilla")
         includeGroup("org.incendo")
-        includeGroup("net.kyori") // TODO adventure mod 6.4.0
+        includeGroup("net.kyori") // TODO adventure mod 6.4.0 & platform 4.3.5
       }
     }
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
