@@ -68,7 +68,7 @@ slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 slf4jJdk14 = { group = "org.slf4j", name = "slf4j-jdk14", version.ref = "slf4j" }
 log4jSlf4jImpl = { group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version.ref = "log4jSlf4jImpl" }
 
-legacyPluginBase = { group = "xyz.jpenilla", name = "legacy-plugin-base", version = "0.0.1+133-SNAPSHOT" }
+legacyPluginBase = { group = "xyz.jpenilla", name = "legacy-plugin-base", version = "0.0.1+139-SNAPSHOT" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
