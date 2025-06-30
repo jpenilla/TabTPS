@@ -80,7 +80,7 @@ paperLib = { group = "io.papermc", name = "paperlib", version.ref = "paperLib" }
 
 fabricApi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabricApi" }
 fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabricLoader" }
-fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.3.3"
+fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.4.1"
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 
 zNeoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
