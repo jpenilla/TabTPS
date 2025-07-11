@@ -32,7 +32,6 @@ tasks {
       "io.papermc.lib",
       "net.kyori",
       "org.spongepowered.configurate",
-      "com.typesafe.config",
       "me.lucko.commodore",
       "org.checkerframework",
       "org.bstats",

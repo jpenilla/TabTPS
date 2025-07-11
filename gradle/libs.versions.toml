@@ -13,7 +13,6 @@ cloudMinecraft = "2.0.0-beta.10"
 cloudModded = "2.0.0-beta.10"
 cloudSponge = "2.0.0-SNAPSHOT"
 configurate = "4.2.0"
-typesafeConfig = "1.4.3"
 checkerQual = "3.49.4"
 slf4j = "1.7.32"
 log4jSlf4jImpl = "2.8.1"
@@ -60,7 +59,6 @@ mixin = { group = "org.spongepowered", name = "mixin", version.ref = "mixin" }
 
 configurateCore = { group = "org.spongepowered", name = "configurate-core", version.ref = "configurate" }
 configurateHocon = { group = "org.spongepowered", name = "configurate-hocon", version.ref = "configurate" }
-typesafeConfig = { group = "com.typesafe", name = "config", version.ref = "typesafeConfig" }
 
 checkerQual = { group = "org.checkerframework", name = "checker-qual", version.ref = "checkerQual" }
 
@@ -93,4 +91,4 @@ build-mod-publish-plugin = { module = "me.modmuss50:mod-publish-plugin", version
 build-hangarPublishPlugin = { group = "io.papermc", name = "hangar-publish-plugin", version.ref = "hangarPublishPlugin" }
 
 [bundles]
-configurate = ["configurateCore", "configurateHocon", "typesafeConfig"]
+configurate = ["configurateCore", "configurateHocon"]

@@ -74,7 +74,6 @@ tasks {
       "net.kyori.adventure.serializer.configurate4",
       "org.incendo.cloud",
       "org.spongepowered.configurate",
-      "com.typesafe.config",
       "xyz.jpenilla.jmplib"
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
