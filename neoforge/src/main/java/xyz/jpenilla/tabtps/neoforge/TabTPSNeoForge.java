@@ -117,7 +117,9 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
     NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
       this.server = event.getServer();
 
-      CompletableFuture.runAsync(() -> UpdateChecker.checkVersion(Constants.TABTPS_VERSION).forEach(this.logger::info));
+      if (this.tabTPS.configManager().pluginSettings().updateChecker()) {
+        CompletableFuture.runAsync(() -> UpdateChecker.checkVersion(Constants.TABTPS_VERSION).forEach(this.logger::info));
+      }
     });
 
     NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> {
