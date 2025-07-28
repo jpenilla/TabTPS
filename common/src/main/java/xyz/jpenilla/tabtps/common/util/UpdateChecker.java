@@ -67,8 +67,8 @@ public final class UpdateChecker {
     final int versionsBehind = versionList.indexOf(currentVersion);
     list.add("There is an update available for TabTPS!");
     list.add("This server is running version " + currentVersion + ", which is " + (versionsBehind == -1 ? "UNKNOWN" : versionsBehind) + " versions outdated.");
-    list.add("Download the latest version, " + versionList.get(0) + " from GitHub at the link below:");
-    list.add(versionMap.get(versionList.get(0)));
+    list.add("Download the latest version, " + versionList.get(0) + " from Modrinth at the link below:");
+    list.add("https://modrinth.com/plugin/tabtps");
     return list;
   }
 }
