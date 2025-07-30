@@ -10,7 +10,6 @@ dependencyResolutionManagement {
         snapshotsOnly()
         includeGroup("xyz.jpenilla")
         includeGroup("org.incendo")
-        includeGroup("net.kyori") // TODO adventure-platform and adventure-platform-mod snapshots
       }
     }
     maven("https://central.sonatype.com/repository/maven-snapshots/") {
