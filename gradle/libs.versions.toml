@@ -31,7 +31,7 @@ neoForm = "1.21.8-20250717.133445"
 
 # buildSrc
 indra = "3.2.0"
-shadow = "8.3.8"
+shadow = "9.0.2"
 mod-publish-plugin = "0.8.4"
 hangarPublishPlugin = "0.1.3"
 
