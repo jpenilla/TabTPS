@@ -25,9 +25,12 @@ package xyz.jpenilla.tabtps.spigot;
 
 import io.papermc.lib.PaperLib;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.logging.Level;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.SenderMapper;
@@ -36,7 +39,6 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.jpenilla.pluginbase.legacy.PluginBase;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -51,21 +53,23 @@ import xyz.jpenilla.tabtps.spigot.service.BukkitUserService;
 import xyz.jpenilla.tabtps.spigot.service.PaperTickTimeService;
 import xyz.jpenilla.tabtps.spigot.service.SpigotTickTimeService;
 
-public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Player, BukkitUser> {
+public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;
   private LegacyPaperCommandManager<Commander> commandManager;
   private UserService<Player, BukkitUser> userService;
   private TickTimeService tickTimeService;
   private Logger logger;
+  private BukkitAudiences audiences;
 
   @Override
-  public void enable() {
+  public void onEnable() {
     PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
     if (this.craftBukkit()) {
       this.getServer().getPluginManager().disablePlugin(this);
       return;
     }
+    this.audiences = BukkitAudiences.create(this);
     if (PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()) {
       this.tickTimeService = new SpigotTickTimeService();
     } else {
@@ -89,9 +93,13 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
   }
 
   @Override
-  public void disable() {
+  public void onDisable() {
     if (this.tabTPS != null) { // don't shutdown if we have an exception before init completes
       this.tabTPS.shutdown();
+    }
+    if (this.audiences != null) {
+      this.audiences.close();
+      this.audiences = null;
     }
   }
 
@@ -107,6 +115,10 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
     }
   }
 
+  public BukkitAudiences audiences() {
+    return Objects.requireNonNull(this.audiences, "BukkitAudiences");
+  }
+
   private void setupCommandManager() {
     this.commandManager = new LegacyPaperCommandManager<>(
       this,
@@ -116,7 +128,7 @@ public final class TabTPSPlugin extends PluginBase implements TabTPSPlatform<Pla
           if (commandSender instanceof Player) {
             return this.userService().user((Player) commandSender);
           }
-          return BukkitConsoleCommander.from(this.audiences(), commandSender);
+          return BukkitConsoleCommander.from(this.audiences, commandSender);
         },
         commander -> {
           if (commander instanceof BukkitConsoleCommander) {
