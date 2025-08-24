@@ -21,38 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.service;
+package xyz.jpenilla.tabtps.paper.command;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
-import org.jetbrains.annotations.NotNull;
-import xyz.jpenilla.tabtps.common.service.UserService;
-import xyz.jpenilla.tabtps.spigot.BukkitUser;
-import xyz.jpenilla.tabtps.spigot.TabTPSPlugin;
+import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 
-@DefaultQualifier(NonNull.class)
-public final class BukkitUserService extends UserService<Player, BukkitUser> {
-  public BukkitUserService(final TabTPSPlugin plugin) {
-    super(plugin);
+public final class BukkitConsoleCommander implements ConsoleCommander {
+  private final CommandSender commandSender;
+  private final Audience audience;
+
+  private BukkitConsoleCommander(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
+    this.commandSender = sender;
+    this.audience = bukkitAudiences.sender(sender);
+  }
+
+  public static @NonNull BukkitConsoleCommander from(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
+    return new BukkitConsoleCommander(bukkitAudiences, sender);
   }
 
   @Override
-  protected UUID uuid(final @NotNull Player base) {
-    return base.getUniqueId();
+  public boolean hasPermission(final @NonNull String permissionString) {
+    return this.commandSender.hasPermission(permissionString);
   }
 
   @Override
-  protected BukkitUser create(final @NotNull Player base) {
-    return BukkitUser.from(this.platform.tabTPS(), base);
+  public @NonNull Audience audience() {
+    return this.audience;
   }
 
-  @Override
-  protected Collection<Player> platformPlayers() {
-    return Collections.unmodifiableCollection(Bukkit.getOnlinePlayers());
+  public @NonNull CommandSender commandSender() {
+    return this.commandSender;
   }
 }

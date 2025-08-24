@@ -21,28 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot;
+package xyz.jpenilla.tabtps.paper.command;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.bukkit.data.MultiplePlayerSelector;
+import org.incendo.cloud.context.CommandContext;
+import xyz.jpenilla.tabtps.common.command.Commander;
+import xyz.jpenilla.tabtps.common.command.Commands;
+import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
+import xyz.jpenilla.tabtps.paper.TabTPSPlugin;
 
-public final class JoinQuitListener implements Listener {
+import static org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser.multiplePlayerSelectorParser;
+
+public final class BukkitPingCommand extends PingCommand {
   private final TabTPSPlugin plugin;
 
-  public JoinQuitListener(final @NonNull TabTPSPlugin plugin) {
+  public BukkitPingCommand(final @NonNull TabTPSPlugin plugin, final @NonNull Commands commands) {
+    super(plugin.tabTPS(), commands);
     this.plugin = plugin;
   }
 
-  @EventHandler
-  public void onJoin(final @NonNull PlayerJoinEvent e) {
-    this.plugin.userService().handleJoin(e.getPlayer());
+  @Override
+  public void register() {
+    this.registerPingTargetsCommand(multiplePlayerSelectorParser(), this::onPingTargets);
   }
 
-  @EventHandler
-  public void onQuit(final @NonNull PlayerQuitEvent e) {
-    this.plugin.userService().handleQuit(e.getPlayer());
+  private void onPingTargets(final @NonNull CommandContext<Commander> context) {
+    final MultiplePlayerSelector target = context.get("target");
+    this.pingTargets(
+      context.sender(),
+      target.values().stream()
+        .map(this.plugin.userService()::user)
+        .collect(Collectors.toList()),
+      target.inputString(),
+      context.get("page")
+    );
   }
 }

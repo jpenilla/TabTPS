@@ -1,6 +1,6 @@
 name: TabTPS
 version: $version
-main: xyz.jpenilla.tabtps.spigot.TabTPSPlugin
+main: xyz.jpenilla.tabtps.paper.TabTPSPlugin
 description: $description
 authors:
   - jmp

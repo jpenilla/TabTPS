@@ -21,20 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.service;
+package xyz.jpenilla.tabtps.paper;
 
-import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
-public final class PaperTickTimeService implements TickTimeService {
-  @Override
-  public double averageMspt() {
-    return Bukkit.getAverageTickTime();
+public final class JoinQuitListener implements Listener {
+  private final TabTPSPlugin plugin;
+
+  public JoinQuitListener(final @NonNull TabTPSPlugin plugin) {
+    this.plugin = plugin;
   }
 
-  @Override
-  public double @NonNull [] recentTps() {
-    return Bukkit.getTPS();
+  @EventHandler
+  public void onJoin(final @NonNull PlayerJoinEvent e) {
+    this.plugin.userService().handleJoin(e.getPlayer());
+  }
+
+  @EventHandler
+  public void onQuit(final @NonNull PlayerQuitEvent e) {
+    this.plugin.userService().handleQuit(e.getPlayer());
   }
 }

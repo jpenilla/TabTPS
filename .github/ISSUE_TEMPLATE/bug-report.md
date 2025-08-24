@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Server Software and Version:**
- - Vendor: [e.g. Paper, Purpur, Spigot, Tunity]
+ - Vendor: [e.g. Paper, Tunity]
  - Minecraft Version: [e.g. 1.15.2, 1.16.3]
  - Output of /version command: [e.g. This server is running Paper version git-Paper-53 (MC: 1.16.1) (Implementing API version 1.16.1-R0.1-SNAPSHOT)] 
 

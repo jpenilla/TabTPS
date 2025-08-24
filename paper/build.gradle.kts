@@ -70,6 +70,7 @@ tasks {
       "1.19.4",
     ),
     21 to setOf(
+      "1.20.6",
       mcVer,
     )
   ).forEach { (javaVersion, minecraftVersions) ->

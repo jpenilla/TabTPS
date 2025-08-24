@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot;
+package xyz.jpenilla.tabtps.paper;
 
 import io.papermc.lib.PaperLib;
 import net.kyori.adventure.audience.Audience;
@@ -35,7 +35,7 @@ import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 
-import static xyz.jpenilla.tabtps.spigot.util.SpigotReflection.spigotReflection;
+import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
 @DefaultQualifier(NonNull.class)
 public final class BukkitUser extends AbstractUser<Player> {

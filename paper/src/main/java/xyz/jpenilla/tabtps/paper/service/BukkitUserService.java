@@ -21,21 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.service;
+package xyz.jpenilla.tabtps.paper.service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.service.TickTimeService;
+import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jetbrains.annotations.NotNull;
+import xyz.jpenilla.tabtps.common.service.UserService;
+import xyz.jpenilla.tabtps.paper.BukkitUser;
+import xyz.jpenilla.tabtps.paper.TabTPSPlugin;
 
-import static xyz.jpenilla.tabtps.spigot.util.SpigotReflection.spigotReflection;
-
-public final class SpigotTickTimeService implements TickTimeService {
-  @Override
-  public double averageMspt() {
-    return spigotReflection().averageTickTime();
+@DefaultQualifier(NonNull.class)
+public final class BukkitUserService extends UserService<Player, BukkitUser> {
+  public BukkitUserService(final TabTPSPlugin plugin) {
+    super(plugin);
   }
 
   @Override
-  public double @NonNull [] recentTps() {
-    return spigotReflection().recentTps();
+  protected UUID uuid(final @NotNull Player base) {
+    return base.getUniqueId();
+  }
+
+  @Override
+  protected BukkitUser create(final @NotNull Player base) {
+    return BukkitUser.from(this.platform.tabTPS(), base);
+  }
+
+  @Override
+  protected Collection<Player> platformPlayers() {
+    return Collections.unmodifiableCollection(Bukkit.getOnlinePlayers());
   }
 }

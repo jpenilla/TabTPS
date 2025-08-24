@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.util;
+package xyz.jpenilla.tabtps.paper.util;
 
 import io.papermc.lib.PaperLib;
 import java.lang.invoke.MethodHandle;

@@ -21,41 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.command;
+package xyz.jpenilla.tabtps.paper.service;
 
-import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.bukkit.data.MultiplePlayerSelector;
-import org.incendo.cloud.context.CommandContext;
-import xyz.jpenilla.tabtps.common.command.Commander;
-import xyz.jpenilla.tabtps.common.command.Commands;
-import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
-import xyz.jpenilla.tabtps.spigot.TabTPSPlugin;
+import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
-import static org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser.multiplePlayerSelectorParser;
-
-public final class BukkitPingCommand extends PingCommand {
-  private final TabTPSPlugin plugin;
-
-  public BukkitPingCommand(final @NonNull TabTPSPlugin plugin, final @NonNull Commands commands) {
-    super(plugin.tabTPS(), commands);
-    this.plugin = plugin;
+public final class PaperTickTimeService implements TickTimeService {
+  @Override
+  public double averageMspt() {
+    return Bukkit.getAverageTickTime();
   }
 
   @Override
-  public void register() {
-    this.registerPingTargetsCommand(multiplePlayerSelectorParser(), this::onPingTargets);
-  }
-
-  private void onPingTargets(final @NonNull CommandContext<Commander> context) {
-    final MultiplePlayerSelector target = context.get("target");
-    this.pingTargets(
-      context.sender(),
-      target.values().stream()
-        .map(this.plugin.userService()::user)
-        .collect(Collectors.toList()),
-      target.inputString(),
-      context.get("page")
-    );
+  public double @NonNull [] recentTps() {
+    return Bukkit.getTPS();
   }
 }

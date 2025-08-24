@@ -6,7 +6,7 @@
 */target/
 BuildTools/
 run/
-/spigot/run*/
+/paper/run*/
 # Ignore Gradle project-specific cache directory
 .gradle
 

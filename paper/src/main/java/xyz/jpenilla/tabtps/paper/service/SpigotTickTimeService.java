@@ -21,38 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.command;
+package xyz.jpenilla.tabtps.paper.service;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
+import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
-public final class BukkitConsoleCommander implements ConsoleCommander {
-  private final CommandSender commandSender;
-  private final Audience audience;
+import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
-  private BukkitConsoleCommander(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
-    this.commandSender = sender;
-    this.audience = bukkitAudiences.sender(sender);
-  }
-
-  public static @NonNull BukkitConsoleCommander from(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
-    return new BukkitConsoleCommander(bukkitAudiences, sender);
+public final class SpigotTickTimeService implements TickTimeService {
+  @Override
+  public double averageMspt() {
+    return spigotReflection().averageTickTime();
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
-    return this.commandSender.hasPermission(permissionString);
-  }
-
-  @Override
-  public @NonNull Audience audience() {
-    return this.audience;
-  }
-
-  public @NonNull CommandSender commandSender() {
-    return this.commandSender;
+  public double @NonNull [] recentTps() {
+    return spigotReflection().recentTps();
   }
 }

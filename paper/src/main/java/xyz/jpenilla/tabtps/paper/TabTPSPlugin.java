@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot;
+package xyz.jpenilla.tabtps.paper;
 
 import io.papermc.lib.PaperLib;
 import java.nio.file.Path;
@@ -46,12 +46,12 @@ import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.common.util.UpdateChecker;
-import xyz.jpenilla.tabtps.spigot.command.BukkitConsoleCommander;
-import xyz.jpenilla.tabtps.spigot.command.BukkitPingCommand;
-import xyz.jpenilla.tabtps.spigot.command.PaperTickInfoCommandFormatter;
-import xyz.jpenilla.tabtps.spigot.service.BukkitUserService;
-import xyz.jpenilla.tabtps.spigot.service.PaperTickTimeService;
-import xyz.jpenilla.tabtps.spigot.service.SpigotTickTimeService;
+import xyz.jpenilla.tabtps.paper.command.BukkitConsoleCommander;
+import xyz.jpenilla.tabtps.paper.command.BukkitPingCommand;
+import xyz.jpenilla.tabtps.paper.command.PaperTickInfoCommandFormatter;
+import xyz.jpenilla.tabtps.paper.service.BukkitUserService;
+import xyz.jpenilla.tabtps.paper.service.PaperTickTimeService;
+import xyz.jpenilla.tabtps.paper.service.SpigotTickTimeService;
 
 public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;

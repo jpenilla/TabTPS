@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.jpenilla.tabtps.spigot.command;
+package xyz.jpenilla.tabtps.paper.command;
 
 import com.google.common.collect.ImmutableList;
 import java.lang.invoke.MethodHandle;
