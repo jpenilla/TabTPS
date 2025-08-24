@@ -1,7 +1,7 @@
 [plugins]
 blossom = { id = "net.kyori.blossom", version = "2.1.0" }
 localization = { id = "ca.stellardrift.localization", version = "6.2.0" }
-runPaper = { id = "xyz.jpenilla.run-paper", version = "2.3.1" }
+runPaper = { id = "xyz.jpenilla.run-paper", version = "3.0.0-beta.1" }
 sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 
 [versions]
@@ -21,17 +21,17 @@ guava = "21.0"
 bstats = "3.1.0"
 paperApi = "1.16.5-R0.1-SNAPSHOT"
 paperLib = "1.0.8"
-fabricApi = "0.129.0+1.21.8"
+fabricApi = "0.132.0+1.21.8"
 fabricLoader = "0.17.2"
 minecraft = "1.21.8"
 adventurePlatformMod = "6.6.0"
 mixin = "0.8.7"
-neoforge = "21.8.29"
+neoforge = "21.8.36"
 neoForm = "1.21.8-20250717.133445"
 
 # buildSrc
 indra = "3.2.0"
-shadow = "8.3.8"
+shadow = "9.0.2"
 mod-publish-plugin = "0.8.4"
 hangarPublishPlugin = "0.1.3"
 
@@ -66,7 +66,7 @@ slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 slf4jJdk14 = { group = "org.slf4j", name = "slf4j-jdk14", version.ref = "slf4j" }
 log4jSlf4jImpl = { group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version.ref = "log4jSlf4jImpl" }
 
-legacyPluginBase = { group = "xyz.jpenilla", name = "legacy-plugin-base", version = "0.0.1+147-SNAPSHOT" }
+legacyPluginBase = { group = "xyz.jpenilla", name = "legacy-plugin-base", version = "0.0.1+148-SNAPSHOT" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
