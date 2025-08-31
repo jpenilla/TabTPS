@@ -11,7 +11,6 @@ dependencies {
   compileOnly(libs.paperApi)
   implementation(libs.adventurePlatformBukkit)
   implementation(libs.paperLib)
-  implementation(libs.legacyPluginBase)
   implementation(libs.bstatsBukkit)
   implementation(libs.slf4jJdk14)
 

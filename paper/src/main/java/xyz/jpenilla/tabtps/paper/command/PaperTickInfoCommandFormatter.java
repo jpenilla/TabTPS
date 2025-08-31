@@ -31,9 +31,9 @@ import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.type.tuple.Pair;
-import xyz.jpenilla.pluginbase.legacy.Crafty;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
+import xyz.jpenilla.tabtps.paper.util.Crafty;
 
 public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Formatter {
   private final Class<?> _MinecraftServer = Crafty.needNMSClassOrElse(

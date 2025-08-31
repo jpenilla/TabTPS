@@ -65,8 +65,6 @@ checkerQual = { group = "org.checkerframework", name = "checker-qual", version.r
 slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 slf4jJdk14 = { group = "org.slf4j", name = "slf4j-jdk14", version.ref = "slf4j" }
 
-legacyPluginBase = { group = "xyz.jpenilla", name = "legacy-plugin-base", version = "0.0.1+148-SNAPSHOT" }
-
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 
