@@ -43,26 +43,49 @@ public final class PaperModernTickInfoCommandFormatter implements TickInfoComman
     "MinecraftServer",
     "net.minecraft.server.MinecraftServer"
   );
-  private final Class<?> _TickData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData");
-  private final Class<?> _TickReportData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$TickReportData");
-  private final Class<?> _SegmentData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$SegmentData");
-  private final Class<?> _TickRateManager = Crafty.needNMSClassOrElse(
-    "TickRateManager",
-    "net.minecraft.world.tick.TickRateManager"
-  );
+  private final Class<?> _TickData;
+  private final Class<?> _TickReportData;
+  private final Class<?> _SegmentData;
+  private final Class<?> _TickRateManager;
 
-  private final MethodHandle _getServer = Objects.requireNonNull(Crafty.findStaticMethod(this._MinecraftServer, "getServer", this._MinecraftServer));
-  private final MethodHandle _tickRateManager = Objects.requireNonNull(Crafty.findMethod(this._MinecraftServer, "tickRateManager", this._TickRateManager));
-  private final MethodHandle _nanosecondsPerTick = Objects.requireNonNull(Crafty.findMethod(this._TickRateManager, "nanosecondsPerTick", long.class));
-  private final MethodHandle _generateTickReport = Objects.requireNonNull(Crafty.findMethod(this._TickData, "generateTickReport", this._TickReportData, String.class, long.class, long.class));
-  private final MethodHandle _timePerTickData = Objects.requireNonNull(Crafty.findMethod(this._TickReportData, "timePerTickData", this._SegmentData));
-  private final MethodHandle _rawData = Objects.requireNonNull(Crafty.findMethod(this._SegmentData, "rawData", long[].class));
+  private final MethodHandle _getServer;
+  private final MethodHandle _tickRateManager;
+  private final MethodHandle _nanosecondsPerTick;
+  private final MethodHandle _generateTickReport;
+  private final MethodHandle _timePerTickData;
+  private final MethodHandle _rawData;
 
   private final Field _tickTimes5s;
   private final Field _tickTimes10s;
   private final Field _tickTimes1m;
 
   public PaperModernTickInfoCommandFormatter() {
+    // Try to find all required classes
+    this._TickData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData");
+    this._TickReportData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$TickReportData");
+    this._SegmentData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$SegmentData");
+    
+    // Try to find TickRateManager - might be in different packages or not exist
+    Class<?> tickRateManager = Crafty.findClass("net.minecraft.world.tick.TickRateManager");
+    if (tickRateManager == null) {
+      tickRateManager = Crafty.findNmsClass("TickRateManager");
+    }
+    this._TickRateManager = tickRateManager;
+
+    // Verify all required classes were found
+    if (this._TickData == null || this._TickReportData == null || 
+        this._SegmentData == null || this._TickRateManager == null) {
+      throw new IllegalStateException("Failed to find required TickData classes");
+    }
+
+    // Get method handles
+    this._getServer = Objects.requireNonNull(Crafty.findStaticMethod(this._MinecraftServer, "getServer", this._MinecraftServer));
+    this._tickRateManager = Objects.requireNonNull(Crafty.findMethod(this._MinecraftServer, "tickRateManager", this._TickRateManager));
+    this._nanosecondsPerTick = Objects.requireNonNull(Crafty.findMethod(this._TickRateManager, "nanosecondsPerTick", long.class));
+    this._generateTickReport = Objects.requireNonNull(Crafty.findMethod(this._TickData, "generateTickReport", this._TickReportData, String.class, long.class, long.class));
+    this._timePerTickData = Objects.requireNonNull(Crafty.findMethod(this._TickReportData, "timePerTickData", this._SegmentData));
+    this._rawData = Objects.requireNonNull(Crafty.findMethod(this._SegmentData, "rawData", long[].class));
+
     try {
       this._tickTimes5s = Crafty.needField(this._MinecraftServer, "tickTimes5s");
       this._tickTimes10s = Crafty.needField(this._MinecraftServer, "tickTimes10s");
