@@ -23,17 +23,18 @@
  */
 package xyz.jpenilla.tabtps.paper.command;
 
-import com.google.common.collect.ImmutableList;
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.type.tuple.Pair;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
-import xyz.jpenilla.tabtps.paper.util.Crafty;
+
+import static java.lang.invoke.MethodType.methodType;
 
 public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Formatter {
 
@@ -44,36 +45,41 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
   private final MethodHandle _timePerTickData;
   private final MethodHandle _rawData;
 
-  private final Field _tickTimes1s;
-  private final Field _tickTimes5s;
-  private final Field _tickTimes10s;
-  private final Field _tickTimes15s;
-  private final Field _tickTimes1m;
-  private final Field _tickTimes5m;
-  private final Field _tickTimes15m;
+  private final Pair<String, Field>[] tickTimesFields;
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public PaperTickInfoCommandFormatter() {
-    final Class<?> _TickData = Crafty.needClass("ca.spottedleaf.moonrise.common.time.TickData");
-    final Class<?> _TickTime = Crafty.needClass("ca.spottedleaf.moonrise.common.time.TickTime");
-    final Class<?> _TickReportData = Crafty.needClass("ca.spottedleaf.moonrise.common.time.TickData$TickReportData");
-    final Class<?> _SegmentedAverage = Crafty.needClass("ca.spottedleaf.moonrise.common.time.TickData$SegmentedAverage");
-    final Class<?> _TickRateManager = Crafty.needClass("net.minecraft.server.ServerTickRateManager");
-    final Class<?> _MinecraftServer = Crafty.needClass("net.minecraft.server.MinecraftServer");
+    try {
+      final Class<?> _TickData = Class.forName("ca.spottedleaf.moonrise.common.time.TickData");
+      final Class<?> _TickTime = Class.forName("ca.spottedleaf.moonrise.common.time.TickTime");
+      final Class<?> _TickReportData = Class.forName("ca.spottedleaf.moonrise.common.time.TickData$TickReportData");
+      final Class<?> _SegmentedAverage = Class.forName("ca.spottedleaf.moonrise.common.time.TickData$SegmentedAverage");
+      final Class<?> _TickRateManager = Class.forName("net.minecraft.server.ServerTickRateManager");
+      final Class<?> _MinecraftServer = Class.forName("net.minecraft.server.MinecraftServer");
 
-    this._getServer = Objects.requireNonNull(Crafty.findStaticMethod(_MinecraftServer, "getServer", _MinecraftServer));
-    this._tickRateManager = Objects.requireNonNull(Crafty.findMethod(_MinecraftServer, "tickRateManager", _TickRateManager));
-    this._nanosecondsPerTick = Objects.requireNonNull(Crafty.findMethod(_TickRateManager, "nanosecondsPerTick", long.class));
-    this._generateTickReport = Objects.requireNonNull(Crafty.findMethod(_TickData, "generateTickReport", _TickReportData, _TickTime, long.class, long.class));
-    this._timePerTickData = Objects.requireNonNull(Crafty.findMethod(_TickReportData, "timePerTickData", _SegmentedAverage));
-    this._rawData = Objects.requireNonNull(Crafty.findMethod(_SegmentedAverage, "rawData", long[].class));
+      final MethodHandles.Lookup lookup = MethodHandles.lookup();
 
-    this._tickTimes1s = Crafty.needField(_MinecraftServer, "tickTimes1s");
-    this._tickTimes5s = Crafty.needField(_MinecraftServer, "tickTimes5s");
-    this._tickTimes10s = Crafty.needField(_MinecraftServer, "tickTimes10s");
-    this._tickTimes15s = Crafty.needField(_MinecraftServer, "tickTimes15s");
-    this._tickTimes1m = Crafty.needField(_MinecraftServer, "tickTimes1m");
-    this._tickTimes5m = Crafty.needField(_MinecraftServer, "tickTimes5m");
-    this._tickTimes15m = Crafty.needField(_MinecraftServer, "tickTimes15m");
+      this._getServer = lookup.findStatic(_MinecraftServer, "getServer", methodType(_MinecraftServer));
+      this._tickRateManager = lookup.findVirtual(_MinecraftServer, "tickRateManager", methodType(_TickRateManager));
+      this._nanosecondsPerTick = lookup.findVirtual(_TickRateManager, "nanosecondsPerTick", methodType(long.class));
+      this._generateTickReport = lookup.findVirtual(_TickData, "generateTickReport", methodType(_TickReportData, _TickTime, long.class, long.class));
+      this._timePerTickData = lookup.findVirtual(_TickReportData, "timePerTickData", methodType(_SegmentedAverage));
+      this._rawData = lookup.findVirtual(_SegmentedAverage, "rawData", methodType(long[].class));
+
+      final List<Pair<String, Field>> tickTimesFieldsList = new ArrayList<>();
+      for (final Field f : _MinecraftServer.getDeclaredFields()) {
+        if (f.getType() == _TickData && f.getName().startsWith("tickTimes")) {
+          f.setAccessible(true);
+          tickTimesFieldsList.add(Pair.of(f.getName().substring("tickTimes".length()), f));
+        }
+      }
+      if (tickTimesFieldsList.size() < 3) {
+        throw new IllegalStateException("Expected at least 3 tickTimes fields, found " + tickTimesFieldsList.size() + ": " + tickTimesFieldsList);
+      }
+      this.tickTimesFields = tickTimesFieldsList.toArray(new Pair[0]);
+    } catch (final ReflectiveOperationException e) {
+      throw new IllegalStateException("Failed to initialize", e);
+    }
   }
 
   @Override
@@ -84,23 +90,17 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
       final long nanosecondsPerTick = (long) this._nanosecondsPerTick.invoke(tickRateManager);
       final long now = System.nanoTime();
 
-      final long[] times1s = this.extractRawData(this._tickTimes1s.get(minecraftServer), now, nanosecondsPerTick);
-      final long[] times5s = this.extractRawData(this._tickTimes5s.get(minecraftServer), now, nanosecondsPerTick);
-      final long[] times10s = this.extractRawData(this._tickTimes10s.get(minecraftServer), now, nanosecondsPerTick);
-      final long[] times15s = this.extractRawData(this._tickTimes15s.get(minecraftServer), now, nanosecondsPerTick);
-      final long[] times1m = this.extractRawData(this._tickTimes1m.get(minecraftServer), now, nanosecondsPerTick);
-      final long[] times5m = this.extractRawData(this._tickTimes5m.get(minecraftServer), now, nanosecondsPerTick);
-      final long[] times15m = this.extractRawData(this._tickTimes15m.get(minecraftServer), now, nanosecondsPerTick);
+      final List<Pair<String, long[]>> formatList = new ArrayList<>();
+      for (final Pair<String, Field> pair : this.tickTimesFields) {
+        final Object tickData = pair.second().get(minecraftServer);
+        if (tickData == null) {
+          throw new IllegalStateException("TickData field " + pair.first() + " was null");
+        }
+        final long[] rawData = this.extractRawData(tickData, now, nanosecondsPerTick);
+        formatList.add(Pair.of(pair.first(), rawData));
+      }
 
-      return TPSUtil.formatTickTimes(ImmutableList.of(
-        Pair.of("1s", times1s),
-        Pair.of("5s", times5s),
-        Pair.of("10s", times10s),
-        Pair.of("15s", times15s),
-        Pair.of("1m", times1m),
-        Pair.of("5m", times5m),
-        Pair.of("15m", times15m)
-      ));
+      return TPSUtil.formatTickTimes(formatList);
     } catch (final Throwable throwable) {
       throw new IllegalStateException("Failed to retrieve tick time statistics", throwable);
     }

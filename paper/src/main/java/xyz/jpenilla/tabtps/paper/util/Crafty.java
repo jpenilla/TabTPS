@@ -98,11 +98,6 @@ public final class Crafty {
     }
   }
 
-  @ForName
-  public static Class<?> needClass(final @NonNull String className) {
-    return requireNonNull(findClass(className), "Could not find class " + className);
-  }
-
   /**
    * Gets a {@code org.bukkit.craftbukkit} class.
    *
