@@ -10,6 +10,7 @@ dependencies {
 
   compileOnly(libs.paperApi)
   implementation(libs.adventurePlatformBukkit)
+  implementation(libs.adventureTextSerializerPlain)
   implementation(libs.paperLib)
   implementation(libs.bstatsBukkit)
   implementation(libs.slf4jJdk14)

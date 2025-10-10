@@ -39,6 +39,7 @@ hangarPublishPlugin = "0.1.3"
 adventureBom = { group = "net.kyori", name = "adventure-bom", version.ref = "adventure" }
 adventureApi = { group = "net.kyori", name = "adventure-api" }
 adventureTextSerializerLegacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
+adventureTextSerializerPlain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 adventureSerializerConfigurate4 = { group = "net.kyori", name = "adventure-serializer-configurate4", version.ref = "adventure" }
 adventureTextFeaturePagination = { group = "net.kyori", name = "adventure-text-feature-pagination", version.ref = "adventurePagination" }
 adventurePlatformBukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventurePlatform" }
