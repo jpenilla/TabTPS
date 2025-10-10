@@ -2,7 +2,6 @@ import me.modmuss50.mpp.ReleaseType
 
 plugins {
   id("tabtps.base")
-  id("com.gradleup.shadow")
   id("me.modmuss50.mod-publish-plugin")
 }
 
@@ -17,9 +16,6 @@ tasks {
   }
   assemble {
     dependsOn(copyJar)
-  }
-  shadowJar {
-    mergeServiceFiles()
   }
 }
 

@@ -2,7 +2,7 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-  id("tabtps.platform")
+  id("tabtps.platform.shadow")
   alias(libs.plugins.sponge.gradle)
   id("net.neoforged.moddev")
 }

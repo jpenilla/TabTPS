@@ -1,7 +1,7 @@
 import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
-  id("tabtps.platform")
+  id("tabtps.platform.shadow")
   alias(libs.plugins.runPaper)
 }
 

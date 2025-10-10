@@ -1,6 +1,6 @@
 plugins {
   id("quiet-fabric-loom")
-  id("tabtps.platform")
+  id("tabtps.platform.shadow")
 }
 
 val shade: Configuration by configurations.creating
