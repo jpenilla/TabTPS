@@ -44,9 +44,13 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
   private final MethodHandle _timePerTickData;
   private final MethodHandle _rawData;
 
+  private final Field _tickTimes1s;
   private final Field _tickTimes5s;
   private final Field _tickTimes10s;
+  private final Field _tickTimes15s;
   private final Field _tickTimes1m;
+  private final Field _tickTimes5m;
+  private final Field _tickTimes15m;
 
   public PaperTickInfoCommandFormatter() {
     final Class<?> _TickData = Crafty.needClass("ca.spottedleaf.moonrise.common.time.TickData");
@@ -63,9 +67,13 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
     this._timePerTickData = Objects.requireNonNull(Crafty.findMethod(_TickReportData, "timePerTickData", _SegmentedAverage));
     this._rawData = Objects.requireNonNull(Crafty.findMethod(_SegmentedAverage, "rawData", long[].class));
 
+    this._tickTimes1s = Crafty.needField(_MinecraftServer, "tickTimes1s");
     this._tickTimes5s = Crafty.needField(_MinecraftServer, "tickTimes5s");
     this._tickTimes10s = Crafty.needField(_MinecraftServer, "tickTimes10s");
+    this._tickTimes15s = Crafty.needField(_MinecraftServer, "tickTimes15s");
     this._tickTimes1m = Crafty.needField(_MinecraftServer, "tickTimes1m");
+    this._tickTimes5m = Crafty.needField(_MinecraftServer, "tickTimes5m");
+    this._tickTimes15m = Crafty.needField(_MinecraftServer, "tickTimes15m");
   }
 
   @Override
@@ -76,18 +84,22 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
       final long nanosecondsPerTick = (long) this._nanosecondsPerTick.invoke(tickRateManager);
       final long now = System.nanoTime();
 
-      final Object tickData5s = this._tickTimes5s.get(minecraftServer);
-      final Object tickData10s = this._tickTimes10s.get(minecraftServer);
-      final Object tickData1m = this._tickTimes1m.get(minecraftServer);
-
-      final long[] times5s = this.extractRawData(tickData5s, now, nanosecondsPerTick);
-      final long[] times10s = this.extractRawData(tickData10s, now, nanosecondsPerTick);
-      final long[] times1m = this.extractRawData(tickData1m, now, nanosecondsPerTick);
+      final long[] times1s = this.extractRawData(this._tickTimes1s.get(minecraftServer), now, nanosecondsPerTick);
+      final long[] times5s = this.extractRawData(this._tickTimes5s.get(minecraftServer), now, nanosecondsPerTick);
+      final long[] times10s = this.extractRawData(this._tickTimes10s.get(minecraftServer), now, nanosecondsPerTick);
+      final long[] times15s = this.extractRawData(this._tickTimes15s.get(minecraftServer), now, nanosecondsPerTick);
+      final long[] times1m = this.extractRawData(this._tickTimes1m.get(minecraftServer), now, nanosecondsPerTick);
+      final long[] times5m = this.extractRawData(this._tickTimes5m.get(minecraftServer), now, nanosecondsPerTick);
+      final long[] times15m = this.extractRawData(this._tickTimes15m.get(minecraftServer), now, nanosecondsPerTick);
 
       return TPSUtil.formatTickTimes(ImmutableList.of(
+        Pair.of("1s", times1s),
         Pair.of("5s", times5s),
         Pair.of("10s", times10s),
-        Pair.of("1m", times1m)
+        Pair.of("15s", times15s),
+        Pair.of("1m", times1m),
+        Pair.of("5m", times5m),
+        Pair.of("15m", times15m)
       ));
     } catch (final Throwable throwable) {
       throw new IllegalStateException("Failed to retrieve tick time statistics", throwable);
