@@ -48,6 +48,7 @@ import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.common.util.UpdateChecker;
 import xyz.jpenilla.tabtps.paper.command.BukkitConsoleCommander;
 import xyz.jpenilla.tabtps.paper.command.BukkitPingCommand;
+import xyz.jpenilla.tabtps.paper.command.PaperModernTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.paper.command.PaperTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.paper.service.BukkitUserService;
 import xyz.jpenilla.tabtps.paper.service.PaperTickTimeService;
@@ -151,9 +152,13 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   private void registerCommands() {
     if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
       try {
-        TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
+        TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperModernTickInfoCommandFormatter()).register();
       } catch (final Exception e) {
-        TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register(); // TODO - new formatter for Paper 1.21.10+
+        try {
+          TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
+        } catch (final Exception e2) {
+          TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
+        }
       }
     } else {
       TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
