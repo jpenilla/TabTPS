@@ -151,12 +151,23 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
 
   private void registerCommands() {
     if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
-      try {
-        TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperModernTickInfoCommandFormatter()).register();
-      } catch (final Exception e) {
+      // Try modern formatter for Paper 1.21.10+
+      if (PaperModernTickInfoCommandFormatter.isAvailable()) {
+        try {
+          TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperModernTickInfoCommandFormatter()).register();
+        } catch (final Exception e) {
+          // If modern formatter fails for any other reason, try legacy formatter
+          try {
+            TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
+          } catch (final Exception e2) {
+            TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
+          }
+        }
+      } else {
+        // Modern formatter not available, try legacy formatter for Paper 1.15-1.21.9
         try {
           TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
-        } catch (final Exception e2) {
+        } catch (final Exception e) {
           TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
         }
       }
