@@ -149,13 +149,20 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
     }
   }
 
+  private static boolean hasCopperGolem() {
+    try {
+      Class.forName("org.bukkit.entity.CopperGolem");
+      return true;
+    } catch (final ClassNotFoundException e) {
+      return false;
+    }
+  }
+
   private void registerCommands() {
     if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
-      try {
+      if (hasCopperGolem()) {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
-      } catch (Exception e) {
-        // TODO better selection of formatter based on version
-        e.printStackTrace();
+      } else {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new LegacyPaperTickInfoCommandFormatter()).register();
       }
     } else {

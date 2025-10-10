@@ -53,13 +53,9 @@ public final class LegacyPaperTickInfoCommandFormatter implements TickInfoComman
   private final Field _tickTimes60s;
 
   public LegacyPaperTickInfoCommandFormatter() {
-    try {
-      this._tickTimes5s = Crafty.needField(this._MinecraftServer, "tickTimes5s");
-      this._tickTimes10s = Crafty.needField(this._MinecraftServer, "tickTimes10s");
-      this._tickTimes60s = Crafty.needField(this._MinecraftServer, "tickTimes60s");
-    } catch (final NoSuchFieldException e) {
-      throw new IllegalStateException("Failed to initialize formatter", e);
-    }
+    this._tickTimes5s = Crafty.needField(this._MinecraftServer, "tickTimes5s");
+    this._tickTimes10s = Crafty.needField(this._MinecraftServer, "tickTimes10s");
+    this._tickTimes60s = Crafty.needField(this._MinecraftServer, "tickTimes60s");
   }
 
   @Override
