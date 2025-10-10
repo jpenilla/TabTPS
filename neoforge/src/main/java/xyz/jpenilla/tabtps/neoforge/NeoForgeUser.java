@@ -47,7 +47,7 @@ public final class NeoForgeUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public Component displayName() {
-    return MinecraftServerAudiences.of(this.base().getServer()).asAdventure(this.base().getDisplayName());
+    return MinecraftServerAudiences.of(this.base().level().getServer()).asAdventure(this.base().getDisplayName());
   }
 
   @Override
@@ -69,6 +69,6 @@ public final class NeoForgeUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public Audience audience() {
-    return MinecraftServerAudiences.of(this.base().getServer()).audience(this.base());
+    return MinecraftServerAudiences.of(this.base().level().getServer()).audience(this.base());
   }
 }

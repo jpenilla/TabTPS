@@ -34,7 +34,7 @@ import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 public record NeoForgeConsoleCommander(CommandSourceStack commandSourceStack) implements ConsoleCommander {
   @Override
   public boolean hasPermission(final String permissionString) {
-    return this.commandSourceStack.hasPermission(this.commandSourceStack.getServer().getOperatorUserPermissionLevel());
+    return this.commandSourceStack.hasPermission(this.commandSourceStack.getServer().operatorUserPermissionLevel());
   }
 
   @Override

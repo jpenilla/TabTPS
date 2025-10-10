@@ -47,7 +47,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public Component displayName() {
-    return MinecraftServerAudiences.of(this.base().getServer()).asAdventure(this.base().getDisplayName());
+    return MinecraftServerAudiences.of(this.base().level().getServer()).asAdventure(this.base().getDisplayName());
   }
 
   @Override
@@ -62,7 +62,7 @@ public final class FabricUser extends AbstractUser<ServerPlayer> {
 
   @Override
   public boolean hasPermission(final String permissionString) {
-    return Permissions.check(this.base(), permissionString, this.base().getServer().getOperatorUserPermissionLevel());
+    return Permissions.check(this.base(), permissionString, this.base().level().getServer().operatorUserPermissionLevel());
   }
 
   @Override

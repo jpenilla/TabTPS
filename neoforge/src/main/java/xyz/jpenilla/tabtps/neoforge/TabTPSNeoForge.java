@@ -177,7 +177,7 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
     final UUID uuid,
     final PermissionDynamicContext<?>... contexts
   ) {
-    return player != null && player.hasPermissions(player.getServer().getOperatorUserPermissionLevel());
+    return player != null && player.hasPermissions(player.level().getServer().operatorUserPermissionLevel());
   }
 
   public static @NonNull TabTPSNeoForge get() {
