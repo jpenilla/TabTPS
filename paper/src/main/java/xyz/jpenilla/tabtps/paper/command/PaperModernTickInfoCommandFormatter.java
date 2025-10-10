@@ -59,30 +59,6 @@ public final class PaperModernTickInfoCommandFormatter implements TickInfoComman
   private final Field _tickTimes10s;
   private final Field _tickTimes1m;
 
-  /**
-   * Check if the modern TickData API is available.
-   *
-   * @return true if the required classes exist
-   */
-  public static boolean isAvailable() {
-    // Check if the core TickData classes exist
-    if (Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData") == null) {
-      return false;
-    }
-    if (Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$TickReportData") == null) {
-      return false;
-    }
-    if (Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$SegmentData") == null) {
-      return false;
-    }
-    // Check if TickRateManager exists (in either location)
-    if (Crafty.findClass("net.minecraft.world.tick.TickRateManager") == null && 
-        Crafty.findNmsClass("TickRateManager") == null) {
-      return false;
-    }
-    return true;
-  }
-
   public PaperModernTickInfoCommandFormatter() {
     // Try to find all required classes
     this._TickData = Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData");
