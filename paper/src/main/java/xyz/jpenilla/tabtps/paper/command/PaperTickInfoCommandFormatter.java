@@ -40,23 +40,43 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
     "MinecraftServer",
     "net.minecraft.server.MinecraftServer"
   );
-  private final Class<?> _MinecraftServer_TickTimes = Crafty.needNMSClassOrElse(
-    "MinecraftServer$TickTimes",
-    "net.minecraft.server.MinecraftServer$TickTimes"
-  );
+  private final Class<?> _TickData;
+  private final Class<?> _TickTime;
+  private final Class<?> _TickReportData;
+  private final Class<?> _SegmentedAverage;
+  private final Class<?> _TickRateManager;
 
-  private final MethodHandle _getServer = Objects.requireNonNull(Crafty.findStaticMethod(this._MinecraftServer, "getServer", this._MinecraftServer));
-  private final MethodHandle _getTimes = Objects.requireNonNull(Crafty.findMethod(this._MinecraftServer_TickTimes, "getTimes", long[].class));
+  private final MethodHandle _getServer;
+  private final MethodHandle _tickRateManager;
+  private final MethodHandle _nanosecondsPerTick;
+  private final MethodHandle _generateTickReport;
+  private final MethodHandle _timePerTickData;
+  private final MethodHandle _rawData;
 
   private final Field _tickTimes5s;
   private final Field _tickTimes10s;
-  private final Field _tickTimes60s;
+  private final Field _tickTimes1m;
 
   public PaperTickInfoCommandFormatter() {
+    // Try to find all required classes
+    this._TickData = Objects.requireNonNull(Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData"));
+    this._TickTime = Objects.requireNonNull(Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickTime"));
+    this._TickReportData = Objects.requireNonNull(Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$TickReportData"));
+    this._SegmentedAverage = Objects.requireNonNull(Crafty.findClass("ca.spottedleaf.moonrise.common.time.TickData$SegmentedAverage"));
+    this._TickRateManager = Objects.requireNonNull(Crafty.findClass("net.minecraft.server.ServerTickRateManager"));
+
+    // Get method handles
+    this._getServer = Objects.requireNonNull(Crafty.findStaticMethod(this._MinecraftServer, "getServer", this._MinecraftServer));
+    this._tickRateManager = Objects.requireNonNull(Crafty.findMethod(this._MinecraftServer, "tickRateManager", this._TickRateManager));
+    this._nanosecondsPerTick = Objects.requireNonNull(Crafty.findMethod(this._TickRateManager, "nanosecondsPerTick", long.class));
+    this._generateTickReport = Objects.requireNonNull(Crafty.findMethod(this._TickData, "generateTickReport", this._TickReportData, this._TickTime, long.class, long.class));
+    this._timePerTickData = Objects.requireNonNull(Crafty.findMethod(this._TickReportData, "timePerTickData", this._SegmentedAverage));
+    this._rawData = Objects.requireNonNull(Crafty.findMethod(this._SegmentedAverage, "rawData", long[].class));
+
     try {
       this._tickTimes5s = Crafty.needField(this._MinecraftServer, "tickTimes5s");
       this._tickTimes10s = Crafty.needField(this._MinecraftServer, "tickTimes10s");
-      this._tickTimes60s = Crafty.needField(this._MinecraftServer, "tickTimes60s");
+      this._tickTimes1m = Crafty.needField(this._MinecraftServer, "tickTimes1m");
     } catch (final NoSuchFieldException e) {
       throw new IllegalStateException("Failed to initialize formatter", e);
     }
@@ -66,21 +86,34 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
   public @NonNull List<Component> formatTickTimes() {
     try {
       final Object minecraftServer = this._getServer.invoke();
-      final Object tickTimes5s = this._tickTimes5s.get(minecraftServer);
-      final Object tickTimes10s = this._tickTimes10s.get(minecraftServer);
-      final Object tickTimes60s = this._tickTimes60s.get(minecraftServer);
+      final Object tickRateManager = this._tickRateManager.invoke(minecraftServer);
+      final long nanosecondsPerTick = (long) this._nanosecondsPerTick.invoke(tickRateManager);
+      final long now = System.nanoTime();
 
-      final long[] times5s = (long[]) this._getTimes.bindTo(tickTimes5s).invoke();
-      final long[] times10s = (long[]) this._getTimes.bindTo(tickTimes10s).invoke();
-      final long[] times60s = (long[]) this._getTimes.bindTo(tickTimes60s).invoke();
+      final Object tickData5s = this._tickTimes5s.get(minecraftServer);
+      final Object tickData10s = this._tickTimes10s.get(minecraftServer);
+      final Object tickData1m = this._tickTimes1m.get(minecraftServer);
+
+      final long[] times5s = extractRawData(tickData5s, now, nanosecondsPerTick);
+      final long[] times10s = extractRawData(tickData10s, now, nanosecondsPerTick);
+      final long[] times1m = extractRawData(tickData1m, now, nanosecondsPerTick);
 
       return TPSUtil.formatTickTimes(ImmutableList.of(
         Pair.of("5s", times5s),
         Pair.of("10s", times10s),
-        Pair.of("60s", times60s)
+        Pair.of("1m", times1m)
       ));
     } catch (final Throwable throwable) {
       throw new IllegalStateException("Failed to retrieve tick time statistics", throwable);
     }
+  }
+
+  private long[] extractRawData(final Object tickData, final long now, final long nanosecondsPerTick) throws Throwable {
+    final Object reportData = this._generateTickReport.invoke(tickData, null, now, nanosecondsPerTick);
+    if (reportData == null) {
+      return new long[0];
+    }
+    final Object timePerTickData = this._timePerTickData.invoke(reportData);
+    return (long[]) this._rawData.invoke(timePerTickData);
   }
 }
