@@ -80,9 +80,9 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
       final Object tickData10s = this._tickTimes10s.get(minecraftServer);
       final Object tickData1m = this._tickTimes1m.get(minecraftServer);
 
-      final long[] times5s = extractRawData(tickData5s, now, nanosecondsPerTick);
-      final long[] times10s = extractRawData(tickData10s, now, nanosecondsPerTick);
-      final long[] times1m = extractRawData(tickData1m, now, nanosecondsPerTick);
+      final long[] times5s = this.extractRawData(tickData5s, now, nanosecondsPerTick);
+      final long[] times10s = this.extractRawData(tickData10s, now, nanosecondsPerTick);
+      final long[] times1m = this.extractRawData(tickData1m, now, nanosecondsPerTick);
 
       return TPSUtil.formatTickTimes(ImmutableList.of(
         Pair.of("5s", times5s),
