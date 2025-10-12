@@ -5,11 +5,11 @@ runPaper = { id = "xyz.jpenilla.run-paper", version = "3.0.2" }
 sponge-gradle = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 
 [versions]
-adventure = "4.24.0"
+adventure = "4.25.0"
 adventurePagination = "4.0.0-SNAPSHOT"
 adventurePlatform = "4.4.1"
 cloud = "2.0.0"
-cloudMinecraft = "2.0.0-beta.12"
+cloudMinecraft = "2.0.0-beta.13"
 cloudModded = "2.0.0-beta.13"
 cloudSponge = "2.0.0-SNAPSHOT"
 configurate = "4.2.0"
@@ -76,7 +76,7 @@ paperLib = { group = "io.papermc", name = "paperlib", version.ref = "paperLib" }
 
 fabricApi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabricApi" }
 fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabricLoader" }
-fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.4.1"
+fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.5.0"
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 
 zNeoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
