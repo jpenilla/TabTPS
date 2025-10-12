@@ -11,7 +11,7 @@ hangarPublish.publications.register("plugin") {
   apiKey.set(providers.environmentVariable("HANGAR_UPLOAD_KEY"))
   platforms {
     paper {
-      jar.set(project(":tabtps-spigot").the<TabTPSPlatformExtension>().productionJar)
+      jar.set(project(":tabtps-paper").the<TabTPSPlatformExtension>().productionJar)
       val vers = bukkitVersions.toMutableList()
       vers -= "1.8.8"
       vers -= "1.8.9"
