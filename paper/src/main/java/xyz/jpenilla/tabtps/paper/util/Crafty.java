@@ -160,12 +160,15 @@ public final class Crafty {
    * @param holderClass a class
    * @param fieldName   a field name
    * @return an accessible field
-   * @throws NoSuchFieldException when thrown by {@link Class#getDeclaredField(String)}
    */
-  public static @NonNull Field needField(final @NonNull Class<?> holderClass, final @NonNull String fieldName) throws NoSuchFieldException {
-    final Field field = holderClass.getDeclaredField(fieldName);
-    field.setAccessible(true);
-    return field;
+  public static @NonNull Field needField(final @NonNull Class<?> holderClass, final @NonNull String fieldName) {
+    try {
+      final Field field = holderClass.getDeclaredField(fieldName);
+      field.setAccessible(true);
+      return field;
+    } catch (final NoSuchFieldException ex) {
+      throw new IllegalStateException(String.format("Unable to find field '%s' in class '%s'", fieldName, holderClass.getCanonicalName()), ex);
+    }
   }
 
   /**

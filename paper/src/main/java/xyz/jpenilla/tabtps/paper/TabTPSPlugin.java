@@ -48,6 +48,7 @@ import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.common.util.UpdateChecker;
 import xyz.jpenilla.tabtps.paper.command.BukkitConsoleCommander;
 import xyz.jpenilla.tabtps.paper.command.BukkitPingCommand;
+import xyz.jpenilla.tabtps.paper.command.LegacyPaperTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.paper.command.PaperTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.paper.service.BukkitUserService;
 import xyz.jpenilla.tabtps.paper.service.PaperTickTimeService;
@@ -148,12 +149,21 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
     }
   }
 
+  private static boolean hasCopperGolem() {
+    try {
+      Class.forName("org.bukkit.entity.CopperGolem");
+      return true;
+    } catch (final ClassNotFoundException e) {
+      return false;
+    }
+  }
+
   private void registerCommands() {
     if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
-      try {
+      if (hasCopperGolem()) {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
-      } catch (final Exception e) {
-        TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register(); // TODO - new formatter for Paper 1.21.10+
+      } else {
+        TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new LegacyPaperTickInfoCommandFormatter()).register();
       }
     } else {
       TickInfoCommand.defaultFormatter(this.tabTPS, this.tabTPS.commands()).register();
