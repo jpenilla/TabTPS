@@ -30,7 +30,7 @@ neoforge = "21.10.10-beta"
 neoForm = "1.21.10-20251010.172816"
 
 # buildSrc
-indra = "3.2.0"
+indra = "4.0.0"
 shadow = "9.2.2"
 mod-publish-plugin = "1.0.0"
 hangarPublishPlugin = "0.1.3"
