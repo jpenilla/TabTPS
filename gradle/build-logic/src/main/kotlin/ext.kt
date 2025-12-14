@@ -7,7 +7,7 @@ val Project.releaseNotes: Provider<String>
   get() = providers.environmentVariable("RELEASE_NOTES")
 
 fun Project.lastCommitHash(): String =
-  the<IndraGitExtension>().commit()?.name?.substring(0, 7)
+  the<IndraGitExtension>().commit().orNull?.name?.substring(0, 7)
     ?: error("Could not determine git commit hash")
 
 fun Project.decorateVersion() {
