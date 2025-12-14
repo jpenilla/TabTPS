@@ -34,6 +34,7 @@ import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permission;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -177,7 +178,7 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
     final UUID uuid,
     final PermissionDynamicContext<?>... contexts
   ) {
-    return player != null && player.hasPermissions(player.level().getServer().operatorUserPermissionLevel());
+    return player != null && player.permissions().hasPermission(new Permission.HasCommandLevel(player.level().getServer().operatorUserPermissions().level()));
   }
 
   public static @NonNull TabTPSNeoForge get() {

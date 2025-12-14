@@ -26,6 +26,7 @@ package xyz.jpenilla.tabtps.neoforge.command;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.permissions.Permission;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
@@ -34,7 +35,7 @@ import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 public record NeoForgeConsoleCommander(CommandSourceStack commandSourceStack) implements ConsoleCommander {
   @Override
   public boolean hasPermission(final String permissionString) {
-    return this.commandSourceStack.hasPermission(this.commandSourceStack.getServer().operatorUserPermissionLevel());
+    return this.commandSourceStack.permissions().hasPermission(new Permission.HasCommandLevel(this.commandSourceStack.getServer().operatorUserPermissions().level()));
   }
 
   @Override

@@ -21,13 +21,13 @@ guava = "21.0"
 bstats = "3.1.0"
 paperApi = "1.16.5-R0.1-SNAPSHOT"
 paperLib = "1.0.8"
-fabricApi = "0.135.0+1.21.10"
+fabricApi = "0.139.5+1.21.11"
 fabricLoader = "0.18.2"
-minecraft = "1.21.10"
-adventurePlatformMod = "6.7.0"
+minecraft = "1.21.11"
+adventurePlatformMod = "6.8.0"
 mixin = "0.8.7"
-neoforge = "21.10.10-beta"
-neoForm = "1.21.10-20251010.172816"
+neoforge = "21.11.6-beta"
+neoForm = "1.21.11-20251209.172050"
 
 # buildSrc
 indra = "4.0.0"
@@ -76,7 +76,7 @@ paperLib = { group = "io.papermc", name = "paperlib", version.ref = "paperLib" }
 
 fabricApi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabricApi" }
 fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabricLoader" }
-fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.5.0"
+fabricPermissionsApi = "me.lucko:fabric-permissions-api:0.6.1"
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 
 zNeoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }

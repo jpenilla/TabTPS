@@ -34,7 +34,7 @@ import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 public record FabricConsoleCommander(CommandSourceStack commandSourceStack) implements ConsoleCommander {
   @Override
   public boolean hasPermission(final String permissionString) {
-    return Permissions.check(this.commandSourceStack, permissionString, this.commandSourceStack.getServer().operatorUserPermissionLevel());
+    return Permissions.check(this.commandSourceStack, permissionString, this.commandSourceStack.getServer().operatorUserPermissions().level());
   }
 
   @Override
