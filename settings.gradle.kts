@@ -37,7 +37,7 @@ pluginManagement {
 plugins {
   id("quiet-fabric-loom") version "1.13-SNAPSHOT"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("net.neoforged.moddev.repositories") version "2.0.124"
+  id("net.neoforged.moddev.repositories") version "2.0.140"
 }
 
 rootProject.name = "TabTPS"
