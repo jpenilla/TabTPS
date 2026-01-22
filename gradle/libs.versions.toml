@@ -26,7 +26,7 @@ fabricLoader = "0.18.2"
 minecraft = "1.21.11"
 adventurePlatformMod = "6.8.0"
 mixin = "0.8.7"
-neoforge = "21.11.6-beta"
+neoforge = "21.11.37-beta"
 neoForm = "1.21.11-20251209.172050"
 
 # buildSrc
