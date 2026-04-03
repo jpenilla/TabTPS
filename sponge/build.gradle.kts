@@ -21,8 +21,8 @@ dependencies {
   }
 }
 
-java {
-  disableAutoTargetJvm()
+indra {
+  javaVersions().target(25)
 }
 
 sponge {
