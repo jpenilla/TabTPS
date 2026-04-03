@@ -96,7 +96,7 @@ tabTPSPlatform {
 publishMods.modrinth {
   modLoaders.add("sponge")
   minecraftVersions.addAll(
-    "26.1"
+    "26.1.1",
   )
 }
 
