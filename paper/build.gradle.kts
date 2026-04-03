@@ -9,6 +9,7 @@ dependencies {
   implementation(projects.tabtpsCommon)
 
   compileOnly(libs.paperApi)
+  compileOnly(libs.brigadier)
   implementation(libs.adventurePlatformBukkit)
   implementation(libs.adventureTextSerializerPlain)
   implementation(libs.paperLib)
@@ -71,6 +72,9 @@ tasks {
     ),
     21 to setOf(
       "1.20.6",
+      "1.21.11",
+    ),
+    25 to setOf(
       mcVer,
     )
   ).forEach { (javaVersion, minecraftVersions) ->

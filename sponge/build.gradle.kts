@@ -27,7 +27,7 @@ java {
 
 sponge {
   injectRepositories(false)
-  apiVersion("17.0.0-SNAPSHOT")
+  apiVersion("19.0.0-SNAPSHOT")
   plugin(rootProject.name.lowercase()) {
     loader {
       name(PluginLoaders.JAVA_PLAIN)
@@ -96,7 +96,7 @@ tabTPSPlatform {
 publishMods.modrinth {
   modLoaders.add("sponge")
   minecraftVersions.addAll(
-    "1.21.11"
+    "26.1"
   )
 }
 
@@ -104,7 +104,7 @@ configurations.spongeRuntime {
   resolutionStrategy {
     eachDependency {
       if (target.name == "spongevanilla") {
-        useVersion("1.21.11-18.+")
+        useVersion("26.1-19.+")
       }
     }
   }

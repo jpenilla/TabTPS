@@ -41,7 +41,7 @@ tasks.withType<RunGameTask>().configureEach {
 }
 
 indra {
-  javaVersions().target(21)
+  javaVersions().target(25)
 }
 
 val common: Configuration by configurations.creating
@@ -68,10 +68,6 @@ dependencies {
   jarJar(libs.bundles.configurate)
   implementation(libs.adventureSerializerConfigurate4)
   jarJar(libs.adventureSerializerConfigurate4)
-}
-
-indra {
-  javaVersions().target(21)
 }
 
 tasks {

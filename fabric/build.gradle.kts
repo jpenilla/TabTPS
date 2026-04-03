@@ -1,5 +1,5 @@
 plugins {
-  id("quiet-fabric-loom")
+  id("xyz.jpenilla.quiet-fabric-loom")
   id("tabtps.platform.shadow")
 }
 
@@ -8,22 +8,21 @@ val minecraftVersion = libs.versions.minecraft.get()
 
 dependencies {
   minecraft(libs.minecraft)
-  mappings(loom.officialMojangMappings())
-  modImplementation(libs.fabricLoader)
-  modImplementation(libs.fabricApi)
+  implementation(libs.fabricLoader)
+  implementation(libs.fabricApi)
 
   implementation(projects.tabtpsCommon)
   shade(projects.tabtpsCommon) {
     isTransitive = false
   }
 
-  modImplementation(libs.cloudFabric)
+  implementation(libs.cloudFabric)
   include(libs.cloudFabric)
   implementation(libs.cloudMinecraftExtras)
   include(libs.cloudMinecraftExtras)
 
   include(libs.adventurePlatformFabric)
-  modImplementation(libs.adventurePlatformFabric)
+  implementation(libs.adventurePlatformFabric)
   implementation(libs.adventureTextFeaturePagination)
   include(libs.adventureTextFeaturePagination)
   implementation(libs.adventureTextSerializerLegacy)
@@ -34,19 +33,17 @@ dependencies {
   implementation(libs.adventureSerializerConfigurate4)
   include(libs.adventureSerializerConfigurate4)
 
-  modImplementation(libs.fabricPermissionsApi)
+  implementation(libs.fabricPermissionsApi)
   include(libs.fabricPermissionsApi)
 }
 
 indra {
-  javaVersions().target(21)
+  javaVersions().target(25)
 }
 
 tasks {
   shadowJar {
     configurations = listOf(shade)
-  }
-  remapJar {
     archiveFileName.set("${project.name}-mc$minecraftVersion-${project.version}.jar")
   }
   processResources {
@@ -65,7 +62,7 @@ tasks {
 }
 
 tabTPSPlatform {
-  productionJar.set(tasks.remapJar.flatMap { it.archiveFile })
+  productionJar.set(tasks.shadowJar.flatMap { it.archiveFile })
 }
 
 publishMods.modrinth {

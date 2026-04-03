@@ -4,7 +4,7 @@
     "config:recommended"
   ],
   "ignoreDeps": [
-    "quiet-fabric-loom",
+    "xyz.jpenilla.quiet-fabric-loom-repositories",
     "com.mojang:minecraft",
     "com.google.code.gson:gson",
     "com.google.guava:guava"

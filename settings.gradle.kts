@@ -9,7 +9,7 @@ dependencyResolutionManagement {
       mavenContent {
         snapshotsOnly()
         includeGroup("xyz.jpenilla")
-        includeGroup("org.incendo")
+        includeModule("org.incendo", "cloud-sponge")
       }
     }
     maven("https://central.sonatype.com/repository/maven-snapshots/") {
@@ -35,9 +35,9 @@ pluginManagement {
 }
 
 plugins {
-  id("quiet-fabric-loom") version "1.13-SNAPSHOT"
+  id("xyz.jpenilla.quiet-fabric-loom-repositories") version "1.15-SNAPSHOT"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("net.neoforged.moddev.repositories") version "2.0.124"
+  id("net.neoforged.moddev.repositories") version "2.0.141"
 }
 
 rootProject.name = "TabTPS"
