@@ -31,18 +31,16 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
-import xyz.jpenilla.pluginbase.legacy.environment.MinecraftRelease;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_16;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_17;
 import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
 @DefaultQualifier(NonNull.class)
 public final class BukkitUser extends AbstractUser<Player> {
-  private static final MinecraftRelease MINECRAFT_1_16_0 = MinecraftRelease.oldSchemaRelease(16, 0);
-  private static final MinecraftRelease MINECRAFT_1_17_0 = MinecraftRelease.oldSchemaRelease(17, 0);
-
   private final BukkitAudiences audiences;
   private @MonotonicNonNull Audience audience;
 
@@ -72,10 +70,10 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public int ping() {
-    if (Environment.currentMinecraft().isAtLeast(MINECRAFT_1_17_0)) {
+    if (Environment.currentMinecraft().isAtLeast(v1_17)) {
       return this.base().getPing();
     }
-    return Environment.currentMinecraft().isOlderThan(MINECRAFT_1_16_0) || !Environment.paper()
+    return Environment.currentMinecraft().isOlderThan(v1_16) || !Environment.paper()
       ? spigotReflection().ping(this.base())
       : this.base().spigot().getPing();
   }

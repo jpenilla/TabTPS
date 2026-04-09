@@ -38,7 +38,6 @@ import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
-import xyz.jpenilla.pluginbase.legacy.environment.MinecraftRelease;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -53,6 +52,9 @@ import xyz.jpenilla.tabtps.paper.command.PaperTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.paper.service.BukkitUserService;
 import xyz.jpenilla.tabtps.paper.service.PaperTickTimeService;
 import xyz.jpenilla.tabtps.paper.service.SpigotTickTimeService;
+
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_13;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_15;
 
 public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;
@@ -113,7 +115,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
 
   @Override
   public void onReload() {
-    if (Environment.currentMinecraft().isAtLeast(MinecraftRelease.oldSchemaRelease(13, 0))) {
+    if (Environment.currentMinecraft().isAtLeast(v1_13)) {
       this.getServer().getOnlinePlayers().forEach(Player::updateCommands);
     }
   }
@@ -171,7 +173,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   private void registerCommands() {
-    if (Environment.currentMinecraft().isAtLeast(MinecraftRelease.oldSchemaRelease(15, 0)) && Environment.paper()) {
+    if (Environment.currentMinecraft().isAtLeast(v1_15) && Environment.paper()) {
       if (hasCopperGolem()) {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
       } else {

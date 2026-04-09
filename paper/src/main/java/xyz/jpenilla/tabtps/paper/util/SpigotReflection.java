@@ -31,10 +31,18 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
-import xyz.jpenilla.pluginbase.legacy.environment.MinecraftRelease;
 import xyz.jpenilla.pluginbase.legacy.environment.MinecraftVersion;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_13;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_14;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_16;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_17;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_18;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_19;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_20_3;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_20_6;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_21_11;
 import static xyz.jpenilla.tabtps.paper.util.Crafty.findField;
 import static xyz.jpenilla.tabtps.paper.util.Crafty.needCraftClass;
 import static xyz.jpenilla.tabtps.paper.util.Crafty.needNMSClassOrElse;
@@ -70,24 +78,26 @@ public final class SpigotReflection {
   private static @NonNull Field tickTimesField() {
     final String tickTimes;
     final MinecraftVersion version = Environment.currentMinecraft();
-    if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(13, 0))) {
+    if (version.isOlderThan(v1_13)) {
       tickTimes = "h";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(14, 0))) {
+    } else if (version.isOlderThan(v1_14)) {
       tickTimes = "d";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(16, 0))) {
+    } else if (version.isOlderThan(v1_16)) {
       tickTimes = "f";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(17, 0))) {
+    } else if (version.isOlderThan(v1_17)) {
       tickTimes = "h";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(18, 0))) {
+    } else if (version.isOlderThan(v1_18)) {
       tickTimes = "n";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(19, 0))) {
+    } else if (version.isOlderThan(v1_19)) {
       tickTimes = "o";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(20, 3))) {
+    } else if (version.isOlderThan(v1_20_3)) {
       tickTimes = "k";
-    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(20, 6))) {
+    } else if (version.isOlderThan(v1_20_6)) {
       tickTimes = "ac";
-    } else {
+    } else if (version.isOrOlder(v1_21_11)) {
       tickTimes = "ab";
+    } else {
+      throw new IllegalStateException("Don't know tickTimes field name for version " + version);
     }
     return needField(MinecraftServer_class, tickTimes);
   }
