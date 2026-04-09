@@ -23,10 +23,8 @@
  */
 package xyz.jpenilla.tabtps.paper;
 
-import io.papermc.lib.PaperLib;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.logging.Level;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
@@ -39,6 +37,8 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.jpenilla.pluginbase.legacy.environment.Environment;
+import xyz.jpenilla.pluginbase.legacy.environment.MinecraftRelease;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -64,8 +64,10 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
 
   @Override
   public void onEnable() {
-    PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
+    if (!Environment.paper()) {
+      this.logger.warn("Spigot detected. Paper is recommended.");
+    }
     if (this.craftBukkit()) {
       this.getServer().getPluginManager().disablePlugin(this);
       return;
@@ -111,7 +113,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
 
   @Override
   public void onReload() {
-    if (PaperLib.getMinecraftVersion() >= 13) {
+    if (Environment.currentMinecraft().isAtLeast(MinecraftRelease.oldSchemaRelease(13, 0))) {
       this.getServer().getOnlinePlayers().forEach(Player::updateCommands);
     }
   }
@@ -169,7 +171,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   private void registerCommands() {
-    if (PaperLib.getMinecraftVersion() >= 15 && PaperLib.isPaper()) {
+    if (Environment.currentMinecraft().isAtLeast(MinecraftRelease.oldSchemaRelease(15, 0)) && Environment.paper()) {
       if (hasCopperGolem()) {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
       } else {
@@ -216,8 +218,17 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
     return this.logger;
   }
 
+  private static boolean classExists(final String fullyQualifiedName) {
+    try {
+      Class.forName(fullyQualifiedName);
+      return true;
+    } catch (final ClassNotFoundException e) {
+      return false;
+    }
+  }
+
   private boolean craftBukkit() {
-    if (!PaperLib.isSpigot()) {
+    if (!classExists("org.spigotmc.SpigotConfig")) {
       this.logger.error("==========================================");
       this.logger.error("TabTPS is not compatible with CraftBukkit.");
       this.logger.error("You must use either Spigot or later forks");

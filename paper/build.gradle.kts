@@ -12,7 +12,7 @@ dependencies {
   compileOnly(libs.brigadier)
   implementation(libs.adventurePlatformBukkit)
   implementation(libs.adventureTextSerializerPlain)
-  implementation(libs.paperLib)
+  implementation(libs.legacyPluginBase)
   implementation(libs.bstatsBukkit)
   implementation(libs.slf4jJdk14)
 
@@ -30,7 +30,6 @@ tasks {
       "org.slf4j",
       "org.incendo.cloud",
       "io.leangen.geantyref",
-      "io.papermc.lib",
       "net.kyori",
       "org.spongepowered.configurate",
       "me.lucko.commodore",

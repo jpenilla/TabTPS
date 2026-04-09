@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.paper.util;
 
-import io.papermc.lib.PaperLib;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -31,6 +30,9 @@ import java.util.Objects;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import xyz.jpenilla.pluginbase.legacy.environment.Environment;
+import xyz.jpenilla.pluginbase.legacy.environment.MinecraftRelease;
+import xyz.jpenilla.pluginbase.legacy.environment.MinecraftVersion;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
 import static xyz.jpenilla.tabtps.paper.util.Crafty.findField;
@@ -67,27 +69,25 @@ public final class SpigotReflection {
 
   private static @NonNull Field tickTimesField() {
     final String tickTimes;
-    final int ver = PaperLib.getMinecraftVersion();
-    if (ver < 13) {
+    final MinecraftVersion version = Environment.currentMinecraft();
+    if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(13, 0))) {
       tickTimes = "h";
-    } else if (ver == 13) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(14, 0))) {
       tickTimes = "d";
-    } else if (ver == 14 || ver == 15) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(16, 0))) {
       tickTimes = "f";
-    } else if (ver == 16) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(17, 0))) {
       tickTimes = "h";
-    } else if (ver == 17) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(18, 0))) {
       tickTimes = "n";
-    } else if (ver == 18) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(19, 0))) {
       tickTimes = "o";
-    } else if (ver == 19 || ver == 20 && PaperLib.getMinecraftPatchVersion() < 3) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(20, 3))) {
       tickTimes = "k";
-    } else if (ver == 20 && PaperLib.getMinecraftPatchVersion() < 6) {
+    } else if (version.isOlderThan(MinecraftRelease.oldSchemaRelease(20, 6))) {
       tickTimes = "ac";
-    } else if (ver == 20 || ver == 21) {
-      tickTimes = "ab";
     } else {
-      throw new IllegalStateException("Don't know tickTimes field name!");
+      tickTimes = "ab";
     }
     return needField(MinecraftServer_class, tickTimes);
   }
