@@ -71,10 +71,10 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
       return;
     }
     this.audiences = BukkitAudiences.create(this);
-    if (PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()) {
-      this.tickTimeService = new SpigotTickTimeService();
-    } else {
+    if (this.supportsBukkitTickApi()) {
       this.tickTimeService = new PaperTickTimeService();
+    } else {
+      this.tickTimeService = new SpigotTickTimeService();
     }
 
     this.setupCommandManager();
@@ -154,6 +154,16 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
       Class.forName("org.bukkit.entity.CopperGolem");
       return true;
     } catch (final ClassNotFoundException e) {
+      return false;
+    }
+  }
+
+  private boolean supportsBukkitTickApi() {
+    try {
+      this.getServer().getTPS();
+      this.getServer().getAverageTickTime();
+      return true;
+    } catch (final LinkageError | UnsupportedOperationException ex) {
       return false;
     }
   }
