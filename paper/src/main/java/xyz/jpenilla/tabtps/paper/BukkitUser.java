@@ -40,6 +40,9 @@ import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
 @DefaultQualifier(NonNull.class)
 public final class BukkitUser extends AbstractUser<Player> {
+  private static final MinecraftRelease MINECRAFT_1_16_0 = MinecraftRelease.oldSchemaRelease(16, 0);
+  private static final MinecraftRelease MINECRAFT_1_17_0 = MinecraftRelease.oldSchemaRelease(17, 0);
+
   private final BukkitAudiences audiences;
   private @MonotonicNonNull Audience audience;
 
@@ -69,10 +72,10 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public int ping() {
-    if (Environment.currentMinecraft().isAtLeast(MinecraftRelease.oldSchemaRelease(17, 0))) {
+    if (Environment.currentMinecraft().isAtLeast(MINECRAFT_1_17_0)) {
       return this.base().getPing();
     }
-    return Environment.currentMinecraft().isOlderThan(MinecraftRelease.oldSchemaRelease(16, 0)) || !Environment.paper()
+    return Environment.currentMinecraft().isOlderThan(MINECRAFT_1_16_0) || !Environment.paper()
       ? spigotReflection().ping(this.base())
       : this.base().spigot().getPing();
   }
