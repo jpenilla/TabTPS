@@ -23,8 +23,10 @@
  */
 package xyz.jpenilla.tabtps.paper;
 
+import io.papermc.lib.PaperLib;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.logging.Level;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
@@ -55,6 +57,7 @@ import xyz.jpenilla.tabtps.paper.service.SpigotTickTimeService;
 
 import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_13;
 import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_15;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_16;
 
 public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;
@@ -66,6 +69,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
 
   @Override
   public void onEnable() {
+    PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
     if (!Environment.paper()) {
       this.logger.warn("Spigot detected. Paper is recommended.");
@@ -75,10 +79,10 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
       return;
     }
     this.audiences = BukkitAudiences.create(this);
-    if (this.supportsBukkitTickApi()) {
-      this.tickTimeService = new PaperTickTimeService();
-    } else {
+    if (Environment.currentMinecraft().isOlderThan(v1_16) || !Environment.paper()) {
       this.tickTimeService = new SpigotTickTimeService();
+    } else {
+      this.tickTimeService = new PaperTickTimeService();
     }
 
     this.setupCommandManager();
@@ -158,16 +162,6 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
       Class.forName("org.bukkit.entity.CopperGolem");
       return true;
     } catch (final ClassNotFoundException e) {
-      return false;
-    }
-  }
-
-  private boolean supportsBukkitTickApi() {
-    try {
-      this.getServer().getTPS();
-      this.getServer().getAverageTickTime();
-      return true;
-    } catch (final LinkageError | UnsupportedOperationException ex) {
       return false;
     }
   }
