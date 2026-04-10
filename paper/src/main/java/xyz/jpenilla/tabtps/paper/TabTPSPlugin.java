@@ -71,9 +71,6 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   public void onEnable() {
     PaperLib.suggestPaper(this, Level.WARNING);
     this.logger = LoggerFactory.getLogger(this.getLogger().getName());
-    if (!Environment.paper()) {
-      this.logger.warn("Spigot detected. Paper is recommended.");
-    }
     if (this.craftBukkit()) {
       this.getServer().getPluginManager().disablePlugin(this);
       return;
