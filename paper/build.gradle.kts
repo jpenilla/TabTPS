@@ -41,6 +41,7 @@ tasks {
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
     }
+    relocate("xyz.jpenilla.pluginbase.legacy", "${rootProject.group}.${rootProject.name.lowercase()}.lib.xyz.jpenilla.pluginbase.legacy")
     manifest {
       attributes("paperweight-mappings-namespace" to "mojang")
     }
