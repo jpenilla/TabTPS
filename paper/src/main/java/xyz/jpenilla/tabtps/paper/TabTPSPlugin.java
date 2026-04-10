@@ -76,7 +76,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
       return;
     }
     this.audiences = BukkitAudiences.create(this);
-    if (Environment.currentMinecraft().isOlderThan(v1_16) || !Environment.paper()) {
+    if (Environment.currentMinecraft().isOlderThan(v1_16) || !isPaperServer()) {
       this.tickTimeService = new SpigotTickTimeService();
     } else {
       this.tickTimeService = new PaperTickTimeService();
@@ -164,7 +164,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   private void registerCommands() {
-    if (Environment.currentMinecraft().isAtLeast(v1_15) && Environment.paper()) {
+    if (Environment.currentMinecraft().isAtLeast(v1_15) && isPaperServer()) {
       if (hasCopperGolem()) {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
       } else {
@@ -211,17 +211,16 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
     return this.logger;
   }
 
-  private static boolean classExists(final String fullyQualifiedName) {
+  static boolean isPaperServer() {
     try {
-      Class.forName(fullyQualifiedName);
-      return true;
-    } catch (final ClassNotFoundException e) {
-      return false;
+      return Environment.paper();
+    } catch (final Throwable e) {
+      return PaperLib.isPaper();
     }
   }
 
   private boolean craftBukkit() {
-    if (!classExists("org.spigotmc.SpigotConfig")) {
+    if (!PaperLib.isSpigot()) {
       this.logger.error("==========================================");
       this.logger.error("TabTPS is not compatible with CraftBukkit.");
       this.logger.error("You must use either Spigot or later forks");
