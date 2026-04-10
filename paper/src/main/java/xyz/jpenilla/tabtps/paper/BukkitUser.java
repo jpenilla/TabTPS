@@ -73,7 +73,7 @@ public final class BukkitUser extends AbstractUser<Player> {
     if (Environment.currentMinecraft().isAtLeast(v1_17)) {
       return this.base().getPing();
     }
-    return Environment.currentMinecraft().isOlderThan(v1_16) || !TabTPSPlugin.isPaperServer()
+    return Environment.currentMinecraft().isOlderThan(v1_16) || !Environment.paper()
       ? spigotReflection().ping(this.base())
       : this.base().spigot().getPing();
   }

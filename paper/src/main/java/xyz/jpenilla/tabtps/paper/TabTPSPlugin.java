@@ -76,7 +76,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
       return;
     }
     this.audiences = BukkitAudiences.create(this);
-    if (Environment.currentMinecraft().isOlderThan(v1_16) || !isPaperServer()) {
+    if (Environment.currentMinecraft().isOlderThan(v1_16) || !Environment.paper()) {
       this.tickTimeService = new SpigotTickTimeService();
     } else {
       this.tickTimeService = new PaperTickTimeService();
@@ -164,7 +164,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   private void registerCommands() {
-    if (Environment.currentMinecraft().isAtLeast(v1_15) && isPaperServer()) {
+    if (Environment.currentMinecraft().isAtLeast(v1_15) && Environment.paper()) {
       if (hasCopperGolem()) {
         TickInfoCommand.withFormatter(this.tabTPS, this.tabTPS.commands(), new PaperTickInfoCommandFormatter()).register();
       } else {
@@ -209,10 +209,6 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   @Override
   public @NonNull Logger logger() {
     return this.logger;
-  }
-
-  static boolean isPaperServer() {
-    return Environment.paper();
   }
 
   private boolean craftBukkit() {
