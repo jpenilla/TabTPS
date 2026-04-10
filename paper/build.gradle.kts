@@ -13,6 +13,7 @@ dependencies {
   implementation(libs.adventurePlatformBukkit)
   implementation(libs.adventureTextSerializerPlain)
   implementation(libs.paperLib)
+  implementation(libs.legacyPluginBase)
   implementation(libs.bstatsBukkit)
   implementation(libs.slf4jJdk14)
 
@@ -36,7 +37,7 @@ tasks {
       "me.lucko.commodore",
       "org.checkerframework",
       "org.bstats",
-      "xyz.jpenilla.pluginbase"
+      "xyz.jpenilla.pluginbase.legacy",
     ).forEach { pkg ->
       relocate(pkg, "${rootProject.group}.${rootProject.name.lowercase()}.lib.$pkg")
     }

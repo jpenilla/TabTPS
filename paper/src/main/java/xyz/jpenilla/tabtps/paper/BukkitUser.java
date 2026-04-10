@@ -23,7 +23,6 @@
  */
 package xyz.jpenilla.tabtps.paper;
 
-import io.papermc.lib.PaperLib;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -31,10 +30,13 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import xyz.jpenilla.pluginbase.legacy.environment.Environment;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_16;
+import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_17;
 import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
 @DefaultQualifier(NonNull.class)
@@ -68,10 +70,10 @@ public final class BukkitUser extends AbstractUser<Player> {
 
   @Override
   public int ping() {
-    if (PaperLib.getMinecraftVersion() >= 17) {
+    if (Environment.currentMinecraft().isAtLeast(v1_17)) {
       return this.base().getPing();
     }
-    return PaperLib.getMinecraftVersion() < 16 || !PaperLib.isPaper()
+    return Environment.currentMinecraft().isOlderThan(v1_16) || !Environment.paper()
       ? spigotReflection().ping(this.base())
       : this.base().spigot().getPing();
   }
