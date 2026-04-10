@@ -212,11 +212,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   static boolean isPaperServer() {
-    try {
-      return Environment.paper();
-    } catch (final Throwable e) {
-      return PaperLib.isPaper();
-    }
+    return Environment.paper();
   }
 
   private boolean craftBukkit() {
