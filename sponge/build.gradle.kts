@@ -96,7 +96,7 @@ tabTPSPlatform {
 publishMods.modrinth {
   modLoaders.add("sponge")
   minecraftVersions.addAll(
-    "26.1.1",
+    "26.1.2",
   )
 }
 
@@ -104,7 +104,7 @@ configurations.spongeRuntime {
   resolutionStrategy {
     eachDependency {
       if (target.name == "spongevanilla") {
-        useVersion("26.1-19.+")
+        useVersion("26.1.2-19.+")
       }
     }
   }
