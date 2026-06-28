@@ -50,6 +50,9 @@ tasks {
 
   runServer {
     minecraftVersion(mcVer)
+    javaLauncher.set(project.javaToolchains.launcherFor {
+      languageVersion.set(JavaLanguageVersion.of(25))
+    })
   }
 
   mapOf(
@@ -76,6 +79,7 @@ tasks {
       "1.21.11",
     ),
     25 to setOf(
+      "26.1.2",
       mcVer,
     )
   ).forEach { (javaVersion, minecraftVersions) ->

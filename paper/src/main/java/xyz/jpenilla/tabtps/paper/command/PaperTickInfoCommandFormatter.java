@@ -50,10 +50,11 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
   @SuppressWarnings({"unchecked", "rawtypes"})
   public PaperTickInfoCommandFormatter() {
     try {
-      final Class<?> _TickData = Class.forName("ca.spottedleaf.moonrise.common.time.TickData");
-      final Class<?> _TickTime = Class.forName("ca.spottedleaf.moonrise.common.time.TickTime");
-      final Class<?> _TickReportData = Class.forName("ca.spottedleaf.moonrise.common.time.TickData$TickReportData");
-      final Class<?> _SegmentedAverage = Class.forName("ca.spottedleaf.moonrise.common.time.TickData$SegmentedAverage");
+      final String tickDataPackage = tickDataPackage();
+      final Class<?> _TickData = Class.forName(tickDataPackage + ".TickData");
+      final Class<?> _TickTime = Class.forName(tickDataPackage + ".TickTime");
+      final Class<?> _TickReportData = Class.forName(tickDataPackage + ".TickData$TickReportData");
+      final Class<?> _SegmentedAverage = Class.forName(tickDataPackage + ".TickData$SegmentedAverage");
       final Class<?> _TickRateManager = Class.forName("net.minecraft.server.ServerTickRateManager");
       final Class<?> _MinecraftServer = Class.forName("net.minecraft.server.MinecraftServer");
 
@@ -79,6 +80,21 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
       this.tickTimesFields = tickTimesFieldsList.toArray(new Pair[0]);
     } catch (final ReflectiveOperationException e) {
       throw new IllegalStateException("Failed to initialize", e);
+    }
+  }
+
+  private static String tickDataPackage() throws ClassNotFoundException {
+    try {
+      Class.forName("ca.spottedleaf.common.time.TickData");
+      return "ca.spottedleaf.common.time";
+    } catch (final ClassNotFoundException newPackageNotFound) {
+      try {
+        Class.forName("ca.spottedleaf.moonrise.common.time.TickData");
+        return "ca.spottedleaf.moonrise.common.time";
+      } catch (final ClassNotFoundException oldPackageNotFound) {
+        newPackageNotFound.addSuppressed(oldPackageNotFound);
+        throw newPackageNotFound;
+      }
     }
   }
 
