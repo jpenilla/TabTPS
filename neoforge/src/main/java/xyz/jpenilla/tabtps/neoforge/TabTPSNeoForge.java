@@ -61,7 +61,6 @@ import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.common.util.Constants;
-import xyz.jpenilla.tabtps.common.util.TranslatableProvider;
 import xyz.jpenilla.tabtps.common.util.UpdateChecker;
 import xyz.jpenilla.tabtps.neoforge.command.NeoForgeConsoleCommander;
 import xyz.jpenilla.tabtps.neoforge.command.NeoForgePingCommand;
@@ -83,8 +82,6 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
       throw new IllegalStateException("Cannot create a second instance of " + this.getClass().getName());
     }
     instance = this;
-
-    TranslatableProvider.MOD_JAR_OVERRIDE = modContainer.getModInfo().getOwningFile().getFile().getFilePath();
 
     this.userService = new NeoForgeUserService(this); // todo store in level container?
 

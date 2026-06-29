@@ -27,6 +27,9 @@ dependencyResolutionManagement {
 pluginManagement {
   repositories {
     gradlePluginPortal()
+    mavenCentral {
+      mavenContent { releasesOnly() }
+    }
     maven("https://maven.fabricmc.net/")
     maven("https://repo.spongepowered.org/repository/maven-public/")
     maven("https://repo.jpenilla.xyz/snapshots/")

@@ -4,11 +4,18 @@ plugins {
   id("tabtps.base")
   alias(libs.plugins.blossom)
   alias(libs.plugins.localization)
+  alias(libs.plugins.writeLocaleList)
 }
 
 localization {
   templateType.set(TemplateType.JAVA)
   templateFile.set(projectDir.resolve("src/main/message-templates/messages.java.tmpl"))
+}
+
+writeLocaleList {
+  registerBundle("xyz.jpenilla.tabtps.common.messages") {
+    dir.set(layout.projectDirectory.dir("src/main/messages/xyz/jpenilla/tabtps/common"))
+  }
 }
 
 tasks.jar {

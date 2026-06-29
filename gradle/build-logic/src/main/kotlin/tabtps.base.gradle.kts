@@ -14,7 +14,7 @@ description = rootProject.description
 
 indra {
   javaVersions {
-    target(8)
+    target(17)
     minimumToolchain(21)
   }
   github("jpenilla", "TabTPS")

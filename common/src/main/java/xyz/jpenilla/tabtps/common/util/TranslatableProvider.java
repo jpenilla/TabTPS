@@ -23,41 +23,32 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
-import com.google.common.collect.ImmutableSet;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
+import net.kyori.adventure.translation.TranslationStore;
 import net.kyori.adventure.translation.Translator;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.Style.style;
 
@@ -65,7 +56,7 @@ import static net.kyori.adventure.text.format.Style.style;
 public final class TranslatableProvider implements ComponentLike {
   private static final Logger LOGGER = LoggerFactory.getLogger(TranslatableProvider.class);
   private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-  private static final String PROPERTIES_EXTENSION = ".properties";
+  private static final String LOCALES_LIST_SUFFIX = "-locales.list";
 
   private final String key;
 
@@ -100,7 +91,7 @@ public final class TranslatableProvider implements ComponentLike {
     return translatable(this.key, style(color, decoration), args);
   }
 
-  public @NonNull String key() {
+  public String key() {
     return this.key;
   }
 
@@ -113,50 +104,25 @@ public final class TranslatableProvider implements ComponentLike {
   }
 
   public static void loadBundle(final String bundleName) {
-    final TranslationRegistry registry = TranslationRegistry.create(Key.key("tabtps", bundleName));
+    final TranslationStore<MessageFormat> registry = TranslationStore.messageFormat(Key.key("tabtps", bundleName));
     registry.defaultLocale(DEFAULT_LOCALE);
-
-    registerAll(
-      registry,
-      availableLocales(bundleName),
-      bundleName,
-      false
-    );
-
+    registerAll(registry, availableLocales(bundleName), bundleName);
     GlobalTranslator.translator().addSource(registry);
   }
 
-  private static final boolean HAS_LIST_OF;
-
-  static {
-    boolean hasListOf;
-    try {
-      List.class.getDeclaredMethod("of");
-      hasListOf = true;
-    } catch (final ReflectiveOperationException e) {
-      hasListOf = false;
-    }
-    HAS_LIST_OF = hasListOf;
-  }
-
-  private static void registerAll(final TranslationRegistry registry, final Set<Locale> locales, final String bundleName, final boolean escapeSingleQuotes) {
+  private static void registerAll(
+    final TranslationStore<MessageFormat> registry,
+    final Set<Locale> locales,
+    final String bundleName
+  ) {
     for (final Locale locale : locales) {
-      final ResourceBundle bundle;
-      // custom Control not supported in named modules, so don't try and use one where it's not needed (JRE 9+)
-      if (HAS_LIST_OF) {
-        bundle = PropertyResourceBundle.getBundle(bundleName, locale, TranslatableProvider.class.getClassLoader());
-      } else {
-        bundle = PropertyResourceBundle.getBundle(bundleName, locale, TranslatableProvider.class.getClassLoader(), UTF8ResourceBundleControl.get());
-      }
+      final ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale, TranslatableProvider.class.getClassLoader());
       for (final String key : bundle.keySet()) {
         try {
           registry.register(
             formatKey(bundleName, key),
             locale,
-            new MessageFormat(
-              escapeSingleQuotes ? TranslationRegistry.SINGLE_QUOTE_PATTERN.matcher(bundle.getString(key)).replaceAll("''") : bundle.getString(key),
-              locale
-            )
+            new MessageFormat(bundle.getString(key), locale)
           );
         } catch (final IllegalArgumentException | MissingResourceException | ClassCastException ex) {
           LOGGER.warn("Failed to load translation for key '{}' from bundle '{}' with the '{}' locale.", key, bundleName, locale.getDisplayName(), ex);
@@ -165,72 +131,36 @@ public final class TranslatableProvider implements ComponentLike {
     }
   }
 
-  public static Path MOD_JAR_OVERRIDE = null;
-
-  private static Path modJar() throws URISyntaxException, MalformedURLException {
-    if (MOD_JAR_OVERRIDE != null) {
-      return MOD_JAR_OVERRIDE;
-    }
-
-    URL sourceUrl = TranslatableProvider.class.getProtectionDomain().getCodeSource().getLocation();
-    // Some class loaders give the full url to the class, some give the URL to its jar.
-    // We want the containing jar, so we will unwrap jar-schema code sources.
-    if (sourceUrl.getProtocol().equals("jar")) {
-      final int exclamationIdx = sourceUrl.getPath().lastIndexOf('!');
-      if (exclamationIdx != -1) {
-        sourceUrl = new URL(sourceUrl.getPath().substring(0, exclamationIdx));
-      }
-    }
-    return Paths.get(sourceUrl.toURI());
-  }
-
   private static Set<Locale> availableLocales(final String bundleName) {
     final String bundlePath = bundleName.replace('.', '/');
-    try {
-      // If this were meant to be more generic we would pass in the ClassLoader and use its code source here...
-      final Path codeSource = modJar();
+    final Set<Locale> known = new LinkedHashSet<>();
+    known.add(DEFAULT_LOCALE);
 
-      final Set<Locale> known = new HashSet<>();
-
-      walkJar(codeSource, stream -> stream
-        .filter(Files::isRegularFile)
-        .map(Path::toString)
-        .filter(it -> it.endsWith(PROPERTIES_EXTENSION))
-        .map(it -> it.replace('\\', '/'))
-        .map(it -> it.startsWith("/") ? it.substring(1) : it)
-        .filter(it -> it.startsWith(bundlePath))
-        .map(it -> it.substring(bundlePath.length()).replaceFirst(PROPERTIES_EXTENSION, ""))
-        .filter(it -> it.isEmpty() || it.startsWith("_"))
-        .map(string -> {
-          if (string.isEmpty()) {
-            return DEFAULT_LOCALE;
-          } else {
-            return requireNonNull(Translator.parseLocale(string.substring(1)), "Could not parse locale from: '" + string.substring(1) + "'");
+    final String localeListPath = bundlePath + LOCALES_LIST_SUFFIX;
+    try (final InputStream stream = TranslatableProvider.class.getClassLoader().getResourceAsStream(localeListPath)) {
+      if (stream == null) {
+        LOGGER.warn("Failed to discover available locales for bundle '{}': resource '{}' was not found.", bundleName, localeListPath);
+        return known;
+      }
+      try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+        String localeString;
+        while ((localeString = reader.readLine()) != null) {
+          localeString = localeString.trim();
+          if (localeString.isEmpty()) {
+            continue;
           }
-        })
-        .forEach(known::add));
-
-      return known;
-    } catch (final URISyntaxException | IOException ex) {
+          final @Nullable Locale locale = Translator.parseLocale(localeString);
+          if (locale == null) {
+            LOGGER.warn("Could not parse locale from '{}'; skipping.", localeString);
+            continue;
+          }
+          known.add(locale);
+        }
+      }
+    } catch (final IOException ex) {
       LOGGER.warn("Failed to discover available locales for bundle '{}'.", bundleName, ex);
-      return ImmutableSet.of(DEFAULT_LOCALE);
     }
-  }
 
-  private static void walkJar(final Path jarPath, final Consumer<Stream<Path>> user) throws IOException {
-    if (Files.isDirectory(jarPath)) {
-      try (final Stream<Path> stream = Files.walk(jarPath)) {
-        user.accept(stream.map(it -> it.relativize(jarPath)));
-      }
-      return;
-    }
-    try (final FileSystem jar = FileSystems.newFileSystem(jarPath, TranslatableProvider.class.getClassLoader())) {
-      final Path root = jar.getRootDirectories()
-        .iterator()
-        .next();
-      try (final Stream<Path> stream = Files.walk(root)) {
-        user.accept(stream);
-      }
-    }
+    return known;
   }
 }
