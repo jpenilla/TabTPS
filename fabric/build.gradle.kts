@@ -1,3 +1,5 @@
+import me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment
+
 plugins {
   id("xyz.jpenilla.quiet-fabric-loom")
   id("tabtps.platform.shadow")
@@ -66,6 +68,7 @@ tabTPSPlatform {
 }
 
 publishMods.modrinth {
+  environment = ModrinthEnvironment.SERVER_ONLY
   modLoaders.add("fabric")
   minecraftVersions.add(minecraftVersion)
 }

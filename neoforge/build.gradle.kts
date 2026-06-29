@@ -1,3 +1,4 @@
+import me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment
 import net.neoforged.moddevgradle.internal.RunGameTask
 
 plugins {
@@ -95,6 +96,7 @@ tabTPSPlatform {
 }
 
 publishMods.modrinth {
+  environment = ModrinthEnvironment.SERVER_ONLY
   modLoaders.add("neoforge")
   minecraftVersions.add(minecraftVersion)
 }
