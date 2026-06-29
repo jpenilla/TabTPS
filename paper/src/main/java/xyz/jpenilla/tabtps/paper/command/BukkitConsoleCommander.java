@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.paper.command;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.CommandSender;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 
 public final class BukkitConsoleCommander implements ConsoleCommander {

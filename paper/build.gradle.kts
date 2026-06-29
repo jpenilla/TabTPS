@@ -35,7 +35,6 @@ tasks {
       "net.kyori",
       "org.spongepowered.configurate",
       "me.lucko.commodore",
-      "org.checkerframework",
       "org.bstats",
       "xyz.jpenilla.pluginbase.legacy",
     ).forEach { pkg ->

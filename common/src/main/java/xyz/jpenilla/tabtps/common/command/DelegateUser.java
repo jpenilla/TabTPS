@@ -26,8 +26,8 @@ package xyz.jpenilla.tabtps.common.command;
 import java.util.UUID;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.User;
 
 public final class DelegateUser<U, C> implements User<U> {

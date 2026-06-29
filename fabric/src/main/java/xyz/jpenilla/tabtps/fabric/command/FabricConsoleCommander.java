@@ -26,11 +26,10 @@ package xyz.jpenilla.tabtps.fabric.command;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.kyori.adventure.audience.Audience;
 import net.minecraft.commands.CommandSourceStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public record FabricConsoleCommander(CommandSourceStack commandSourceStack) implements ConsoleCommander {
   @Override
   public boolean hasPermission(final String permissionString) {

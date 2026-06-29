@@ -28,14 +28,13 @@ import java.util.Collections;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.paper.BukkitUser;
 import xyz.jpenilla.tabtps.paper.TabTPSPlugin;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class BukkitUserService extends UserService<Player, BukkitUser> {
   public BukkitUserService(final TabTPSPlugin plugin) {
     super(plugin);

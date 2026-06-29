@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.module;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 

@@ -32,8 +32,8 @@ import java.util.function.LongPredicate;
 import java.util.stream.LongStream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.type.tuple.Pair;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.config.Theme;
 

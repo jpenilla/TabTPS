@@ -28,8 +28,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
 import xyz.jpenilla.pluginbase.legacy.environment.MinecraftVersion;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
@@ -103,11 +103,11 @@ public final class SpigotReflection {
   }
 
   private static @Nullable Field pingField() {
-    final @Nullable Field mojang = findField(ServerPlayer_class, "latency");
+    final Field mojang = findField(ServerPlayer_class, "latency");
     if (mojang != null) {
       return mojang;
     }
-    final @Nullable Field spigotNamedOld = findField(ServerPlayer_class, "ping");
+    final Field spigotNamedOld = findField(ServerPlayer_class, "ping");
     return spigotNamedOld;
   }
 

@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.sponge.command;
 
 import net.kyori.adventure.audience.Audience;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.api.command.CommandCause;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 

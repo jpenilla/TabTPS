@@ -24,9 +24,9 @@
 package xyz.jpenilla.tabtps.neoforge.command;
 
 import java.util.stream.Collectors;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.minecraft.modded.data.MultiplePlayerSelector;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;

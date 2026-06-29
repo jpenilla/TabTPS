@@ -29,8 +29,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.type.tuple.Pair;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 

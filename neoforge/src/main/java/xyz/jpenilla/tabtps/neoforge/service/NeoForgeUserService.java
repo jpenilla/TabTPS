@@ -27,13 +27,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.neoforge.NeoForgeUser;
 import xyz.jpenilla.tabtps.neoforge.TabTPSNeoForge;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class NeoForgeUserService extends UserService<ServerPlayer, NeoForgeUser> {
   private final TabTPSNeoForge tabTPSNeoForge;
 

@@ -28,11 +28,10 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.kyori.adventure.text.Component;
 import net.minecraft.server.level.ServerPlayer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class FabricUser extends AbstractUser<ServerPlayer> {
   private final TabTPSFabric tabTPSFabric;
 

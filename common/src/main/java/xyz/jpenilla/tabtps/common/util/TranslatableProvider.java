@@ -43,16 +43,14 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationStore;
 import net.kyori.adventure.translation.Translator;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static net.kyori.adventure.text.Component.translatable;
 import static net.kyori.adventure.text.format.Style.style;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class TranslatableProvider implements ComponentLike {
   private static final Logger LOGGER = LoggerFactory.getLogger(TranslatableProvider.class);
   private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
@@ -149,7 +147,7 @@ public final class TranslatableProvider implements ComponentLike {
           if (localeString.isEmpty()) {
             continue;
           }
-          final @Nullable Locale locale = Translator.parseLocale(localeString);
+          final Locale locale = Translator.parseLocale(localeString);
           if (locale == null) {
             LOGGER.warn("Could not parse locale from '{}'; skipping.", localeString);
             continue;

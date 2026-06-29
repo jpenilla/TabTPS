@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.common.service;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface TickTimeService {
   double averageMspt();

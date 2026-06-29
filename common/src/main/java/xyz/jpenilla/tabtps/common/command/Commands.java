@@ -24,9 +24,9 @@
 package xyz.jpenilla.tabtps.common.command;
 
 import java.util.function.Function;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
 public final class Commands {

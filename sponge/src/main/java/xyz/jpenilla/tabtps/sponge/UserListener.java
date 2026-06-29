@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.sponge;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;

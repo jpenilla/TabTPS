@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.paper.service;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
 import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;

@@ -38,15 +38,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.incendo.cloud.type.tuple.Pair;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPSPlatform;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public abstract class UserService<P, U extends User<P>> {
   private static final Gson GSON = new GsonBuilder()
     .setPrettyPrinting()

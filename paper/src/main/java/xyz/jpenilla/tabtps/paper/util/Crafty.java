@@ -29,7 +29,6 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import org.bukkit.Bukkit;
-import org.checkerframework.common.reflection.qual.ForName;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -89,7 +88,6 @@ public final class Crafty {
    * @param className a class name
    * @return a class or {@code null} if not found
    */
-  @ForName
   public static @Nullable Class<?> findClass(final @NonNull String className) {
     try {
       return Class.forName(className);
@@ -105,7 +103,6 @@ public final class Crafty {
    * @return a class
    * @throws NullPointerException if the class was not found
    */
-  @ForName
   public static @NonNull Class<?> needCraftClass(final @NonNull String className) {
     return requireNonNull(findCraftClass(className), "Could not find org.bukkit.craftbukkit class " + className);
   }
@@ -232,7 +229,6 @@ public final class Crafty {
    * @param className a class name, without the {@code org.bukkit.craftbukkit} prefix
    * @return a class or {@code null} if not found
    */
-  @ForName
   public static @Nullable Class<?> findCraftClass(final @NonNull String className) {
     final String craftClassName = findCraftClassName(className);
     if (craftClassName == null) {
@@ -258,7 +254,6 @@ public final class Crafty {
    * @param className a class name, without the {@code net.minecraft.server} prefix
    * @return a class name or {@code null} if not found
    */
-  @ForName
   public static @Nullable Class<?> findNmsClass(final @NonNull String className) {
     final String nmsClassName = findNmsClassName(className);
     if (nmsClassName == null) {

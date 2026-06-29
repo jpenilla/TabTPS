@@ -23,7 +23,7 @@
  */
 package xyz.jpenilla.tabtps.sponge.access;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.util.TickTimes;
 
 public interface MinecraftServerAccess {

@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.BooleanSupplier;
 import net.minecraft.server.MinecraftServer;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;

@@ -27,13 +27,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.fabric.FabricUser;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class FabricUserService extends UserService<ServerPlayer, FabricUser> {
   private final TabTPSFabric tabTPSFabric;
 

@@ -1,4 +1,6 @@
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 
 plugins {
@@ -19,6 +21,12 @@ indra {
   }
   github("jpenilla", "TabTPS")
   mitLicense()
+}
+
+val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+dependencies {
+  add("compileOnlyApi", libs.findLibrary("jspecify").get())
 }
 
 tasks {

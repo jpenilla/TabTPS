@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.util;
 
 import java.util.concurrent.Future;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class RunnableFuturePair<R extends Runnable> {
   private final R runnable;

@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.paper.service;
 
 import org.bukkit.Bukkit;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
 public final class PaperTickTimeService implements TickTimeService {

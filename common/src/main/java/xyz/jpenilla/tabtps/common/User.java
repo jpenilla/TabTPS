@@ -27,15 +27,14 @@ import io.leangen.geantyref.TypeToken;
 import java.util.List;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public interface User<P> extends Commander {
   TypeToken<User<?>> TYPE = new TypeToken<User<?>>() {};
 

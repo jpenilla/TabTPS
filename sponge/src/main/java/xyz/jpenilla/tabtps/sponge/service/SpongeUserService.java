@@ -25,15 +25,14 @@ package xyz.jpenilla.tabtps.sponge.service;
 
 import java.util.Collection;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import xyz.jpenilla.tabtps.common.service.UserService;
 import xyz.jpenilla.tabtps.sponge.SpongeUser;
 import xyz.jpenilla.tabtps.sponge.TabTPSPlugin;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class SpongeUserService extends UserService<ServerPlayer, SpongeUser> {
   private final TabTPSPlugin plugin;
 

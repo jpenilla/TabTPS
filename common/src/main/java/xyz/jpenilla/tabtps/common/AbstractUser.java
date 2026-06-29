@@ -27,15 +27,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.config.PluginSettings;
 import xyz.jpenilla.tabtps.common.display.DisplayHandler;
 import xyz.jpenilla.tabtps.common.display.task.ActionBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.BossBarDisplayTask;
 import xyz.jpenilla.tabtps.common.display.task.TabDisplayTask;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public abstract class AbstractUser<P> implements User<P> {
   private final P base;
   private final UUID uuid;

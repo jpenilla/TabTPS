@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.common.config;
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationOptions;

@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface Module {
   @NonNull Component label();

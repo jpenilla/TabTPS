@@ -26,13 +26,12 @@ package xyz.jpenilla.tabtps.sponge;
 import java.lang.reflect.Field;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class SpongeUser extends AbstractUser<ServerPlayer> {
   private SpongeUser(final TabTPS tabTPS, final ServerPlayer player) {
     super(tabTPS, player, player.uniqueId());

@@ -23,8 +23,8 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.CommandManager;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
 public abstract class TabTPSCommand {

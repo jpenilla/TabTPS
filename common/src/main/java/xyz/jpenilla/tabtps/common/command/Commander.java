@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.command;
 
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface Commander extends ForwardingAudience.Single {
   boolean hasPermission(@NonNull String permissionString);

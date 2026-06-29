@@ -27,11 +27,10 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.permissions.Permission;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public record NeoForgeConsoleCommander(CommandSourceStack commandSourceStack) implements ConsoleCommander {
   @Override
   public boolean hasPermission(final String permissionString) {

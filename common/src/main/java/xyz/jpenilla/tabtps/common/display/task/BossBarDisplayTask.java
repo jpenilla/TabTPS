@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.display.task;
 
 import net.kyori.adventure.bossbar.BossBar;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;

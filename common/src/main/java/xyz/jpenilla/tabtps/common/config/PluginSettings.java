@@ -29,8 +29,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 

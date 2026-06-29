@@ -27,9 +27,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
 import xyz.jpenilla.tabtps.common.AbstractUser;
 import xyz.jpenilla.tabtps.common.TabTPS;
@@ -39,10 +38,10 @@ import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_16
 import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_17;
 import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class BukkitUser extends AbstractUser<Player> {
   private final BukkitAudiences audiences;
-  private @MonotonicNonNull Audience audience;
+  private @Nullable Audience audience;
 
   private BukkitUser(final TabTPS tabTPS, final Player player) {
     super(tabTPS, player, player.getUniqueId());
