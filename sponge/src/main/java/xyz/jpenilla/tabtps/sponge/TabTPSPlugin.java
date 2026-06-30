@@ -33,7 +33,7 @@ import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.sponge.CloudInjectionModule;
 import org.incendo.cloud.sponge.SpongeCommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -55,6 +55,7 @@ import xyz.jpenilla.tabtps.sponge.command.SpongeTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.sponge.service.SpongeUserService;
 
 @Plugin("tabtps")
+@NullMarked
 public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUser> {
   private final Injector injector;
   private final PluginContainer pluginContainer;
@@ -67,10 +68,10 @@ public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUs
 
   @Inject
   public TabTPSPlugin(
-    final @NonNull PluginContainer pluginContainer,
-    @ConfigDir(sharedRoot = false) final @NonNull Path dataDirectory,
-    final @NonNull Injector injector,
-    final @NonNull Game game
+    final PluginContainer pluginContainer,
+    @ConfigDir(sharedRoot = false) final Path dataDirectory,
+    final Injector injector,
+    final Game game
   ) {
     final CloudInjectionModule<Commander> cloudModule = new CloudInjectionModule<>(
       Commander.class,
@@ -109,22 +110,22 @@ public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUs
   }
 
   @Override
-  public @NonNull UserService<ServerPlayer, SpongeUser> userService() {
+  public UserService<ServerPlayer, SpongeUser> userService() {
     return this.userService;
   }
 
   @Override
-  public @NonNull Path dataDirectory() {
+  public Path dataDirectory() {
     return this.dataDirectory;
   }
 
   @Override
-  public @NonNull TabTPS tabTPS() {
+  public TabTPS tabTPS() {
     return this.tabTPS;
   }
 
   @Override
-  public @NonNull TickTimeService tickTimeService() {
+  public TickTimeService tickTimeService() {
     return (TickTimeService) this.game.server();
   }
 
@@ -144,12 +145,12 @@ public final class TabTPSPlugin implements TabTPSPlatform<ServerPlayer, SpongeUs
   }
 
   @Override
-  public @NonNull Logger logger() {
+  public Logger logger() {
     return this.logger;
   }
 
   @Override
-  public @NonNull CommandManager<Commander> commandManager() {
+  public CommandManager<Commander> commandManager() {
     return this.commandManager;
   }
 }

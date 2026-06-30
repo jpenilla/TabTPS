@@ -36,7 +36,8 @@ import net.minecraft.world.entity.Entity;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.fabric.FabricServerCommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.tabtps.common.TabTPS;
@@ -53,14 +54,15 @@ import xyz.jpenilla.tabtps.fabric.command.FabricPingCommand;
 import xyz.jpenilla.tabtps.fabric.command.FabricTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.fabric.service.FabricUserService;
 
+@NullMarked
 public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<ServerPlayer, FabricUser> {
-  private static TabTPSFabric instance = null;
+  private static TabTPSFabric instance;
   private final Path configDirectory = FabricLoader.getInstance().getConfigDir().resolve("TabTPS");
   private final Logger logger = LoggerFactory.getLogger("TabTPS");
   private final FabricUserService userService;
   private final TabTPS tabTPS;
   private final FabricServerCommandManager<Commander> commandManager;
-  private MinecraftServer server;
+  private @Nullable MinecraftServer server;
 
   public TabTPSFabric() {
     if (instance != null) {
@@ -99,7 +101,7 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     this.logger.info("Done initializing TabTPS.");
   }
 
-  public static @NonNull TabTPSFabric get() {
+  public static TabTPSFabric get() {
     return instance;
   }
 
@@ -133,27 +135,27 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
     */
   }
 
-  public @NonNull MinecraftServer server() {
+  public MinecraftServer server() {
     return Objects.requireNonNull(this.server, "server is null");
   }
 
   @Override
-  public @NonNull UserService<ServerPlayer, FabricUser> userService() {
+  public UserService<ServerPlayer, FabricUser> userService() {
     return this.userService;
   }
 
   @Override
-  public @NonNull Path dataDirectory() {
+  public Path dataDirectory() {
     return this.configDirectory;
   }
 
   @Override
-  public @NonNull TabTPS tabTPS() {
+  public TabTPS tabTPS() {
     return this.tabTPS;
   }
 
   @Override
-  public @NonNull TickTimeService tickTimeService() {
+  public TickTimeService tickTimeService() {
     return (TickTimeService) this.server;
   }
 
@@ -173,12 +175,12 @@ public final class TabTPSFabric implements ModInitializer, TabTPSPlatform<Server
   }
 
   @Override
-  public @NonNull Logger logger() {
+  public Logger logger() {
     return this.logger;
   }
 
   @Override
-  public @NonNull FabricServerCommandManager<Commander> commandManager() {
+  public FabricServerCommandManager<Commander> commandManager() {
     return this.commandManager;
   }
 }

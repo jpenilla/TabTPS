@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.display.task;
 
 import net.kyori.adventure.text.Component;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
@@ -32,11 +32,12 @@ import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
 
+@NullMarked
 public final class ActionBarDisplayTask implements Display {
   private final User<?> user;
   private final ModuleRenderer renderer;
 
-  public ActionBarDisplayTask(final @NonNull TabTPS tabTPS, final @NonNull User<?> user, final DisplayConfig.@NonNull ActionBarSettings settings) {
+  public ActionBarDisplayTask(final TabTPS tabTPS, final User<?> user, final DisplayConfig.ActionBarSettings settings) {
     final Theme theme = tabTPS.configManager().theme(settings.theme());
     this.renderer = ModuleRenderer.builder()
       .modules(tabTPS, theme, user, settings.modules())

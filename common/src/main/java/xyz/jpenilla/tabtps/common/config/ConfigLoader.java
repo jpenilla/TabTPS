@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.common.config;
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationOptions;
@@ -36,6 +36,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import xyz.jpenilla.tabtps.common.util.Serializers;
 
+@NullMarked
 public class ConfigLoader<C> {
   private static final TypeSerializerCollection SERIALIZERS;
 
@@ -53,9 +54,9 @@ public class ConfigLoader<C> {
   private final ObjectMapper<C> mapper;
 
   public ConfigLoader(
-    final @NonNull Class<C> configClass,
-    final @NonNull Path configPath,
-    final @NonNull ConfigurationOptions options
+    final Class<C> configClass,
+    final Path configPath,
+    final ConfigurationOptions options
   ) {
     try {
       this.mapper = ObjectMapper.factory().get(configClass);
@@ -73,26 +74,26 @@ public class ConfigLoader<C> {
   }
 
   public ConfigLoader(
-    final @NonNull Class<C> configClass,
-    final @NonNull Path configPath,
-    final @NonNull UnaryOperator<ConfigurationOptions> options
+    final Class<C> configClass,
+    final Path configPath,
+    final UnaryOperator<ConfigurationOptions> options
   ) {
     this(configClass, configPath, options.apply(ConfigurationOptions.defaults()));
   }
 
   public ConfigLoader(
-    final @NonNull Class<C> configClass,
-    final @NonNull Path configPath
+    final Class<C> configClass,
+    final Path configPath
   ) {
     this(configClass, configPath, ConfigurationOptions.defaults());
   }
 
-  public @NonNull C load() throws ConfigurateException {
+  public C load() throws ConfigurateException {
     final CommentedConfigurationNode node = this.loader.load();
     return this.mapper.load(node);
   }
 
-  public void save(final @NonNull C config) throws ConfigurateException {
+  public void save(final C config) throws ConfigurateException {
     final CommentedConfigurationNode node = this.loader.createNode();
     this.mapper.save(config, node);
     this.loader.save(node);

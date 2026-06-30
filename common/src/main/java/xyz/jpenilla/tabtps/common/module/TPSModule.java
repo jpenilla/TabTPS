@@ -24,27 +24,28 @@
 package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
+@NullMarked
 public final class TPSModule extends AbstractModule {
   public TPSModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme
+    final TabTPS tabTPS,
+    final Theme theme
   ) {
     super(tabTPS, theme);
   }
 
   @Override
-  public @NonNull Component label() {
+  public Component label() {
     return Messages.LABEL_TPS.styled(this.theme.colorScheme().text());
   }
 
   @Override
-  public @NonNull Component display() {
+  public Component display() {
     return TPSUtil.coloredTps(this.tabTPS.platform().tickTimeService().displayTps(), this.theme.colorScheme());
   }
 }

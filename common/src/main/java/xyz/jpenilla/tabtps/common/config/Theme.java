@@ -26,12 +26,13 @@ package xyz.jpenilla.tabtps.common.config;
 import java.util.Objects;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
+@NullMarked
 public final class Theme {
   public static final Theme DEFAULT = new Theme();
 
@@ -41,7 +42,7 @@ public final class Theme {
     + "   For a list of named text colors, refer to the Minecraft wiki: https://minecraft.gamepedia.com/Formatting_codes#Color_codes")
   private Colors colorScheme = new Colors();
 
-  public @NonNull Colors colorScheme() {
+  public Colors colorScheme() {
     return this.colorScheme;
   }
 
@@ -77,27 +78,27 @@ public final class Theme {
       return this.textSecondary;
     }
 
-    public @NonNull TextColor lowPerformance() {
+    public TextColor lowPerformance() {
       return this.lowPerformance;
     }
 
-    public @NonNull TextColor lowPerformanceSecondary() {
+    public TextColor lowPerformanceSecondary() {
       return this.lowPerformanceSecondary;
     }
 
-    public @NonNull TextColor mediumPerformance() {
+    public TextColor mediumPerformance() {
       return this.mediumPerformance;
     }
 
-    public @NonNull TextColor mediumPerformanceSecondary() {
+    public TextColor mediumPerformanceSecondary() {
       return this.mediumPerformanceSecondary;
     }
 
-    public @NonNull TextColor goodPerformance() {
+    public TextColor goodPerformance() {
       return this.goodPerformance;
     }
 
-    public @NonNull TextColor goodPerformanceSecondary() {
+    public TextColor goodPerformanceSecondary() {
       return this.goodPerformanceSecondary;
     }
   }

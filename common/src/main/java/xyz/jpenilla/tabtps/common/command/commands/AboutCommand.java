@@ -25,7 +25,7 @@ package xyz.jpenilla.tabtps.common.command.commands;
 
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.context.CommandContext;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -46,8 +46,9 @@ import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription
 import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 import static xyz.jpenilla.tabtps.common.util.Serializers.MINIMESSAGE;
 
+@NullMarked
 public final class AboutCommand extends TabTPSCommand {
-  public AboutCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public AboutCommand(final TabTPS tabTPS, final Commands commands) {
     super(tabTPS, commands);
   }
 
@@ -58,7 +59,7 @@ public final class AboutCommand extends TabTPSCommand {
       .handler(this::executeAbout));
   }
 
-  private void executeAbout(final @NonNull CommandContext<Commander> ctx) {
+  private void executeAbout(final CommandContext<Commander> ctx) {
     final Component header = gradient("                                  ", style -> style.decorate(STRIKETHROUGH), BLUE, WHITE, BLUE);
     ctx.sender().sendMessage(Components.ofChildren(
       header,

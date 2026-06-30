@@ -34,9 +34,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.ConfigurateException;
 
+@NullMarked
 public final class ConfigManager {
   private final Path dataDirectory;
 
@@ -51,7 +52,7 @@ public final class ConfigManager {
   private final Map<Theme, ConfigLoader<Theme>> themes = new HashMap<>();
   private final Map<String, Theme> themesByName = new HashMap<>();
 
-  public ConfigManager(final @NonNull Path dataDirectory) {
+  public ConfigManager(final Path dataDirectory) {
     this.dataDirectory = dataDirectory;
 
     this.pluginSettingsLoader = new ConfigLoader<>(
@@ -145,15 +146,15 @@ public final class ConfigManager {
     }
   }
 
-  public @NonNull PluginSettings pluginSettings() {
+  public PluginSettings pluginSettings() {
     return this.pluginSettings;
   }
 
-  public @NonNull Collection<DisplayConfig> displayConfigs() {
+  public Collection<DisplayConfig> displayConfigs() {
     return Collections.unmodifiableSet(this.displayConfigs.keySet());
   }
 
-  public @NonNull Theme theme(final @NonNull String name) {
+  public Theme theme(final String name) {
     final Theme theme = this.themesByName.get(name);
     if (theme == null) {
       throw new IllegalArgumentException(String.format(
@@ -165,11 +166,11 @@ public final class ConfigManager {
     return theme;
   }
 
-  public @NonNull Map<String, DisplayConfig> displayConfigsByPermission() {
+  public Map<String, DisplayConfig> displayConfigsByPermission() {
     return this.displayConfigsByPermission;
   }
 
-  private static void tryCreateDirectoryIfNeeded(final @NonNull Path directory) {
+  private static void tryCreateDirectoryIfNeeded(final Path directory) {
     if (Files.exists(directory)) {
       return;
     }

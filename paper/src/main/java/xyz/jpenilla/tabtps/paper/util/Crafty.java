@@ -29,7 +29,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import org.bukkit.Bukkit;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
@@ -37,6 +37,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Reflection utilities for accessing {@code net.minecraft.server}.
  */
+@NullMarked
 public final class Crafty {
   private Crafty() {
   }
@@ -61,9 +62,9 @@ public final class Crafty {
     }
   }
 
-  public static @NonNull Class<?> needNMSClassOrElse(
-    final @NonNull String nms,
-    final @NonNull String... classNames
+  public static Class<?> needNMSClassOrElse(
+    final String nms,
+    final String... classNames
   ) throws RuntimeException {
     final Class<?> nmsClass = findNmsClass(nms);
     if (nmsClass != null) {
@@ -88,7 +89,7 @@ public final class Crafty {
    * @param className a class name
    * @return a class or {@code null} if not found
    */
-  public static @Nullable Class<?> findClass(final @NonNull String className) {
+  public static @Nullable Class<?> findClass(final String className) {
     try {
       return Class.forName(className);
     } catch (final ClassNotFoundException e) {
@@ -103,7 +104,7 @@ public final class Crafty {
    * @return a class
    * @throws NullPointerException if the class was not found
    */
-  public static @NonNull Class<?> needCraftClass(final @NonNull String className) {
+  public static Class<?> needCraftClass(final String className) {
     return requireNonNull(findCraftClass(className), "Could not find org.bukkit.craftbukkit class " + className);
   }
 
@@ -158,7 +159,7 @@ public final class Crafty {
    * @param fieldName   a field name
    * @return an accessible field
    */
-  public static @NonNull Field needField(final @NonNull Class<?> holderClass, final @NonNull String fieldName) {
+  public static Field needField(final Class<?> holderClass, final String fieldName) {
     try {
       final Field field = holderClass.getDeclaredField(fieldName);
       field.setAccessible(true);
@@ -175,7 +176,7 @@ public final class Crafty {
    * @param fieldName   a field name
    * @return an accessible field
    */
-  public static @Nullable Field findField(final @Nullable Class<?> holderClass, final @NonNull String fieldName) {
+  public static @Nullable Field findField(final @Nullable Class<?> holderClass, final String fieldName) {
     return findField(holderClass, fieldName, null);
   }
 
@@ -186,7 +187,7 @@ public final class Crafty {
    * @param fieldName   a field name
    * @return an accessible field
    */
-  public static @Nullable Field findField(final @Nullable Class<?> holderClass, final @NonNull String fieldName, final @Nullable Class<?> expectedType) {
+  public static @Nullable Field findField(final @Nullable Class<?> holderClass, final String fieldName, final @Nullable Class<?> expectedType) {
     if (holderClass == null) return null;
 
     final Field field;
@@ -219,7 +220,7 @@ public final class Crafty {
    * @param className a class name, without the {@code org.bukkit.craftbukkit} prefix
    * @return a class name or {@code null} if not found
    */
-  public static @Nullable String findCraftClassName(final @NonNull String className) {
+  public static @Nullable String findCraftClassName(final String className) {
     return isCraftBukkit() ? PREFIX_CRAFTBUKKIT + VERSION + className : null;
   }
 
@@ -229,7 +230,7 @@ public final class Crafty {
    * @param className a class name, without the {@code org.bukkit.craftbukkit} prefix
    * @return a class or {@code null} if not found
    */
-  public static @Nullable Class<?> findCraftClass(final @NonNull String className) {
+  public static @Nullable Class<?> findCraftClass(final String className) {
     final String craftClassName = findCraftClassName(className);
     if (craftClassName == null) {
       return null;
@@ -244,7 +245,7 @@ public final class Crafty {
    * @param className a class name, without the {@code net.minecraft.server} prefix
    * @return a class name or {@code null} if not found
    */
-  public static @Nullable String findNmsClassName(final @NonNull String className) {
+  public static @Nullable String findNmsClassName(final String className) {
     return isCraftBukkit() ? PREFIX_NMS + VERSION + className : null;
   }
 
@@ -254,7 +255,7 @@ public final class Crafty {
    * @param className a class name, without the {@code net.minecraft.server} prefix
    * @return a class name or {@code null} if not found
    */
-  public static @Nullable Class<?> findNmsClass(final @NonNull String className) {
+  public static @Nullable Class<?> findNmsClass(final String className) {
     final String nmsClassName = findNmsClassName(className);
     if (nmsClassName == null) {
       return null;

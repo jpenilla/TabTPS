@@ -35,7 +35,7 @@ import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.incendo.cloud.context.CommandContext;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -59,6 +59,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 
+@NullMarked
 public final class TickInfoCommand extends TabTPSCommand {
   private static final Function<Module, Component> MODULE_RENDERER = ModuleRenderer.standardRenderFunction(Theme.DEFAULT);
 
@@ -66,7 +67,7 @@ public final class TickInfoCommand extends TabTPSCommand {
   private final ModuleRenderer memoryRenderer;
   private final Formatter formatter;
 
-  private TickInfoCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands, final @NonNull Formatter formatter) {
+  private TickInfoCommand(final TabTPS tabTPS, final Commands commands, final Formatter formatter) {
     super(tabTPS, commands);
     this.formatter = formatter;
     this.cpuRenderer = ModuleRenderer.builder().modules(tabTPS, Theme.DEFAULT, "cpu").moduleRenderFunction(MODULE_RENDERER).build();
@@ -81,15 +82,15 @@ public final class TickInfoCommand extends TabTPSCommand {
       .handler(this::executeTickInfo));
   }
 
-  public static @NonNull TickInfoCommand defaultFormatter(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public static TickInfoCommand defaultFormatter(final TabTPS tabTPS, final Commands commands) {
     return withFormatter(tabTPS, commands, new DefaultFormatter(tabTPS));
   }
 
-  public static @NonNull TickInfoCommand withFormatter(final @NonNull TabTPS tabTPS, final @NonNull Commands commands, final @NonNull Formatter formatter) {
+  public static TickInfoCommand withFormatter(final TabTPS tabTPS, final Commands commands, final Formatter formatter) {
     return new TickInfoCommand(tabTPS, commands, formatter);
   }
 
-  private void executeTickInfo(final @NonNull CommandContext<Commander> ctx) {
+  private void executeTickInfo(final CommandContext<Commander> ctx) {
     final List<Component> messages = new ArrayList<>();
     messages.add(empty());
     messages.add(Components.ofChildren(
@@ -107,7 +108,7 @@ public final class TickInfoCommand extends TabTPSCommand {
     messages.forEach(ctx.sender()::sendMessage);
   }
 
-  private @NonNull Component renderMemory() {
+  private Component renderMemory() {
     return this.memoryRenderer.render()
       .hoverEvent(text()
         .color(GRAY)
@@ -123,7 +124,7 @@ public final class TickInfoCommand extends TabTPSCommand {
         .build());
   }
 
-  private @NonNull Component formatTPS() {
+  private Component formatTPS() {
     final double[] tps = this.tabTPS.platform().tickTimeService().recentTps();
     final TextComponent.Builder builder = text()
       .hoverEvent(Messages.COMMAND_TICKINFO_TEXT_TPS_HOVER.styled(GRAY))
@@ -149,18 +150,18 @@ public final class TickInfoCommand extends TabTPSCommand {
   }
 
   public interface Formatter {
-    @NonNull List<Component> formatTickTimes();
+    List<Component> formatTickTimes();
   }
 
   private static final class DefaultFormatter implements Formatter {
     private final ModuleRenderer msptRenderer;
 
-    DefaultFormatter(final @NonNull TabTPS tabTPS) {
+    DefaultFormatter(final TabTPS tabTPS) {
       this.msptRenderer = ModuleRenderer.builder().modules(tabTPS, Theme.DEFAULT, "mspt").moduleRenderFunction(MODULE_RENDERER).build();
     }
 
     @Override
-    public @NonNull List<Component> formatTickTimes() {
+    public List<Component> formatTickTimes() {
       return Collections.singletonList(
         this.msptRenderer.render().hoverEvent(Messages.COMMAND_TICKINFO_TEXT_MSPT_HOVER.styled(GRAY))
       );

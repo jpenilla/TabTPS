@@ -24,28 +24,29 @@
 package xyz.jpenilla.tabtps.sponge.command;
 
 import net.kyori.adventure.audience.Audience;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.api.command.CommandCause;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 
+@NullMarked
 public final class SpongeConsoleCommander implements ConsoleCommander {
   private final CommandCause commandCause;
 
-  public SpongeConsoleCommander(final @NonNull CommandCause commandCause) {
+  public SpongeConsoleCommander(final CommandCause commandCause) {
     this.commandCause = commandCause;
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return this.commandCause.hasPermission(permissionString);
   }
 
   @Override
-  public @NonNull Audience audience() {
+  public Audience audience() {
     return this.commandCause.audience();
   }
 
-  public @NonNull CommandCause commandCause() {
+  public CommandCause commandCause() {
     return this.commandCause;
   }
 }

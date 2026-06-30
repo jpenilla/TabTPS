@@ -35,15 +35,16 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class UpdateChecker {
   private static final JsonParser parser = new JsonParser();
 
   private UpdateChecker() {
   }
 
-  public static @NonNull List<String> checkVersion(final @NonNull String version) {
+  public static List<String> checkVersion(final String version) {
     final JsonArray result;
     try {
       result = parser.parse(new InputStreamReader(new URL("https://api.github.com/repos/jpenilla/TabTPS/releases").openStream(), Charsets.UTF_8)).getAsJsonArray();

@@ -42,7 +42,7 @@ import org.incendo.cloud.exception.InvalidSyntaxException;
 import org.incendo.cloud.exception.NoPermissionException;
 import org.incendo.cloud.exception.handling.ExceptionContext;
 import org.incendo.cloud.exception.parsing.ParserException;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.exception.CommandCompletedException;
@@ -59,18 +59,19 @@ import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
+@NullMarked
 public final class ExceptionHandler {
   private final TabTPS tabTPS;
 
-  ExceptionHandler(final @NonNull TabTPS tabTPS) {
+  ExceptionHandler(final TabTPS tabTPS) {
     this.tabTPS = tabTPS;
   }
 
-  private static void decorateAndSend(final @NonNull Commander commander, final @NonNull ComponentLike componentLike) {
+  private static void decorateAndSend(final Commander commander, final ComponentLike componentLike) {
     commander.sendMessage(Components.ofChildren(Constants.PREFIX, space(), componentLike));
   }
 
-  public void apply(final @NonNull CommandManager<Commander> manager) {
+  public void apply(final CommandManager<Commander> manager) {
     manager.exceptionController().registerHandler(CommandExecutionException.class, this::commandExecution);
     manager.exceptionController().registerHandler(NoPermissionException.class, this::noPermission);
     manager.exceptionController().registerHandler(ArgumentParseException.class, this::argumentParsing);
@@ -78,7 +79,7 @@ public final class ExceptionHandler {
     manager.exceptionController().registerHandler(InvalidSyntaxException.class, this::invalidSyntax);
   }
 
-  private void commandExecution(final @NonNull ExceptionContext<Commander, CommandExecutionException> ctx) {
+  private void commandExecution(final ExceptionContext<Commander, CommandExecutionException> ctx) {
     final Throwable cause = ctx.exception().getCause();
 
     if (cause instanceof CommandCompletedException) {
@@ -114,11 +115,11 @@ public final class ExceptionHandler {
     decorateAndSend(ctx.context().sender(), message);
   }
 
-  private void noPermission(final @NonNull ExceptionContext<Commander, NoPermissionException> ctx) {
+  private void noPermission(final ExceptionContext<Commander, NoPermissionException> ctx) {
     decorateAndSend(ctx.context().sender(), Messages.COMMAND_EXCEPTION_NO_PERMISSION.styled(RED));
   }
 
-  private void argumentParsing(final @NonNull ExceptionContext<Commander, ArgumentParseException> ctx) {
+  private void argumentParsing(final ExceptionContext<Commander, ArgumentParseException> ctx) {
     final Throwable cause = ctx.exception().getCause();
     final Component message;
     if (cause instanceof ParserException) {
@@ -137,7 +138,7 @@ public final class ExceptionHandler {
     decorateAndSend(ctx.context().sender(), Messages.COMMAND_EXCEPTION_INVALID_ARGUMENT.styled(RED, message));
   }
 
-  private void invalidSender(final @NonNull ExceptionContext<Commander, InvalidCommandSenderException> ctx) {
+  private void invalidSender(final ExceptionContext<Commander, InvalidCommandSenderException> ctx) {
     if (ctx.exception().requiredSenderTypes().size() > 1) {
       // We don't have any command chains that would cause this to happen
       throw new IllegalStateException();
@@ -149,7 +150,7 @@ public final class ExceptionHandler {
     decorateAndSend(ctx.context().sender(), message);
   }
 
-  private void invalidSyntax(final @NonNull ExceptionContext<Commander, InvalidSyntaxException> ctx) {
+  private void invalidSyntax(final ExceptionContext<Commander, InvalidSyntaxException> ctx) {
     final Component message = Messages.COMMAND_EXCEPTION_INVALID_SYNTAX.styled(
       RED,
       Components.highlight(text(String.format("/%s", ctx.exception().correctSyntax()), GRAY), WHITE)

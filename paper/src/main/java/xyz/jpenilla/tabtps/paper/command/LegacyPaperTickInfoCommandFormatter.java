@@ -30,11 +30,12 @@ import java.util.List;
 import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.type.tuple.Pair;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.paper.util.Crafty;
 
+@NullMarked
 public final class LegacyPaperTickInfoCommandFormatter implements TickInfoCommand.Formatter {
   private final Class<?> _MinecraftServer = Crafty.needNMSClassOrElse(
     "MinecraftServer",
@@ -59,7 +60,7 @@ public final class LegacyPaperTickInfoCommandFormatter implements TickInfoComman
   }
 
   @Override
-  public @NonNull List<Component> formatTickTimes() {
+  public List<Component> formatTickTimes() {
     try {
       final Object minecraftServer = this._getServer.invoke();
       final Object tickTimes5s = this._tickTimes5s.get(minecraftServer);

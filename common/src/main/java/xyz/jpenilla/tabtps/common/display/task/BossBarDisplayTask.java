@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.display.task;
 
 import net.kyori.adventure.bossbar.BossBar;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
@@ -32,6 +32,7 @@ import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.display.Display;
 import xyz.jpenilla.tabtps.common.module.ModuleRenderer;
 
+@NullMarked
 public final class BossBarDisplayTask implements Display {
   private final TabTPS tabTPS;
   private final User<?> user;
@@ -40,9 +41,9 @@ public final class BossBarDisplayTask implements Display {
   private final BossBar bar;
 
   public BossBarDisplayTask(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull User<?> user,
-    final DisplayConfig.@NonNull BossBarSettings settings
+    final TabTPS tabTPS,
+    final User<?> user,
+    final DisplayConfig.BossBarSettings settings
   ) {
     this.tabTPS = tabTPS;
     this.user = user;
@@ -89,7 +90,7 @@ public final class BossBarDisplayTask implements Display {
     return (float) Math.max(0.00D, Math.min(1.00D, value));
   }
 
-  private BossBar.@NonNull Color color() {
+  private BossBar.Color color() {
     switch (this.settings.fillMode()) {
       case MSPT:
       case REVERSE_MSPT:
@@ -116,7 +117,7 @@ public final class BossBarDisplayTask implements Display {
     }
   }
 
-  private BossBar.@NonNull Overlay overlay() {
+  private BossBar.Overlay overlay() {
     return this.settings.overlay();
   }
 

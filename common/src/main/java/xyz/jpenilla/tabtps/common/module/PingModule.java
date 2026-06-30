@@ -24,32 +24,33 @@
 package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.PingUtil;
 
+@NullMarked
 public final class PingModule extends AbstractModule {
   private final User<?> user;
 
   public PingModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme,
-    final @NonNull User<?> user
+    final TabTPS tabTPS,
+    final Theme theme,
+    final User<?> user
   ) {
     super(tabTPS, theme);
     this.user = user;
   }
 
   @Override
-  public @NonNull Component label() {
+  public Component label() {
     return Messages.LABEL_PING.styled(this.theme.colorScheme().text());
   }
 
   @Override
-  public @NonNull Component display() {
+  public Component display() {
     return Component.text()
       .append(PingUtil.coloredPing(this.user, this.theme.colorScheme()))
       .append(Messages.LABEL_MILLISECONDS_SHORT.styled(this.theme.colorScheme().textSecondary()))

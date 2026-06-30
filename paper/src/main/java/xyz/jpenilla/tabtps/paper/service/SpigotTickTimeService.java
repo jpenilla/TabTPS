@@ -23,11 +23,12 @@
  */
 package xyz.jpenilla.tabtps.paper.service;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
 import static xyz.jpenilla.tabtps.paper.util.SpigotReflection.spigotReflection;
 
+@NullMarked
 public final class SpigotTickTimeService implements TickTimeService {
   @Override
   public double averageMspt() {
@@ -35,7 +36,7 @@ public final class SpigotTickTimeService implements TickTimeService {
   }
 
   @Override
-  public double @NonNull [] recentTps() {
+  public double[] recentTps() {
     return spigotReflection().recentTps();
   }
 }

@@ -23,6 +23,9 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public enum TickingState {
   // paused, init
   NOT_TICKING,

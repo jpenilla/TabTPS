@@ -33,7 +33,7 @@ import java.util.stream.LongStream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.incendo.cloud.type.tuple.Pair;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.config.Theme;
 
@@ -43,6 +43,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 
+@NullMarked
 public final class TPSUtil {
   private static final DecimalFormat FORMAT = new DecimalFormat("0.00");
   private static final LongPredicate NOT_ZERO = l -> l != 0;
@@ -50,11 +51,11 @@ public final class TPSUtil {
   private TPSUtil() {
   }
 
-  private static @NonNull String formatDouble(final double value) {
+  private static String formatDouble(final double value) {
     return FORMAT.format(value);
   }
 
-  public static @NonNull Component coloredTps(final double tps, final Theme.@NonNull Colors colors) {
+  public static Component coloredTps(final double tps, final Theme.Colors colors) {
     final TextColor color1;
     final TextColor color2;
     if (tps >= 18.5) {
@@ -78,7 +79,7 @@ public final class TPSUtil {
     return time * 1.0E-6D;
   }
 
-  public static @NonNull Component coloredMspt(final double mspt, final Theme.@NonNull Colors colors) {
+  public static Component coloredMspt(final double mspt, final Theme.Colors colors) {
     final TextColor color1;
     final TextColor color2;
     if (mspt <= 25.0) {
@@ -94,7 +95,7 @@ public final class TPSUtil {
     return gradient(formatDouble(mspt), color1, color2);
   }
 
-  public static @NonNull List<Component> formatTickTimes(final @NonNull List<Pair<String, long[]>> times) {
+  public static List<Component> formatTickTimes(final List<Pair<String, long[]>> times) {
     final Component header = text()
       .color(GRAY)
       .append(
@@ -125,7 +126,7 @@ public final class TPSUtil {
     return output;
   }
 
-  private static @NonNull Component formatStatistics(final @NonNull String branch, final @NonNull Component time, final long @NonNull [] times) {
+  private static Component formatStatistics(final String branch, final Component time, final long[] times) {
     final LongSummaryStatistics statistics = LongStream.of(times).filter(NOT_ZERO).summaryStatistics();
     return Components.ofChildren(
       space(),
@@ -141,7 +142,7 @@ public final class TPSUtil {
     );
   }
 
-  public static double average(final long @NonNull [] longs) {
+  public static double average(final long[] longs) {
     long i = 0L;
     for (final long l : longs) {
       i += l;

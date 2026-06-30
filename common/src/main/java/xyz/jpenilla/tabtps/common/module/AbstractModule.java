@@ -23,15 +23,16 @@
  */
 package xyz.jpenilla.tabtps.common.module;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 
+@NullMarked
 abstract class AbstractModule implements Module {
   protected final TabTPS tabTPS;
   protected final Theme theme;
 
-  AbstractModule(final @NonNull TabTPS tabTPS, final @NonNull Theme theme) {
+  AbstractModule(final TabTPS tabTPS, final Theme theme) {
     this.tabTPS = tabTPS;
     this.theme = theme;
   }

@@ -26,33 +26,34 @@ package xyz.jpenilla.tabtps.paper.command;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.CommandSender;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.ConsoleCommander;
 
+@NullMarked
 public final class BukkitConsoleCommander implements ConsoleCommander {
   private final CommandSender commandSender;
   private final Audience audience;
 
-  private BukkitConsoleCommander(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
+  private BukkitConsoleCommander(final BukkitAudiences bukkitAudiences, final CommandSender sender) {
     this.commandSender = sender;
     this.audience = bukkitAudiences.sender(sender);
   }
 
-  public static @NonNull BukkitConsoleCommander from(final @NonNull BukkitAudiences bukkitAudiences, final @NonNull CommandSender sender) {
+  public static BukkitConsoleCommander from(final BukkitAudiences bukkitAudiences, final CommandSender sender) {
     return new BukkitConsoleCommander(bukkitAudiences, sender);
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return this.commandSender.hasPermission(permissionString);
   }
 
   @Override
-  public @NonNull Audience audience() {
+  public Audience audience() {
     return this.audience;
   }
 
-  public @NonNull CommandSender commandSender() {
+  public CommandSender commandSender() {
     return this.commandSender;
   }
 }

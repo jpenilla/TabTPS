@@ -25,20 +25,21 @@ package xyz.jpenilla.tabtps.common;
 
 import java.nio.file.Path;
 import org.incendo.cloud.CommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 import xyz.jpenilla.tabtps.common.service.UserService;
 
+@NullMarked
 public interface TabTPSPlatform<P, U extends User<P>> {
-  @NonNull UserService<P, U> userService();
+  UserService<P, U> userService();
 
-  @NonNull Path dataDirectory();
+  Path dataDirectory();
 
-  @NonNull TabTPS tabTPS();
+  TabTPS tabTPS();
 
-  @NonNull TickTimeService tickTimeService();
+  TickTimeService tickTimeService();
 
   int maxPlayers();
 
@@ -46,9 +47,9 @@ public interface TabTPSPlatform<P, U extends User<P>> {
 
   void onReload();
 
-  @NonNull Logger logger();
+  Logger logger();
 
-  @NonNull CommandManager<Commander> commandManager();
+  CommandManager<Commander> commandManager();
 
   default Throwable asComponentMessageThrowable(final Throwable thr) {
     return thr;

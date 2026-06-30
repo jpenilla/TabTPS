@@ -25,20 +25,21 @@ package xyz.jpenilla.tabtps.common.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.Theme;
 
+@NullMarked
 public final class PingUtil {
 
   private PingUtil() {
   }
 
-  public static @NonNull Component coloredPing(final @NonNull User<?> user, final Theme.@NonNull Colors colors) {
+  public static Component coloredPing(final User<?> user, final Theme.Colors colors) {
     return coloredPing(user.ping(), colors);
   }
 
-  public static @NonNull Component coloredPing(final int ping, final Theme.@NonNull Colors colors) {
+  public static Component coloredPing(final int ping, final Theme.Colors colors) {
     final TextColor color1;
     final TextColor color2;
     if (ping < 100) {

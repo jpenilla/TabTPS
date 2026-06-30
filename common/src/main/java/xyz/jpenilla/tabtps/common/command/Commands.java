@@ -26,30 +26,31 @@ package xyz.jpenilla.tabtps.common.command;
 import java.util.function.Function;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
+@NullMarked
 public final class Commands {
   private final CommandManager<Commander> commandManager;
 
-  public Commands(final @NonNull TabTPS tabTPS, final @NonNull CommandManager<Commander> commandManager) {
+  public Commands(final TabTPS tabTPS, final CommandManager<Commander> commandManager) {
     this.commandManager = commandManager;
     new ExceptionHandler(tabTPS).apply(commandManager);
   }
 
-  public @NonNull CommandManager<Commander> commandManager() {
+  public CommandManager<Commander> commandManager() {
     return this.commandManager;
   }
 
-  public void registerSubcommand(final @NonNull Function<Command.Builder<Commander>, Command.Builder<? extends Commander>> modifier) {
+  public void registerSubcommand(final Function<Command.Builder<Commander>, Command.Builder<? extends Commander>> modifier) {
     this.commandManager.command(modifier.apply(this.rootBuilder()));
   }
 
-  public Command.@NonNull Builder<Commander> rootBuilder() {
+  public Command.Builder<Commander> rootBuilder() {
     return this.commandManager.commandBuilder("tabtps");
   }
 
-  public void register(final Command.@NonNull Builder<? extends Commander> builder) {
+  public void register(final Command.Builder<? extends Commander> builder) {
     this.commandManager.command(builder);
   }
 }

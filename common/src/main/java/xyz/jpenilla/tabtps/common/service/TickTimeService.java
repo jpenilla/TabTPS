@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 package xyz.jpenilla.tabtps.common.service;
+import org.jspecify.annotations.NullMarked;
 
-import org.jspecify.annotations.NonNull;
-
+@NullMarked
 public interface TickTimeService {
   double averageMspt();
 
-  double @NonNull [] recentTps();
+  double[] recentTps();
 
   default double displayTps() {
     final double[] recentTps = this.recentTps();

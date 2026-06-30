@@ -24,8 +24,10 @@
 package xyz.jpenilla.tabtps.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
+@NullMarked
 public final class TabTPSFabricClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {

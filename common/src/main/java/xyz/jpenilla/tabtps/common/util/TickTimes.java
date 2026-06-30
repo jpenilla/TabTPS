@@ -23,11 +23,14 @@
  */
 package xyz.jpenilla.tabtps.common.util;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Based on the MIT licensed Paper-Server patch "Add tick times API and /mspt command".
  *
  * @author William Blake Galbreath/BillyGalbreath
  */
+@NullMarked
 public final class TickTimes {
   private final long[] times;
 

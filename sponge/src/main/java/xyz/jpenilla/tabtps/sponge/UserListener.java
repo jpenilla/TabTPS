@@ -23,30 +23,31 @@
  */
 package xyz.jpenilla.tabtps.sponge;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 
+@NullMarked
 public final class UserListener {
   private final TabTPSPlugin plugin;
 
-  UserListener(final @NonNull TabTPSPlugin plugin) {
+  UserListener(final TabTPSPlugin plugin) {
     this.plugin = plugin;
   }
 
   @Listener
-  public void handleJoin(final ServerSideConnectionEvent.@NonNull Join event) {
+  public void handleJoin(final ServerSideConnectionEvent.Join event) {
     this.plugin.userService().handleJoin(event.player());
   }
 
   @Listener
-  public void handleQuit(final ServerSideConnectionEvent.@NonNull Leave event) {
+  public void handleQuit(final ServerSideConnectionEvent.Leave event) {
     this.plugin.userService().handleQuit(event.player());
   }
 
   @Listener
-  public void handleRespawn(final RespawnPlayerEvent.@NonNull Post event) {
+  public void handleRespawn(final RespawnPlayerEvent.Post event) {
     this.plugin.userService().replacePlayer(event.entity());
   }
 }

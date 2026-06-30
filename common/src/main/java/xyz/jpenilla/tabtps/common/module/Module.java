@@ -24,14 +24,15 @@
 package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface Module {
-  @NonNull Component label();
+  Component label();
 
-  @NonNull Component display();
+  Component display();
 
-  default @NonNull ModuleType<? extends Module> type() {
+  default ModuleType<? extends Module> type() {
     return ModuleType.fromClass(this.getClass());
   }
 }

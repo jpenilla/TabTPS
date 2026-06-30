@@ -28,7 +28,7 @@ import java.math.RoundingMode;
 import java.util.function.BooleanSupplier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.profiling.ProfilerFiller;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
@@ -52,6 +52,7 @@ import xyz.jpenilla.tabtps.sponge.access.MinecraftServerAccess;
 @Unique
 @Mixin(MinecraftServer.class)
 @Implements({@Interface(iface = TickTimeService.class, prefix = "tabtps$")})
+@NullMarked
 abstract class MinecraftServerMixin implements MinecraftServerAccess {
   @Unique
   private final TickTimes tickTimes5s = new TickTimes(100);
@@ -120,7 +121,7 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
     return TPSUtil.toMilliseconds(TPSUtil.average(this.tickTimesNanos));
   }
 
-  public double @NonNull [] tabtps$recentTps() {
+  public double[] tabtps$recentTps() {
     final double[] tps = new double[4];
     tps[0] = this.tps5s.average();
     tps[1] = this.tps1m.average();
@@ -130,17 +131,17 @@ abstract class MinecraftServerMixin implements MinecraftServerAccess {
   }
 
   @Override
-  public @NonNull TickTimes tickTimes5s() {
+  public TickTimes tickTimes5s() {
     return this.tickTimes5s;
   }
 
   @Override
-  public @NonNull TickTimes tickTimes10s() {
+  public TickTimes tickTimes10s() {
     return this.tickTimes10s;
   }
 
   @Override
-  public @NonNull TickTimes tickTimes60s() {
+  public TickTimes tickTimes60s() {
     return this.tickTimes60s;
   }
 }

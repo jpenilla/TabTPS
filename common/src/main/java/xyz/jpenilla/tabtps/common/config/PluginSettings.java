@@ -30,11 +30,12 @@ import java.util.Set;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
+@NullMarked
 public final class PluginSettings {
 
   @Comment("Should the plugin check GitHub for updates on startup?")
@@ -61,19 +62,19 @@ public final class PluginSettings {
   @Comment("Colors used in the command help menus")
   private HelpColors helpColors = new HelpColors();
 
-  public @NonNull HelpColors helpColors() {
+  public HelpColors helpColors() {
     return this.helpColors;
   }
 
-  public @NonNull Set<String> ignoredMemoryPools() {
+  public Set<String> ignoredMemoryPools() {
     return this.ignoredMemoryPools;
   }
 
-  public @NonNull UpdateRates updateRates() {
+  public UpdateRates updateRates() {
     return this.updateRates;
   }
 
-  public @NonNull Set<String> permissionPriorities() {
+  public Set<String> permissionPriorities() {
     return this.permissionPriorities;
   }
 
@@ -108,7 +109,7 @@ public final class PluginSettings {
     private TextColor text = NamedTextColor.GRAY;
     private TextColor accent = NamedTextColor.DARK_GRAY;
 
-    public MinecraftHelp.@NonNull HelpColors toCloud() {
+    public MinecraftHelp.HelpColors toCloud() {
       return MinecraftHelp.helpColors(this.primary, this.highlight, this.alternateHighlight, this.text, this.accent);
     }
   }

@@ -30,12 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.type.tuple.Pair;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 
 import static java.lang.invoke.MethodType.methodType;
 
+@NullMarked
 public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Formatter {
 
   private final MethodHandle _getServer;
@@ -99,7 +100,7 @@ public final class PaperTickInfoCommandFormatter implements TickInfoCommand.Form
   }
 
   @Override
-  public @NonNull List<Component> formatTickTimes() {
+  public List<Component> formatTickTimes() {
     try {
       final Object minecraftServer = this._getServer.invoke();
       final Object tickRateManager = this._tickRateManager.invoke(minecraftServer);

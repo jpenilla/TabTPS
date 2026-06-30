@@ -24,7 +24,7 @@
 package xyz.jpenilla.tabtps.common.command.commands;
 
 import org.incendo.cloud.context.CommandContext;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -39,8 +39,9 @@ import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 import static xyz.jpenilla.tabtps.common.util.Components.gradient;
 
+@NullMarked
 public final class ReloadCommand extends TabTPSCommand {
-  public ReloadCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public ReloadCommand(final TabTPS tabTPS, final Commands commands) {
     super(tabTPS, commands);
   }
 
@@ -52,7 +53,7 @@ public final class ReloadCommand extends TabTPSCommand {
       .handler(this::executeReload));
   }
 
-  private void executeReload(final @NonNull CommandContext<Commander> ctx) {
+  private void executeReload(final CommandContext<Commander> ctx) {
     this.tabTPS.reload();
     ctx.sender().sendMessage(Components.ofChildren(
       Constants.PREFIX,

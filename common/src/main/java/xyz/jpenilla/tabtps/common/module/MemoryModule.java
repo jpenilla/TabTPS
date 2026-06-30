@@ -26,19 +26,20 @@ package xyz.jpenilla.tabtps.common.module;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.Components;
 import xyz.jpenilla.tabtps.common.util.MemoryUtil;
 
+@NullMarked
 public final class MemoryModule extends AbstractModule {
   private final boolean alwaysShowMax;
 
   public MemoryModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme,
+    final TabTPS tabTPS,
+    final Theme theme,
     final boolean alwaysShowMax
   ) {
     super(tabTPS, theme);
@@ -46,19 +47,19 @@ public final class MemoryModule extends AbstractModule {
   }
 
   public MemoryModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme
+    final TabTPS tabTPS,
+    final Theme theme
   ) {
     this(tabTPS, theme, false);
   }
 
   @Override
-  public @NonNull Component label() {
+  public Component label() {
     return Messages.LABEL_MEMORY.styled(this.theme.colorScheme().text());
   }
 
   @Override
-  public @NonNull Component display() {
+  public Component display() {
     final TextColor color1 = this.theme.colorScheme().goodPerformance();
     final TextColor color2 = this.theme.colorScheme().goodPerformanceSecondary();
     final TextComponent.Builder builder = Component.text()

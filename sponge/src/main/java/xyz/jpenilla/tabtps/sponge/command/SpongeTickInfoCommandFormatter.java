@@ -27,15 +27,16 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.type.tuple.Pair;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.api.Sponge;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.sponge.access.MinecraftServerAccess;
 
+@NullMarked
 public final class SpongeTickInfoCommandFormatter implements TickInfoCommand.Formatter {
   @Override
-  public @NonNull List<Component> formatTickTimes() {
+  public List<Component> formatTickTimes() {
     final MinecraftServerAccess server = (MinecraftServerAccess) Sponge.server();
     return TPSUtil.formatTickTimes(ImmutableList.of(
       Pair.of("5s", server.tickTimes5s().times()),

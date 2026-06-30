@@ -24,22 +24,23 @@
 package xyz.jpenilla.tabtps.common.util;
 
 import java.util.concurrent.Future;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class RunnableFuturePair<R extends Runnable> {
   private final R runnable;
   private final Future<?> future;
 
-  public RunnableFuturePair(final @NonNull R runnable, final @NonNull Future<?> future) {
+  public RunnableFuturePair(final R runnable, final Future<?> future) {
     this.runnable = runnable;
     this.future = future;
   }
 
-  public @NonNull R runnable() {
+  public R runnable() {
     return this.runnable;
   }
 
-  public @NonNull Future<?> future() {
+  public Future<?> future() {
     return this.future;
   }
 }

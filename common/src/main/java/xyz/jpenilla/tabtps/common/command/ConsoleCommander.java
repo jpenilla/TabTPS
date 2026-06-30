@@ -23,5 +23,8 @@
  */
 package xyz.jpenilla.tabtps.common.command;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public interface ConsoleCommander extends Commander {
 }

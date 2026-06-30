@@ -29,7 +29,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.permission.PredicatePermission;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
@@ -48,8 +48,9 @@ import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 
+@NullMarked
 public final class ToggleDisplayCommands extends TabTPSCommand {
-  public ToggleDisplayCommands(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public ToggleDisplayCommands(final TabTPS tabTPS, final Commands commands) {
     super(tabTPS, commands);
   }
 
@@ -76,13 +77,13 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
       .handler(this::toggleBossBar));
   }
 
-  private boolean togglePermission(final @NonNull User<?> sender, final @NonNull Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
+  private boolean togglePermission(final User<?> sender, final Function<DisplayConfig, DisplayConfig.DisplaySettings> function) {
     return this.tabTPS.findDisplayConfig(sender)
       .map(config -> function.apply(config).allow())
       .orElse(false);
   }
 
-  private void toggleTab(final @NonNull CommandContext<User<?>> context) {
+  private void toggleTab(final CommandContext<User<?>> context) {
     final User<?> user = context.sender();
     if (user.tab().enabled()) {
       user.tab().stopDisplay();
@@ -96,7 +97,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     user.markDirty();
   }
 
-  private void toggleActionBar(final @NonNull CommandContext<User<?>> context) {
+  private void toggleActionBar(final CommandContext<User<?>> context) {
     final User<?> user = context.sender();
     if (user.actionBar().enabled()) {
       user.actionBar().stopDisplay();
@@ -110,7 +111,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     user.markDirty();
   }
 
-  private void toggleBossBar(final @NonNull CommandContext<User<?>> context) {
+  private void toggleBossBar(final CommandContext<User<?>> context) {
     final User<?> user = context.sender();
     if (user.bossBar().enabled()) {
       user.bossBar().stopDisplay();
@@ -124,7 +125,7 @@ public final class ToggleDisplayCommands extends TabTPSCommand {
     user.markDirty();
   }
 
-  private static @NonNull Component feedbackMessage(final @NonNull String command, final @NonNull TranslatableProvider translatable, final @NonNull TextColor color) {
+  private static Component feedbackMessage(final String command, final TranslatableProvider translatable, final TextColor color) {
     return text()
       .append(Constants.PREFIX)
       .append(space())

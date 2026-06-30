@@ -32,7 +32,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
@@ -41,12 +41,13 @@ import xyz.jpenilla.tabtps.common.config.Theme;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 
+@NullMarked
 public final class ModuleRenderer {
   private final List<Module> modules;
   private final Function<Module, Component> moduleRenderFunction;
   private final Component separator;
 
-  public static @NonNull Function<Module, Component> standardRenderFunction(final @NonNull Theme theme) {
+  public static Function<Module, Component> standardRenderFunction(final Theme theme) {
     return module -> text()
       .append(module.label())
       .append(text(":", theme.colorScheme().textSecondary()))
@@ -56,8 +57,8 @@ public final class ModuleRenderer {
   }
 
   private ModuleRenderer(
-    final @NonNull List<Module> modules,
-    final @NonNull Function<Module, Component> moduleRenderFunction,
+    final List<Module> modules,
+    final Function<Module, Component> moduleRenderFunction,
     final @Nullable Component separator
   ) {
     this.modules = modules;
@@ -65,7 +66,7 @@ public final class ModuleRenderer {
     this.separator = separator;
   }
 
-  public @NonNull Component render() {
+  public Component render() {
     final TextComponent.Builder builder = text();
     final Iterator<Module> iterator = this.modules.iterator();
     while (iterator.hasNext()) {
@@ -87,35 +88,35 @@ public final class ModuleRenderer {
    *
    * @return A new {@link Builder}
    */
-  public static @NonNull Builder builder() {
+  public static Builder builder() {
     return new Builder();
   }
 
   public static final class Builder {
     private final List<Module> modules = new ArrayList<>();
-    private Function<Module, Component> moduleRenderFunction;
-    private Component separator = null;
+    private @Nullable Function<Module, Component> moduleRenderFunction;
+    private @Nullable Component separator = null;
 
     private Builder() {
     }
 
-    public @NonNull Builder moduleRenderFunction(final @NonNull Function<Module, Component> function) {
+    public Builder moduleRenderFunction(final Function<Module, Component> function) {
       this.moduleRenderFunction = function;
       return this;
     }
 
-    public @NonNull Builder separator(final @NonNull Component separator) {
+    public Builder separator(final Component separator) {
       this.separator = separator;
       return this;
     }
 
-    public @NonNull Builder modules(final @NonNull List<Module> modules) {
+    public Builder modules(final List<Module> modules) {
       this.modules.clear();
       this.modules.addAll(modules);
       return this;
     }
 
-    public @NonNull Builder modules(final @NonNull Module... modules) {
+    public Builder modules(final Module... modules) {
       return this.modules(Arrays.asList(modules));
     }
 
@@ -128,10 +129,10 @@ public final class ModuleRenderer {
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    public @NonNull Builder modules(
-      final @NonNull TabTPS tabTPS,
-      final @NonNull Theme theme,
-      final @NonNull String modules
+    public Builder modules(
+      final TabTPS tabTPS,
+      final Theme theme,
+      final String modules
     ) {
       return this.modules(tabTPS, theme, null, modules);
     }
@@ -145,11 +146,11 @@ public final class ModuleRenderer {
      * @param modules The list of Modules to use in the builder, separated by commas.
      * @return The {@link Builder}
      */
-    public @NonNull Builder modules(
-      final @NonNull TabTPS tabTPS,
-      final @NonNull Theme theme,
+    public Builder modules(
+      final TabTPS tabTPS,
+      final Theme theme,
       final @Nullable User<?> player,
-      final @NonNull String modules
+      final String modules
     ) {
       return this.modules(Arrays.stream(modules.replace(" ", "").split(","))
         .filter(s -> s != null && !s.isEmpty())
@@ -165,7 +166,7 @@ public final class ModuleRenderer {
      * @return The built {@link ModuleRenderer}
      * @throws IllegalArgumentException When a needed parameter has not been provided
      */
-    public @NonNull ModuleRenderer build() throws IllegalArgumentException {
+    public ModuleRenderer build() throws IllegalArgumentException {
       if (this.separator == null && this.modules.size() > 1) {
         throw new IllegalArgumentException("separator is null but there is more than one module");
       }

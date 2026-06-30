@@ -27,9 +27,10 @@ import java.util.UUID;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.User;
 
+@NullMarked
 public final class DelegateUser<U, C> implements User<U> {
   private final User<U> user;
   private final C c;
@@ -51,12 +52,12 @@ public final class DelegateUser<U, C> implements User<U> {
   }
 
   @Override
-  public @NonNull UUID uuid() {
+  public UUID uuid() {
     return this.user.uuid();
   }
 
   @Override
-  public @NonNull Component displayName() {
+  public Component displayName() {
     return this.user.displayName();
   }
 
@@ -71,17 +72,17 @@ public final class DelegateUser<U, C> implements User<U> {
   }
 
   @Override
-  public @NonNull U base() {
+  public U base() {
     return this.user.base();
   }
 
   @Override
-  public @NonNull State state() {
+  public State state() {
     return this.user.state();
   }
 
   @Override
-  public boolean hasPermission(final @NonNull String permissionString) {
+  public boolean hasPermission(final String permissionString) {
     return this.user.hasPermission(permissionString);
   }
 

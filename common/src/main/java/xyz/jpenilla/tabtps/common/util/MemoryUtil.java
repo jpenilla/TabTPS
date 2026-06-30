@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.tabtps.common.Messages;
 
@@ -45,6 +45,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextColor.color;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 
+@NullMarked
 public final class MemoryUtil {
   private MemoryUtil() {
   }
@@ -61,15 +62,15 @@ public final class MemoryUtil {
     return Math.round(ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / 1048576f);
   }
 
-  public static @NonNull Component renderBar(final @NonNull MemoryUsage usage, final int barLength) {
+  public static Component renderBar(final MemoryUsage usage, final int barLength) {
     return renderBarImpl(null, usage, barLength);
   }
 
-  public static @NonNull Component renderBar(final @NonNull String name, final @NonNull MemoryUsage usage, final int barLength) {
+  public static Component renderBar(final String name, final MemoryUsage usage, final int barLength) {
     return renderBarImpl(name, usage, barLength);
   }
 
-  private static @NonNull Component renderBarImpl(final @Nullable String name, final @NonNull MemoryUsage usage, final int barLength) {
+  private static Component renderBarImpl(final @Nullable String name, final MemoryUsage usage, final int barLength) {
     final long used = usage.getUsed();
     final long committed = usage.getCommitted();
     final long max = usage.getMax();
@@ -137,7 +138,7 @@ public final class MemoryUtil {
     return builder.build();
   }
 
-  public static @NonNull Component humanReadableByteCountBin(final long bytes) {
+  public static Component humanReadableByteCountBin(final long bytes) {
     final long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
     if (absB < 1024) {
       return Components.ofChildren(

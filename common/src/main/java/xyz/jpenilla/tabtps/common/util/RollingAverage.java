@@ -25,13 +25,14 @@ package xyz.jpenilla.tabtps.common.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Based on the MIT licensed Paper-Server patch "Further improve server tick loop".
  *
  * @author Daniel Ennis/Aikar
  */
+@NullMarked
 public final class RollingAverage {
   public static final int TPS = 20;
   public static final int SAMPLE_INTERVAL = 20;
@@ -58,11 +59,11 @@ public final class RollingAverage {
     }
   }
 
-  private static @NonNull BigDecimal dec(final long t) {
+  private static BigDecimal dec(final long t) {
     return new BigDecimal(t);
   }
 
-  public void add(final @NonNull BigDecimal x, final long t) {
+  public void add(final BigDecimal x, final long t) {
     this.time -= this.times[this.index];
     this.total = this.total.subtract(this.samples[this.index].multiply(dec(this.times[this.index])));
     this.samples[this.index] = x;

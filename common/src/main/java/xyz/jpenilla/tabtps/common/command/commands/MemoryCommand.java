@@ -30,7 +30,7 @@ import java.util.Comparator;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.context.CommandContext;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -46,8 +46,9 @@ import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.TextDecoration.ITALIC;
 import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 
+@NullMarked
 public final class MemoryCommand extends TabTPSCommand {
-  public MemoryCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public MemoryCommand(final TabTPS tabTPS, final Commands commands) {
     super(tabTPS, commands);
   }
 
@@ -59,7 +60,7 @@ public final class MemoryCommand extends TabTPSCommand {
       .handler(this::executeMemory));
   }
 
-  private void executeMemory(final @NonNull CommandContext<Commander> ctx) {
+  private void executeMemory(final CommandContext<Commander> ctx) {
     final List<Component> messages = new ArrayList<>();
     messages.add(empty());
     final Component header = Components.ofChildren(

@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.sponge.command;
 import java.util.stream.Collectors;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.sponge.data.MultiplePlayerSelector;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
@@ -34,10 +34,11 @@ import xyz.jpenilla.tabtps.sponge.TabTPSPlugin;
 
 import static org.incendo.cloud.sponge.parser.MultiplePlayerSelectorParser.multiplePlayerSelectorParser;
 
+@NullMarked
 public final class SpongePingCommand extends PingCommand {
   private final TabTPSPlugin plugin;
 
-  public SpongePingCommand(final @NonNull TabTPSPlugin plugin, final @NonNull Commands commands) {
+  public SpongePingCommand(final TabTPSPlugin plugin, final Commands commands) {
     super(plugin.tabTPS(), commands);
     this.plugin = plugin;
   }
@@ -47,7 +48,7 @@ public final class SpongePingCommand extends PingCommand {
     this.registerPingTargetsCommand(multiplePlayerSelectorParser(), this::handlePingTargets);
   }
 
-  private void handlePingTargets(final @NonNull CommandContext<Commander> context) {
+  private void handlePingTargets(final CommandContext<Commander> context) {
     final MultiplePlayerSelector target = context.get("target");
     this.pingTargets(
       context.sender(),

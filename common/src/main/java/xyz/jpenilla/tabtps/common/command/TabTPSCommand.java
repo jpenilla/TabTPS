@@ -24,15 +24,16 @@
 package xyz.jpenilla.tabtps.common.command;
 
 import org.incendo.cloud.CommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
+@NullMarked
 public abstract class TabTPSCommand {
   protected final TabTPS tabTPS;
   protected final Commands commands;
   protected final CommandManager<Commander> commandManager;
 
-  protected TabTPSCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  protected TabTPSCommand(final TabTPS tabTPS, final Commands commands) {
     this.tabTPS = tabTPS;
     this.commands = commands;
     this.commandManager = commands.commandManager();

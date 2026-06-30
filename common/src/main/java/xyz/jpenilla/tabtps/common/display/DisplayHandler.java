@@ -26,25 +26,27 @@ package xyz.jpenilla.tabtps.common.display;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.util.RunnableFuturePair;
 
+@NullMarked
 public final class DisplayHandler<D extends Display> {
   private transient final TabTPS tabTPS;
   private transient final User<?> user;
   private transient final Function<DisplayConfig, D> displayFactory;
   private transient final int updateRate;
-  private transient RunnableFuturePair<D> futurePair = null;
+  private transient @Nullable RunnableFuturePair<D> futurePair = null;
   private boolean enabled = false;
 
   public DisplayHandler(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull User<?> user,
+    final TabTPS tabTPS,
+    final User<?> user,
     final int updateRate,
-    final @NonNull Function<DisplayConfig, D> displayFactory
+    final Function<DisplayConfig, D> displayFactory
   ) {
     this.tabTPS = tabTPS;
     this.user = user;

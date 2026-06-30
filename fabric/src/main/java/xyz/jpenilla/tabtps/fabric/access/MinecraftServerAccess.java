@@ -23,13 +23,14 @@
  */
 package xyz.jpenilla.tabtps.fabric.access;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.util.TickTimes;
 
+@NullMarked
 public interface MinecraftServerAccess {
-  @NonNull TickTimes tickTimes5s();
+  TickTimes tickTimes5s();
 
-  @NonNull TickTimes tickTimes10s();
+  TickTimes tickTimes10s();
 
-  @NonNull TickTimes tickTimes60s();
+  TickTimes tickTimes60s();
 }

@@ -31,7 +31,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class CPUMonitor {
   private int index = 0;
   private volatile double recentProcessCpuLoadSnapshot = 0;

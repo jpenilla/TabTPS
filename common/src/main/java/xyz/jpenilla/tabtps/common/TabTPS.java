@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.stream.Stream;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.TabTPSCommand;
 import xyz.jpenilla.tabtps.common.command.commands.AboutCommand;
@@ -42,6 +42,7 @@ import xyz.jpenilla.tabtps.common.config.ConfigManager;
 import xyz.jpenilla.tabtps.common.config.DisplayConfig;
 import xyz.jpenilla.tabtps.common.util.CPUMonitor;
 
+@NullMarked
 public final class TabTPS {
   private final TabTPSPlatform<?, ?> platform;
   private final CPUMonitor cpuMonitor;
@@ -49,7 +50,7 @@ public final class TabTPS {
   private final ScheduledExecutorService executor;
   private final Commands commands;
 
-  public TabTPS(final @NonNull TabTPSPlatform<?, ?> platform) {
+  public TabTPS(final TabTPSPlatform<?, ?> platform) {
     this.platform = platform;
     try {
       Messages.load();
@@ -99,15 +100,15 @@ public final class TabTPS {
     ).forEach(TabTPSCommand::register);
   }
 
-  public @NonNull TabTPSPlatform<?, ?> platform() {
+  public TabTPSPlatform<?, ?> platform() {
     return this.platform;
   }
 
-  public @NonNull ConfigManager configManager() {
+  public ConfigManager configManager() {
     return this.configManager;
   }
 
-  public @NonNull Optional<DisplayConfig> findDisplayConfig(final @NonNull User<?> player) {
+  public Optional<DisplayConfig> findDisplayConfig(final User<?> player) {
     for (final String permission : this.configManager.pluginSettings().permissionPriorities()) {
       if (player.hasPermission(permission) || permission.isEmpty()) {
         return Optional.of(this.configManager.displayConfigsByPermission().get(permission));
@@ -116,19 +117,19 @@ public final class TabTPS {
     return Optional.empty();
   }
 
-  public @NonNull ScheduledExecutorService executor() {
+  public ScheduledExecutorService executor() {
     return this.executor;
   }
 
-  public @NonNull CPUMonitor cpuMonitor() {
+  public CPUMonitor cpuMonitor() {
     return this.cpuMonitor;
   }
 
-  public @NonNull Commands commands() {
+  public Commands commands() {
     return this.commands;
   }
 
-  private static @NonNull IllegalStateException initializationFailed(final Throwable cause) {
+  private static IllegalStateException initializationFailed(final Throwable cause) {
     return new IllegalStateException("Failed to initialize TabTPS", cause);
   }
 }

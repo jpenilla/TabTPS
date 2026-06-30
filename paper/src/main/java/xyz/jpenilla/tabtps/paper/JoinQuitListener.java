@@ -27,22 +27,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class JoinQuitListener implements Listener {
   private final TabTPSPlugin plugin;
 
-  public JoinQuitListener(final @NonNull TabTPSPlugin plugin) {
+  public JoinQuitListener(final TabTPSPlugin plugin) {
     this.plugin = plugin;
   }
 
   @EventHandler
-  public void onJoin(final @NonNull PlayerJoinEvent e) {
+  public void onJoin(final PlayerJoinEvent e) {
     this.plugin.userService().handleJoin(e.getPlayer());
   }
 
   @EventHandler
-  public void onQuit(final @NonNull PlayerQuitEvent e) {
+  public void onQuit(final PlayerQuitEvent e) {
     this.plugin.userService().handleQuit(e.getPlayer());
   }
 }

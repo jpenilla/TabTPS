@@ -25,27 +25,28 @@ package xyz.jpenilla.tabtps.common.module;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.config.Theme;
 import xyz.jpenilla.tabtps.common.util.Components;
 
+@NullMarked
 public final class CPUModule extends AbstractModule {
   public CPUModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme
+    final TabTPS tabTPS,
+    final Theme theme
   ) {
     super(tabTPS, theme);
   }
 
   @Override
-  public @NonNull Component label() {
+  public Component label() {
     return Messages.LABEL_CPU.styled(this.theme.colorScheme().text());
   }
 
   @Override
-  public @NonNull Component display() {
+  public Component display() {
     final TextComponent.Builder builder = Component.text()
       .append(Components.gradient(String.valueOf(this.tabTPS.cpuMonitor().recentSystemCpuLoadSnapshot()), this.theme.colorScheme().goodPerformance(), this.theme.colorScheme().goodPerformanceSecondary()))
       .append(Component.text("%", this.theme.colorScheme().text()))

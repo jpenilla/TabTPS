@@ -34,7 +34,7 @@ import org.incendo.cloud.component.DefaultValue;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.execution.CommandExecutionHandler;
 import org.incendo.cloud.parser.ParserDescriptor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
@@ -61,8 +61,9 @@ import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
 import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription;
 import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
 
+@NullMarked
 public class PingCommand extends TabTPSCommand {
-  public PingCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public PingCommand(final TabTPS tabTPS, final Commands commands) {
     super(tabTPS, commands);
   }
 
@@ -81,8 +82,8 @@ public class PingCommand extends TabTPSCommand {
   }
 
   protected <T> void registerPingTargetsCommand(
-    final @NonNull ParserDescriptor<Commander, T> targetsArgument,
-    final @NonNull CommandExecutionHandler<Commander> handler
+    final ParserDescriptor<Commander, T> targetsArgument,
+    final CommandExecutionHandler<Commander> handler
   ) {
     this.commands.register(this.commandManager.commandBuilder("ping")
       .required("target", targetsArgument, richDescription(Messages.COMMAND_PING_TARGET_ARGUMENTS_TARGET))
@@ -92,13 +93,13 @@ public class PingCommand extends TabTPSCommand {
       .handler(handler));
   }
 
-  private void onPingAll(final @NonNull CommandContext<Commander> context) {
+  private void onPingAll(final CommandContext<Commander> context) {
     final Commander sender = context.sender();
     final int page = context.get("page");
     this.pingMultiple(sender, Collections.unmodifiableCollection(this.tabTPS.platform().userService().onlineUsers()), page, "pingall");
   }
 
-  private void onPingSelf(final @NonNull CommandContext<Commander> context) {
+  private void onPingSelf(final CommandContext<Commander> context) {
     final Commander sender = context.sender();
     if (!(sender instanceof User)) {
       throw CommandCompletedException.withMessage(Components.ofChildren(
@@ -121,9 +122,9 @@ public class PingCommand extends TabTPSCommand {
   }
 
   protected final void pingTargets(
-    final @NonNull Commander commander,
-    final @NonNull List<User<?>> targets,
-    final @NonNull String inputString,
+    final Commander commander,
+    final List<User<?>> targets,
+    final String inputString,
     final int page
   ) {
     if (targets.isEmpty()) {
@@ -152,10 +153,10 @@ public class PingCommand extends TabTPSCommand {
   }
 
   private void pingMultiple(
-    final @NonNull Commander sender,
-    final @NonNull Collection<User<?>> targets,
+    final Commander sender,
+    final Collection<User<?>> targets,
     final int page,
-    final @NonNull String commandPrefix
+    final String commandPrefix
   ) {
     final List<Component> content = new ArrayList<>();
     final List<Integer> pings = new ArrayList<>();
@@ -197,7 +198,7 @@ public class PingCommand extends TabTPSCommand {
     messages.forEach(sender::sendMessage);
   }
 
-  private static @NonNull Pagination<Component> pagination(final @NonNull String prefix) {
+  private static Pagination<Component> pagination(final String prefix) {
     return Pagination.builder()
       .resultsPerPage(10)
       .width(38)

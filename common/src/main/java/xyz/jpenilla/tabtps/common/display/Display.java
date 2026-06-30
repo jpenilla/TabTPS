@@ -23,6 +23,9 @@
  */
 package xyz.jpenilla.tabtps.common.display;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public interface Display extends Runnable {
   default void disable() {
   }

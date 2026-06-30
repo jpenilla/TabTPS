@@ -49,7 +49,7 @@ import net.neoforged.neoforge.server.permission.nodes.PermissionTypes;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.neoforge.NeoForgeServerCommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,14 +68,15 @@ import xyz.jpenilla.tabtps.neoforge.command.NeoForgeTickInfoCommandFormatter;
 import xyz.jpenilla.tabtps.neoforge.service.NeoForgeUserService;
 
 @Mod("tabtps")
+@NullMarked
 public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoForgeUser> {
-  private static TabTPSNeoForge instance = null;
+  private static TabTPSNeoForge instance;
   private final Path configDirectory = Path.of("config", "tabtps");
   private final Logger logger = LoggerFactory.getLogger("TabTPS");
   private final NeoForgeUserService userService;
   private final TabTPS tabTPS;
   private final NeoForgeServerCommandManager<Commander> commandManager;
-  private MinecraftServer server;
+  private @Nullable MinecraftServer server;
 
   public TabTPSNeoForge(final ModContainer modContainer) {
     if (instance != null) {
@@ -178,31 +179,31 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
     return player != null && player.permissions().hasPermission(new Permission.HasCommandLevel(player.level().getServer().operatorUserPermissions().level()));
   }
 
-  public static @NonNull TabTPSNeoForge get() {
+  public static TabTPSNeoForge get() {
     return instance;
   }
 
-  public @NonNull MinecraftServer server() {
+  public MinecraftServer server() {
     return Objects.requireNonNull(this.server, "server is null");
   }
 
   @Override
-  public @NonNull UserService<ServerPlayer, NeoForgeUser> userService() {
+  public UserService<ServerPlayer, NeoForgeUser> userService() {
     return this.userService;
   }
 
   @Override
-  public @NonNull Path dataDirectory() {
+  public Path dataDirectory() {
     return this.configDirectory;
   }
 
   @Override
-  public @NonNull TabTPS tabTPS() {
+  public TabTPS tabTPS() {
     return this.tabTPS;
   }
 
   @Override
-  public @NonNull TickTimeService tickTimeService() {
+  public TickTimeService tickTimeService() {
     return (TickTimeService) this.server;
   }
 
@@ -222,12 +223,12 @@ public final class TabTPSNeoForge implements TabTPSPlatform<ServerPlayer, NeoFor
   }
 
   @Override
-  public @NonNull Logger logger() {
+  public Logger logger() {
     return this.logger;
   }
 
   @Override
-  public @NonNull NeoForgeServerCommandManager<Commander> commandManager() {
+  public NeoForgeServerCommandManager<Commander> commandManager() {
     return this.commandManager;
   }
 

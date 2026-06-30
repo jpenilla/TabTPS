@@ -24,9 +24,10 @@
 package xyz.jpenilla.tabtps.paper.service;
 
 import org.bukkit.Bukkit;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.service.TickTimeService;
 
+@NullMarked
 public final class PaperTickTimeService implements TickTimeService {
   @Override
   public double averageMspt() {
@@ -34,7 +35,7 @@ public final class PaperTickTimeService implements TickTimeService {
   }
 
   @Override
-  public double @NonNull [] recentTps() {
+  public double[] recentTps() {
     return Bukkit.getTPS();
   }
 }

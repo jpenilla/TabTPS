@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
 import xyz.jpenilla.pluginbase.legacy.environment.MinecraftVersion;
@@ -47,12 +47,13 @@ import static xyz.jpenilla.tabtps.paper.util.Crafty.findField;
 import static xyz.jpenilla.tabtps.paper.util.Crafty.needCraftClass;
 import static xyz.jpenilla.tabtps.paper.util.Crafty.needNMSClassOrElse;
 
+@NullMarked
 public final class SpigotReflection {
   private static final class Holder {
     static final SpigotReflection INSTANCE = new SpigotReflection();
   }
 
-  public static @NonNull SpigotReflection spigotReflection() {
+  public static SpigotReflection spigotReflection() {
     return Holder.INSTANCE;
   }
 
@@ -75,7 +76,7 @@ public final class SpigotReflection {
 
   private final Field MinecraftServer_recentTickTimes_field = tickTimesField();
 
-  private static @NonNull Field tickTimesField() {
+  private static Field tickTimesField() {
     final String tickTimes;
     final MinecraftVersion version = Environment.currentMinecraft();
     if (version.isOlderThan(v1_13)) {
@@ -111,7 +112,7 @@ public final class SpigotReflection {
     return spigotNamedOld;
   }
 
-  public int ping(final @NonNull Player player) {
+  public int ping(final Player player) {
     if (ServerPlayer_latency_field == null) {
       throw new IllegalStateException("ServerPlayer_latency_field is null");
     }
@@ -133,7 +134,7 @@ public final class SpigotReflection {
     }
   }
 
-  public double @NonNull [] recentTps() {
+  public double[] recentTps() {
     final Object server = invokeOrThrow(MinecraftServer_getServer_method);
     try {
       return (double[]) MinecraftServer_recentTps_field.get(server);
@@ -142,7 +143,7 @@ public final class SpigotReflection {
     }
   }
 
-  private static @NonNull MethodHandle needMethod(final @NonNull Class<?> holderClass, final @NonNull String methodName, final @NonNull Class<?> returnClass, final @NonNull Class<?> @NonNull ... parameterClasses) {
+  private static MethodHandle needMethod(final Class<?> holderClass, final String methodName, final Class<?> returnClass, final Class<?>... parameterClasses) {
     return Objects.requireNonNull(
       Crafty.findMethod(holderClass, methodName, returnClass, parameterClasses),
       String.format(
@@ -153,7 +154,7 @@ public final class SpigotReflection {
     );
   }
 
-  private static @NonNull MethodHandle needStaticMethod(final @NonNull Class<?> holderClass, final @NonNull String methodName, final @NonNull Class<?> returnClass, final @NonNull Class<?> @NonNull ... parameterClasses) {
+  private static MethodHandle needStaticMethod(final Class<?> holderClass, final String methodName, final Class<?> returnClass, final Class<?>... parameterClasses) {
     return Objects.requireNonNull(
       Crafty.findStaticMethod(holderClass, methodName, returnClass, parameterClasses),
       String.format(
@@ -164,7 +165,7 @@ public final class SpigotReflection {
     );
   }
 
-  public static @NonNull Field needField(final @NonNull Class<?> holderClass, final @NonNull String fieldName) {
+  public static Field needField(final Class<?> holderClass, final String fieldName) {
     final Field field;
     try {
       field = holderClass.getDeclaredField(fieldName);
@@ -175,7 +176,7 @@ public final class SpigotReflection {
     }
   }
 
-  private static @Nullable Object invokeOrThrow(final @NonNull MethodHandle methodHandle, final @Nullable Object @NonNull ... params) {
+  private static @Nullable Object invokeOrThrow(final MethodHandle methodHandle, final @Nullable Object... params) {
     try {
       if (params.length == 0) {
         return methodHandle.invoke();

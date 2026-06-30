@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.paper.command;
 import java.util.stream.Collectors;
 import org.incendo.cloud.bukkit.data.MultiplePlayerSelector;
 import org.incendo.cloud.context.CommandContext;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
@@ -34,10 +34,11 @@ import xyz.jpenilla.tabtps.paper.TabTPSPlugin;
 
 import static org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser.multiplePlayerSelectorParser;
 
+@NullMarked
 public final class BukkitPingCommand extends PingCommand {
   private final TabTPSPlugin plugin;
 
-  public BukkitPingCommand(final @NonNull TabTPSPlugin plugin, final @NonNull Commands commands) {
+  public BukkitPingCommand(final TabTPSPlugin plugin, final Commands commands) {
     super(plugin.tabTPS(), commands);
     this.plugin = plugin;
   }
@@ -47,7 +48,7 @@ public final class BukkitPingCommand extends PingCommand {
     this.registerPingTargetsCommand(multiplePlayerSelectorParser(), this::onPingTargets);
   }
 
-  private void onPingTargets(final @NonNull CommandContext<Commander> context) {
+  private void onPingTargets(final CommandContext<Commander> context) {
     final MultiplePlayerSelector target = context.get("target");
     this.pingTargets(
       context.sender(),

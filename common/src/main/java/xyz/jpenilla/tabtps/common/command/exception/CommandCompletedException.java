@@ -27,9 +27,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.util.ComponentMessageThrowable;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public final class CommandCompletedException extends RuntimeException implements ComponentMessageThrowable {
   private static final long serialVersionUID = -3747530074315156805L;
 
@@ -39,11 +40,11 @@ public final class CommandCompletedException extends RuntimeException implements
     this.message = message;
   }
 
-  public static @NonNull CommandCompletedException withoutMessage() {
+  public static CommandCompletedException withoutMessage() {
     return new CommandCompletedException(null);
   }
 
-  public static @NonNull CommandCompletedException withMessage(final @NonNull ComponentLike message) {
+  public static CommandCompletedException withMessage(final ComponentLike message) {
     return new CommandCompletedException(message.asComponent());
   }
 
@@ -53,7 +54,7 @@ public final class CommandCompletedException extends RuntimeException implements
   }
 
   @Override
-  public @NonNull String getMessage() {
+  public String getMessage() {
     return PlainTextComponentSerializer.plainText().serializeOr(this.message, "No message.");
   }
 }

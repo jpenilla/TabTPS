@@ -36,7 +36,8 @@ import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.jpenilla.pluginbase.legacy.environment.Environment;
@@ -59,13 +60,14 @@ import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_13
 import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_15;
 import static xyz.jpenilla.pluginbase.legacy.environment.MinecraftReleases.v1_16;
 
+@NullMarked
 public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Player, BukkitUser> {
   private TabTPS tabTPS;
   private LegacyPaperCommandManager<Commander> commandManager;
   private UserService<Player, BukkitUser> userService;
   private TickTimeService tickTimeService;
   private Logger logger;
-  private BukkitAudiences audiences;
+  private @Nullable BukkitAudiences audiences;
 
   @Override
   public void onEnable() {
@@ -177,27 +179,27 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   @Override
-  public @NonNull CommandManager<Commander> commandManager() {
+  public CommandManager<Commander> commandManager() {
     return this.commandManager;
   }
 
   @Override
-  public @NonNull UserService<Player, BukkitUser> userService() {
+  public UserService<Player, BukkitUser> userService() {
     return this.userService;
   }
 
   @Override
-  public @NonNull Path dataDirectory() {
+  public Path dataDirectory() {
     return this.getDataFolder().toPath();
   }
 
   @Override
-  public @NonNull TabTPS tabTPS() {
+  public TabTPS tabTPS() {
     return this.tabTPS;
   }
 
   @Override
-  public @NonNull TickTimeService tickTimeService() {
+  public TickTimeService tickTimeService() {
     return this.tickTimeService;
   }
 
@@ -207,7 +209,7 @@ public final class TabTPSPlugin extends JavaPlugin implements TabTPSPlatform<Pla
   }
 
   @Override
-  public @NonNull Logger logger() {
+  public Logger logger() {
     return this.logger;
   }
 

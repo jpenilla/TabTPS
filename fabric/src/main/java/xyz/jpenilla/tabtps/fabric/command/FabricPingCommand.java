@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.fabric.command;
 import java.util.stream.Collectors;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.minecraft.modded.data.MultiplePlayerSelector;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.Commander;
 import xyz.jpenilla.tabtps.common.command.Commands;
 import xyz.jpenilla.tabtps.common.command.commands.PingCommand;
@@ -34,10 +34,11 @@ import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 
 import static org.incendo.cloud.minecraft.modded.parser.VanillaArgumentParsers.multiplePlayerSelectorParser;
 
+@NullMarked
 public final class FabricPingCommand extends PingCommand {
   private final TabTPSFabric tabTPSFabric;
 
-  public FabricPingCommand(final @NonNull TabTPSFabric tabTPSFabric, final @NonNull Commands commands) {
+  public FabricPingCommand(final TabTPSFabric tabTPSFabric, final Commands commands) {
     super(tabTPSFabric.tabTPS(), commands);
     this.tabTPSFabric = tabTPSFabric;
   }
@@ -47,7 +48,7 @@ public final class FabricPingCommand extends PingCommand {
     this.registerPingTargetsCommand(multiplePlayerSelectorParser(), this::handlePingTargets);
   }
 
-  private void handlePingTargets(final @NonNull CommandContext<Commander> context) {
+  private void handlePingTargets(final CommandContext<Commander> context) {
     final MultiplePlayerSelector target = context.get("target");
     this.pingTargets(
       context.sender(),

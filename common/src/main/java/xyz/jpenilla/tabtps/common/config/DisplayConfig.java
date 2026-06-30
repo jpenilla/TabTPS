@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.common.config;
 import java.util.Objects;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
@@ -34,6 +34,7 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 import static net.kyori.adventure.text.Component.space;
 
 @ConfigSerializable
+@NullMarked
 public final class DisplayConfig {
   private static final String SEPARATOR_COMMENT = "The text used to separate modules. Accepts MiniMessage (i.e. \" <gray>|</gray> \")";
 
@@ -44,19 +45,19 @@ public final class DisplayConfig {
   private BossBarSettings bossBarSettings = new BossBarSettings();
   private TabSettings tabSettings = new TabSettings();
 
-  public @NonNull String permission() {
+  public String permission() {
     return this.permission;
   }
 
-  public @NonNull ActionBarSettings actionBarSettings() {
+  public ActionBarSettings actionBarSettings() {
     return this.actionBarSettings;
   }
 
-  public @NonNull BossBarSettings bossBarSettings() {
+  public BossBarSettings bossBarSettings() {
     return this.bossBarSettings;
   }
 
-  public @NonNull TabSettings tabSettings() {
+  public TabSettings tabSettings() {
     return this.tabSettings;
   }
 
@@ -81,9 +82,9 @@ public final class DisplayConfig {
 
     boolean enableOnLogin();
 
-    @NonNull String theme();
+    String theme();
 
-    @NonNull Component separator();
+    Component separator();
   }
 
   @ConfigSerializable
@@ -97,7 +98,7 @@ public final class DisplayConfig {
     private Component separator = space();
 
     @Override
-    public @NonNull Component separator() {
+    public Component separator() {
       return this.separator;
     }
 
@@ -111,12 +112,12 @@ public final class DisplayConfig {
       return this.allow;
     }
 
-    public @NonNull String modules() {
+    public String modules() {
       return this.modules;
     }
 
     @Override
-    public @NonNull String theme() {
+    public String theme() {
       return this.theme;
     }
   }
@@ -141,7 +142,7 @@ public final class DisplayConfig {
     private Component separator = space();
 
     @Override
-    public @NonNull Component separator() {
+    public Component separator() {
       return this.separator;
     }
 
@@ -155,24 +156,24 @@ public final class DisplayConfig {
       return this.enableOnLogin;
     }
 
-    public @NonNull String modules() {
+    public String modules() {
       return this.modules;
     }
 
-    public @NonNull FillMode fillMode() {
+    public FillMode fillMode() {
       return this.fillMode;
     }
 
-    public BossBar.@NonNull Overlay overlay() {
+    public BossBar.Overlay overlay() {
       return this.overlay;
     }
 
-    public @NonNull Colors colors() {
+    public Colors colors() {
       return this.colors;
     }
 
     @Override
-    public @NonNull String theme() {
+    public String theme() {
       return this.theme;
     }
 
@@ -186,15 +187,15 @@ public final class DisplayConfig {
       private BossBar.Color mediumPerformance = BossBar.Color.YELLOW;
       private BossBar.Color goodPerformance = BossBar.Color.GREEN;
 
-      public BossBar.@NonNull Color lowPerformance() {
+      public BossBar.Color lowPerformance() {
         return this.lowPerformance;
       }
 
-      public BossBar.@NonNull Color mediumPerformance() {
+      public BossBar.Color mediumPerformance() {
         return this.mediumPerformance;
       }
 
-      public BossBar.@NonNull Color goodPerformance() {
+      public BossBar.Color goodPerformance() {
         return this.goodPerformance;
       }
     }
@@ -212,7 +213,7 @@ public final class DisplayConfig {
     private Component separator = space();
 
     @Override
-    public @NonNull Component separator() {
+    public Component separator() {
       return this.separator;
     }
 
@@ -226,16 +227,16 @@ public final class DisplayConfig {
       return this.allow;
     }
 
-    public @NonNull String headerModules() {
+    public String headerModules() {
       return this.headerModules;
     }
 
-    public @NonNull String footerModules() {
+    public String footerModules() {
       return this.footerModules;
     }
 
     @Override
-    public @NonNull String theme() {
+    public String theme() {
       return this.theme;
     }
   }

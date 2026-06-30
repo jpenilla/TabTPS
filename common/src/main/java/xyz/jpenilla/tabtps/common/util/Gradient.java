@@ -26,7 +26,7 @@ package xyz.jpenilla.tabtps.common.util;
 import java.util.Arrays;
 import java.util.Collections;
 import net.kyori.adventure.text.format.TextColor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Utility class for creating {@link TextColor} gradients.
@@ -34,6 +34,7 @@ import org.jspecify.annotations.NonNull;
  * <p>Based on <a href="https://github.com/KyoriPowered/adventure-text-minimessage/blob/b44cb90632c03c78c50dbae5c86e616a570afa3d/src/main/java/net/kyori/adventure/text/minimessage/fancy/Gradient.java">
  * MiniMessage 4.0.0-SNAPSHOT's Gradient Class</a>, which is released under the MIT license.</p>
  */
+@NullMarked
 public final class Gradient {
 
   private int index = 0;
@@ -49,7 +50,7 @@ public final class Gradient {
    *
    * @param colors colors to use for this gradient, in order
    */
-  public Gradient(final @NonNull TextColor... colors) {
+  public Gradient(final TextColor... colors) {
     this(0, colors);
   }
 
@@ -59,7 +60,7 @@ public final class Gradient {
    * @param phase  phase to use for this gradient, must be in range [-1, 1]
    * @param colors colors to use for this gradient, in order
    */
-  public Gradient(final float phase, final @NonNull TextColor... colors) {
+  public Gradient(final float phase, final TextColor... colors) {
     if (colors.length < 2) {
       throw new IllegalArgumentException("Gradients must have at least two colors! colors=" + Arrays.toString(colors));
     }
@@ -97,7 +98,7 @@ public final class Gradient {
    *
    * @return the next color needed to form the gradient
    */
-  public @NonNull TextColor nextColor() {
+  public TextColor nextColor() {
     // color switch needed?
     if (this.factorStep * this.index > 1) {
       this.colorIndex++;
@@ -117,7 +118,7 @@ public final class Gradient {
     }
   }
 
-  private @NonNull TextColor interpolate(final @NonNull TextColor color1, final @NonNull TextColor color2, final float factor) {
+  private TextColor interpolate(final TextColor color1, final TextColor color2, final float factor) {
     return TextColor.color(
       Math.round(color1.red() + factor * (color2.red() - color1.red())),
       Math.round(color1.green() + factor * (color2.green() - color1.green())),

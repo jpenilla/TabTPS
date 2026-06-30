@@ -27,21 +27,22 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.type.tuple.Pair;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.command.commands.TickInfoCommand;
 import xyz.jpenilla.tabtps.common.util.TPSUtil;
 import xyz.jpenilla.tabtps.fabric.TabTPSFabric;
 import xyz.jpenilla.tabtps.fabric.access.MinecraftServerAccess;
 
+@NullMarked
 public final class FabricTickInfoCommandFormatter implements TickInfoCommand.Formatter {
   private final TabTPSFabric tabTPSFabric;
 
-  public FabricTickInfoCommandFormatter(final @NonNull TabTPSFabric tabTPSFabric) {
+  public FabricTickInfoCommandFormatter(final TabTPSFabric tabTPSFabric) {
     this.tabTPSFabric = tabTPSFabric;
   }
 
   @Override
-  public @NonNull List<Component> formatTickTimes() {
+  public List<Component> formatTickTimes() {
     final MinecraftServerAccess server = (MinecraftServerAccess) this.tabTPSFabric.server();
     return TPSUtil.formatTickTimes(ImmutableList.of(
       Pair.of("5s", server.tickTimes5s().times()),

@@ -28,12 +28,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.User;
 import xyz.jpenilla.tabtps.common.config.Theme;
 
+@NullMarked
 public final class ModuleType<T extends Module> {
   private static final Map<String, ModuleType<? extends Module>> TYPES_BY_NAME = new HashMap<>();
   private static final Map<Class<? extends Module>, ModuleType<? extends Module>> TYPES_BY_CLASS = new HashMap<>();
@@ -49,7 +50,7 @@ public final class ModuleType<T extends Module> {
     return Collections.unmodifiableCollection(TYPES_BY_NAME.values());
   }
 
-  public static @NonNull ModuleType<? extends Module> fromName(final @NonNull String name) {
+  public static ModuleType<? extends Module> fromName(final String name) {
     final ModuleType<? extends Module> type = TYPES_BY_NAME.get(name);
     if (type == null) {
       throw new IllegalArgumentException("Unknown or invalid module type: " + name);
@@ -58,7 +59,7 @@ public final class ModuleType<T extends Module> {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends Module> @NonNull ModuleType<T> fromClass(final @NonNull Class<T> moduleClass) {
+  public static <T extends Module> ModuleType<T> fromClass(final Class<T> moduleClass) {
     final ModuleType<T> type = (ModuleType<T>) TYPES_BY_CLASS.get(moduleClass);
     if (type == null) {
       throw new IllegalArgumentException("Unknown or invalid module class: " + moduleClass.getSimpleName());
@@ -66,10 +67,10 @@ public final class ModuleType<T extends Module> {
     return type;
   }
 
-  private static <T extends Module> @NonNull ModuleType<T> withoutPlayer(
-    final @NonNull Class<T> moduleClass,
-    final @NonNull BiFunction<@NonNull TabTPS, @NonNull Theme, @NonNull T> moduleFactory,
-    final @NonNull String name
+  private static <T extends Module> ModuleType<T> withoutPlayer(
+    final Class<T> moduleClass,
+    final BiFunction<TabTPS, Theme, T> moduleFactory,
+    final String name
   ) {
     return new ModuleType<>(
       moduleClass,
@@ -79,10 +80,10 @@ public final class ModuleType<T extends Module> {
     );
   }
 
-  private static <T extends Module> @NonNull ModuleType<T> withPlayer(
-    final @NonNull Class<T> moduleClass,
-    final @NonNull ModuleFactory<T> moduleFactory,
-    final @NonNull String name
+  private static <T extends Module> ModuleType<T> withPlayer(
+    final Class<T> moduleClass,
+    final ModuleFactory<T> moduleFactory,
+    final String name
   ) {
     return new ModuleType<>(moduleClass, moduleFactory, name, true);
   }
@@ -93,9 +94,9 @@ public final class ModuleType<T extends Module> {
   private final boolean needsPlayer;
 
   private ModuleType(
-    final @NonNull Class<T> moduleClass,
-    final @NonNull ModuleFactory<T> moduleFactory,
-    final @NonNull String name,
+    final Class<T> moduleClass,
+    final ModuleFactory<T> moduleFactory,
+    final String name,
     final boolean needsPlayer
   ) {
     this.moduleClass = moduleClass;
@@ -106,7 +107,7 @@ public final class ModuleType<T extends Module> {
     TYPES_BY_CLASS.put(moduleClass, this);
   }
 
-  public @NonNull String name() {
+  public String name() {
     return this.name;
   }
 
@@ -114,13 +115,13 @@ public final class ModuleType<T extends Module> {
     return this.needsPlayer;
   }
 
-  public @NonNull Class<T> moduleClass() {
+  public Class<T> moduleClass() {
     return this.moduleClass;
   }
 
-  public @NonNull T createModule(
-    final @NonNull TabTPS tabTPS,
-    final @NonNull Theme theme,
+  public T createModule(
+    final TabTPS tabTPS,
+    final Theme theme,
     final @Nullable User<?> user
   ) {
     if (this.needsPlayer && user == null) {
@@ -131,9 +132,9 @@ public final class ModuleType<T extends Module> {
 
   @FunctionalInterface
   private interface ModuleFactory<T extends Module> {
-    @NonNull T create(
-      final @NonNull TabTPS tabTPS,
-      final @NonNull Theme theme,
+    T create(
+      final TabTPS tabTPS,
+      final Theme theme,
       final @Nullable User<?> user
     );
   }

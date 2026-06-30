@@ -33,7 +33,7 @@ import org.incendo.cloud.context.CommandInput;
 import org.incendo.cloud.help.result.CommandEntry;
 import org.incendo.cloud.minecraft.extras.AudienceProvider;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.Messages;
 import xyz.jpenilla.tabtps.common.TabTPS;
 import xyz.jpenilla.tabtps.common.command.Commander;
@@ -45,8 +45,9 @@ import static org.incendo.cloud.minecraft.extras.RichDescription.richDescription
 import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
 import static org.incendo.cloud.suggestion.SuggestionProvider.blockingStrings;
 
+@NullMarked
 public final class HelpCommand extends TabTPSCommand {
-  public HelpCommand(final @NonNull TabTPS tabTPS, final @NonNull Commands commands) {
+  public HelpCommand(final TabTPS tabTPS, final Commands commands) {
     super(tabTPS, commands);
   }
 
@@ -67,11 +68,11 @@ public final class HelpCommand extends TabTPSCommand {
       .handler(this::executeHelp));
   }
 
-  private void executeHelp(final @NonNull CommandContext<Commander> context) {
+  private void executeHelp(final CommandContext<Commander> context) {
     this.help().queryCommands(context.get("query"), context.sender());
   }
 
-  public @NonNull Iterable<String> helpQuerySuggestions(final @NonNull CommandContext<Commander> context, final @NonNull CommandInput input) {
+  public Iterable<String> helpQuerySuggestions(final CommandContext<Commander> context, final CommandInput input) {
     return this.commands.commandManager().createHelpHandler()
       .queryRootIndex(context.sender())
       .entries()
@@ -80,7 +81,7 @@ public final class HelpCommand extends TabTPSCommand {
       .collect(Collectors.toList());
   }
 
-  private @NonNull MinecraftHelp<Commander> help() {
+  private MinecraftHelp<Commander> help() {
     return MinecraftHelp.<Commander>builder()
       .commandManager(this.commandManager)
       .audienceProvider(AudienceProvider.nativeAudience())
@@ -90,7 +91,7 @@ public final class HelpCommand extends TabTPSCommand {
       .build();
   }
 
-  private static @NonNull Component helpMessage(final @NonNull Commander sender, final @NonNull String key, final @NonNull Map<String, String> args) {
+  private static Component helpMessage(final Commander sender, final String key, final Map<String, String> args) {
     return translatable(
       Messages.bundleName() + "/help." + key,
       args.values().stream()

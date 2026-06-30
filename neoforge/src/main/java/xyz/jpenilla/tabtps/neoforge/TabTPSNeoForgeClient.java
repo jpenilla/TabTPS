@@ -25,9 +25,11 @@ package xyz.jpenilla.tabtps.neoforge;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
+import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.tabtps.common.TabTPS;
 
 @Mod(value = "tabtps", dist = Dist.CLIENT)
+@NullMarked
 public final class TabTPSNeoForgeClient {
   public TabTPSNeoForgeClient() {
     final Thread thread = new Thread(() -> {
