@@ -19,6 +19,7 @@ dependencies {
   shade(projects.tabtpsCommon) {
     exclude("org.slf4j")
   }
+  shade(platform(libs.adventure5Bom))
 }
 
 indra {

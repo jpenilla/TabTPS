@@ -32,7 +32,7 @@ dependencies {
   api(libs.cloudCore)
   api(libs.cloudMinecraftExtras)
   api(libs.configurateHocon)
-  api(platform(libs.adventureBom))
+  api(platform(libs.adventure4Bom))
   api(libs.adventureApi)
   api(libs.adventureSerializerConfigurate4)
   api(libs.adventureTextSerializerLegacy)

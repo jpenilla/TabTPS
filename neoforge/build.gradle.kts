@@ -52,7 +52,12 @@ dependencies {
   common(projects.tabtpsCommon) {
     isTransitive = false
   }
-
+  implementation(platform(libs.adventure5Bom))
+  val adventure5 = libs.versions.adventure5.get()
+  constraints {
+    add("jarJar", libs.adventureTextSerializerLegacy.get()) { version { require(adventure5) } }
+    add("jarJar", libs.adventureSerializerConfigurate4.get()) { version { require(adventure5) } }
+  }
   implementation(libs.cloudNeoforge)
   jarJar(libs.cloudNeoforge)
   implementation(libs.cloudMinecraftExtras)

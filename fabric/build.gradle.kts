@@ -17,6 +17,8 @@ dependencies {
   shade(projects.tabtpsCommon) {
     isTransitive = false
   }
+  implementation(platform(libs.adventure5Bom))
+  include(platform(libs.adventure5Bom))
 
   implementation(libs.cloudFabric)
   include(libs.cloudFabric)
