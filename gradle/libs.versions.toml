@@ -37,7 +37,7 @@ neoForm = "26.2-1"
 # buildSrc
 indra = "4.0.0"
 shadow = "9.6.0"
-mod-publish-plugin = "2.1.1"
+mod-publish-plugin = "2.2.0"
 hangarPublishPlugin = "0.1.4"
 
 [libraries]
