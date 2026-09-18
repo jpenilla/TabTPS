@@ -27,10 +27,10 @@
   ],
   "depends": {
     "cloud": "*",
-    "fabricloader": ">=0.19.3",
+    "fabricloader": ">=0.19.5",
     "fabric-api": "*",
     "fabric-permissions-api-v0": "*",
     "adventure-platform-fabric": "*",
-    "minecraft": ">=26.2"
+    "minecraft": ">=26.3"
   }
 }
