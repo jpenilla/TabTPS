@@ -153,13 +153,9 @@ public abstract class UserService<P, U extends User<P>> {
   }
 
   public final void removeUser(final UUID uniqueId) {
-    final U removed = this.userMap.remove(uniqueId);
+    final U removed = this.remove(uniqueId);
     if (removed == null) {
       throw new IllegalStateException("Cannot remove non-existing user " + uniqueId);
-    }
-    this.shutdownDisplays(removed);
-    if (removed.shouldSave()) {
-      this.saveUser(uniqueId, removed);
     }
   }
 
@@ -190,7 +186,21 @@ public abstract class UserService<P, U extends User<P>> {
   }
 
   public final void handleQuit(final P platformPlayer) {
-    this.removeUser(this.uuid(platformPlayer));
+    // A disconnect can happen before the join sequence completed, meaning the user was never
+    // added. There is nothing to clean up in that case, and the server should not crash on it.
+    this.remove(this.uuid(platformPlayer));
+  }
+
+  private U remove(final UUID uniqueId) {
+    final U removed = this.userMap.remove(uniqueId);
+    if (removed == null) {
+      return null;
+    }
+    this.shutdownDisplays(removed);
+    if (removed.shouldSave()) {
+      this.saveUser(uniqueId, removed);
+    }
+    return removed;
   }
 
   private void shutdownDisplays(final U user) {
