@@ -40,7 +40,7 @@ pluginManagement {
 plugins {
   id("xyz.jpenilla.quiet-fabric-loom-repositories") version "1.18-SNAPSHOT"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("net.neoforged.moddev.repositories") version "2.0.147"
+  id("net.neoforged.moddev.repositories") version "2.0.148"
 }
 
 rootProject.name = "TabTPS"
