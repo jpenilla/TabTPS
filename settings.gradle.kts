@@ -12,6 +12,12 @@ dependencyResolutionManagement {
         includeModule("org.incendo", "cloud-sponge")
       }
     }
+    maven("https://nexus.lucko.me/repository/maven-snapshots/") {
+      mavenContent {
+        snapshotsOnly()
+        includeModule("net.kyori", "adventure-text-feature-pagination")
+      }
+    }
     maven("https://central.sonatype.com/repository/maven-snapshots/") {
       mavenContent { snapshotsOnly() }
     }
